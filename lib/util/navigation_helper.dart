@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zahra/model/item_model.dart';
 import 'package:zahra/util/epub_helper.dart';
-import 'package:zahra/widget/big_image_card_widget.dart';
-import 'package:zahra/widget/blue_list_card_widget.dart';
-import 'package:zahra/widget/circle_list_card_widget.dart';
-import 'package:zahra/widget/multi_dark_card_widget.dart';
-import 'package:zahra/widget/normal_list_card_widget.dart';
-import 'package:zahra/widget/single_dark_card_widget.dart';
-import 'package:zahra/widget/small_image_card_widget.dart';
-import 'package:zahra/widget/square_list_card_widget.dart';
-import 'package:zahra/widget/three_items_card_widget.dart';
-
 import '../model/reference_model.dart';
-import '../widget/simple_list_card_widget.dart';
 
 class NavigationHelper {
   static void navigateTo(
@@ -65,34 +54,4 @@ class NavigationHelper {
       openEpub(context: context, reference: ReferenceModel(title: '', bookName: '',bookPath: bookPath0, navIndex: sectionName.toString()));
   }
 
-  static Widget buildItem(BuildContext context, ItemModel item) {
-    switch (item.type) {
-      case 'bigimage':
-        return BigImageCardWidget(item: item);
-      case 'blue_list':
-        return BlueListCardWidget(item: item);
-      case 'circleList':
-        return CircleListCardWidget(item: item);
-      case 'normalList':
-        return NormalListCardWidget(item: item);
-      case 'singleDark':
-        return SingleDarkCardWidget(item: item);
-      case 'dubleLight':
-        return MultiDarkCardWidget(item: item);
-      case 'dubleDark':
-        return MultiDarkCardWidget(item: item);
-      case 'tripleDark':
-        return MultiDarkCardWidget(item: item);
-      case 'smallimage':
-        return SmallImageCardWidget(item: item);
-      case 'squareList':
-        return SquareListCardWidget(item: item);
-      case 'list':
-        return SimpleListCardWidget(item: item);
-      case 'threeitems':
-        return ThreeItemsCardWidget(item: item);
-      default:
-        return ListTile(title: Text('Unknown item type: ${item.type}'));
-    }
-  }
 }
