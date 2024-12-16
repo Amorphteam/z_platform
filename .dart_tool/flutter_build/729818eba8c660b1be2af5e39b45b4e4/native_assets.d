@@ -1,0 +1,1 @@
+ /Users/alibayati/Works/Programming/MultiPlatform/z_platform/.dart_tool/flutter_build/729818eba8c660b1be2af5e39b45b4e4/native_assets.yaml: 
