@@ -379,6 +379,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         child: SelectionArea(
                           child: Html(
                             data: content[index],
+                            onAnchorTap: _handleAnchorTap,
                             style: {
                               'body': Style(
                                 direction: TextDirection.rtl,
@@ -924,6 +925,32 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
 
+  void _handleFragment(String fragment) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Fragment Clicked'),
+        content: Text('You clicked on fragment: $fragment'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleAnchorTap(String? href, Map<String, String> attributes, dom.Element? element) {
+    if (href != null) {
+      final Uri uri = Uri.parse(href);
+      if (uri.fragment.isNotEmpty) {
+        _handleFragment(href);
+      } else {
+        debugPrint('Anchor href: $href'); // For cases without `#`
+      }
+    }
+  }
 
 }
 
