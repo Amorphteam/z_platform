@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zahra/repository/json_repository.dart';
 import 'package:zahra/screen/epub_viewer/cubit/epub_viewer_cubit.dart';
 import 'package:zahra/screen/epub_viewer/epub_viewer_screen.dart';
 import 'package:zahra/screen/search/cubit/search_cubit.dart';
