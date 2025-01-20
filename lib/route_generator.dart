@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zahra/screen/bookmark/bookmark_screen.dart';
+import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:zahra/screen/epub_viewer/cubit/epub_viewer_cubit.dart';
 import 'package:zahra/screen/epub_viewer/epub_viewer_screen.dart';
 import 'package:zahra/screen/library/cubit/library_cubit.dart';
@@ -20,8 +22,8 @@ class RouteGenerator {
       case '/searchScreen':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-              create: (context) => TocCubit(),
-              child: TocScreen(id: 1),
+              create: (context) => BookmarkCubit(),
+              child: BookmarkScreen(),
             ),
         );
       case '/epubViewer':
