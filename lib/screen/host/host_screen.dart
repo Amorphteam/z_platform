@@ -6,7 +6,6 @@ import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:zahra/screen/search/cubit/search_cubit.dart';
 import 'package:zahra/screen/search/search_screen.dart';
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -44,8 +43,14 @@ class _HostScreenState extends State<HostScreen> {
     Container(color: Colors.red),
     Container(color: Colors.red),
     Container(color: Colors.red),
-    const SearchScreen(),
-    const BookmarkScreen(),
+    BlocProvider(
+      create: (context) => SearchCubit(),
+      child: const SearchScreen(),
+    ),
+    BlocProvider(
+      create: (context) => BookmarkCubit(),
+      child: const BookmarkScreen(),
+    ),
   ];
 
   @override
