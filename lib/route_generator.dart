@@ -6,6 +6,8 @@ import 'package:zahra/screen/library/cubit/library_cubit.dart';
 import 'package:zahra/screen/library/library_screen.dart';
 import 'package:zahra/screen/search/cubit/search_cubit.dart';
 import 'package:zahra/screen/search/search_screen.dart';
+import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
+import 'package:zahra/screen/toc/toc_screen.dart';
 import 'model/book_model.dart';
 import 'model/reference_model.dart';
 import 'model/search_model.dart';
@@ -18,8 +20,8 @@ class RouteGenerator {
       case '/searchScreen':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-              create: (context) => LibraryCubit(),
-              child: const LibraryScreen(),
+              create: (context) => TocCubit(),
+              child: TocScreen(id: 1),
             ),
         );
       case '/epubViewer':
