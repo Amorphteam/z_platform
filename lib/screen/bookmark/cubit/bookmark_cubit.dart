@@ -52,4 +52,16 @@ class BookmarkCubit extends Cubit<BookmarkState> {
   void openEpub(ReferenceModel item){
     emit(BookmarkTappedState(item));
   }
+
+  Future<void> loadAllHistory() async {
+    emit(BookmarkLoadingState());
+    try {
+      final bookmarks = await referencesDatabase.getAllReferences();
+      emit(AllBookmarksLoadedState(bookmarks));
+    } catch (error) {
+      if (error is Exception) {
+        emit(BookmarkErrorState(error));
+      }
+    }
+  }
 }
