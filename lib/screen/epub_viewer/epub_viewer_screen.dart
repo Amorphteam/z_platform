@@ -9,7 +9,7 @@ import 'package:html/parser.dart' as html_parser;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:zahra/screen/epub_viewer/widgets/toc_tree_list_widget.dart';
 
-import '../../model/category_model.dart';
+import '../../model/book_model.dart';
 import '../../model/reference_model.dart';
 import '../../model/search_model.dart';
 import '../../model/style_model.dart';
@@ -28,12 +28,12 @@ class EpubViewerScreen extends StatefulWidget {
   const EpubViewerScreen({
     super.key,
     this.referenceModel,
-    this.catModel,
+    this.book,
     this.tocModel,
     this.searchModel,
   });
   final ReferenceModel? referenceModel;
-  final CategoryModel? catModel;
+  final Book? book;
   final EpubChaptersWithBookPath? tocModel;
   final SearchModel? searchModel;
 
@@ -810,7 +810,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   _loadEpubFromCategory() {
-    _bookPath = widget.catModel!.bookPath!;
+    _bookPath = widget.book!.epub!;
     _loadAndParseEpub(bookPath: _bookPath!);
 
   }
