@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubit/bookmark_cubit.dart';
+import 'cubit/bookmark_state.dart';
 import 'widgets/reference_list_widget.dart';
 
 class BookmarkScreen extends StatefulWidget {
@@ -16,12 +17,12 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   @override
   void initState() {
     super.initState();
-    _loadAllBookmarks();
-    _loadAllHistory();
+    _loadBookmarksOrHistory(); // Load initial data
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Column(
         children: [
@@ -49,8 +50,8 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                     return Colors.white70;
                   }
                 }),
-                backgroundColor: WidgetStateProperty.resolveWith((states) {
-                  if (states.contains(WidgetState.selected)) {
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.selected)) {
                     return Theme.of(context).colorScheme.onSecondary;
                   } else {
                     return Theme.of(context).colorScheme.primary;
@@ -60,73 +61,75 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               onSelectionChanged: (newSelection) {
                 setState(() {
                   _selectedSegment = newSelection.first;
+                  _loadBookmarksOrHistory(); // Load data based on selection
                 });
               },
             ),
           ),
           Expanded(
-            child: _selectedSegment == 'Bookmark'
-                ? BlocBuilder<BookmarkCubit, BookmarkState>(
-              builder: (context, state) => _buildBookmarkBody(state),
-            )
-                : BlocBuilder<BookmarkCubit, BookmarkState>(
-              builder: (context, state) => _buildHistoryBody(state),
+            child: BlocBuilder<BookmarkCubit, BookmarkState>(
+              builder: (context, state) {
+                return _selectedSegment == 'Bookmark'
+                    ? _buildBookmarkBody(state)
+                    : _buildHistoryBody(state);
+              },
             ),
           ),
         ],
       ),
     );
-
-  void _loadAllBookmarks() {
-    BlocProvider.of<BookmarkCubit>(context).loadAllBookmarks();
   }
 
-  void _loadAllHistory() {
-    BlocProvider.of<BookmarkCubit>(context).loadAllHistory(); // Implement this in your cubit
+  void _loadBookmarksOrHistory() {
+    if (_selectedSegment == 'Bookmark') {
+      BlocProvider.of<BookmarkCubit>(context).loadAllBookmarks();
+    } else {
+      BlocProvider.of<BookmarkCubit>(context).loadAllHistory();
+    }
   }
 
   Widget _buildBookmarkBody(BookmarkState state) {
-    if (state is BookmarkLoadingState) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    } else if (state is AllBookmarksLoadedState) {
-      if (state.bookmarks.isEmpty) {
-        return _buildEmptyMessage(
-          title: 'قائمة الإشارات المرجعية فارغة',
-          subtitle: 'يمكنك إضافة إشارات مرجعية من الكتب التي تقرأها.',
+    return state.when(
+      initial: () => const Center(child: Text('Initializing...')),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      bookmarksLoaded: (bookmarks) {
+        if (bookmarks.isEmpty) {
+          return _buildEmptyMessage(
+            title: 'قائمة الإشارات المرجعية فارغة',
+            subtitle: 'يمكنك إضافة إشارات مرجعية من الكتب التي تقرأها.',
+          );
+        }
+        return ReferenceListWidget(
+          referenceList: bookmarks,
+          onRefreshBookmarks: _loadBookmarksOrHistory,
         );
-      }
-      return _buildList(state);
-    } else if (state is BookmarkErrorState) {
-      return Center(
-        child: Text(state.error.toString()),
-      );
-    } else {
-      return Container();
-    }
+      },
+      historyLoaded: (_) => Container(), // Not applicable here
+      bookmarkTapped: (_) => Container(), // Not applicable here
+      error: (message) => Center(child: Text(message)),
+    );
   }
 
   Widget _buildHistoryBody(BookmarkState state) {
-    if (state is BookmarkLoadingState) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    } else if (state is AllHistoryLoadedState) {
-      if (state.history.isEmpty) {
-        return _buildEmptyMessage(
-          title: 'قائمة السجل فارغة',
-          subtitle: 'يمكنك مراجعة السجل هنا.',
+    return state.when(
+      initial: () => const Center(child: Text('Initializing...')),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      historyLoaded: (history) {
+        if (history.isEmpty) {
+          return _buildEmptyMessage(
+            title: 'قائمة السجل فارغة',
+            subtitle: 'يمكنك مراجعة السجل هنا.',
+          );
+        }
+        return ReferenceListWidget(
+          referenceList: history,
+          onRefreshBookmarks: _loadBookmarksOrHistory,
         );
-      }
-      return _buildHistoryList(state);
-    } else if (state is BookmarkErrorState) {
-      return Center(
-        child: Text(state.error.toString()),
-      );
-    } else {
-      return Container();
-    }
+      },
+      bookmarksLoaded: (_) => Container(), // Not applicable here
+      bookmarkTapped: (_) => Container(), // Not applicable here
+      error: (message) => Center(child: Text(message)),
+    );
   }
 
   Widget _buildEmptyMessage({required String title, required String subtitle}) {
@@ -140,14 +143,14 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             children: [
               const SizedBox(height: 120),
               Text(
-                textAlign: TextAlign.center,
                 title,
+                textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(color: const Color(0xFFffffff)),
               ),
               const SizedBox(height: 8),
               Text(
-                textAlign: TextAlign.center,
                 subtitle,
+                textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(color: const Color(0xFFffffff)),
               ),
             ],
@@ -156,18 +159,4 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       ),
     );
   }
-
-  Widget _buildList(AllBookmarksLoadedState state) => ReferenceListWidget(
-    referenceList: state.bookmarks,
-    onRefreshBookmarks: () {
-      _loadAllBookmarks();
-    },
-  );
-
-  Widget _buildHistoryList(AllHistoryLoadedState state) => ReferenceListWidget(
-    referenceList: state.history,
-    onRefreshBookmarks: () {
-      _loadAllHistory();
-    },
-  );
 }

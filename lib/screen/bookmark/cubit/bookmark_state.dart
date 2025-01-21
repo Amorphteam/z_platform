@@ -1,30 +1,17 @@
-part of 'bookmark_cubit.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../model/reference_model.dart';
 
-abstract class BookmarkState {}
+part 'bookmark_state.freezed.dart';
 
-class AllBookmarksLoadedState extends BookmarkState {
-  AllBookmarksLoadedState(this.bookmarks);
-  final List<ReferenceModel> bookmarks;
+@freezed
+class BookmarkState with _$BookmarkState {
+  const factory BookmarkState.initial() = _Initial;
+
+  const factory BookmarkState.loading() = _Loading;
+
+  const factory BookmarkState.bookmarksLoaded(List<ReferenceModel> bookmarks) = _BookmarksLoaded;
+
+  const factory BookmarkState.historyLoaded(List<ReferenceModel> history) = _HistoryLoaded;
+  const factory BookmarkState.bookmarkTapped(ReferenceModel bookmark) = _BookmarkTapped;
+  const factory BookmarkState.error(String message) = _Error;
 }
-class AllHistoryLoadedState extends BookmarkState {
-  AllHistoryLoadedState(this.history);
-  final List<ReferenceModel> history;
-}
-
-class BookmarkDeletedState extends BookmarkState {}
-
-class BookmarkLoadingState extends BookmarkState {}
-
-class BookmarkInitState extends BookmarkState {}
-
-class BookmarkErrorState extends BookmarkState {
-  BookmarkErrorState(this.error);
-  final Exception error;
-}
-
-class BookmarkTappedState extends BookmarkState {
-  BookmarkTappedState(this.item);
-  final ReferenceModel item;
-}
-
-
