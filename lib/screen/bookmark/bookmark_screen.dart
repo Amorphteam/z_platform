@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zahra/screen/bookmark/widgets/history_list_widget.dart';
 import 'cubit/bookmark_cubit.dart';
 import 'cubit/bookmark_state.dart';
 import 'widgets/reference_list_widget.dart';
@@ -106,6 +107,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       },
       historyLoaded: (_) => Container(), // Not applicable here
       bookmarkTapped: (_) => Container(), // Not applicable here
+      historyTapped: (_) => Container(), // Not applicable here
       error: (message) => Center(child: Text(message)),
     );
   }
@@ -121,13 +123,14 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             subtitle: 'يمكنك مراجعة السجل هنا.',
           );
         }
-        return ReferenceListWidget(
-          referenceList: history,
-          onRefreshBookmarks: _loadBookmarksOrHistory,
+        return HistoryListWidget(
+          historyList: history,
+          onHistoryBookmarks: _loadBookmarksOrHistory,
         );
       },
       bookmarksLoaded: (_) => Container(), // Not applicable here
       bookmarkTapped: (_) => Container(), // Not applicable here
+      historyTapped: (_) => Container(), // Not applicable here
       error: (message) => Center(child: Text(message)),
     );
   }

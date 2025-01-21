@@ -21,8 +21,9 @@ mixin _$BookmarkState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ReferenceModel> bookmarks) bookmarksLoaded,
-    required TResult Function(List<ReferenceModel> history) historyLoaded,
+    required TResult Function(List<HistoryModel> history) historyLoaded,
     required TResult Function(ReferenceModel bookmark) bookmarkTapped,
+    required TResult Function(HistoryDatabase history) historyTapped,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -31,8 +32,9 @@ mixin _$BookmarkState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult? Function(List<ReferenceModel> history)? historyLoaded,
+    TResult? Function(List<HistoryModel> history)? historyLoaded,
     TResult? Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult? Function(HistoryDatabase history)? historyTapped,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -41,8 +43,9 @@ mixin _$BookmarkState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult Function(List<ReferenceModel> history)? historyLoaded,
+    TResult Function(List<HistoryModel> history)? historyLoaded,
     TResult Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult Function(HistoryDatabase history)? historyTapped,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -54,6 +57,7 @@ mixin _$BookmarkState {
     required TResult Function(_BookmarksLoaded value) bookmarksLoaded,
     required TResult Function(_HistoryLoaded value) historyLoaded,
     required TResult Function(_BookmarkTapped value) bookmarkTapped,
+    required TResult Function(_HistoryTapped value) historyTapped,
     required TResult Function(_Error value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -64,6 +68,7 @@ mixin _$BookmarkState {
     TResult? Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult? Function(_HistoryLoaded value)? historyLoaded,
     TResult? Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult? Function(_HistoryTapped value)? historyTapped,
     TResult? Function(_Error value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -74,6 +79,7 @@ mixin _$BookmarkState {
     TResult Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult Function(_HistoryLoaded value)? historyLoaded,
     TResult Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult Function(_HistoryTapped value)? historyTapped,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) =>
@@ -139,8 +145,9 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ReferenceModel> bookmarks) bookmarksLoaded,
-    required TResult Function(List<ReferenceModel> history) historyLoaded,
+    required TResult Function(List<HistoryModel> history) historyLoaded,
     required TResult Function(ReferenceModel bookmark) bookmarkTapped,
+    required TResult Function(HistoryDatabase history) historyTapped,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -152,8 +159,9 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult? Function(List<ReferenceModel> history)? historyLoaded,
+    TResult? Function(List<HistoryModel> history)? historyLoaded,
     TResult? Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult? Function(HistoryDatabase history)? historyTapped,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -165,8 +173,9 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult Function(List<ReferenceModel> history)? historyLoaded,
+    TResult Function(List<HistoryModel> history)? historyLoaded,
     TResult Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult Function(HistoryDatabase history)? historyTapped,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -184,6 +193,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_BookmarksLoaded value) bookmarksLoaded,
     required TResult Function(_HistoryLoaded value) historyLoaded,
     required TResult Function(_BookmarkTapped value) bookmarkTapped,
+    required TResult Function(_HistoryTapped value) historyTapped,
     required TResult Function(_Error value) error,
   }) {
     return initial(this);
@@ -197,6 +207,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult? Function(_HistoryLoaded value)? historyLoaded,
     TResult? Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult? Function(_HistoryTapped value)? historyTapped,
     TResult? Function(_Error value)? error,
   }) {
     return initial?.call(this);
@@ -210,6 +221,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult Function(_HistoryLoaded value)? historyLoaded,
     TResult Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult Function(_HistoryTapped value)? historyTapped,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -265,8 +277,9 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ReferenceModel> bookmarks) bookmarksLoaded,
-    required TResult Function(List<ReferenceModel> history) historyLoaded,
+    required TResult Function(List<HistoryModel> history) historyLoaded,
     required TResult Function(ReferenceModel bookmark) bookmarkTapped,
+    required TResult Function(HistoryDatabase history) historyTapped,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -278,8 +291,9 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult? Function(List<ReferenceModel> history)? historyLoaded,
+    TResult? Function(List<HistoryModel> history)? historyLoaded,
     TResult? Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult? Function(HistoryDatabase history)? historyTapped,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -291,8 +305,9 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult Function(List<ReferenceModel> history)? historyLoaded,
+    TResult Function(List<HistoryModel> history)? historyLoaded,
     TResult Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult Function(HistoryDatabase history)? historyTapped,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -310,6 +325,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_BookmarksLoaded value) bookmarksLoaded,
     required TResult Function(_HistoryLoaded value) historyLoaded,
     required TResult Function(_BookmarkTapped value) bookmarkTapped,
+    required TResult Function(_HistoryTapped value) historyTapped,
     required TResult Function(_Error value) error,
   }) {
     return loading(this);
@@ -323,6 +339,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult? Function(_HistoryLoaded value)? historyLoaded,
     TResult? Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult? Function(_HistoryTapped value)? historyTapped,
     TResult? Function(_Error value)? error,
   }) {
     return loading?.call(this);
@@ -336,6 +353,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult Function(_HistoryLoaded value)? historyLoaded,
     TResult Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult Function(_HistoryTapped value)? historyTapped,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -426,8 +444,9 @@ class _$BookmarksLoadedImpl implements _BookmarksLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ReferenceModel> bookmarks) bookmarksLoaded,
-    required TResult Function(List<ReferenceModel> history) historyLoaded,
+    required TResult Function(List<HistoryModel> history) historyLoaded,
     required TResult Function(ReferenceModel bookmark) bookmarkTapped,
+    required TResult Function(HistoryDatabase history) historyTapped,
     required TResult Function(String message) error,
   }) {
     return bookmarksLoaded(bookmarks);
@@ -439,8 +458,9 @@ class _$BookmarksLoadedImpl implements _BookmarksLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult? Function(List<ReferenceModel> history)? historyLoaded,
+    TResult? Function(List<HistoryModel> history)? historyLoaded,
     TResult? Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult? Function(HistoryDatabase history)? historyTapped,
     TResult? Function(String message)? error,
   }) {
     return bookmarksLoaded?.call(bookmarks);
@@ -452,8 +472,9 @@ class _$BookmarksLoadedImpl implements _BookmarksLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult Function(List<ReferenceModel> history)? historyLoaded,
+    TResult Function(List<HistoryModel> history)? historyLoaded,
     TResult Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult Function(HistoryDatabase history)? historyTapped,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -471,6 +492,7 @@ class _$BookmarksLoadedImpl implements _BookmarksLoaded {
     required TResult Function(_BookmarksLoaded value) bookmarksLoaded,
     required TResult Function(_HistoryLoaded value) historyLoaded,
     required TResult Function(_BookmarkTapped value) bookmarkTapped,
+    required TResult Function(_HistoryTapped value) historyTapped,
     required TResult Function(_Error value) error,
   }) {
     return bookmarksLoaded(this);
@@ -484,6 +506,7 @@ class _$BookmarksLoadedImpl implements _BookmarksLoaded {
     TResult? Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult? Function(_HistoryLoaded value)? historyLoaded,
     TResult? Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult? Function(_HistoryTapped value)? historyTapped,
     TResult? Function(_Error value)? error,
   }) {
     return bookmarksLoaded?.call(this);
@@ -497,6 +520,7 @@ class _$BookmarksLoadedImpl implements _BookmarksLoaded {
     TResult Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult Function(_HistoryLoaded value)? historyLoaded,
     TResult Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult Function(_HistoryTapped value)? historyTapped,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -523,7 +547,7 @@ abstract class _$$HistoryLoadedImplCopyWith<$Res> {
           _$HistoryLoadedImpl value, $Res Function(_$HistoryLoadedImpl) then) =
       __$$HistoryLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ReferenceModel> history});
+  $Res call({List<HistoryModel> history});
 }
 
 /// @nodoc
@@ -543,7 +567,7 @@ class __$$HistoryLoadedImplCopyWithImpl<$Res>
       null == history
           ? _value._history
           : history // ignore: cast_nullable_to_non_nullable
-              as List<ReferenceModel>,
+              as List<HistoryModel>,
     ));
   }
 }
@@ -551,12 +575,12 @@ class __$$HistoryLoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$HistoryLoadedImpl implements _HistoryLoaded {
-  const _$HistoryLoadedImpl(final List<ReferenceModel> history)
+  const _$HistoryLoadedImpl(final List<HistoryModel> history)
       : _history = history;
 
-  final List<ReferenceModel> _history;
+  final List<HistoryModel> _history;
   @override
-  List<ReferenceModel> get history {
+  List<HistoryModel> get history {
     if (_history is EqualUnmodifiableListView) return _history;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_history);
@@ -591,8 +615,9 @@ class _$HistoryLoadedImpl implements _HistoryLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ReferenceModel> bookmarks) bookmarksLoaded,
-    required TResult Function(List<ReferenceModel> history) historyLoaded,
+    required TResult Function(List<HistoryModel> history) historyLoaded,
     required TResult Function(ReferenceModel bookmark) bookmarkTapped,
+    required TResult Function(HistoryDatabase history) historyTapped,
     required TResult Function(String message) error,
   }) {
     return historyLoaded(history);
@@ -604,8 +629,9 @@ class _$HistoryLoadedImpl implements _HistoryLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult? Function(List<ReferenceModel> history)? historyLoaded,
+    TResult? Function(List<HistoryModel> history)? historyLoaded,
     TResult? Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult? Function(HistoryDatabase history)? historyTapped,
     TResult? Function(String message)? error,
   }) {
     return historyLoaded?.call(history);
@@ -617,8 +643,9 @@ class _$HistoryLoadedImpl implements _HistoryLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult Function(List<ReferenceModel> history)? historyLoaded,
+    TResult Function(List<HistoryModel> history)? historyLoaded,
     TResult Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult Function(HistoryDatabase history)? historyTapped,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -636,6 +663,7 @@ class _$HistoryLoadedImpl implements _HistoryLoaded {
     required TResult Function(_BookmarksLoaded value) bookmarksLoaded,
     required TResult Function(_HistoryLoaded value) historyLoaded,
     required TResult Function(_BookmarkTapped value) bookmarkTapped,
+    required TResult Function(_HistoryTapped value) historyTapped,
     required TResult Function(_Error value) error,
   }) {
     return historyLoaded(this);
@@ -649,6 +677,7 @@ class _$HistoryLoadedImpl implements _HistoryLoaded {
     TResult? Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult? Function(_HistoryLoaded value)? historyLoaded,
     TResult? Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult? Function(_HistoryTapped value)? historyTapped,
     TResult? Function(_Error value)? error,
   }) {
     return historyLoaded?.call(this);
@@ -662,6 +691,7 @@ class _$HistoryLoadedImpl implements _HistoryLoaded {
     TResult Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult Function(_HistoryLoaded value)? historyLoaded,
     TResult Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult Function(_HistoryTapped value)? historyTapped,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -673,10 +703,10 @@ class _$HistoryLoadedImpl implements _HistoryLoaded {
 }
 
 abstract class _HistoryLoaded implements BookmarkState {
-  const factory _HistoryLoaded(final List<ReferenceModel> history) =
+  const factory _HistoryLoaded(final List<HistoryModel> history) =
       _$HistoryLoadedImpl;
 
-  List<ReferenceModel> get history;
+  List<HistoryModel> get history;
   @JsonKey(ignore: true)
   _$$HistoryLoadedImplCopyWith<_$HistoryLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -689,6 +719,8 @@ abstract class _$$BookmarkTappedImplCopyWith<$Res> {
       __$$BookmarkTappedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({ReferenceModel bookmark});
+
+  $ReferenceModelCopyWith<$Res> get bookmark;
 }
 
 /// @nodoc
@@ -710,6 +742,14 @@ class __$$BookmarkTappedImplCopyWithImpl<$Res>
           : bookmark // ignore: cast_nullable_to_non_nullable
               as ReferenceModel,
     ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ReferenceModelCopyWith<$Res> get bookmark {
+    return $ReferenceModelCopyWith<$Res>(_value.bookmark, (value) {
+      return _then(_value.copyWith(bookmark: value));
+    });
   }
 }
 
@@ -751,8 +791,9 @@ class _$BookmarkTappedImpl implements _BookmarkTapped {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ReferenceModel> bookmarks) bookmarksLoaded,
-    required TResult Function(List<ReferenceModel> history) historyLoaded,
+    required TResult Function(List<HistoryModel> history) historyLoaded,
     required TResult Function(ReferenceModel bookmark) bookmarkTapped,
+    required TResult Function(HistoryDatabase history) historyTapped,
     required TResult Function(String message) error,
   }) {
     return bookmarkTapped(bookmark);
@@ -764,8 +805,9 @@ class _$BookmarkTappedImpl implements _BookmarkTapped {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult? Function(List<ReferenceModel> history)? historyLoaded,
+    TResult? Function(List<HistoryModel> history)? historyLoaded,
     TResult? Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult? Function(HistoryDatabase history)? historyTapped,
     TResult? Function(String message)? error,
   }) {
     return bookmarkTapped?.call(bookmark);
@@ -777,8 +819,9 @@ class _$BookmarkTappedImpl implements _BookmarkTapped {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult Function(List<ReferenceModel> history)? historyLoaded,
+    TResult Function(List<HistoryModel> history)? historyLoaded,
     TResult Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult Function(HistoryDatabase history)? historyTapped,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -796,6 +839,7 @@ class _$BookmarkTappedImpl implements _BookmarkTapped {
     required TResult Function(_BookmarksLoaded value) bookmarksLoaded,
     required TResult Function(_HistoryLoaded value) historyLoaded,
     required TResult Function(_BookmarkTapped value) bookmarkTapped,
+    required TResult Function(_HistoryTapped value) historyTapped,
     required TResult Function(_Error value) error,
   }) {
     return bookmarkTapped(this);
@@ -809,6 +853,7 @@ class _$BookmarkTappedImpl implements _BookmarkTapped {
     TResult? Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult? Function(_HistoryLoaded value)? historyLoaded,
     TResult? Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult? Function(_HistoryTapped value)? historyTapped,
     TResult? Function(_Error value)? error,
   }) {
     return bookmarkTapped?.call(this);
@@ -822,6 +867,7 @@ class _$BookmarkTappedImpl implements _BookmarkTapped {
     TResult Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult Function(_HistoryLoaded value)? historyLoaded,
     TResult Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult Function(_HistoryTapped value)? historyTapped,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {
@@ -839,6 +885,170 @@ abstract class _BookmarkTapped implements BookmarkState {
   ReferenceModel get bookmark;
   @JsonKey(ignore: true)
   _$$BookmarkTappedImplCopyWith<_$BookmarkTappedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$HistoryTappedImplCopyWith<$Res> {
+  factory _$$HistoryTappedImplCopyWith(
+          _$HistoryTappedImpl value, $Res Function(_$HistoryTappedImpl) then) =
+      __$$HistoryTappedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({HistoryDatabase history});
+}
+
+/// @nodoc
+class __$$HistoryTappedImplCopyWithImpl<$Res>
+    extends _$BookmarkStateCopyWithImpl<$Res, _$HistoryTappedImpl>
+    implements _$$HistoryTappedImplCopyWith<$Res> {
+  __$$HistoryTappedImplCopyWithImpl(
+      _$HistoryTappedImpl _value, $Res Function(_$HistoryTappedImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? history = null,
+  }) {
+    return _then(_$HistoryTappedImpl(
+      null == history
+          ? _value.history
+          : history // ignore: cast_nullable_to_non_nullable
+              as HistoryDatabase,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$HistoryTappedImpl implements _HistoryTapped {
+  const _$HistoryTappedImpl(this.history);
+
+  @override
+  final HistoryDatabase history;
+
+  @override
+  String toString() {
+    return 'BookmarkState.historyTapped(history: $history)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HistoryTappedImpl &&
+            (identical(other.history, history) || other.history == history));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, history);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$HistoryTappedImplCopyWith<_$HistoryTappedImpl> get copyWith =>
+      __$$HistoryTappedImplCopyWithImpl<_$HistoryTappedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ReferenceModel> bookmarks) bookmarksLoaded,
+    required TResult Function(List<HistoryModel> history) historyLoaded,
+    required TResult Function(ReferenceModel bookmark) bookmarkTapped,
+    required TResult Function(HistoryDatabase history) historyTapped,
+    required TResult Function(String message) error,
+  }) {
+    return historyTapped(history);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
+    TResult? Function(List<HistoryModel> history)? historyLoaded,
+    TResult? Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult? Function(HistoryDatabase history)? historyTapped,
+    TResult? Function(String message)? error,
+  }) {
+    return historyTapped?.call(history);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
+    TResult Function(List<HistoryModel> history)? historyLoaded,
+    TResult Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult Function(HistoryDatabase history)? historyTapped,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (historyTapped != null) {
+      return historyTapped(history);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_BookmarksLoaded value) bookmarksLoaded,
+    required TResult Function(_HistoryLoaded value) historyLoaded,
+    required TResult Function(_BookmarkTapped value) bookmarkTapped,
+    required TResult Function(_HistoryTapped value) historyTapped,
+    required TResult Function(_Error value) error,
+  }) {
+    return historyTapped(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_BookmarksLoaded value)? bookmarksLoaded,
+    TResult? Function(_HistoryLoaded value)? historyLoaded,
+    TResult? Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult? Function(_HistoryTapped value)? historyTapped,
+    TResult? Function(_Error value)? error,
+  }) {
+    return historyTapped?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_BookmarksLoaded value)? bookmarksLoaded,
+    TResult Function(_HistoryLoaded value)? historyLoaded,
+    TResult Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult Function(_HistoryTapped value)? historyTapped,
+    TResult Function(_Error value)? error,
+    required TResult orElse(),
+  }) {
+    if (historyTapped != null) {
+      return historyTapped(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _HistoryTapped implements BookmarkState {
+  const factory _HistoryTapped(final HistoryDatabase history) =
+      _$HistoryTappedImpl;
+
+  HistoryDatabase get history;
+  @JsonKey(ignore: true)
+  _$$HistoryTappedImplCopyWith<_$HistoryTappedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -909,8 +1119,9 @@ class _$ErrorImpl implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ReferenceModel> bookmarks) bookmarksLoaded,
-    required TResult Function(List<ReferenceModel> history) historyLoaded,
+    required TResult Function(List<HistoryModel> history) historyLoaded,
     required TResult Function(ReferenceModel bookmark) bookmarkTapped,
+    required TResult Function(HistoryDatabase history) historyTapped,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -922,8 +1133,9 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult? Function(List<ReferenceModel> history)? historyLoaded,
+    TResult? Function(List<HistoryModel> history)? historyLoaded,
     TResult? Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult? Function(HistoryDatabase history)? historyTapped,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -935,8 +1147,9 @@ class _$ErrorImpl implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ReferenceModel> bookmarks)? bookmarksLoaded,
-    TResult Function(List<ReferenceModel> history)? historyLoaded,
+    TResult Function(List<HistoryModel> history)? historyLoaded,
     TResult Function(ReferenceModel bookmark)? bookmarkTapped,
+    TResult Function(HistoryDatabase history)? historyTapped,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -954,6 +1167,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function(_BookmarksLoaded value) bookmarksLoaded,
     required TResult Function(_HistoryLoaded value) historyLoaded,
     required TResult Function(_BookmarkTapped value) bookmarkTapped,
+    required TResult Function(_HistoryTapped value) historyTapped,
     required TResult Function(_Error value) error,
   }) {
     return error(this);
@@ -967,6 +1181,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult? Function(_HistoryLoaded value)? historyLoaded,
     TResult? Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult? Function(_HistoryTapped value)? historyTapped,
     TResult? Function(_Error value)? error,
   }) {
     return error?.call(this);
@@ -980,6 +1195,7 @@ class _$ErrorImpl implements _Error {
     TResult Function(_BookmarksLoaded value)? bookmarksLoaded,
     TResult Function(_HistoryLoaded value)? historyLoaded,
     TResult Function(_BookmarkTapped value)? bookmarkTapped,
+    TResult Function(_HistoryTapped value)? historyTapped,
     TResult Function(_Error value)? error,
     required TResult orElse(),
   }) {

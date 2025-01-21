@@ -6,10 +6,12 @@ import 'package:epub_parser/epub_parser.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zahra/model/history_model.dart';
 
 import '../../../model/reference_model.dart';
 import '../../../model/search_model.dart';
 import '../../../model/style_model.dart';
+import '../../../repository/hostory_database.dart';
 import '../../../repository/reference_database.dart';
 import '../../../util/epub_helper.dart';
 import '../../../util/search_helper.dart';
@@ -161,6 +163,25 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
         emit(EpubViewerState.bookmarkAdded(status: addStatus));
       } else {
         emit(const EpubViewerState.bookmarkAdded(status: -1));
+      }
+    } catch (error) {
+      if (error is Exception) {
+        emit(EpubViewerState.error(error: error.toString()));
+      }
+    }
+  }
+
+
+  Future<void> addHistory(HistoryModel history) async {
+    try {
+      final historyDatabase = HistoryDatabase.instance;
+      final existingHistory = await historyDatabase
+          .getHistoryByBookTitleAndPage(history.bookPath, history.navIndex);
+      if (existingHistory.isEmpty) {
+        final int addStatus = await historyDatabase.addHistory(history);
+        emit(EpubViewerState.historyAdded(status: addStatus));
+      } else {
+        emit(const EpubViewerState.historyAdded(status: -1));
       }
     } catch (error) {
       if (error is Exception) {

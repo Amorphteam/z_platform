@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:zahra/repository/hostory_database.dart';
 
 import '../../../model/reference_model.dart';
 import '../../../repository/reference_database.dart';
@@ -10,6 +10,7 @@ class BookmarkCubit extends Cubit<BookmarkState> {
   BookmarkCubit() : super(const BookmarkState.initial());
 
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
+  final HistoryDatabase historyDatabase = HistoryDatabase.instance;
 
   Future<void> loadAllBookmarks() async {
     emit(const BookmarkState.loading());
@@ -31,6 +32,17 @@ class BookmarkCubit extends Cubit<BookmarkState> {
     }
   }
 
+  Future<void> deleteHistory(int id) async {
+    emit(const BookmarkState.loading());
+    try {
+      await historyDatabase.deleteHistory(id);
+      await loadAllHistory();
+    } catch (error) {
+      emit(BookmarkState.error(error.toString()));
+    }
+  }
+
+
   Future<void> filterBookmarks(String query) async {
     emit(const BookmarkState.loading());
     try {
@@ -48,7 +60,7 @@ class BookmarkCubit extends Cubit<BookmarkState> {
   Future<void> loadAllHistory() async {
     emit(const BookmarkState.loading());
     try {
-      final history = await referencesDatabase.getAllReferences();
+      final history = await historyDatabase.getAllHistory();
       emit(BookmarkState.historyLoaded(history));
     } catch (error) {
       emit(BookmarkState.error(error.toString()));
