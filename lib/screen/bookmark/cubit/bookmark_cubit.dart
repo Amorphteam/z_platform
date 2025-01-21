@@ -1,67 +1,57 @@
 import 'package:bloc/bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../model/reference_model.dart';
 import '../../../repository/reference_database.dart';
+import 'bookmark_state.dart';
 
-part 'bookmark_state.dart';
 
-
-//TODO: ITS BETTER TO USE FREEZEED
 class BookmarkCubit extends Cubit<BookmarkState> {
-  BookmarkCubit() : super(BookmarkInitState());
+  BookmarkCubit() : super(const BookmarkState.initial());
 
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
 
   Future<void> loadAllBookmarks() async {
-    emit(BookmarkLoadingState());
+    emit(const BookmarkState.loading());
     try {
       final bookmarks = await referencesDatabase.getAllReferences();
-      emit(AllBookmarksLoadedState(bookmarks));
+      emit(BookmarkState.bookmarksLoaded(bookmarks));
     } catch (error) {
-      if (error is Exception) {
-        emit(BookmarkErrorState(error));
-      }
+      emit(BookmarkState.error(error.toString()));
     }
   }
 
   Future<void> deleteBookmark(int id) async {
-    emit(BookmarkLoadingState());
+    emit(const BookmarkState.loading());
     try {
       await referencesDatabase.deleteReference(id);
-      emit(BookmarkDeletedState());
-      loadAllBookmarks();
-    } catch (error){
-      if (error is Exception){
-        emit(BookmarkErrorState(error));
-      }
+      await loadAllBookmarks();
+    } catch (error) {
+      emit(BookmarkState.error(error.toString()));
     }
   }
 
   Future<void> filterBookmarks(String query) async {
-    emit(BookmarkLoadingState());
+    emit(const BookmarkState.loading());
     try {
-      final bookmarks = await referencesDatabase.getFilterReference(query);
-      emit(AllBookmarksLoadedState(bookmarks));
+      final filteredBookmarks = await referencesDatabase.getFilterReference(query);
+      emit(BookmarkState.bookmarksLoaded(filteredBookmarks));
     } catch (error) {
-      if (error is Exception) {
-        emit(BookmarkErrorState(error));
-      }
+      emit(BookmarkState.error(error.toString()));
     }
   }
 
-  void openEpub(ReferenceModel item){
-    emit(BookmarkTappedState(item));
+  void openEpub(ReferenceModel item) {
+    emit(BookmarkState.bookmarkTapped(item));
   }
 
   Future<void> loadAllHistory() async {
-    emit(BookmarkLoadingState());
+    emit(const BookmarkState.loading());
     try {
-      final bookmarks = await referencesDatabase.getAllReferences();
-      emit(AllBookmarksLoadedState(bookmarks));
+      final history = await referencesDatabase.getAllReferences();
+      emit(BookmarkState.historyLoaded(history));
     } catch (error) {
-      if (error is Exception) {
-        emit(BookmarkErrorState(error));
-      }
+      emit(BookmarkState.error(error.toString()));
     }
   }
 }
