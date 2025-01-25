@@ -21,6 +21,7 @@ mixin _$SearchState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -29,6 +30,7 @@ mixin _$SearchState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -37,6 +39,7 @@ mixin _$SearchState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -46,6 +49,7 @@ mixin _$SearchState {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_LoadedList value) loadedList,
     required TResult Function(_error value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -54,6 +58,7 @@ mixin _$SearchState {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_LoadedList value)? loadedList,
     TResult? Function(_error value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -62,6 +67,7 @@ mixin _$SearchState {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_LoadedList value)? loadedList,
     TResult Function(_error value)? error,
     required TResult orElse(),
   }) =>
@@ -127,6 +133,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) {
     return initial();
@@ -138,6 +145,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) {
     return initial?.call();
@@ -149,6 +157,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -164,6 +173,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_LoadedList value) loadedList,
     required TResult Function(_error value) error,
   }) {
     return initial(this);
@@ -175,6 +185,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_LoadedList value)? loadedList,
     TResult? Function(_error value)? error,
   }) {
     return initial?.call(this);
@@ -186,6 +197,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_LoadedList value)? loadedList,
     TResult Function(_error value)? error,
     required TResult orElse(),
   }) {
@@ -241,6 +253,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) {
     return loading();
@@ -252,6 +265,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -263,6 +277,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -278,6 +293,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_LoadedList value) loadedList,
     required TResult Function(_error value) error,
   }) {
     return loading(this);
@@ -289,6 +305,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_LoadedList value)? loadedList,
     TResult? Function(_error value)? error,
   }) {
     return loading?.call(this);
@@ -300,6 +317,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_LoadedList value)? loadedList,
     TResult Function(_error value)? error,
     required TResult orElse(),
   }) {
@@ -389,6 +407,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) {
     return loaded(searchResults);
@@ -400,6 +419,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(searchResults);
@@ -411,6 +431,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -426,6 +447,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_LoadedList value) loadedList,
     required TResult Function(_error value) error,
   }) {
     return loaded(this);
@@ -437,6 +459,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_LoadedList value)? loadedList,
     TResult? Function(_error value)? error,
   }) {
     return loaded?.call(this);
@@ -448,6 +471,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_LoadedList value)? loadedList,
     TResult Function(_error value)? error,
     required TResult orElse(),
   }) {
@@ -465,6 +489,163 @@ abstract class _Loaded implements SearchState {
   List<SearchModel> get searchResults;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LoadedListImplCopyWith<$Res> {
+  factory _$$LoadedListImplCopyWith(
+          _$LoadedListImpl value, $Res Function(_$LoadedListImpl) then) =
+      __$$LoadedListImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<Book> books});
+}
+
+/// @nodoc
+class __$$LoadedListImplCopyWithImpl<$Res>
+    extends _$SearchStateCopyWithImpl<$Res, _$LoadedListImpl>
+    implements _$$LoadedListImplCopyWith<$Res> {
+  __$$LoadedListImplCopyWithImpl(
+      _$LoadedListImpl _value, $Res Function(_$LoadedListImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? books = null,
+  }) {
+    return _then(_$LoadedListImpl(
+      null == books
+          ? _value._books
+          : books // ignore: cast_nullable_to_non_nullable
+              as List<Book>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LoadedListImpl implements _LoadedList {
+  const _$LoadedListImpl(final List<Book> books) : _books = books;
+
+  final List<Book> _books;
+  @override
+  List<Book> get books {
+    if (_books is EqualUnmodifiableListView) return _books;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_books);
+  }
+
+  @override
+  String toString() {
+    return 'SearchState.loadedList(books: $books)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoadedListImpl &&
+            const DeepCollectionEquality().equals(other._books, _books));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_books));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoadedListImplCopyWith<_$LoadedListImpl> get copyWith =>
+      __$$LoadedListImplCopyWithImpl<_$LoadedListImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(List<Book> books) loadedList,
+    required TResult Function(String error) error,
+  }) {
+    return loadedList(books);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<Book> books)? loadedList,
+    TResult? Function(String error)? error,
+  }) {
+    return loadedList?.call(books);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<Book> books)? loadedList,
+    TResult Function(String error)? error,
+    required TResult orElse(),
+  }) {
+    if (loadedList != null) {
+      return loadedList(books);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_LoadedList value) loadedList,
+    required TResult Function(_error value) error,
+  }) {
+    return loadedList(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_LoadedList value)? loadedList,
+    TResult? Function(_error value)? error,
+  }) {
+    return loadedList?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_LoadedList value)? loadedList,
+    TResult Function(_error value)? error,
+    required TResult orElse(),
+  }) {
+    if (loadedList != null) {
+      return loadedList(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _LoadedList implements SearchState {
+  const factory _LoadedList(final List<Book> books) = _$LoadedListImpl;
+
+  List<Book> get books;
+  @JsonKey(ignore: true)
+  _$$LoadedListImplCopyWith<_$LoadedListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -535,6 +716,7 @@ class _$errorImpl implements _error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -546,6 +728,7 @@ class _$errorImpl implements _error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -557,6 +740,7 @@ class _$errorImpl implements _error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -572,6 +756,7 @@ class _$errorImpl implements _error {
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_LoadedList value) loadedList,
     required TResult Function(_error value) error,
   }) {
     return error(this);
@@ -583,6 +768,7 @@ class _$errorImpl implements _error {
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_LoadedList value)? loadedList,
     TResult? Function(_error value)? error,
   }) {
     return error?.call(this);
@@ -594,6 +780,7 @@ class _$errorImpl implements _error {
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_LoadedList value)? loadedList,
     TResult Function(_error value)? error,
     required TResult orElse(),
   }) {
