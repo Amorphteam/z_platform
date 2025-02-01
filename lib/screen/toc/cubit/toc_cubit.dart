@@ -12,10 +12,14 @@ class TocCubit extends Cubit<TocState> {
   TocCubit() : super(const TocState.initial());
   final JsonRepository _jsonRepository = JsonRepository();
 
-  Future<void> fetchItems(int id) async {
+  Future<void> fetchItems({int? id}) async {
     try {
       emit(const TocState.loading());
-      print('id is $id');
+      if (id == null) {
+        final items = await _jsonRepository.fetchAllJsonToc();
+        emit(TocState.loaded(items));
+        return;
+      }
       final items = await _jsonRepository.fetchJsonTocById(id);
       emit(TocState.loaded(items));
     } catch (e) {
