@@ -5,10 +5,13 @@ import 'package:zahra/screen/bookmark/bookmark_screen.dart';
 import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:zahra/screen/library/cubit/library_cubit.dart';
 import 'package:zahra/screen/library/library_screen.dart';
+import 'package:zahra/screen/recommanded_toc/cubit/recommanded_toc_cubit.dart';
 import 'package:zahra/screen/search/cubit/search_cubit.dart';
 import 'package:zahra/screen/search/search_screen.dart';
 import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
 import 'package:zahra/screen/toc/toc_screen.dart';
+
+import '../recommanded_toc/recommanded_toc_screen.dart';
 
 class HostScreen extends StatefulWidget {
   const HostScreen({super.key});
@@ -21,7 +24,10 @@ class _HostScreenState extends State<HostScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    Container(color: Colors.red),
+    BlocProvider(
+      create: (context) => RecommandedTocCubit(),
+      child:  RecommandedTocScreen(),
+    ),
     BlocProvider(
       create: (context) => TocCubit(),
       child:  TocScreen(),

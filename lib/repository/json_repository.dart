@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 import '../model/book_model.dart';
+import '../model/selected_toc_item.dart';
 import '../model/toc_item.dart';
 
 class JsonRepository {
@@ -51,6 +52,13 @@ class JsonRepository {
     final List<dynamic> data = json.decode(response) as List<dynamic>;
 
     return data.map((item) => TocItem.fromJson(item as Map<String, dynamic>)).toList();
+  }
+
+  Future<List<SelectedTocItem>> fetchJsonSelectedToc() async {
+    final String response = await rootBundle.loadString('assets/json/selectList.json');
+    final List<dynamic> data = json.decode(response) as List<dynamic>;
+
+    return data.map((item) => SelectedTocItem.fromJson(item as Map<String, dynamic>)).toList();
   }
 
 }
