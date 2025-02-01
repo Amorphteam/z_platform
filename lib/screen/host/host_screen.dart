@@ -3,31 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zahra/screen/bookmark/bookmark_screen.dart';
 import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
+import 'package:zahra/screen/library/cubit/library_cubit.dart';
+import 'package:zahra/screen/library/library_screen.dart';
 import 'package:zahra/screen/search/cubit/search_cubit.dart';
 import 'package:zahra/screen/search/search_screen.dart';
-
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]).then((_) {
-    runApp(const MyApp());
-  });
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
-        ),
-        home: const HostScreen(),
-      );
-}
+import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
+import 'package:zahra/screen/toc/toc_screen.dart';
 
 class HostScreen extends StatefulWidget {
   const HostScreen({super.key});
@@ -41,8 +22,14 @@ class _HostScreenState extends State<HostScreen> {
 
   final List<Widget> _screens = [
     Container(color: Colors.red),
-    Container(color: Colors.red),
-    Container(color: Colors.red),
+    BlocProvider(
+      create: (context) => TocCubit(),
+      child:  TocScreen(id: 1),
+    ),
+    BlocProvider(
+      create: (context) => LibraryCubit(),
+      child:  const LibraryScreen(),
+    ),
     BlocProvider(
       create: (context) => SearchCubit(),
       child: const SearchScreen(),
