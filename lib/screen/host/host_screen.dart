@@ -24,7 +24,7 @@ class _HostScreenState extends State<HostScreen> {
     Container(color: Colors.red),
     BlocProvider(
       create: (context) => TocCubit(),
-      child:  TocScreen(id: 1),
+      child:  TocScreen(),
     ),
     BlocProvider(
       create: (context) => LibraryCubit(),

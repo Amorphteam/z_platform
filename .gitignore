@@ -31,3 +31,23 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Flutter/Dart related files
+.dart_tool/
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Flutter build files
+flutter_build/
+
+# Ignoring temporary and cache files
+*.lock
+filecache/
+
+# Ignoring generated JSON
+*.g.dart
+
+# Ignoring VS Code settings
+.vscode/
