@@ -7,9 +7,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:zahra/model/history_model.dart';
 import 'package:zahra/screen/epub_viewer/widgets/toc_tree_list_widget.dart';
 
-import '../../model/category_model.dart';
+import '../../model/book_model.dart';
 import '../../model/reference_model.dart';
 import '../../model/search_model.dart';
 import '../../model/style_model.dart';
@@ -28,12 +29,14 @@ class EpubViewerScreen extends StatefulWidget {
   const EpubViewerScreen({
     super.key,
     this.referenceModel,
-    this.catModel,
+    this.book,
     this.tocModel,
     this.searchModel,
+    this.historyModel,
   });
   final ReferenceModel? referenceModel;
-  final CategoryModel? catModel;
+  final HistoryModel? historyModel;
+  final Book? book;
   final EpubChaptersWithBookPath? tocModel;
   final SearchModel? searchModel;
 
@@ -65,13 +68,21 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   final String _pathUrl = 'assets/epub/';
   List<String> _content = [];
   List<String> _orginalContent = [];
-
   bool _isSliderChange = false;
+  EpubViewerCubit? _epubViewerCubit;
   String searchedWord = '';
   bool isSearchOpen = false;
   bool isDarkMode = false;
   final focusNode = FocusNode();
   final textEditingController = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Save the cubit reference safely.
+    _epubViewerCubit = context.read<EpubViewerCubit>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -205,6 +216,11 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           final int intValue = doubleValue.toInt();
                           context.read<EpubViewerCubit>().emitCustomPageSeen((intValue).toString());
                         }
+                        if (widget.historyModel?.navIndex !=null){
+                          final double doubleValue = double.parse(widget.referenceModel!.navIndex);
+                          final int intValue = doubleValue.toInt();
+                          context.read<EpubViewerCubit>().emitCustomPageSeen((intValue).toString());
+                        }
                         if (widget.searchModel?.pageIndex !=null){
                           context.read<EpubViewerCubit>().emitCustomPageSeen((widget.searchModel!.pageIndex - 1).toString() ?? '0');
                           Future.delayed(const Duration(milliseconds: 500), () {
@@ -235,6 +251,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           lineHeight,
                           fontFamily,) => _buildCurrentUi(context, _content),
                       bookmarkAdded: (int? status) => _buildCurrentUi(context, _content),
+                      historyAdded: (int? status) => _buildCurrentUi(context, _content),
                       searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content),),
                 ),
               ),
@@ -331,7 +348,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   Widget _buildCurrentUi(BuildContext context, List<String>? content) {
-
     if (content == null){
       return Placeholder();
     } else {
@@ -810,7 +826,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   _loadEpubFromCategory() {
-    _bookPath = widget.catModel!.bookPath!;
+    _bookPath = widget.book!.epub!;
     _loadAndParseEpub(bookPath: _bookPath!);
 
   }
@@ -855,6 +871,11 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
   @override
   dispose() {
+    // Save the history before disposing
+    if (_epubViewerCubit != null) {
+      _saveHistory(); // Save the last visited page before disposing
+    }
+
     final pageHelper = PageHelper();
     pageHelper.saveBookData(widget.referenceModel?.bookPath?? _bookPath!, _currentPage);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
@@ -865,6 +886,21 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
     super.dispose();
   }
+
+  Future<void> _saveHistory() async {
+    if (_bookPath == null || _bookName.isEmpty) return;
+
+    final history = HistoryModel(
+      title: _bookName,
+      bookName: _bookName,
+      bookPath: _bookPath!,
+      navIndex: _currentPage.toString(),
+    );
+
+    // Save the history using your database logic
+    await _epubViewerCubit!.addHistory(history);
+  }
+
 
   String _getAppBarTitle(EpubViewerState state) => state.maybeWhen(
       loaded: (_, title, __) => title,

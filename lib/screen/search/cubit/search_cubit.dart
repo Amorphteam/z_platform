@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:zahra/model/epubBookLocal.dart';
 
+import '../../../model/book_model.dart';
 import '../../../model/search_model.dart';
+import '../../../repository/json_repository.dart';
 import '../../../util/search_helper.dart';
 
 part 'search_state.dart';
@@ -29,52 +31,19 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
+  Future<void> fetchBooksList() async {
+    final List<Book> books = await JsonRepository().loadEpubFromJson();
+    emit(SearchState.loadedList(books));
+  }
 
-  Future<void> storeEpubBooks() async {
+  void resetState() {
+    emit(const SearchState.initial());
+  }
+
+
+  Future<void> storeEpubBooks(Map<String, bool> selectedBooks) async {
     emit(const SearchState.loading());
-
-    // TODO: SHUOLD GET THE EPUBS FROM ASSETS
-    final List<String> allBooks = [
-      'assets/epub/1.epub',
-      'assets/epub/2.epub',
-      'assets/epub/3.epub',
-      'assets/epub/4.epub',
-      'assets/epub/5.epub',
-      'assets/epub/6.epub',
-      'assets/epub/7.epub',
-      'assets/epub/8.epub',
-      'assets/epub/9.epub',
-      'assets/epub/10.epub',
-      'assets/epub/11.epub',
-      'assets/epub/12.epub',
-      'assets/epub/13.epub',
-      'assets/epub/15.epub',
-      'assets/epub/16.epub',
-      'assets/epub/17.epub',
-      'assets/epub/18.epub',
-      'assets/epub/19.epub',
-      'assets/epub/20.epub',
-      'assets/epub/21.epub',
-      'assets/epub/22.epub',
-      'assets/epub/23.epub',
-      'assets/epub/24.epub',
-      'assets/epub/25.epub',
-      'assets/epub/26.epub',
-      'assets/epub/27.epub',
-      'assets/epub/28.epub',
-      'assets/epub/29.epub',
-      'assets/epub/30.epub',
-      'assets/epub/31.epub',
-      'assets/epub/32.epub',
-      'assets/epub/33.epub',
-      'assets/epub/34.epub',
-      'assets/epub/35.epub',
-      'assets/epub/36.epub',
-      'assets/epub/37.epub',
-      'assets/epub/38.epub',
-      'assets/epub/39.epub',
-      'assets/epub/40.epub',
-    ];
+    final List<String> allBooks = selectedBooks.entries.where((entry) => entry.value).map((entry) => entry.key).toList();
 
     epubBooks = await getEpubsFromAssets(allBooks);
   }
