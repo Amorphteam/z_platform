@@ -31,6 +31,20 @@ class JsonRepository {
     return result;
   }
 
+  Future<List<TocItem>> fetchAllJsonToc() async {
+    final allTocItem = await fetchJsonToc();
+    final List<TocItem> result = [];
+
+    void collectTocItems(List<TocItem> items) {
+      for (final item in items) {
+        result.add(item);
+        collectTocItems(item.childs ?? []);
+      }
+    }
+
+    collectTocItems(allTocItem);
+    return result;
+  }
 
   Future<List<TocItem>> fetchJsonToc() async {
     final String response = await rootBundle.loadString('assets/json/jsonlist.json');
