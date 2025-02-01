@@ -9,11 +9,11 @@ import '../../model/toc_item.dart';
 class TocScreen extends StatefulWidget {
    TocScreen({
     super.key,
-    required this.id,
+    this.id,
     this.title,
   });
 
-    final int id;
+   int? id;
    String? title;
 
   @override
@@ -28,7 +28,7 @@ class _TocScreenState extends State<TocScreen> {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
-    context.read<TocCubit>().fetchItems(widget.id);
+    context.read<TocCubit>().fetchItems(id: widget.id);
     if (widget.title != null && widget.title!.contains('\n')) {
       widget.title = widget.title!.replaceAll('\n', ' ');
     }
