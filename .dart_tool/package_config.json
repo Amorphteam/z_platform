@@ -458,6 +458,24 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "path_provider",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/path_provider-2.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "path_provider_android",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/path_provider_android-2.2.15",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "path_provider_foundation",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "path_provider_linux",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1",
       "packageUri": "lib/",
@@ -734,7 +752,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-02-01T04:51:28.684101Z",
+  "generated": "2025-02-01T15:47:44.176745Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///Users/alibayati/FlutterDev/flutter",

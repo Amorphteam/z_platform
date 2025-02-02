@@ -62,7 +62,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16.0,
                 mainAxisSpacing: 16.0,
-                childAspectRatio: 0.7,
+                childAspectRatio: 0.6,
               ),
               itemCount: books.length,
               itemBuilder: (context, index) {
@@ -90,9 +90,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                             borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(8.0),
                             ),
-                            child: Image.network(
-                              book.image!,
-                              fit: BoxFit.cover,
+                            child: Image.asset(
+                              'assets/image/${book.image!}',
+                              fit: BoxFit.fill,
                               width: double.infinity,
                             ),
                           )

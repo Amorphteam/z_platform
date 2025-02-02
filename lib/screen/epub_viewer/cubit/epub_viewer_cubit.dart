@@ -253,4 +253,5 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     emit(EpubViewerState.contentHighlighted(content: updatedContent, highlightedIndex: pageIndex - 1));
   }
 
+
 }

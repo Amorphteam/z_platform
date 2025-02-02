@@ -8,10 +8,12 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:zahra/model/history_model.dart';
+import 'package:zahra/repository/database_repository.dart';
 import 'package:zahra/screen/epub_viewer/widgets/toc_tree_list_widget.dart';
 
 import '../../model/book_model.dart';
 import '../../model/reference_model.dart';
+import '../../model/rejal.dart';
 import '../../model/search_model.dart';
 import '../../model/style_model.dart';
 import '../../model/tree_toc_model.dart';
@@ -961,20 +963,55 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
 
-  void _handleFragment(String fragment) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Fragment Clicked'),
-        content: Text('You clicked on fragment: $fragment'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+  Future<void> _handleFragment(String fragment) async {
+    List<String> ids = fragment.split('#').last.split(',');
+    if (ids.length > 1) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('یرجی اختیار الاسم'),
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 200, // Adjust based on content size
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: ids.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(ids[index]),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                  onTap: () {
+                    Navigator.pop(context); // Close the dialog
+                    // _handleSingleId(ids[index]); // Handle selected ID
+                  },
+                );
+              },
+            ),
           ),
-        ],
-      ),
-    );
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+    } else {
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('یرجی اختیار الاسم'),
+          content: Text('You clicked on multiple fragments: ${ids.join(', ')}'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void _handleAnchorTap(String? href, Map<String, String> attributes, dom.Element? element) {
@@ -987,6 +1024,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       }
     }
   }
+
 
 }
 

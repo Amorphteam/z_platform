@@ -50,6 +50,8 @@ dependencies:
   firebase_core: ^2.32.0
   firebase_analytics: ^10.10.7
   firebase_crashlytics: ^3.5.7
+  path_provider: ^2.1.2
+
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +81,7 @@ flutter:
     - assets/image/
     - assets/epub/
     - assets/icon/
+    - assets/db/
   fonts:
     - family: font1
       fonts:
