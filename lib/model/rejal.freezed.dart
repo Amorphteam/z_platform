@@ -26,7 +26,6 @@ mixin _$Rejal {
   String get det => throw _privateConstructorUsedError;
   int get joz => throw _privateConstructorUsedError;
   int get page => throw _privateConstructorUsedError;
-  int get favorite => throw _privateConstructorUsedError;
   String get harf => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,7 +45,6 @@ abstract class $RejalCopyWith<$Res> {
       String det,
       int joz,
       int page,
-      int favorite,
       String harf});
 }
 
@@ -69,7 +67,6 @@ class _$RejalCopyWithImpl<$Res, $Val extends Rejal>
     Object? det = null,
     Object? joz = null,
     Object? page = null,
-    Object? favorite = null,
     Object? harf = null,
   }) {
     return _then(_value.copyWith(
@@ -97,10 +94,6 @@ class _$RejalCopyWithImpl<$Res, $Val extends Rejal>
           ? _value.page
           : page // ignore: cast_nullable_to_non_nullable
               as int,
-      favorite: null == favorite
-          ? _value.favorite
-          : favorite // ignore: cast_nullable_to_non_nullable
-              as int,
       harf: null == harf
           ? _value.harf
           : harf // ignore: cast_nullable_to_non_nullable
@@ -123,7 +116,6 @@ abstract class _$$RejalImplCopyWith<$Res> implements $RejalCopyWith<$Res> {
       String det,
       int joz,
       int page,
-      int favorite,
       String harf});
 }
 
@@ -144,7 +136,6 @@ class __$$RejalImplCopyWithImpl<$Res>
     Object? det = null,
     Object? joz = null,
     Object? page = null,
-    Object? favorite = null,
     Object? harf = null,
   }) {
     return _then(_$RejalImpl(
@@ -172,10 +163,6 @@ class __$$RejalImplCopyWithImpl<$Res>
           ? _value.page
           : page // ignore: cast_nullable_to_non_nullable
               as int,
-      favorite: null == favorite
-          ? _value.favorite
-          : favorite // ignore: cast_nullable_to_non_nullable
-              as int,
       harf: null == harf
           ? _value.harf
           : harf // ignore: cast_nullable_to_non_nullable
@@ -194,7 +181,6 @@ class _$RejalImpl implements _Rejal {
       required this.det,
       required this.joz,
       required this.page,
-      this.favorite = 0,
       required this.harf});
 
   factory _$RejalImpl.fromJson(Map<String, dynamic> json) =>
@@ -214,14 +200,11 @@ class _$RejalImpl implements _Rejal {
   @override
   final int page;
   @override
-  @JsonKey()
-  final int favorite;
-  @override
   final String harf;
 
   @override
   String toString() {
-    return 'Rejal(id: $id, name: $name, name2: $name2, det: $det, joz: $joz, page: $page, favorite: $favorite, harf: $harf)';
+    return 'Rejal(id: $id, name: $name, name2: $name2, det: $det, joz: $joz, page: $page, harf: $harf)';
   }
 
   @override
@@ -235,15 +218,13 @@ class _$RejalImpl implements _Rejal {
             (identical(other.det, det) || other.det == det) &&
             (identical(other.joz, joz) || other.joz == joz) &&
             (identical(other.page, page) || other.page == page) &&
-            (identical(other.favorite, favorite) ||
-                other.favorite == favorite) &&
             (identical(other.harf, harf) || other.harf == harf));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, name, name2, det, joz, page, favorite, harf);
+      Object.hash(runtimeType, id, name, name2, det, joz, page, harf);
 
   @JsonKey(ignore: true)
   @override
@@ -267,7 +248,6 @@ abstract class _Rejal implements Rejal {
       required final String det,
       required final int joz,
       required final int page,
-      final int favorite,
       required final String harf}) = _$RejalImpl;
 
   factory _Rejal.fromJson(Map<String, dynamic> json) = _$RejalImpl.fromJson;
@@ -284,8 +264,6 @@ abstract class _Rejal implements Rejal {
   int get joz;
   @override
   int get page;
-  @override
-  int get favorite;
   @override
   String get harf;
   @override

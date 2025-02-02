@@ -12,7 +12,6 @@ class Rejal with _$Rejal {
     required String det,
     required int joz,
     required int page,
-    @Default(0) int favorite,
     required String harf,
   }) = _Rejal;
 

@@ -5,17 +5,6 @@ import '../util/database_helper.dart';
 
 class DatabaseRepository {
 
-  Future<Rejal?> getRejalById(int id) async {
-    final db = await DatabaseHelper.database;
-    List<Map<String, dynamic>> results =
-    await db.query("rejal", where: "ID = ?", whereArgs: [id]);
-
-    if (results.isNotEmpty) {
-      return Rejal.fromJson(results.first);
-    }
-    return null;
-  }
-
   Future<List<Rejal>> getRejalsByIds(List<int> ids) async {
     final db = await DatabaseHelper.database;
     String idList = ids.map((id) => '?').join(',');

@@ -965,44 +965,15 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
   Future<void> _handleFragment(String fragment) async {
     List<String> ids = fragment.split('#').last.split(',');
-    if (ids.length > 1) {
-      showDialog(
+      final databaseRepository = DatabaseRepository();
+      List<Rejal> rejals = await databaseRepository.getRejalsByIds(ids.map(int.parse).toList());
+    if (rejals.isEmpty) {
+      // If no data is found, show a default message
+      await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('یرجی اختیار الاسم'),
-          content: SizedBox(
-            width: double.maxFinite,
-            height: 200, // Adjust based on content size
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: ids.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(ids[index]),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {
-                    Navigator.pop(context); // Close the dialog
-                    // _handleSingleId(ids[index]); // Handle selected ID
-                  },
-                );
-              },
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
-            ),
-          ],
-        ),
-      );
-    } else {
-
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('یرجی اختیار الاسم'),
-          content: Text('You clicked on multiple fragments: ${ids.join(', ')}'),
+          title: const Text('Error'),
+          content: const Text('No details found for this reference.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -1011,6 +982,45 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           ],
         ),
       );
+      return;
+    }
+
+    if (ids.length > 1) {
+      await showDialog(
+        context: context,
+        builder: (context) => Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            title: const Text('اختر الاسم'),
+            content: SizedBox(
+              width: double.maxFinite,
+              height: 300,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: rejals.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(rejals[index].name),
+                    subtitle: Text(_getShortDescription(rejals[index].det), style: Theme.of(context).textTheme.bodySmall),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 12),
+                    onTap: () {
+                      _showSingleRejalDialog(rejals[index]);
+                    },
+                  );
+                },
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('إغلاق'),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      _showSingleRejalDialog(rejals.first);
     }
   }
 
@@ -1023,6 +1033,65 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         debugPrint('Anchor href: $href'); // For cases without `#`
       }
     }
+  }
+
+  void _showSingleRejalDialog(Rejal first) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Allows full-screen height
+      backgroundColor: Colors.transparent, // Optional: for rounded corners
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.9, // Almost full-screen
+        minChildSize: 0.5, // Allow dragging to half size
+        maxChildSize: 1.0, // Full-screen
+        expand: false,
+        builder: (context, scrollController) => Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              children: [
+                // Close button
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(width: 32), // To balance the close button
+                      Text(
+                        first.name,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Scrollable content
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      first.det, // Display `det` field
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ),
+    );
+  }
+
+  String _getShortDescription(String det) {
+    List<String> words = det.split(' ');
+    return words.length > 10 ? words.take(8).join(' ') + '...' : det;
   }
 
 
