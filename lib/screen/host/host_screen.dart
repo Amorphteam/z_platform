@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zahra/screen/bookmark/bookmark_screen.dart';
 import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
@@ -34,7 +34,7 @@ class _HostScreenState extends State<HostScreen> {
     ),
     BlocProvider(
       create: (context) => LibraryCubit(),
-      child:  const LibraryScreen(),
+      child: const LibraryScreen(),
     ),
     BlocProvider(
       create: (context) => SearchCubit(),
@@ -48,43 +48,49 @@ class _HostScreenState extends State<HostScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _screens,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _screens,
+      ),
+      bottomNavigationBar: Directionality(
+        textDirection: TextDirection.rtl,
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.star_fill), label: 'اخترنا لكم'),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.list_bullet), label: 'الفهرست'),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.book), label: 'الكتب'),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.search), label: 'البحث'),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.bookmark), label: 'العلامات'),
+          ],
         ),
-        bottomNavigationBar: Directionality(
-          textDirection: TextDirection.rtl,
-          child: NavigationBar(
-            backgroundColor: Theme.of(context).colorScheme.onPrimary,
-            selectedIndex: _currentIndex,
-            onDestinationSelected: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.recommend_rounded),
-                label: 'اخترنا لكم',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.toc_rounded),
-                label: 'الفهرست',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.library_books_rounded),
-                label: 'الكتب',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.search_rounded),
-                label: 'البحث ',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.bookmark_rounded),
-                label: 'العلامات',
-              ),
-            ],
-          ),
-        ),
-      );
+      ),
+    );
+
+  /// Returns the title for the app bar dynamically.
+  String _getTitle(int index) {
+    switch (index) {
+      case 0:
+        return 'اخترنا لكم';
+      case 1:
+        return 'الفهرست';
+      case 2:
+        return 'الكتب';
+      case 3:
+        return 'البحث';
+      case 4:
+        return 'العلامات';
+      default:
+        return '';
+    }
+  }
 }

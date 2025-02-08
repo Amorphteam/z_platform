@@ -46,9 +46,9 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.resolveWith((states) {
                   if (states.contains(MaterialState.selected)) {
-                    return Theme.of(context).colorScheme.primary;
+                    return Theme.of(context).colorScheme.secondary;
                   } else {
-                    return Colors.white70;
+                    return Theme.of(context).colorScheme.secondary.withOpacity(0.4);
                   }
                 }),
                 backgroundColor: MaterialStateProperty.resolveWith((states) {
@@ -148,13 +148,11 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(color: const Color(0xFFffffff)),
               ),
               const SizedBox(height: 8),
               Text(
                 subtitle,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(color: const Color(0xFFffffff)),
               ),
             ],
           ),

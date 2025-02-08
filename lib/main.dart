@@ -27,9 +27,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const ColorScheme lightColorScheme = ColorScheme(
       brightness: Brightness.light,
-      primary: Color(0xFF3f426d),
-      onPrimary: Color(0xFFD3C8C8),
-      secondary: Color(0xFF5A6147),
+      primary: Color(0xFFFFFFFF),
+      onPrimary: Color(0xFFEEEEEE),
+      secondary: Colors.blue,
       onSecondary: Color(0xFFFFFFFF),
       error: Color(0xFFBA1A1A),
       onError: Color(0xFFFFFFFF),
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       onSurface: Color(0xFF1B1C17),
       primaryContainer: Color(0xFFCDEF84),
       onPrimaryContainer: Color(0xFF141F00),
-      secondaryContainer: Color(0xFFCFA355),
+      secondaryContainer: Colors.blue,
       onSecondaryContainer: Color(0xFF171E09),
       tertiaryContainer: Color(0xFFBCECE4),
       onTertiaryContainer: Color(0xFF00201D),

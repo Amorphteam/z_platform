@@ -77,8 +77,8 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
               Navigator.pop(context, selectedBooks);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary, // Change this to your desired color
-              foregroundColor: Colors.white, // Text color
+              backgroundColor: Theme.of(context).colorScheme.secondary, // Change this to your desired color
+              foregroundColor: Theme.of(context).colorScheme.primary, // Text color
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             ),
             child: const Text("موافق"),
@@ -92,6 +92,8 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
     if (book.series == null || book.series!.isEmpty) {
       return ListTile(
         leading: Checkbox(
+          activeColor: Theme.of(context).colorScheme.secondary,
+          checkColor: Theme.of(context).colorScheme.primary,
           value: selectedBooks[book.epub],
           onChanged: (value) {
             setState(() {
@@ -106,6 +108,8 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
         title: Row(
           children: [
             Checkbox(
+              activeColor: Theme.of(context).colorScheme.secondary,
+              checkColor: Theme.of(context).colorScheme.primary,
               value: selectedBooks[book.epub],
               onChanged: (value) {
                 setState(() {
@@ -129,6 +133,8 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
             child: Row(
               children: [
                 Checkbox(
+                  activeColor: Theme.of(context).colorScheme.secondary,
+                  checkColor: Theme.of(context).colorScheme.primary,
                   value: selectedBooks[series.epub],
                   onChanged: (value) {
                     setState(() {

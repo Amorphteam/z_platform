@@ -26,7 +26,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text('كل النتائج: ${widget.searchResults.length}',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(color: const Color(0xFFFFffff)),),
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),),
           ),
         ),
         Expanded(

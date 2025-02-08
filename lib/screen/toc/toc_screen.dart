@@ -32,137 +32,130 @@ class _TocScreenState extends State<TocScreen> {
     if (widget.title != null && widget.title!.contains('\n')) {
       widget.title = widget.title!.replaceAll('\n', ' ');
     }
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white, // Maintain consistent icon color
-        ),
+    return SafeArea(
+      top: false,
+      child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(
-          widget.title ?? '',
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-      body: isLandscape
-          ? Row(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                AnimatedBuilder(
-                  animation: _opacityNotifier,
-                  builder: (_, __) => Container(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withOpacity(_opacityNotifier.value),
+        body: isLandscape
+            ? Row(
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  AnimatedBuilder(
+                    animation: _opacityNotifier,
+                    builder: (_, __) => Container(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(_opacityNotifier.value),
+                    ),
                   ),
-                ),
-                NotificationListener<ScrollNotification>(
-                  onNotification: (scrollNotification) {
-                    if (scrollNotification is ScrollUpdateNotification) {
-                      final pixels = scrollNotification.metrics.pixels;
-                      _opacityNotifier.value =
-                          (pixels / 560).clamp(0.0, 1.0);
-                    }
-                    return true;
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 0),
+                  NotificationListener<ScrollNotification>(
+                    onNotification: (scrollNotification) {
+                      if (scrollNotification is ScrollUpdateNotification) {
+                        final pixels = scrollNotification.metrics.pixels;
+                        _opacityNotifier.value =
+                            (pixels / 560).clamp(0.0, 1.0);
+                      }
+                      return true;
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 0),
 
-                    child: BlocBuilder<TocCubit, TocState>(
-                      builder: (context, state) => state.when(
-                        initial: () => const Center(
-                            child: Text('Tap to start fetching...')),
-                        loading: () => const Center(
-                            child: CircularProgressIndicator()),
-                        loaded: (items) {
-                          return _buildTocTree(items, context);
-                        },
-                        error: (message) =>
-                            Center(child: SelectionArea(child: Text(message))),
+                      child: BlocBuilder<TocCubit, TocState>(
+                        builder: (context, state) => state.when(
+                          initial: () => const Center(
+                              child: Text('Tap to start fetching...')),
+                          loading: () => const Center(
+                              child: CircularProgressIndicator()),
+                          loaded: (items) {
+                            return _buildTocTree(items, context);
+                          },
+                          error: (message) =>
+                              Center(child: SelectionArea(child: Text(message))),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primary,
-              padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
-
+            Expanded(
               child: Container(
+                color: Theme.of(context).colorScheme.primary,
+                padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
+
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        Theme.of(context).brightness == Brightness.dark
+                            ? 'assets/image/landimage_dark.jpg'
+                            : 'assets/image/landimage_light.jpg',
+                      ),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        )
+            : Stack(
+          children: [
+            !isLandscape ? Container(
+              color: Theme.of(context).colorScheme.primary,
+            ):
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
                       Theme.of(context).brightness == Brightness.dark
-                          ? 'assets/image/landimage_dark.jpg'
-                          : 'assets/image/landimage_light.jpg',
+                          ? 'assets/image/main_dark.jpg'
+                          : 'assets/image/main_light.jpg',
                     ),
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.fitWidth,
+                    alignment: Alignment.topCenter,
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      )
-          : Stack(
-        children: [
-          !isLandscape ? Container(
-            color: Theme.of(context).colorScheme.primary,
-          ):
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    Theme.of(context).brightness == Brightness.dark
-                        ? 'assets/image/main_dark.jpg'
-                        : 'assets/image/main_light.jpg',
-                  ),
-                  fit: BoxFit.fitWidth,
-                  alignment: Alignment.topCenter,
+            AnimatedBuilder(
+              animation: _opacityNotifier,
+              builder: (_, __) => Container(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withOpacity(_opacityNotifier.value),
+              ),
+            ),
+            NotificationListener<ScrollNotification>(
+              onNotification: (scrollNotification) {
+                if (scrollNotification is ScrollUpdateNotification) {
+                  final pixels = scrollNotification.metrics.pixels;
+                  _opacityNotifier.value =
+                      (pixels / 560).clamp(0.0, 1.0);
+                }
+                return true;
+              },
+              child: BlocBuilder<TocCubit, TocState>(
+                builder: (context, state) => state.when(
+                  initial: () =>
+                  const Center(child: Text('Tap to start fetching...')),
+                  loading: () =>
+                  const Center(child: CircularProgressIndicator()),
+                  loaded: (items) => _buildTocTree(items, context),
+                  error: (message) =>
+                      Center(child: SelectionArea(child: Text(message))),
                 ),
               ),
             ),
-          ),
-          AnimatedBuilder(
-            animation: _opacityNotifier,
-            builder: (_, __) => Container(
-              color: Theme.of(context)
-                  .colorScheme
-                  .primary
-                  .withOpacity(_opacityNotifier.value),
-            ),
-          ),
-          NotificationListener<ScrollNotification>(
-            onNotification: (scrollNotification) {
-              if (scrollNotification is ScrollUpdateNotification) {
-                final pixels = scrollNotification.metrics.pixels;
-                _opacityNotifier.value =
-                    (pixels / 560).clamp(0.0, 1.0);
-              }
-              return true;
-            },
-            child: BlocBuilder<TocCubit, TocState>(
-              builder: (context, state) => state.when(
-                initial: () =>
-                const Center(child: Text('Tap to start fetching...')),
-                loading: () =>
-                const Center(child: CircularProgressIndicator()),
-                loaded: (items) => _buildTocTree(items, context),
-                error: (message) =>
-                    Center(child: SelectionArea(child: Text(message))),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -187,8 +180,8 @@ class _TocScreenState extends State<TocScreen> {
           elevation: 0,
           child: ExpansionTile(
             title: _buildCardTitle(item, context),
-            iconColor: const Color(0xFFCFA355),
-            collapsedIconColor: const Color(0xFFCFA355),
+            iconColor: Theme.of(context).colorScheme.secondary,
+            collapsedIconColor: Theme.of(context).colorScheme.secondary,
             children: item.childs!
                 .map((child) => _buildTocItem(child, context, isNestedParent: true))
                 .toList(),
@@ -230,7 +223,7 @@ class _TocScreenState extends State<TocScreen> {
                           right: 16, left: 16, top: 8),
                       width: 10,
                       height: 10,
-                      color: const Color(0xFFCFA355),
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ],
                 ),

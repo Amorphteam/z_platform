@@ -30,52 +30,45 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
       widget.title = widget.title!.replaceAll('\n', ' ');
     }
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white, // Maintain consistent icon color
-        ),
+    return SafeArea(
+      top: false,
+      child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(
-          widget.title ?? '',
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-      body: isLandscape
-          ? Row(
-        children: [
-          Expanded(
-            child: BlocBuilder<RecommandedTocCubit, RecommandedTocState>(
-              builder: (context, state) => state.when(
-                initial: () => const Center(
-                    child: Text('Tap to start fetching...')),
-                loading: () => const Center(
-                    child: CircularProgressIndicator()),
-                loaded: (items) {
-                  return _buildSelectedTocList(items, context);
-                },
-                error: (message) =>
-                    Center(child: SelectionArea(child: Text(message))),
+        body: isLandscape
+            ? Row(
+          children: [
+            Expanded(
+              child: BlocBuilder<RecommandedTocCubit, RecommandedTocState>(
+                builder: (context, state) => state.when(
+                  initial: () => const Center(
+                      child: Text('Tap to start fetching...')),
+                  loading: () => const Center(
+                      child: CircularProgressIndicator()),
+                  loaded: (items) {
+                    return _buildSelectedTocList(items, context);
+                  },
+                  error: (message) =>
+                      Center(child: SelectionArea(child: Text(message))),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primary,
-              padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
+            Expanded(
+              child: Container(
+                color: Theme.of(context).colorScheme.primary,
+                padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
+              ),
             ),
+          ],
+        )
+            : BlocBuilder<RecommandedTocCubit, RecommandedTocState>(
+          builder: (context, state) => state.when(
+            initial: () => const Center(
+                child: Text('Tap to start fetching...')),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            loaded: (items) => _buildSelectedTocList(items, context),
+            error: (message) =>
+                Center(child: SelectionArea(child: Text(message))),
           ),
-        ],
-      )
-          : BlocBuilder<RecommandedTocCubit, RecommandedTocState>(
-        builder: (context, state) => state.when(
-          initial: () => const Center(
-              child: Text('Tap to start fetching...')),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          loaded: (items) => _buildSelectedTocList(items, context),
-          error: (message) =>
-              Center(child: SelectionArea(child: Text(message))),
         ),
       ),
     );
@@ -117,7 +110,7 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
                           right: 16, left: 16, top: 8),
                       width: 10,
                       height: 10,
-                      color: const Color(0xFFCFA355),
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ],
                 ),
