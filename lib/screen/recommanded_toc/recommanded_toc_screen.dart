@@ -80,13 +80,10 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
 
   Widget _buildSelectedTocItem(SelectedTocItem item, BuildContext context) => Container(
     alignment: Alignment.center,
-    margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-    child: Card(
-      color: Theme.of(context).colorScheme.onPrimary,
-      elevation: 0,
-      child: Container(
-        margin: const EdgeInsets.all(8.0),
-        child: Row(
+    margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+    child: Column(
+      children: [
+        Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
@@ -118,7 +115,11 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
             ),
           ],
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Divider(),
+        )
+      ],
     ),
   );
 

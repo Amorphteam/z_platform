@@ -175,17 +175,18 @@ class _TocScreenState extends State<TocScreen> {
           left: isNestedParent ? 0.0 : 16.0,
           bottom: 6,
         ),
-        child: Card(
-          color: Theme.of(context).colorScheme.onPrimary,
-          elevation: 0,
-          child: ExpansionTile(
-            title: _buildCardTitle(item, context),
-            iconColor: Theme.of(context).colorScheme.secondary,
-            collapsedIconColor: Theme.of(context).colorScheme.secondary,
-            children: item.childs!
-                .map((child) => _buildTocItem(child, context, isNestedParent: true))
-                .toList(),
-          ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: _buildCardTitle(item, context),
+              iconColor: Theme.of(context).colorScheme.secondary,
+              collapsedIconColor: Theme.of(context).colorScheme.secondary,
+              children: item.childs!
+                  .map((child) => _buildTocItem(child, context, isNestedParent: true))
+                  .toList(),
+            ),
+            Divider()
+          ],
         ),
       );
     }
@@ -194,43 +195,47 @@ class _TocScreenState extends State<TocScreen> {
   Widget _buildCardView(TocItem item, BuildContext context) => Container(
     alignment: Alignment.center,
     margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-    child: Card(
-      color: Theme.of(context).colorScheme.onPrimary,
-      elevation: 0,
-      child: Container(
-        margin: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () => _navigateTo(context, item),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: Text(
-                          item.title,
-                          textAlign: TextAlign.justify,
-                          style: Theme.of(context).textTheme.bodyLarge,
+    child: Container(
+      margin: const EdgeInsets.all(4.0),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => _navigateTo(context, item),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: Text(
+                            item.title,
+                            textAlign: TextAlign.justify,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(
-                          right: 16, left: 16, top: 8),
-                      width: 10,
-                      height: 10,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ],
+                      Container(
+                        margin: const EdgeInsets.only(
+                            right: 16, left: 16, top: 8),
+                        width: 10,
+                        height: 10,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Divider(),
+          )
+        ],
       ),
     ),
   );
