@@ -329,7 +329,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                               'html': Style(
                                 fontSize: FontSize.small,
                                 textAlign: TextAlign.justify,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                               'mark': Style(
                                 backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -402,97 +402,95 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                               'body': Style(
                                 direction: TextDirection.rtl,
                                 textAlign: TextAlign.justify,
-                                lineHeight: LineHeight(lineHeight.size),
-                                padding: HtmlPaddings.all(20),
                                 textDecoration: TextDecoration.none,
                               ),
                               'p': Style(
+                                color: isDarkMode ? Colors.white : const Color(0xFF996633),
                                 textAlign: TextAlign.justify,
+                                margin: Margins.only(bottom: 10),
                                 fontSize: FontSize(fontSize.size),
-                                margin: Margins.symmetric(vertical: 10),
                                 fontFamily: fontFamily.name,
                               ),
-                              '.tit1, h1': Style(
-                                color: isDarkMode? Colors.white :Colors.green[700],
-                                fontSize: FontSize(fontSize.size),
-                                margin: Margins.symmetric(vertical: 10),
+                              'p.center': Style(
+                                color: isDarkMode ? Colors.white : const Color(0xFF996633),
                                 textAlign: TextAlign.center,
-                                fontFamily: fontFamily.name,
-                              ),
-                              '.tit2, h2': Style(
-                                color: isDarkMode? Colors.white :Colors.green[700],
-                                fontSize: FontSize(fontSize.size),
-                                margin: Margins.symmetric(vertical: 10),
-                                textAlign: TextAlign.center,
-                                fontFamily: fontFamily.name,
-                              ),
-                              '.tit3, h3': Style(
-                                color: isDarkMode? Colors.white :Colors.black87,
-                                fontSize: FontSize(fontSize.size),
-                                margin: Margins.symmetric(vertical: 10),
-                                fontFamily: fontFamily.name,
-                              ),
-                              '.tit4, h4': Style(
-                                color: isDarkMode? Colors.white :Colors.red,
-                                fontSize: FontSize(fontSize.size),
                                 margin: Margins.zero,
-                                textAlign: TextAlign.right,
+                                fontSize: FontSize(fontSize.size),
+                                fontFamily: fontFamily.name,
+                              ),
+                              'a': Style(
+                                textDecoration: TextDecoration.none,
+                              ),
+                              'a:link': Style(
+                                color: const Color(0xFF2484C6),
+                              ),
+                              'a:visited': Style(
+                                color: Colors.red,
+                              ),
+                              'h1.tit1': Style(
+                                color: Colors.green[700],
+                                fontSize: FontSize(fontSize.size * 1.1),
+                                textAlign: TextAlign.center,
+                                fontFamily: fontFamily.name,
+                              ),
+                              'h2.tit2': Style(
+                                color: Colors.blue[900],
+                                fontSize: FontSize(fontSize.size),
+                                textAlign: TextAlign.center,
+                                fontFamily: fontFamily.name,
+                              ),
+                              'h3.tit3': Style(
+                                color: Colors.brown,
+                                fontSize: FontSize(fontSize.size),
+                                textAlign: TextAlign.center,
+                                fontFamily: fontFamily.name,
+                              ),
+                              'h4.tit4': Style(
+                                color: Colors.red,
+                                fontSize: FontSize(fontSize.size),
+                                textAlign: TextAlign.center,
                                 fontFamily: fontFamily.name,
                               ),
                               '.pagen': Style(
                                 textAlign: TextAlign.center,
-                                color: isDarkMode ? Colors.deepOrangeAccent: Colors.red,
-                                fontSize: FontSize(fontSize.size * 0.7),
-                              ),
-                              '.asl': Style(
-                                color: Colors.deepOrange,
+                                color: Colors.red,
                                 fontSize: FontSize(fontSize.size),
-                                fontWeight: FontWeight.bold,
-                                margin: Margins.symmetric(vertical: 10),
-                                fontFamily: 'Lotus Qazi Bold',
-                              ),
-                              '.center': Style(
-                                textAlign: TextAlign.center,
+                                fontFamily: fontFamily.name,
                               ),
                               '.fnote': Style(
                                 color: Colors.blue[900],
-                                fontSize: FontSize(fontSize.size * 0.8),
-                                margin: Margins.zero,
+                                fontSize: FontSize(fontSize.size * 0.75),
+                                textAlign: TextAlign.justify,
                               ),
                               '.sher': Style(
                                 textAlign: TextAlign.center,
-                                color: isDarkMode ? Colors.white : Colors.red[800],
-                                fontSize: FontSize(fontSize.size),
-                                margin: Margins.symmetric(vertical: 10),
-                              ),
-
-                              '.fnotesher': Style(
-                                textAlign: TextAlign.center,
                                 color: Colors.red[800],
-                                fontSize: FontSize(fontSize.size),
-                                margin: Margins.zero,
+                                fontSize: FontSize(fontSize.size * 0.8),
                               ),
                               '.psm': Style(
                                 textAlign: TextAlign.center,
                                 color: Colors.red[800],
-                                fontSize: FontSize(fontSize.size),
-                                margin: Margins.symmetric(vertical: 10),
+                                fontSize: FontSize(fontSize.size * 0.8),
                               ),
                               '.msaleh': Style(
                                 color: Colors.purple,
                                 fontWeight: FontWeight.bold,
                               ),
+                              '.onwan': Style(
+                                color: Colors.teal[700],
+                                fontWeight: FontWeight.bold,
+                              ),
                               '.fn': Style(
                                 color: Colors.blue[900],
                                 fontWeight: FontWeight.normal,
-                                fontSize: FontSize(fontSize.size * 0.8),
+                                fontSize: FontSize(fontSize.size * 0.75),
                                 textDecoration: TextDecoration.none,
                                 verticalAlign: VerticalAlign.top,
                               ),
                               '.fm': Style(
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold,
-                                fontSize: FontSize(fontSize.size * 0.7),
+                                fontSize: FontSize(fontSize.size * 0.75),
                                 textDecoration: TextDecoration.none,
                               ),
                               '.quran': Style(
@@ -505,6 +503,11 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                                 fontSize: FontSize(fontSize.size),
                                 color: Colors.teal,
                               ),
+                              '.hadith-num': Style(
+                                fontWeight: FontWeight.bold,
+                                fontSize: FontSize(fontSize.size),
+                                color: Colors.red,
+                              ),
                               '.shreah': Style(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.purple[900],
@@ -514,8 +517,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                                 color: Colors.pink[700],
                               ),
                               'mark': Style(
-                                backgroundColor: Colors
-                                    .yellow, // Highlight color
+                                backgroundColor: Colors.yellow,
                               ),
                             },
                           ),
@@ -533,8 +535,14 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               child: Column(
                 children: [
                   Slider(
-                    thumbColor: const Color(0xFF3f426d),
-                    activeColor: const Color(0xFF3f426d),
+                    thumbColor: Theme
+                        .of(context)
+                        .colorScheme
+                        .onSurface,
+                    activeColor:Theme
+                        .of(context)
+                        .colorScheme
+                        .onSurface,
                     value: _currentPage,
                     min: 0,
                     max: allPagesCount ?? -1,
@@ -1045,46 +1053,68 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         minChildSize: 0.5, // Allow dragging to half size
         maxChildSize: 1.0, // Full-screen
         expand: false,
-        builder: (context, scrollController) => Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            child: Column(
-              children: [
-                // Close button
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox(width: 32), // To balance the close button
-                      Text(
-                        first.name,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  ),
+        builder: (context, scrollController) => Directionality(
+          textDirection: TextDirection.rtl,
+          child: Stack(
+            children: [Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                 ),
-
-                // Scrollable content
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      first.det, // Display `det` field
-                      style: Theme.of(context).textTheme.bodyLarge,
+                child: Column(
+                  children: [
+                    // Close button
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(width: 32), // To balance the close button
+                          Text(
+                            first.name,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      ),
                     ),
+
+                    // Scrollable content
+                    Expanded(
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          first.det, // Display `det` field
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 40,
+                color: Theme.of(context).colorScheme.surface,
+                child: Center(
+                  child: Text(
+                    '  معجم رجال الحديث ${first.joz} : ${first.page}',
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
-              ],
+              ),
             ),
+
+            ],
           ),
+        ),
       ),
     );
   }
