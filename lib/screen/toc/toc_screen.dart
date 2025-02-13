@@ -7,14 +7,14 @@ import 'package:zahra/util/navigation_helper.dart';
 import '../../model/toc_item.dart';
 
 class TocScreen extends StatefulWidget {
-   TocScreen({
+  TocScreen({
     super.key,
     this.id,
     this.title,
   });
 
-   int? id;
-   String? title;
+  int? id;
+  String? title;
 
   @override
   State<TocScreen> createState() => _TocScreenState();
@@ -167,12 +167,16 @@ class _TocScreenState extends State<TocScreen> {
     );
   }
 
-  Widget _buildTocTree(List<TocItem> items, BuildContext context) => ListView(
-    children: items.map((item) => _buildTocItem(item, context)).toList(),
-  );
+  Widget _buildTocTree(List<TocItem> items, BuildContext context) {
+    final rootItems = items.where((item) => item.parentId == 0).toList();
 
-  Widget _buildTocItem(TocItem item, BuildContext context,
-      {bool isNestedParent = false}) {
+    return ListView(
+      children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
+    );
+  }
+
+
+  Widget _buildTocItem(TocItem item, BuildContext context, {bool isNestedParent = false}) {
     if (item.childs == null || item.childs!.isEmpty) {
       return _buildCardView(item, context);
     } else {
@@ -190,6 +194,7 @@ class _TocScreenState extends State<TocScreen> {
             iconColor: const Color(0xFFCFA355),
             collapsedIconColor: const Color(0xFFCFA355),
             children: item.childs!
+                .where((child) => child.parentId == item.id) // Ensure only direct children are added
                 .map((child) => _buildTocItem(child, context, isNestedParent: true))
                 .toList(),
           ),
@@ -197,6 +202,7 @@ class _TocScreenState extends State<TocScreen> {
       );
     }
   }
+
 
   Widget _buildCardView(TocItem item, BuildContext context) => Container(
     alignment: Alignment.center,
