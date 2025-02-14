@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       colorScheme: lightColorScheme,
-      fontFamily: 'almarai',
+      fontFamily: 'SFProDisplay',
     );
 
     final ThemeData darkTheme = ThemeData(
@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       colorScheme: darkColorScheme,
-      fontFamily: 'almarai',
+      fontFamily: 'SFProDisplay',
     );
 
     return BlocProvider(

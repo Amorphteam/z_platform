@@ -101,3 +101,8 @@ flutter:
     - family: almarai
       fonts:
         - asset: assets/font/almarai.ttf
+    - family: SFProDisplay
+      fonts:
+        - asset: assets/font/SF-Pro-Display-Regular.otf
+        - asset: assets/font/SF-Pro-Display-Bold.otf
+          weight: 700
