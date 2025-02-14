@@ -50,17 +50,24 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future<List<EpubBookLocal>> getEpubsFromAssets(List<String> allBooks) async {
     final List<EpubBookLocal> epubBooks = [];
+
     for (final bookPath in allBooks) {
-      final epubData = await rootBundle.load(bookPath);
-      final epubBook = await EpubReader.readBook(epubData.buffer.asUint8List());
+      try {
+        final epubData = await rootBundle.load('assets/epub/$bookPath');
+        final epubBook = await EpubReader.readBook(epubData.buffer.asUint8List());
 
-      final String fileName = getFileNameFromPath(bookPath);
-
-      final epubBookLocal = EpubBookLocal(epubBook, fileName);
-      epubBooks.add(epubBookLocal);
+        final String fileName = getFileNameFromPath(bookPath);
+        final epubBookLocal = EpubBookLocal(epubBook, fileName);
+        epubBooks.add(epubBookLocal);
+      } catch (e) {
+        print("❌ Could not load book: $bookPath - Skipping... Error: $e");
+        continue; // Skip missing books without crashing
+      }
     }
+
     return epubBooks;
   }
+
 
   String getFileNameFromPath(String bookPath) {
     final RegExp regExp = RegExp(r'[^/]+\.epub$');
