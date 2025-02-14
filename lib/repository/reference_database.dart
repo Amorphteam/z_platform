@@ -133,6 +133,11 @@ class ReferencesDatabase {
     );
   }
 
+  Future<void> clearAllReferences() async {
+    final db = await instance.database;
+    await db.delete('reference_database');
+  }
+
 
 
 }

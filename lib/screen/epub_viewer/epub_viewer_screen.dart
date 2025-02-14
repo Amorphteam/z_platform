@@ -899,9 +899,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
   Future<void> _saveHistory() async {
     if (_bookPath == null || _bookName.isEmpty) return;
+    final String? headingTitle = _findPreviousHeading(_currentPage);
 
     final history = HistoryModel(
-      title: _bookName,
+      title: headingTitle ?? ' علامة مرجعية على كتاب $_bookName',
       bookName: _bookName,
       bookPath: _bookPath!,
       navIndex: _currentPage.toString(),

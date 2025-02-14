@@ -32,6 +32,12 @@ class HistoryDatabase {
     ''');
   }
 
+  Future<void> clearAllHistory() async {
+    final db = await instance.database;
+    await db.delete('history_database');
+  }
+
+
   Future<int> addHistory(HistoryModel historyModel) async {
     final db = await instance.database;
     return await db.insert('history_database', historyModel.toJson());
