@@ -37,6 +37,13 @@ class SearchHelper {
     }
   }
 
+  String removeArabicDiacritics(String text) {
+    final RegExp diacriticsRegex = RegExp(
+      r'[\u064B-\u065F\u0610-\u061A\u06D6-\u06DC\u06DF-\u06E8\u06EA-\u06ED]',
+      unicode: true,
+    );
+    return text.replaceAll(diacriticsRegex, '');
+  }
 
   Future<void> _searchAllBooks(SearchTask task) async {
     // Create a ReceivePort to get messages from the main isolate
@@ -94,8 +101,8 @@ class SearchHelper {
     List<HtmlFileInfo> spine;
     try {
       if (spineFile.isEmpty || epub == null) {
-         epubBook = await loadEpubFromAsset(bookPath);
-         spine = await extractHtmlContentWithEmbeddedImages(epubBook);
+        epubBook = await loadEpubFromAsset(bookPath);
+        spine = await extractHtmlContentWithEmbeddedImages(epubBook);
       } else {
         spine = spineFile;
         epubBook = epub;
@@ -133,22 +140,23 @@ class SearchHelper {
   Future<List<SearchModel>> searchHtmlContents(List<String> htmlContents, String searchWord, String? bookName, String? bookAddress) async {
     final List<SearchModel> results = [];
 
+    final normalizedSearchWord = removeArabicDiacritics(searchWord); // Normalize search term
+
     for (int i = 0; i < htmlContents.length; i++) {
       final String pageContent = _removeHtmlTags(htmlContents[i]);
-      SearchIndex searchIndex = _searchInString(pageContent, searchWord, 0);
+      SearchIndex searchIndex = _searchInString(pageContent, normalizedSearchWord, 0);
 
       while (searchIndex.startIndex >= 0) {
         results.add(SearchModel(
-          pageIndex: i +1,  // Use the loop index as the page index
-          searchedWord: searchWord,
-          searchCount: results.length + 1,  // Directly use the length of results for search count
+          pageIndex: i + 1,
+          searchedWord: searchWord,  // Keep original input for display
+          searchCount: results.length + 1,
           spanna: _getHighlightedSection(searchIndex, pageContent),
           bookAddress: bookAddress,
           bookTitle: bookName,
-        ),);
+        ));
 
-        // Continue searching from the end of the last found index
-        searchIndex = _searchInString(pageContent, searchWord, searchIndex.lastIndex + 1);
+        searchIndex = _searchInString(pageContent, normalizedSearchWord, searchIndex.lastIndex + 1);
       }
     }
 
@@ -168,15 +176,21 @@ class SearchHelper {
   }
 
   SearchIndex _searchInString(String pageString, String sw, int start) {
-    final startIndex = pageString.indexOf(sw, start);
-    return startIndex >= 0 ? SearchIndex(startIndex, startIndex + sw.length) : SearchIndex(-1, -1);
+    final normalizedPage = removeArabicDiacritics(pageString); // Remove diacritics from text
+    final normalizedSearchWord = removeArabicDiacritics(sw); // Remove diacritics from search query
+
+    final startIndex = normalizedPage.indexOf(normalizedSearchWord, start);
+    return startIndex >= 0 ? SearchIndex(startIndex, startIndex + normalizedSearchWord.length) : SearchIndex(-1, -1);
   }
 
   Future<void> stopSearch(bool stop) async {
     _isSearchStopped = stop;
   }
 
-  String _removeHtmlTags(String htmlString) => parse(htmlString).documentElement!.text;
+  String _removeHtmlTags(String htmlString) {
+    final text = parse(htmlString).documentElement!.text;
+    return removeArabicDiacritics(text); // Normalize Arabic text
+  }
 }
 
 class SearchIndex {

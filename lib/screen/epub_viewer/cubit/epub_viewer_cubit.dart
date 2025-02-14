@@ -230,8 +230,9 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
     // Decode HTML entities and remove extra HTML tags from searchTerm
     var decodedSearchTerm = html_parser.parse(searchTerm).documentElement?.text ?? '';
-    decodedSearchTerm = RegExp.escape(decodedSearchTerm);
-    final regex = RegExp(decodedSearchTerm, caseSensitive: false);
+
+    // Normalize the search term by removing diacritics
+    final normalizedSearchTerm = searchHelper.removeArabicDiacritics(decodedSearchTerm);
 
     // Create a new list to store updated content
     final List<String> updatedContent = [];
@@ -241,10 +242,11 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       // Convert Latin numbers to Arabic in the content before highlighting
       final convertedContent = convertLatinNumbersToArabic(content);
 
-      final highlightedContent = convertedContent.replaceAllMapped(
-        regex,
-            (match) => '<mark>${match[0]}</mark>',
-      );
+      // Remove diacritics from the content for searching
+      final normalizedContent = searchHelper.removeArabicDiacritics(convertedContent);
+
+      // Get the positions of matches in the normalized content
+      final highlightedContent = _applyHighlightingUsingMapping(convertedContent, normalizedContent, normalizedSearchTerm);
 
       updatedContent.add(highlightedContent);
     }
@@ -252,6 +254,54 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     // Emit the new state with updated content
     emit(EpubViewerState.contentHighlighted(content: updatedContent, highlightedIndex: pageIndex - 1));
   }
+
+  String _applyHighlightingUsingMapping(String originalContent, String normalizedContent, String normalizedSearchTerm) {
+    final List<Match> matches = RegExp(RegExp.escape(normalizedSearchTerm), caseSensitive: false)
+        .allMatches(normalizedContent)
+        .toList();
+
+    if (matches.isEmpty) return originalContent;
+
+    // Create a mapping of originalContent -> normalizedContent index positions
+    Map<int, int> indexMapping = {};
+    int originalIndex = 0;
+    int normalizedIndex = 0;
+
+    while (originalIndex < originalContent.length && normalizedIndex < normalizedContent.length) {
+      if (originalContent[originalIndex] == normalizedContent[normalizedIndex]) {
+        indexMapping[normalizedIndex] = originalIndex;
+        normalizedIndex++;
+      }
+      originalIndex++;
+    }
+
+    String highlightedContent = originalContent;
+    int offset = 0;
+
+    for (final match in matches) {
+      if (!indexMapping.containsKey(match.start) || !indexMapping.containsKey(match.end - 1)) {
+        continue; // Skip if we can't properly map back
+      }
+
+      final int matchStart = indexMapping[match.start]! + offset;
+      final int matchEnd = indexMapping[match.end - 1]! + 1 + offset;
+
+      // Extract the actual matched word from the original content
+      final originalMatch = originalContent.substring(matchStart, matchEnd);
+
+      // Wrap it in a <mark> tag
+      final replacement = '<mark>$originalMatch</mark>';
+
+      // Replace in the content
+      highlightedContent = highlightedContent.replaceRange(matchStart, matchEnd, replacement);
+
+      // Adjust offset to account for the length increase due to <mark></mark>
+      offset += replacement.length - originalMatch.length;
+    }
+
+    return highlightedContent;
+  }
+
 
 
 }
