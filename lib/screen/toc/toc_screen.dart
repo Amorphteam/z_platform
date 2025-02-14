@@ -8,14 +8,14 @@ import '../../model/toc_item.dart';
 import '../../widget/custom_appbar.dart';
 
 class TocScreen extends StatefulWidget {
-   TocScreen({
+  TocScreen({
     super.key,
     this.id,
     this.title,
   });
 
-   int? id;
-   String? title;
+  int? id;
+  String? title;
 
   @override
   State<TocScreen> createState() => _TocScreenState();
@@ -23,159 +23,83 @@ class TocScreen extends StatefulWidget {
 
 class _TocScreenState extends State<TocScreen> {
   final ValueNotifier<double> _opacityNotifier = ValueNotifier(0.0);
+  List<TocItem> _allItems = [];
+  List<TocItem> _filteredItems = [];
+  bool _showSearchBar = true;
+  String searchedWord = '';
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<TocCubit>().fetchItems(id: widget.id);
+  }
+
+  void _filterItems(String query) {
+    setState(() {
+      searchedWord = query;
+      if (query.isEmpty) {
+        _filteredItems = _allItems;
+      } else {
+        // Show only leaf nodes (last children) in a flat list
+        _filteredItems = _allItems
+            .where((item) => (item.childs == null || item.childs!.isEmpty) &&
+            item.title.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-
-    context.read<TocCubit>().fetchItems(id: widget.id);
-    if (widget.title != null && widget.title!.contains('\n')) {
-      widget.title = widget.title!.replaceAll('\n', ' ');
-    }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: CustomAppBar(
         title: "الحديث الشريف",
-        leftIcon: Icons.info_outline_rounded, // Example: Menu icon
-        rightIcon: Icons.settings_outlined, // Example: Search icon
-        onLeftTap: () {
-          print("Left icon tapped!");
-        },
+        leftIcon: Icons.info_outline_rounded,
+        rightIcon: Icons.settings_outlined,
+        onLeftTap: () => print("Left icon tapped!"),
         onRightTap: () {
-          print("Right icon tapped!");
+          setState(() {
+            _showSearchBar = !_showSearchBar; // Toggle search bar visibility
+          });
         },
+        onSearch: _showSearchBar ? _filterItems : null, // Pass search function only if needed
+        showSearchBar: _showSearchBar,
       ),
-      body: isLandscape
-          ? Row(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                AnimatedBuilder(
-                  animation: _opacityNotifier,
-                  builder: (_, __) => Container(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withOpacity(_opacityNotifier.value),
-                  ),
-                ),
-                NotificationListener<ScrollNotification>(
-                  onNotification: (scrollNotification) {
-                    if (scrollNotification is ScrollUpdateNotification) {
-                      final pixels = scrollNotification.metrics.pixels;
-                      _opacityNotifier.value =
-                          (pixels / 560).clamp(0.0, 1.0);
-                    }
-                    return true;
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 0),
-
-                    child: BlocBuilder<TocCubit, TocState>(
-                      builder: (context, state) => state.when(
-                        initial: () => const Center(
-                            child: Text('Tap to start fetching...')),
-                        loading: () => const Center(
-                            child: CircularProgressIndicator()),
-                        loaded: (items) {
-                          return _buildTocTree(items, context);
-                        },
-                        error: (message) =>
-                            Center(child: SelectionArea(child: Text(message))),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primary,
-              padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
-
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? 'assets/image/landimage_dark.jpg'
-                          : 'assets/image/landimage_light.jpg',
-                    ),
-                    fit: BoxFit.fitHeight,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      )
-          : Stack(
-        children: [
-          !isLandscape ? Container(
-            color: Theme.of(context).colorScheme.primary,
-          ):
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    Theme.of(context).brightness == Brightness.dark
-                        ? 'assets/image/main_dark.jpg'
-                        : 'assets/image/main_light.jpg',
-                  ),
-                  fit: BoxFit.fitWidth,
-                  alignment: Alignment.topCenter,
-                ),
-              ),
-            ),
-          ),
-          AnimatedBuilder(
-            animation: _opacityNotifier,
-            builder: (_, __) => Container(
-              color: Theme.of(context)
-                  .colorScheme
-                  .primary
-                  .withOpacity(_opacityNotifier.value),
-            ),
-          ),
-          NotificationListener<ScrollNotification>(
-            onNotification: (scrollNotification) {
-              if (scrollNotification is ScrollUpdateNotification) {
-                final pixels = scrollNotification.metrics.pixels;
-                _opacityNotifier.value =
-                    (pixels / 560).clamp(0.0, 1.0);
-              }
-              return true;
+      body: BlocBuilder<TocCubit, TocState>(
+        builder: (context, state) {
+          return state.when(
+            initial: () => const Center(child: Text('Tap to start fetching...')),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            loaded: (items) {
+              _allItems = items;
+              _filteredItems = _filteredItems.isNotEmpty ? _filteredItems : items;
+              return _buildTocTree(_filteredItems, context);
             },
-            child: BlocBuilder<TocCubit, TocState>(
-              builder: (context, state) => state.when(
-                initial: () =>
-                const Center(child: Text('Tap to start fetching...')),
-                loading: () =>
-                const Center(child: CircularProgressIndicator()),
-                loaded: (items) => _buildTocTree(items, context),
-                error: (message) =>
-                    Center(child: SelectionArea(child: Text(message))),
-              ),
-            ),
-          ),
-        ],
+            error: (message) => Center(child: Text(message)),
+          );
+        },
       ),
     );
   }
+
 
   Widget _buildTocTree(List<TocItem> items, BuildContext context) {
-    final rootItems = items.where((item) => item.parentId == 0).toList();
-
-    return ListView(
-      children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
-    );
+    if (searchedWord.isNotEmpty && _filteredItems.isNotEmpty) {
+      // If searching, show a normal (flat) list
+      return ListView.builder(
+        itemCount: _filteredItems.length,
+        itemBuilder: (context, index) => _buildCardView(_filteredItems[index], context),
+      );
+    } else {
+      // If not searching, show the tree structure
+      final rootItems = items.where((item) => item.parentId == 0).toList();
+      return ListView(
+        children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
+      );
+    }
   }
+
 
   Widget _buildTocItem(TocItem item, BuildContext context,
       {bool isNestedParent = false}) {
@@ -192,6 +116,9 @@ class _TocScreenState extends State<TocScreen> {
           children: [
             ExpansionTile(
               title: _buildCardTitle(item, context),
+              shape: const RoundedRectangleBorder(
+                side: BorderSide.none, // Completely removes the border
+              ),
               iconColor: Theme.of(context).colorScheme.secondary,
               collapsedIconColor: Theme.of(context).colorScheme.secondary,
               children: item.childs!

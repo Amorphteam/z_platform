@@ -35,9 +35,10 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
       top: false,
       child: Scaffold(
         appBar: CustomAppBar(
+          showSearchBar: false,
           title: "الحديث الشريف",
           leftIcon: Icons.info_outline_rounded, // Example: Menu icon
-          rightIcon: Icons.settings_outlined, // Example: Search icon
+          rightIcon: Icons.settings, // Example: Search icon
           onLeftTap: () {
             print("Left icon tapped!");
           },
