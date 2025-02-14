@@ -26,11 +26,11 @@ class _HostScreenState extends State<HostScreen> {
   final List<Widget> _screens = [
     BlocProvider(
       create: (context) => RecommandedTocCubit(),
-      child:  RecommandedTocScreen(),
+      child:  RecommandedTocScreen(title: 'اخترنا لکم',),
     ),
     BlocProvider(
       create: (context) => TocCubit(),
-      child:  TocScreen(),
+      child:  TocScreen(title: 'الفهرست',),
     ),
     BlocProvider(
       create: (context) => LibraryCubit(),
@@ -63,10 +63,10 @@ class _HostScreenState extends State<HostScreen> {
           },
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
-          selectedItemColor: Colors.blue,
+          selectedItemColor: Theme.of(context).colorScheme.onSurface,
           unselectedItemColor: Colors.grey,
           items: const [
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.star_fill), label: 'اخترنا لكم'),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.check_mark_circled), label: 'اخترنا لكم'),
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.list_bullet), label: 'الفهرست'),
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.book), label: 'الكتب'),
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.search), label: 'البحث'),

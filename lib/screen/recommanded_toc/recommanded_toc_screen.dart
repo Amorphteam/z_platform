@@ -6,6 +6,7 @@ import 'package:zahra/screen/toc/cubit/toc_cubit.dart'; // Ensure the correct im
 import 'package:zahra/util/navigation_helper.dart';
 
 import '../../model/selected_toc_item.dart';
+import '../../widget/custom_appbar.dart';
 
 class RecommandedTocScreen extends StatefulWidget {
   RecommandedTocScreen({
@@ -33,6 +34,17 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
     return SafeArea(
       top: false,
       child: Scaffold(
+        appBar: CustomAppBar(
+          title: "الحديث الشريف",
+          leftIcon: Icons.info_outline_rounded, // Example: Menu icon
+          rightIcon: Icons.settings_outlined, // Example: Search icon
+          onLeftTap: () {
+            print("Left icon tapped!");
+          },
+          onRightTap: () {
+            print("Right icon tapped!");
+          },
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: isLandscape
             ? Row(
