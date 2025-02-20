@@ -63,7 +63,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       final EpubBook epubBook = await loadEpubFromAsset(assetPath);
       final List<HtmlFileInfo> epubContent =
       await extractHtmlContentWithEmbeddedImages(epubBook);
-     final spineItems = epubBook.Schema?.Package?.Spine?.Items;
+      final spineItems = epubBook.Schema?.Package?.Spine?.Items;
       final List<String> idRefs = [];
 
       if (spineItems != null) {
@@ -76,8 +76,8 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
       _storeEpubDetails(epubBook, reorderHtmlFilesBasedOnSpine(epubContent, idRefs), assetPath);
       emit(EpubViewerState.loaded(content: _spineHtmlContent!,
-          epubTitle: _bookTitle ?? '',
-          tocTreeList: _tocTreeList,),);
+        epubTitle: _bookTitle ?? '',
+        tocTreeList: _tocTreeList,),);
     } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
     }
@@ -86,7 +86,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
   Future<void> emitLastPageSeen() async {
     final lastPageNumber = await getLastPageNumberForBook(
-        assetPath: _assetPath!,);
+      assetPath: _assetPath!,);
     if (lastPageNumber != null) {
       jumpToPage(newPage: lastPageNumber.toInt());
     }
@@ -94,7 +94,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
   Future<void> emitCustomPageSeen(String customPage) async {
     jumpToPage(newPage: int.parse(customPage));
-    }
+  }
 
   void _storeEpubDetails(EpubBook epubBook, List<HtmlFileInfo> epubContent,
       String assetPath,) {
@@ -146,9 +146,9 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   Future<void> loadUserPreferences() async {
     StyleHelper.loadFromPrefs().then((_) {
       emit(EpubViewerState.styleChanged(
-          fontSize: styleHelper.fontSize,
-          lineHeight: styleHelper.lineSpace,
-          fontFamily: styleHelper.fontFamily,
+        fontSize: styleHelper.fontSize,
+        lineHeight: styleHelper.lineSpace,
+        fontFamily: styleHelper.fontFamily,
       ),);
     });
   }
@@ -256,13 +256,12 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   }
 
   String _applyHighlightingUsingMapping(String originalContent, String normalizedContent, String normalizedSearchTerm) {
-    final List<Match> matches = RegExp(RegExp.escape(normalizedSearchTerm), caseSensitive: false)
-        .allMatches(normalizedContent)
-        .toList();
+    final RegExp searchRegex = RegExp(RegExp.escape(normalizedSearchTerm), caseSensitive: false);
 
+    final List<Match> matches = searchRegex.allMatches(normalizedContent).toList();
     if (matches.isEmpty) return originalContent;
 
-    // Create a mapping of originalContent -> normalizedContent index positions
+    // Create a mapping between originalContent and normalizedContent indices
     Map<int, int> indexMapping = {};
     int originalIndex = 0;
     int normalizedIndex = 0;
@@ -280,22 +279,24 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
     for (final match in matches) {
       if (!indexMapping.containsKey(match.start) || !indexMapping.containsKey(match.end - 1)) {
-        continue; // Skip if we can't properly map back
+        continue; // Skip if mapping is missing
       }
 
       final int matchStart = indexMapping[match.start]! + offset;
       final int matchEnd = indexMapping[match.end - 1]! + 1 + offset;
 
+      if (matchStart < 0 || matchEnd > highlightedContent.length) continue;
+
       // Extract the actual matched word from the original content
-      final originalMatch = originalContent.substring(matchStart, matchEnd);
+      final originalMatch = highlightedContent.substring(matchStart, matchEnd);
 
       // Wrap it in a <mark> tag
-      final replacement = '<mark>$originalMatch</mark>';
+      final String replacement = '<mark>$originalMatch</mark>';
 
       // Replace in the content
       highlightedContent = highlightedContent.replaceRange(matchStart, matchEnd, replacement);
 
-      // Adjust offset to account for the length increase due to <mark></mark>
+      // Adjust offset to account for length increase due to <mark> tags
       offset += replacement.length - originalMatch.length;
     }
 
