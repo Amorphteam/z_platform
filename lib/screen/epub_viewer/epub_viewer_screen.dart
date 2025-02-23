@@ -962,8 +962,15 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       final List<dom.Element> headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
       if (headings.isNotEmpty) {
-        // Found the first heading on this page, return it
-        headingText = headings.last.text.trim();
+        // Check if the heading has a title attribute
+        final dom.Element lastHeading = headings.last;
+        final String? title = lastHeading.attributes['title'];
+
+        if (title != null) {
+          headingText = title.trim();
+        } else {
+          headingText = lastHeading.text.trim();
+        }
         break;
       }
     }
