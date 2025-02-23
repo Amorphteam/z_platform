@@ -51,4 +51,6 @@ class StyleHelper {
     final styleJson = jsonEncode(toJson());
     await prefs.setString('styleHelper', styleJson);
   }
+
+  
 }

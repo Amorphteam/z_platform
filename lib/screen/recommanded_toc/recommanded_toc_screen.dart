@@ -38,7 +38,7 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
           showSearchBar: false,
           title: "الحديث الشريف",
           leftIcon: Icons.info_outline_rounded, // Example: Menu icon
-          rightIcon: Icons.settings, // Example: Search icon
+          rightIcon: Icons.dark_mode_outlined, // Example: Search icon
           onLeftTap: () {
             print("Left icon tapped!");
           },
@@ -116,11 +116,13 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(
-                          right: 16, left: 16, top: 8),
+                      margin: const EdgeInsets.only(right: 16, left: 16, top: 8),
                       width: 10,
                       height: 10,
-                      color: Theme.of(context).colorScheme.secondary,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
+                        shape: BoxShape.circle, // Makes it a circle
+                      ),
                     ),
                   ],
                 ),

@@ -67,7 +67,7 @@ class _HostScreenState extends State<HostScreen> {
           unselectedItemColor: Colors.grey,
           items: const [
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.check_mark_circled), label: 'اخترنا لكم'),
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.list_bullet), label: 'الفهرست'),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.list_number_rtl), label: 'الفهرست'),
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.book), label: 'الكتب'),
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.search), label: 'البحث'),
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.bookmark), label: 'العلامات'),

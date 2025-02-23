@@ -56,12 +56,9 @@ class _TocScreenState extends State<TocScreen> {
       appBar: CustomAppBar(
         title: "الحديث الشريف",
         leftIcon: Icons.info_outline_rounded,
-        rightIcon: Icons.settings_outlined,
+        rightIcon: Icons.dark_mode_outlined,
         onLeftTap: () => print("Left icon tapped!"),
         onRightTap: () {
-          setState(() {
-            _showSearchBar = !_showSearchBar; // Toggle search bar visibility
-          });
         },
         onSearch: _showSearchBar ? _filterItems : null, // Pass search function only if needed
         showSearchBar: _showSearchBar,
@@ -108,9 +105,9 @@ class _TocScreenState extends State<TocScreen> {
     } else {
       return Container(
         margin: EdgeInsets.only(
-          right: 16.0,
-          left: isNestedParent ? 0.0 : 16.0,
-          bottom: 6,
+          right: 8.0,
+          left: isNestedParent ? 0.0 : 8.0,
+          bottom: 0,
         ),
         child: Column(
           children: [
@@ -136,7 +133,7 @@ class _TocScreenState extends State<TocScreen> {
     alignment: Alignment.center,
     margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
     child: Card(
-      color: Theme.of(context).colorScheme.onPrimary,
+      color: Theme.of(context).colorScheme.primary,
       elevation: 0,
       child: Container(
         margin: const EdgeInsets.all(8.0),
@@ -160,11 +157,13 @@ class _TocScreenState extends State<TocScreen> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(
-                          right: 16, left: 16, top: 8),
+                      margin: const EdgeInsets.only(right: 16, left: 16, top: 8),
                       width: 10,
                       height: 10,
-                      color: const Color(0xFFCFA355),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
+                        shape: BoxShape.circle, // Makes it a circle
+                      ),
                     ),
                   ],
                 ),

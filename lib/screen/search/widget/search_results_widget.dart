@@ -87,7 +87,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                   textAlign: TextAlign.right,
                                 ),
                                 'mark': Style(
-                                  backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                                  backgroundColor: Colors.yellow,
                                 ),
                               },
                             ),
@@ -129,7 +129,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                   textAlign: TextAlign.right,
                                 ),
                                 'mark': Style(
-                                  backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                                  backgroundColor: Colors.yellow,
                                 ),
                               },
                             ),

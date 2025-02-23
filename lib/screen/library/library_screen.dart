@@ -65,13 +65,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
               loading: () => const Center(child: CircularProgressIndicator()),
               loaded: (books) => Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16.0,
-                    mainAxisSpacing: 16.0,
-                    childAspectRatio: 0.6,
-                  ),
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8.0),
                   itemCount: books.length,
                   itemBuilder: (context, index) {
                     final book = books[index];
@@ -84,59 +79,75 @@ class _LibraryScreenState extends State<LibraryScreen> {
                           openEpub(context: context, book: Book(epub: bookPath));
                         }
                       },
-                      child: Card(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: book.image != null
-                                  ? ClipRRect(
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(8.0),
-                                ),
-                                child: Image.asset(
-                                  'assets/image/${book.image!}',
-                                  fit: BoxFit.fill,
-                                  width: double.infinity,
-                                ),
-                              )
-                                  : Container(
-                                color: Colors.grey,
-                                alignment: Alignment.center,
-                                child: const Icon(
-                                  Icons.book,
-                                  size: 50,
-                                  color: Colors.white,
-                                ),
-                              ),
+                      child: Column(
+                        children: [
+                          Card(
+                            color: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    book.title ?? 'Unknown Title',
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                            margin: const EdgeInsets.symmetric(vertical: 8.0,), // Spacing between items
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Book Image (Right Side)
+                                SizedBox(
+                                  width: 140,
+                                  height: 190,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: book.image != null
+                                        ? Image.asset(
+                                      'assets/image/${book.image!}',
+                                      fit: BoxFit.cover,
+                                      width: 100, // Adjusted width
+                                      height: 120, // Adjusted height
+                                    )
+                                        : Container(
+                                      width: 100,
+                                      height: 120,
+                                      color: Colors.grey,
+                                      alignment: Alignment.center,
+                                      child: const Icon(
+                                        Icons.book,
+                                        size: 50,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    book.author ?? 'Unknown Author',
-                                    style: Theme.of(context).textTheme.bodyMedium,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(width: 10), // Space between image and text
+                                // Text Content (Left Side)
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          book.title ?? 'Unknown Title',
+                                          style: Theme.of(context).textTheme.titleLarge,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'المؤلف: ${book.author}',
+                                          style: Theme.of(context).textTheme.bodyMedium,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const Divider()
+                        ],
                       ),
                     );
                   },

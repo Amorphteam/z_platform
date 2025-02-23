@@ -22,75 +22,78 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: Theme.of(context).colorScheme.primary,
-    appBar: AppBar(
+  Widget build(BuildContext context) => Directionality(
+    textDirection: TextDirection.rtl,
+    child: Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      actions: [
-        TextButton(
-          onPressed: _clearAll,
-          child: Text(
-            'مسح الكل',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        actions: [
+          TextButton(
+            onPressed: _clearAll,
+            child: Text(
+              'مسح الكل',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
           ),
-        ),
-      ],
-    ),
-    body: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 0.0),
-          child: SegmentedButton<String>(
-            segments: [
-              ButtonSegment(
-                value: 'Bookmark',
-                label: const Text('العلامات'),
-                icon: _selectedSegment == 'Bookmark' ? null : const Icon(Icons.bookmark),
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 0.0),
+            child: SegmentedButton<String>(
+              segments: [
+                ButtonSegment(
+                  value: 'Bookmark',
+                  label: const Text('العلامات'),
+                  icon: _selectedSegment == 'Bookmark' ? const Icon(Icons.bookmark) : const Icon(Icons.bookmark),
+                ),
+                ButtonSegment(
+                  value: 'History',
+                  label: const Text('السجل'),
+                  icon: _selectedSegment == 'History' ? const Icon(Icons.history) : const Icon(Icons.history),
+                ),
+              ],
+              selected: {_selectedSegment},
+              showSelectedIcon: false,
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return Theme.of(context).colorScheme.secondary;
+                  } else {
+                    return Theme.of(context).colorScheme.outlineVariant;
+                  }
+                }),
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return Theme.of(context).colorScheme.onSecondary;
+                  } else {
+                    return Theme.of(context).colorScheme.primary;
+                  }
+                }),
               ),
-              ButtonSegment(
-                value: 'History',
-                label: const Text('السجل'),
-                icon: _selectedSegment == 'History' ? null : const Icon(Icons.history),
-              ),
-            ],
-            selected: {_selectedSegment},
-            showSelectedIcon: false,
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context).colorScheme.secondary;
-                } else {
-                  return Theme.of(context).colorScheme.outlineVariant;
-                }
-              }),
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context).colorScheme.onSecondary;
-                } else {
-                  return Theme.of(context).colorScheme.primary;
-                }
-              }),
+              onSelectionChanged: (newSelection) {
+                setState(() {
+                  _selectedSegment = newSelection.first;
+                  _loadBookmarksOrHistory();
+                });
+              },
             ),
-            onSelectionChanged: (newSelection) {
-              setState(() {
-                _selectedSegment = newSelection.first;
-                _loadBookmarksOrHistory();
-              });
-            },
           ),
-        ),
-        Expanded(
-          child: BlocBuilder<BookmarkCubit, BookmarkState>(
-            builder: (context, state) {
-              return _selectedSegment == 'Bookmark'
-                  ? _buildBookmarkBody(state)
-                  : _buildHistoryBody(state);
-            },
+          Expanded(
+            child: BlocBuilder<BookmarkCubit, BookmarkState>(
+              builder: (context, state) {
+                return _selectedSegment == 'Bookmark'
+                    ? _buildBookmarkBody(state)
+                    : _buildHistoryBody(state);
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 

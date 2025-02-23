@@ -43,8 +43,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ),
           title: Text(
             widget.title,
-            style: const TextStyle(
-              color: Colors.black,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -60,19 +60,29 @@ class _CustomAppBarState extends State<CustomAppBar> {
         if (widget.showSearchBar) // Conditionally show search bar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: TextField(
-              controller: _searchController,
-              onChanged: widget.onSearch, // Will be null-safe
-              decoration: InputDecoration(
-                hintText: "أدخل كلمة لبدء البحث",
-                prefixIcon: const Icon(Icons.search, color: Colors.black54),
-                filled: true,
-                fillColor: Colors.grey[200], // Background color
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Theme(
+                data: ThemeData(
+                  textSelectionTheme: const TextSelectionThemeData(
+                    cursorColor: Colors.black, // Change cursor color
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: widget.onSearch, // Will be null-safe
+                  decoration: InputDecoration(
+                    hintText: "البحث في الفهرست",
+                    prefixIcon: const Icon(Icons.search, color: Colors.black54),
+                    filled: true,
+                    fillColor: Colors.grey[200], // Background color
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                  ),
+                ),
               ),
             ),
           ),
