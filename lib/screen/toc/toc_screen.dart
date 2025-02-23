@@ -58,8 +58,6 @@ class _TocScreenState extends State<TocScreen> {
         leftIcon: Icons.info_outline_rounded,
         rightIcon: Icons.dark_mode_outlined,
         onLeftTap: () => print("Left icon tapped!"),
-        onRightTap: () {
-        },
         onSearch: _showSearchBar ? _filterItems : null, // Pass search function only if needed
         showSearchBar: _showSearchBar,
       ),

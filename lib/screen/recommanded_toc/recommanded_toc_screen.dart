@@ -42,9 +42,6 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
           onLeftTap: () {
             print("Left icon tapped!");
           },
-          onRightTap: () {
-            print("Right icon tapped!");
-          },
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: isLandscape

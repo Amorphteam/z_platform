@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../util/theme_helper.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final IconData leftIcon;
   final IconData rightIcon;
   final VoidCallback onLeftTap;
-  final VoidCallback onRightTap;
   final Function(String)? onSearch; // Now optional
   final bool showSearchBar; // Toggle for search bar
 
@@ -15,7 +17,6 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
     required this.leftIcon,
     required this.rightIcon,
     required this.onLeftTap,
-    required this.onRightTap,
     this.onSearch, // Optional
     this.showSearchBar = true, // Default: show search bar
   }) : super(key: key);
@@ -53,7 +54,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           actions: [
             IconButton(
               icon: Icon(widget.rightIcon, color: Colors.black),
-              onPressed: widget.onRightTap,
+              onPressed: () => _showThemeDialog(context),
             ),
           ],
         ),
@@ -88,4 +89,47 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ),
       ],
     );
+
+  void _showThemeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("اختر سمة التطبيق"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: const Text("الوضع الفاتح"),
+                leading: const Icon(Icons.light_mode),
+                onTap: () {
+                  Provider.of<ThemeHelper>(context, listen: false)
+                      .setTheme(AppTheme.light);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text("الوضع الداكن"),
+                leading: const Icon(Icons.dark_mode),
+                onTap: () {
+                  Provider.of<ThemeHelper>(context, listen: false)
+                      .setTheme(AppTheme.dark);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text("النظام الافتراضي"),
+                leading: const Icon(Icons.settings),
+                onTap: () {
+                  Provider.of<ThemeHelper>(context, listen: false)
+                      .setTheme(AppTheme.system);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
