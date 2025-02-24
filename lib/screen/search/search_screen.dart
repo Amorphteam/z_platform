@@ -75,8 +75,17 @@ class _SearchScreenState extends State<SearchScreen> {
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Theme.of(context).colorScheme.onSecondary))),
           loading: () => Center(
-              child: CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.onSecondary,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(color: Theme.of(context).colorScheme.secondary,),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('جاری البحث'),
+                  ),
+
+                ],
               )),
           loaded: (searchResults) =>
               SearchResultsWidget(searchResults: searchResults),
@@ -90,7 +99,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   }
                 }
                 allBooks = books;
-                _selectedBooksCount = _globalSelectedBooks.entries.where((entry) => entry.value && entry.key.length > 1).length;
+                setState(() {
+                  _selectedBooksCount = _globalSelectedBooks.entries.where((entry) => entry.value && entry.key.length > 1).length;
+                });
               }
 
             });
