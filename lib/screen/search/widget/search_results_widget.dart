@@ -68,6 +68,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                     ),
                   ),
                   ListTile(
+
                     title: GestureDetector(
                       onTap: () {
                         openEpub(context: context, search: widget.searchResults[index]);
@@ -84,6 +85,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                               style: {
                                 'html': Style(
                                   fontSize: FontSize.medium,
+                                  lineHeight: LineHeight(1.2),
                                   textAlign: TextAlign.right,
                                 ),
                                 'mark': Style(
@@ -97,10 +99,10 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
                     child: Divider(
                       thickness: 0.3,
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],
@@ -126,6 +128,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                               style: {
                                 'html': Style(
                                   fontSize: FontSize.large,
+                                  lineHeight: LineHeight(1.2),
                                   textAlign: TextAlign.right,
                                 ),
                                 'mark': Style(
@@ -139,10 +142,10 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
                     child: Divider(
                       thickness: 0.3,
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],
