@@ -33,7 +33,7 @@ class HistoryListWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Card(
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.onPrimary?.withOpacity(0.1),
               child: SizedBox(
                 width: double.infinity,
                 child: Padding(

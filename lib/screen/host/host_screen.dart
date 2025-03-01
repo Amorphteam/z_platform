@@ -63,9 +63,9 @@ class _HostScreenState extends State<HostScreen> {
             });
           },
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: Theme.of(context).colorScheme.onSurface,
-          unselectedItemColor: Colors.grey,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          selectedItemColor: Theme.of(context).colorScheme.secondaryContainer,
+          unselectedItemColor: Theme.of(context).colorScheme.onSurface,
           items: const [
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.check_mark_circled), label: 'اخترنا لكم'),
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.list_number_rtl), label: 'الفهرست'),

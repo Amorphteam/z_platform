@@ -41,8 +41,9 @@ class _TocScreenState extends State<TocScreen> {
       } else {
         // Show only leaf nodes (last children) in a flat list
         _filteredItems = _allItems
-            .where((item) => (item.childs == null || item.childs!.isEmpty) &&
-            item.title.toLowerCase().contains(query.toLowerCase()))
+            .where((item) =>
+                (item.childs == null || item.childs!.isEmpty) &&
+                item.title.toLowerCase().contains(query.toLowerCase()))
             .toList();
       }
     });
@@ -57,17 +58,20 @@ class _TocScreenState extends State<TocScreen> {
         leftIcon: Icons.info_outline_rounded,
         rightIcon: Icons.dark_mode_outlined,
         onLeftTap: () => print("Left icon tapped!"),
-        onSearch: _showSearchBar ? _filterItems : null, // Pass search function only if needed
+        onSearch: _showSearchBar ? _filterItems : null,
+        // Pass search function only if needed
         showSearchBar: _showSearchBar,
       ),
       body: BlocBuilder<TocCubit, TocState>(
         builder: (context, state) {
           return state.when(
-            initial: () => const Center(child: Text('Tap to start fetching...')),
+            initial: () =>
+                const Center(child: Text('Tap to start fetching...')),
             loading: () => const Center(child: CircularProgressIndicator()),
             loaded: (items) {
               _allItems = items;
-              _filteredItems = _filteredItems.isNotEmpty ? _filteredItems : items;
+              _filteredItems =
+                  _filteredItems.isNotEmpty ? _filteredItems : items;
               return _buildTocTree(_filteredItems, context);
             },
             error: (message) => Center(child: Text(message)),
@@ -77,23 +81,23 @@ class _TocScreenState extends State<TocScreen> {
     );
   }
 
-
   Widget _buildTocTree(List<TocItem> items, BuildContext context) {
     if (searchedWord.isNotEmpty && _filteredItems.isNotEmpty) {
       // If searching, show a normal (flat) list
       return ListView.builder(
         itemCount: _filteredItems.length,
-        itemBuilder: (context, index) => _buildCardView(_filteredItems[index], context),
+        itemBuilder: (context, index) =>
+            _buildCardView(_filteredItems[index], context),
       );
     } else {
       // If not searching, show the tree structure
       final rootItems = items.where((item) => item.parentId == 0).toList();
       return ListView(
-        children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
+        children:
+            rootItems.map((item) => _buildTocItem(item, context)).toList(),
       );
     }
   }
-
 
   Widget _buildTocItem(TocItem item, BuildContext context,
       {bool isNestedParent = false}) {
@@ -105,8 +109,10 @@ class _TocScreenState extends State<TocScreen> {
           right: 8.0,
           left: isNestedParent ? 0.0 : 8.0,
           bottom: 0,
+          top: 0,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ExpansionTile(
               title: _buildCardTitle(item, context),
@@ -116,10 +122,14 @@ class _TocScreenState extends State<TocScreen> {
               iconColor: Theme.of(context).colorScheme.secondary,
               collapsedIconColor: Theme.of(context).colorScheme.secondary,
               children: item.childs!
-                  .map((child) => _buildTocItem(child, context, isNestedParent: true))
+                  .map((child) =>
+                      _buildTocItem(child, context, isNestedParent: true))
                   .toList(),
             ),
-            Divider()
+            Divider(
+              thickness: 1, // Adjust thickness as needed
+              height: 0, // Reduces additional spacing
+            )
           ],
         ),
       );
@@ -127,69 +137,70 @@ class _TocScreenState extends State<TocScreen> {
   }
 
   Widget _buildCardView(TocItem item, BuildContext context) => Container(
-    alignment: Alignment.center,
-    margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-    child: Card(
-      color: Theme.of(context).colorScheme.primary,
-      elevation: 0,
-      child: Container(
-        margin: const EdgeInsets.all(8.0),
+        alignment: Alignment.center,
+        margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+        child: Card(
+          color: Theme.of(context).colorScheme.primary,
+          elevation: 0,
+          child: Container(
+            margin: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => _navigateTo(context, item),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: Text(
+                              item.title,
+                              textAlign: TextAlign.justify,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(
+                              right: 16, left: 16, top: 8),
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.secondary,
+                            shape: BoxShape.circle, // Makes it a circle
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+  Widget _buildCardTitle(TocItem item, BuildContext context) => Container(
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
-              child: GestureDetector(
-                onTap: () => _navigateTo(context, item),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: Text(
-                          item.title,
-                          textAlign: TextAlign.justify,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 16, left: 16, top: 8),
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondary,
-                        shape: BoxShape.circle, // Makes it a circle
-                      ),
-                    ),
-                  ],
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Text(
+                  item.title,
+                  textAlign: TextAlign.justify,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
             ),
           ],
         ),
-      ),
-    ),
-  );
-
-  Widget _buildCardTitle(TocItem item, BuildContext context) => Container(
-    margin: const EdgeInsets.symmetric(vertical: 8.0),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Expanded(
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Text(
-              item.title,
-              textAlign: TextAlign.justify,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
+      );
 
   void _navigateTo(BuildContext context, TocItem item) {
     final String bookPath = item.key.split('_').first;

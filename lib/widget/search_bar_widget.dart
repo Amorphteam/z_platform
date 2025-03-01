@@ -45,7 +45,7 @@ class _SearchBarWidgetState extends State<SearchBarWiget> {
             controller: _searchController,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Theme.of(context).colorScheme.onPrimary,
+              fillColor: Colors.grey[400],
               // Adjust the color to match your UI design
               hintText: widget.hint ?? 'أدخل كلمة لبدء البحث',
               hintStyle: TextStyle(fontSize: 12, color: Colors.grey[600]),

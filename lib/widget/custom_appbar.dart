@@ -39,7 +39,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(widget.leftIcon, color: Colors.black),
+            icon: Icon(widget.leftIcon),
             onPressed: widget.onLeftTap,
           ),
           title: Text(
@@ -53,7 +53,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           centerTitle: true,
           actions: [
             IconButton(
-              icon: Icon(widget.rightIcon, color: Colors.black),
+              icon: Icon(widget.rightIcon),
               onPressed: () => _showThemeDialog(context),
             ),
           ],
@@ -66,7 +66,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               child: Theme(
                 data: ThemeData(
                   textSelectionTheme: const TextSelectionThemeData(
-                    cursorColor: Colors.black, // Change cursor color
+                    cursorColor: Colors.grey, // Change cursor color
                   ),
                 ),
                 child: TextField(
@@ -76,7 +76,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     hintText: "البحث في الفهرست",
                     prefixIcon: const Icon(Icons.search, color: Colors.black54),
                     filled: true,
-                    fillColor: Colors.grey[200], // Background color
+                    fillColor: Colors.grey[400], // Background color
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide: BorderSide.none,

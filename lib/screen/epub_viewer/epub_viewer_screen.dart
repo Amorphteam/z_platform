@@ -401,6 +401,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                               'body': Style(
                                 direction: TextDirection.rtl,
                                 textAlign: TextAlign.justify,
+                                lineHeight: LineHeight(lineHeight.size),
                                 textDecoration: TextDecoration.none,
                               ),
                               'p': Style(
@@ -607,54 +608,69 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-          content: Form(
-            key: formKey,
-            child: TextFormField(
-              controller: pageController,
-              autofocus: true,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: 'أدخل رقم الصفحة (بين 1 و ${_content.length})',
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'يرجى إدخال رقم الصفحة';
-                }
-                final int? pageNumber = int.tryParse(value);
-                if (pageNumber == null || pageNumber <= 0 || pageNumber > _content.length) {
-                  return ' الرقم يجب أن يكون بين ١ و ${_content.length}';
-                }
-                return null;  // Means the input is valid
-              },
-              onFieldSubmitted: (value) {
-                if (formKey.currentState!.validate()) {
+      builder: (context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+            content: Form(
+              key: formKey,
+              child: TextFormField(
+                controller: pageController,
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'أدخل رقم الصفحة (بين 1 و ${_content.length})',
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey, width: 1), // Grey underline when not focused
+                  ),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey, width: 1), // Black underline when focused
+                  ),
+                  errorBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red, width: 1.5), // Red underline for validation errors
+                  ),
+                  focusedErrorBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red, width: 2), // Red underline when error & focused
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'يرجى إدخال رقم الصفحة';
+                  }
                   final int? pageNumber = int.tryParse(value);
-                  _jumpTo(pageNumber: pageNumber! - 1);
-                  Navigator.of(context).pop();
-                }
-              },
+                  if (pageNumber == null || pageNumber <= 0 || pageNumber > _content.length) {
+                    return ' الرقم يجب أن يكون بين ١ و ${_content.length}';
+                  }
+                  return null;  // Means the input is valid
+                },
+                onFieldSubmitted: (value) {
+                  if (formKey.currentState!.validate()) {
+                    final int? pageNumber = int.tryParse(value);
+                    _jumpTo(pageNumber: pageNumber! - 1);
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
             ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('إلغاء', style: Theme.of(context).textTheme.labelLarge),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('انتقل',  style: Theme.of(context).textTheme.labelLarge),
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    final int? pageNumber = int.tryParse(pageController.text);
+                    _jumpTo(pageNumber: pageNumber! - 1);
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ],
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('إلغاء'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('انتقل'),
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  final int? pageNumber = int.tryParse(pageController.text);
-                  _jumpTo(pageNumber: pageNumber! - 1);
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
-        ),
+      ),
     );
   }
 
