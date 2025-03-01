@@ -5,10 +5,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hadith/route_generator.dart';
+import 'package:hadith/screen/bookmark/cubit/bookmark_cubit.dart';
+import 'package:hadith/util/theme_helper.dart';
 import 'package:provider/provider.dart';
-import 'package:zahra/route_generator.dart';
-import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
-import 'package:zahra/util/theme_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => BookmarkCubit(),
       child: MaterialApp(
-        title: 'المعارف الفاطمية',
+        title: 'الحديث الشريف',
         debugShowCheckedModeBanner: false,
         theme: lightTheme,
         darkTheme: darkTheme,

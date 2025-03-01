@@ -3,8 +3,8 @@ import 'dart:isolate';
 
 import 'package:epub_parser/epub_parser.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:zahra/model/epubBookLocal.dart';
 
+import '../model/epubBookLocal.dart';
 import '../model/search_model.dart';
 import 'epub_helper.dart';
 

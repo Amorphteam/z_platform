@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zahra/screen/search/widget/book_selection_sheet_widget.dart';
-import 'package:zahra/screen/search/widget/search_results_widget.dart';
-import 'package:zahra/widget/search_bar_widget.dart';
+import 'package:hadith/screen/search/widget/book_selection_sheet_widget.dart';
+import 'package:hadith/screen/search/widget/search_results_widget.dart';
+
 
 import '../../model/book_model.dart';
+import '../../widget/search_bar_widget.dart';
 import 'cubit/search_cubit.dart';
 
 class SearchScreen extends StatefulWidget {

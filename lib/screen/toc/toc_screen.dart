@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zahra/model/item_model.dart';
-import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
-import 'package:zahra/util/navigation_helper.dart';
 
 import '../../model/toc_item.dart';
+import '../../util/navigation_helper.dart';
 import '../../widget/custom_appbar.dart';
+import 'cubit/toc_cubit.dart';
 
 class TocScreen extends StatefulWidget {
   TocScreen({

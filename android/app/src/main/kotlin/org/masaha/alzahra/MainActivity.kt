@@ -1,4 +1,4 @@
-package org.masaha.alzahra
+package org.masaha.alhadith
 
 import io.flutter.embedding.android.FlutterActivity
 

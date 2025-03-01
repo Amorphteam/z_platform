@@ -2,9 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:zahra/model/epubBookLocal.dart';
-
 import '../../../model/book_model.dart';
+import '../../../model/epubBookLocal.dart';
 import '../../../model/search_model.dart';
 import '../../../repository/json_repository.dart';
 import '../../../util/search_helper.dart';

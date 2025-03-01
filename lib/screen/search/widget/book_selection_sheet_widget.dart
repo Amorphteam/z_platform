@@ -1,7 +1,8 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:zahra/model/book_model.dart';
+
+import '../../../model/book_model.dart';
 
 class BookSelectionSheetWidget extends StatefulWidget {
   final ScrollController scrollController;

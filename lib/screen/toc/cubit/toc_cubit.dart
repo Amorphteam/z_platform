@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:zahra/model/toc_item.dart';
 
+import '../../../model/toc_item.dart';
 import '../../../repository/json_repository.dart';
 
 part 'toc_state.dart';

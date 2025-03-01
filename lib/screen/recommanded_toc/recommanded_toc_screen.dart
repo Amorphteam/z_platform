@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zahra/model/item_model.dart';
-import 'package:zahra/screen/recommanded_toc/cubit/recommanded_toc_cubit.dart';
-import 'package:zahra/screen/toc/cubit/toc_cubit.dart'; // Ensure the correct import of the cubit
-import 'package:zahra/util/navigation_helper.dart';
 
 import '../../model/selected_toc_item.dart';
+import '../../util/navigation_helper.dart';
 import '../../widget/custom_appbar.dart';
+import 'cubit/recommanded_toc_cubit.dart';
 
 class RecommandedTocScreen extends StatefulWidget {
   RecommandedTocScreen({

@@ -6,8 +6,7 @@ import 'package:epub_parser/epub_parser.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zahra/model/history_model.dart';
-
+import '../../../model/history_model.dart';
 import '../../../model/reference_model.dart';
 import '../../../model/search_model.dart';
 import '../../../model/style_model.dart';

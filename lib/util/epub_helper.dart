@@ -3,10 +3,9 @@ import 'dart:convert';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:zahra/model/history_model.dart';
-import 'package:zahra/util/page_helper.dart';
-
+import 'package:hadith/util/page_helper.dart';
 import '../model/book_model.dart';
+import '../model/history_model.dart';
 import '../model/reference_model.dart';
 import '../model/search_model.dart';
 import '../model/tree_toc_model.dart';

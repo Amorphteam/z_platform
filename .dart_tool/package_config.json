@@ -746,13 +746,13 @@
       "languageVersion": "2.19"
     },
     {
-      "name": "zahra",
+      "name": "hadith",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-02-24T12:04:02.157821Z",
+  "generated": "2025-03-01T05:42:47.996565Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
   "flutterRoot": "file:///Users/alibayati/FlutterDev/flutter_3.24.3",

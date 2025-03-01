@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:zahra/model/history_model.dart';
-import 'package:zahra/repository/hostory_database.dart';
+import '../../../model/history_model.dart';
 import '../../../model/reference_model.dart';
+import '../../../repository/hostory_database.dart';
 
 part 'bookmark_state.freezed.dart';
 

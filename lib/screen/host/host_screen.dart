@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zahra/screen/bookmark/bookmark_screen.dart';
-import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
-import 'package:zahra/screen/library/cubit/library_cubit.dart';
-import 'package:zahra/screen/library/library_screen.dart';
-import 'package:zahra/screen/recommanded_toc/cubit/recommanded_toc_cubit.dart';
-import 'package:zahra/screen/search/cubit/search_cubit.dart';
-import 'package:zahra/screen/search/search_screen.dart';
-import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
-import 'package:zahra/screen/toc/toc_screen.dart';
 
+
+import '../bookmark/bookmark_screen.dart';
+import '../bookmark/cubit/bookmark_cubit.dart';
+import '../library/cubit/library_cubit.dart';
+import '../library/library_screen.dart';
+import '../recommanded_toc/cubit/recommanded_toc_cubit.dart';
 import '../recommanded_toc/recommanded_toc_screen.dart';
+import '../search/cubit/search_cubit.dart';
+import '../search/search_screen.dart';
+import '../toc/cubit/toc_cubit.dart';
+import '../toc/toc_screen.dart';
 
 class HostScreen extends StatefulWidget {
   const HostScreen({super.key});

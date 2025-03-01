@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:zahra/repository/json_repository.dart';
 
 import '../../../model/book_model.dart';
+import '../../../repository/json_repository.dart';
 
 part 'library_state.dart';
 part 'library_cubit.freezed.dart';
