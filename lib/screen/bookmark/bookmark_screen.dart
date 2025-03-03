@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hadith/screen/bookmark/widgets/history_list_widget.dart';
+import '../../widget/custom_appbar.dart';
 import 'cubit/bookmark_cubit.dart';
 import 'cubit/bookmark_state.dart';
 import 'widgets/reference_list_widget.dart';
@@ -26,20 +27,12 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     textDirection: TextDirection.rtl,
     child: Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        actions: [
-          TextButton(
-            onPressed: _clearAll,
-            child: Text(
-              'مسح الكل',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-          ),
-        ],
-      ),
+      appBar:  CustomAppBar(
+      showSearchBar: false,
+      title: "الحديث الشريف",
+      rightIcon: Icons.delete_sweep_rounded, // Example: Search icon
+      onLeftTap: _clearAll,
+    ),
       body: Column(
         children: [
           Padding(

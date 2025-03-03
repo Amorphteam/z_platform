@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../model/book_model.dart';
 import '../../util/epub_helper.dart';
+import '../../widget/custom_appbar.dart';
 import 'cubit/library_cubit.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -58,6 +59,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
+          appBar: const CustomAppBar(
+            showSearchBar: false,
+            title: "الحديث الشريف",
+          ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           body: BlocBuilder<LibraryCubit, LibraryState>(
             builder: (context, state) => state.when(

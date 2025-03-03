@@ -5,18 +5,18 @@ import '../util/theme_helper.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
-  final IconData leftIcon;
-  final IconData rightIcon;
-  final VoidCallback onLeftTap;
+  final IconData? leftIcon;
+  final IconData? rightIcon;
+  final VoidCallback? onLeftTap;
   final Function(String)? onSearch; // Optional
   final bool showSearchBar; // Toggle for search bar
 
   const CustomAppBar({
     Key? key,
     required this.title,
-    required this.leftIcon,
-    required this.rightIcon,
-    required this.onLeftTap,
+    this.leftIcon, // Made optional
+    this.rightIcon, // Made optional
+    this.onLeftTap, // Made optional
     this.onSearch, // Optional
     this.showSearchBar = true, // Default: show search bar
   }) : super(key: key);
@@ -41,10 +41,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
         AppBar(
           backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
-          leading: IconButton(
+          leading: widget.leftIcon != null
+              ? IconButton(
             icon: Icon(widget.leftIcon, color: isDarkMode ? Colors.white : Colors.black),
             onPressed: widget.onLeftTap,
-          ),
+          )
+              : null, // Hide if leftIcon is null
           title: Text(
             widget.title,
             style: TextStyle(
@@ -54,12 +56,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ),
           ),
           centerTitle: true,
-          actions: [
+          actions: widget.rightIcon != null
+              ? [
             IconButton(
               icon: Icon(widget.rightIcon, color: isDarkMode ? Colors.white : Colors.black),
               onPressed: () => _showThemeDialog(context),
             ),
-          ],
+          ]
+              : [], // Hide if rightIcon is null
         ),
         if (widget.showSearchBar) // Conditionally show search bar
           Padding(
