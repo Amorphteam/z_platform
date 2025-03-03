@@ -6,6 +6,7 @@ import 'package:hadith/screen/host/cubit/host_cubit.dart';
 import 'package:hadith/screen/host/host_screen.dart';
 import 'model/book_model.dart';
 import 'model/reference_model.dart';
+import 'model/history_model.dart';
 import 'model/search_model.dart';
 import 'model/tree_toc_model.dart';
 
@@ -24,6 +25,7 @@ class RouteGenerator {
         if (args != null) {
           final Book? cat = args['cat'];
           final ReferenceModel? reference = args['reference'];
+          final HistoryModel? history = args['history'];
           final EpubChaptersWithBookPath? toc = args['toc'];
           final SearchModel? search = args['search'];
 
@@ -33,6 +35,7 @@ class RouteGenerator {
               child: EpubViewerScreen(
                 book: cat,
                 referenceModel: reference,
+                historyModel: history,
                 searchModel: search,
                 tocModel: toc,
               ),

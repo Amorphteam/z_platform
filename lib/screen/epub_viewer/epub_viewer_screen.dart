@@ -218,7 +218,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           context.read<EpubViewerCubit>().emitCustomPageSeen((intValue).toString());
                         }
                         if (widget.historyModel?.navIndex !=null){
-                          final double doubleValue = double.parse(widget.referenceModel!.navIndex);
+                          final double doubleValue = double.parse(widget.historyModel!.navIndex);
                           final int intValue = doubleValue.toInt();
                           context.read<EpubViewerCubit>().emitCustomPageSeen((intValue).toString());
                         }
@@ -708,6 +708,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
     // Finally, load all bookmarks
     await BlocProvider.of<BookmarkCubit>(context).loadAllBookmarks();
+
   }
 
 
@@ -821,6 +822,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       _loadEpubFromTableOfContents();
     } else if (widget.searchModel != null) {
       _loadEpubFromSearchResult();
+    } else if (widget.historyModel != null){
+      _loadEpubFromHistory();
     } else {
       _loadEpubFromCategory();
     }
@@ -831,6 +834,18 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         int.tryParse(widget.referenceModel?.navIndex ?? '') ?? 0;
     // _pageController.jumpToPage(bookmarkPageNumber);
     _bookPath = widget.referenceModel!.bookPath;
+    _loadAndParseEpub(bookPath: _bookPath!);
+    if (_bookPath == '0.epub'){
+      isAboutUsBook = true;
+    }
+  }
+
+
+  _loadEpubFromHistory() {
+    final int bookmarkPageNumber =
+        int.tryParse(widget.historyModel?.navIndex ?? '') ?? 0;
+    // _pageController.jumpToPage(bookmarkPageNumber);
+    _bookPath = widget.historyModel!.bookPath;
     _loadAndParseEpub(bookPath: _bookPath!);
     if (_bookPath == '0.epub'){
       isAboutUsBook = true;
@@ -924,6 +939,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
     // Save the history using your database logic
     await _epubViewerCubit!.addHistory(history);
+
   }
 
 
