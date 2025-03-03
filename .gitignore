@@ -1,53 +1,87 @@
-# Gradle files
-.gradle/
+# Flutter build files
 build/
+flutter_build/
 
-# Local configuration file (sdk path, etc)
+# Local configuration file (SDK path, etc.)
 local.properties
 
-# Log/OS Files
-*.log
-
-# Android Studio generated files and folders
-captures/
-.externalNativeBuild/
-.cxx/
-*.apk
-output.json
-
-# IntelliJ
-*.iml
-.idea/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
-
-# Keystore files
-*.jks
-*.keystore
-
-# Google Services (e.g. APIs or Firebase)
-google-services.json
-
-# Android Profiling
-*.hprof
-
-# Flutter/Dart related files
+# Dart/Flutter dependencies & cache
 .dart_tool/
+.flutter-plugins
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
 .pub/
 
-# Flutter build files
-flutter_build/
+# Gradle files
+.gradle/
+.cxx/
+.externalNativeBuild/
 
-# Ignoring temporary and cache files
-*.lock
+# Android Studio/IntelliJ IDE settings
+.idea/
+*.iml
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
+
+# Log/OS files
+*.log
 filecache/
 
-# Ignoring generated JSON
-*.g.dart
-
-# Ignoring VS Code settings
+# VS Code settings
 .vscode/
+
+# Generated files
+*.g.dart
+output.json
+
+# APK, AAB, and IPA (Android & iOS builds)
+*.apk
+*.aab
+*.ipa
+
+# Keystore files (Security risk - DO NOT TRACK!)
+*.jks
+*.keystore
+
+# Google Services (e.g. Firebase API keys)
+google-services.json
+firebase.json
+
+# Android Profiling
+*.hprof
+
+# iOS specific files
+ios/Flutter/Generated.xcconfig
+ios/Pods/
+ios/.symlinks/
+ios/Runner.xcworkspace/
+ios/build/
+
+# Xcode specific files
+xcuserdata/
+DerivedData/
+*.pbxproj
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# macOS specific files
+macos/.symlinks/
+macos/Pods/
+macos/build/
+
+# Linux specific files
+linux/build/
+
+# Web specific files
+web/.dart_tool/
+web/build/
+
+# Windows specific files
+windows/.dart_tool/
+windows/build/
+
+# Ignore package-lock.json for Flutter projects (Flutter uses pubspec.lock)
+package-lock.json

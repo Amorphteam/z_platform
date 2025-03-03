@@ -8,7 +8,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final IconData leftIcon;
   final IconData rightIcon;
   final VoidCallback onLeftTap;
-  final Function(String)? onSearch; // Now optional
+  final Function(String)? onSearch; // Optional
   final bool showSearchBar; // Toggle for search bar
 
   const CustomAppBar({
@@ -32,20 +32,23 @@ class _CustomAppBarState extends State<CustomAppBar> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         AppBar(
           backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(widget.leftIcon),
+            icon: Icon(widget.leftIcon, color: isDarkMode ? Colors.white : Colors.black),
             onPressed: widget.onLeftTap,
           ),
           title: Text(
             widget.title,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
+              color: isDarkMode ? Colors.white : Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -53,7 +56,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           centerTitle: true,
           actions: [
             IconButton(
-              icon: Icon(widget.rightIcon),
+              icon: Icon(widget.rightIcon, color: isDarkMode ? Colors.white : Colors.black),
               onPressed: () => _showThemeDialog(context),
             ),
           ],
@@ -65,8 +68,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
               textDirection: TextDirection.rtl,
               child: Theme(
                 data: ThemeData(
-                  textSelectionTheme: const TextSelectionThemeData(
-                    cursorColor: Colors.grey, // Change cursor color
+                  textSelectionTheme: TextSelectionThemeData(
+                    cursorColor: isDarkMode ? Colors.white : Colors.black, // Cursor color
                   ),
                 ),
                 child: TextField(
@@ -74,21 +77,27 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   onChanged: widget.onSearch, // Will be null-safe
                   decoration: InputDecoration(
                     hintText: "البحث في الفهرست",
-                    prefixIcon: const Icon(Icons.search, color: Colors.black54),
+                    hintStyle: TextStyle(
+                      fontSize: 12,
+                      color: isDarkMode ? Colors.grey[400] : Colors.grey[600], // Hint color
+                    ),
+                    prefixIcon: Icon(Icons.search, color: isDarkMode ? Colors.white : Colors.black54),
                     filled: true,
-                    fillColor: Colors.grey[400], // Background color
+                    fillColor: isDarkMode ? Colors.grey[900] : Colors.grey[200], // Background color
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide: BorderSide.none,
                     ),
                     contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   ),
+                  style: TextStyle(color: isDarkMode ? Colors.white : Colors.black), // Text color
                 ),
               ),
             ),
           ),
       ],
     );
+  }
 
   void _showThemeDialog(BuildContext context) {
     showDialog(

@@ -481,7 +481,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                               '.fn': Style(
-                                color: Colors.blue[900],
+                                color: Color(0xFF000080),
                                 fontWeight: FontWeight.normal,
                                 fontSize: FontSize(fontSize.size * 0.75),
                                 textDecoration: TextDecoration.none,
@@ -499,9 +499,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                                 color: Colors.green,
                               ),
                               '.hadith': Style(
-                                fontWeight: FontWeight.bold,
                                 fontSize: FontSize(fontSize.size),
-                                color: Colors.teal,
+                                color: Colors.black,
                               ),
                               '.hadith-num': Style(
                                 fontWeight: FontWeight.bold,
