@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 import '../bookmark/bookmark_screen.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
 import '../library/cubit/library_cubit.dart';
@@ -24,35 +23,10 @@ class HostScreen extends StatefulWidget {
 class _HostScreenState extends State<HostScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    BlocProvider(
-      create: (context) => RecommandedTocCubit(),
-      child:  RecommandedTocScreen(title: 'اخترنا لکم',),
-    ),
-    BlocProvider(
-      create: (context) => TocCubit(),
-      child:  TocScreen(title: 'الفهرست',),
-    ),
-    BlocProvider(
-      create: (context) => LibraryCubit(),
-      child: const LibraryScreen(),
-    ),
-    BlocProvider(
-      create: (context) => SearchCubit(),
-      child: const SearchScreen(),
-    ),
-    BlocProvider(
-      create: (context) => BookmarkCubit(),
-      child: const BookmarkScreen(),
-    ),
-  ];
-
   @override
-  Widget build(BuildContext context) => Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _getScreen(_currentIndex),
       bottomNavigationBar: Directionality(
         textDirection: TextDirection.rtl,
         child: BottomNavigationBar(
@@ -76,6 +50,7 @@ class _HostScreenState extends State<HostScreen> {
         ),
       ),
     );
+  }
 
   /// Returns the title for the app bar dynamically.
   String _getTitle(int index) {
@@ -94,4 +69,37 @@ class _HostScreenState extends State<HostScreen> {
         return '';
     }
   }
+
+  Widget _getScreen(int index) {
+    switch (index) {
+      case 0:
+        return BlocProvider(
+          create: (context) => RecommandedTocCubit(),
+          child: RecommandedTocScreen(),
+        );
+      case 1:
+        return BlocProvider(
+          create: (context) => TocCubit(),
+          child: TocScreen(),
+        );
+      case 2:
+        return BlocProvider(
+          create: (context) => LibraryCubit(),
+          child: const LibraryScreen(),
+        );
+      case 3:
+        return BlocProvider(
+          create: (context) => SearchCubit(),
+          child: const SearchScreen(),
+        );
+      case 4:
+        return BlocProvider(
+          create: (context) => BookmarkCubit(),
+          child: const BookmarkScreen(),
+        );
+      default:
+        return Container();
+    }
+  }
+
 }

@@ -6,9 +6,11 @@ import '../util/theme_helper.dart';
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final IconData? leftIcon;
+  final Widget? leftWidget;
   final IconData? rightIcon;
   final VoidCallback? onLeftTap;
   final Function(String)? onSearch; // Optional
+  final Function(String)? onSubmitted; // Optional
   final bool showSearchBar; // Toggle for search bar
 
   const CustomAppBar({
@@ -18,14 +20,17 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.rightIcon, // Made optional
     this.onLeftTap, // Made optional
     this.onSearch, // Optional
-    this.showSearchBar = true, // Default: show search bar
+    this.showSearchBar = true,
+    this.leftWidget,
+    this.onSubmitted, // Default: show search bar
   }) : super(key: key);
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(showSearchBar ? 140 : kToolbarHeight);
+  Size get preferredSize =>
+      Size.fromHeight(showSearchBar ? 140 : kToolbarHeight);
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
@@ -43,10 +48,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
           elevation: 0,
           leading: widget.leftIcon != null
               ? IconButton(
-            icon: Icon(widget.leftIcon, color: isDarkMode ? Colors.white : Colors.black),
-            onPressed: widget.onLeftTap,
-          )
-              : null, // Hide if leftIcon is null
+                  icon: Icon(widget.leftIcon,
+                      color: isDarkMode ? Colors.white : Colors.black),
+                  onPressed: widget.onLeftTap,
+                )
+              : widget.leftWidget,
+          // Hide if leftIcon is null
           title: Text(
             widget.title,
             style: TextStyle(
@@ -58,43 +65,55 @@ class _CustomAppBarState extends State<CustomAppBar> {
           centerTitle: true,
           actions: widget.rightIcon != null
               ? [
-            IconButton(
-              icon: Icon(widget.rightIcon, color: isDarkMode ? Colors.white : Colors.black),
-              onPressed: () => _showThemeDialog(context),
-            ),
-          ]
+                  IconButton(
+                    icon: Icon(widget.rightIcon,
+                        color: isDarkMode ? Colors.white : Colors.black),
+                    onPressed: () => _showThemeDialog(context),
+                  ),
+                ]
               : [], // Hide if rightIcon is null
         ),
         if (widget.showSearchBar) // Conditionally show search bar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Directionality(
               textDirection: TextDirection.rtl,
               child: Theme(
                 data: ThemeData(
                   textSelectionTheme: TextSelectionThemeData(
-                    cursorColor: isDarkMode ? Colors.white : Colors.black, // Cursor color
+                    cursorColor: isDarkMode
+                        ? Colors.white
+                        : Colors.black, // Cursor color
                   ),
                 ),
                 child: TextField(
                   controller: _searchController,
-                  onChanged: widget.onSearch, // Will be null-safe
+                  onChanged: widget.onSearch,
+                  onSubmitted: widget.onSubmitted,
                   decoration: InputDecoration(
                     hintText: "البحث في الفهرست",
                     hintStyle: TextStyle(
                       fontSize: 12,
-                      color: isDarkMode ? Colors.grey[400] : Colors.grey[600], // Hint color
+                      color: isDarkMode
+                          ? Colors.grey[400]
+                          : Colors.grey[600], // Hint color
                     ),
-                    prefixIcon: Icon(Icons.search, color: isDarkMode ? Colors.white : Colors.black54),
+                    prefixIcon: Icon(Icons.search,
+                        color: isDarkMode ? Colors.white : Colors.black54),
                     filled: true,
-                    fillColor: isDarkMode ? Colors.grey[900] : Colors.grey[200], // Background color
+                    fillColor: isDarkMode ? Colors.grey[900] : Colors.grey[200],
+                    // Background color
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide: BorderSide.none,
                     ),
                     contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   ),
-                  style: TextStyle(color: isDarkMode ? Colors.white : Colors.black), // Text color
+                  style: TextStyle(
+                      color: isDarkMode
+                          ? Colors.white
+                          : Colors.black), // Text color
                 ),
               ),
             ),
