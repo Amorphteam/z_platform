@@ -56,19 +56,24 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
     return SafeArea(
       top: false,
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          appBar: const CustomAppBar(
-            showSearchBar: false,
-            title: "الحديث الشريف",
-          ),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          body: BlocBuilder<LibraryCubit, LibraryState>(
-            builder: (context, state) => state.when(
-              initial: () => const Center(child: CircularProgressIndicator()),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              loaded: (books) => Padding(
+      child: Scaffold(
+        appBar: CustomAppBar(
+          showSearchBar: false,
+          title: "الحديث الشريف",
+          leftIcon: Icons.info_outline_rounded, // Example: Menu icon
+          rightIcon: Icons.dark_mode_outlined, // Example: Search icon
+          onLeftTap: () {
+            print("Left icon tapped!");
+          },
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        body: BlocBuilder<LibraryCubit, LibraryState>(
+          builder: (context, state) => state.when(
+            initial: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            loaded: (books) => Directionality(
+              textDirection: TextDirection.rtl,
+              child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8.0),
@@ -158,8 +163,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   },
                 ),
               ),
-              error: (message) => Center(child: Text(message)),
             ),
+            error: (message) => Center(child: Text(message)),
           ),
         ),
       ),

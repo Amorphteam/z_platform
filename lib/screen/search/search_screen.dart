@@ -109,7 +109,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     context.read<SearchCubit>().resetState();
                   },
                   icon: const Icon(Icons.tune_rounded),
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
               Directionality(
@@ -119,7 +118,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .labelSmall
-                        ?.copyWith(color: Theme.of(context).colorScheme.secondary)),
+                        ),
               ),
             ],
           ),

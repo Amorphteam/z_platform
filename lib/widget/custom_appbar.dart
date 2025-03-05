@@ -58,6 +58,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             widget.title,
             style: TextStyle(
               color: isDarkMode ? Colors.white : Colors.black,
+              fontFamily: 'kuffi',
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -126,39 +127,42 @@ class _CustomAppBarState extends State<CustomAppBar> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("اختر سمة التطبيق"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: const Text("الوضع الفاتح"),
-                leading: const Icon(Icons.light_mode),
-                onTap: () {
-                  Provider.of<ThemeHelper>(context, listen: false)
-                      .setTheme(AppTheme.light);
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: const Text("الوضع الداكن"),
-                leading: const Icon(Icons.dark_mode),
-                onTap: () {
-                  Provider.of<ThemeHelper>(context, listen: false)
-                      .setTheme(AppTheme.dark);
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: const Text("النظام الافتراضي"),
-                leading: const Icon(Icons.settings),
-                onTap: () {
-                  Provider.of<ThemeHelper>(context, listen: false)
-                      .setTheme(AppTheme.system);
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            title: const Text("اختر سمة التطبيق"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: const Text("الوضع الفاتح"),
+                  leading: const Icon(Icons.light_mode),
+                  onTap: () {
+                    Provider.of<ThemeHelper>(context, listen: false)
+                        .setTheme(AppTheme.light);
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text("الوضع الداكن"),
+                  leading: const Icon(Icons.dark_mode),
+                  onTap: () {
+                    Provider.of<ThemeHelper>(context, listen: false)
+                        .setTheme(AppTheme.dark);
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text("النظام الافتراضي"),
+                  leading: const Icon(Icons.settings),
+                  onTap: () {
+                    Provider.of<ThemeHelper>(context, listen: false)
+                        .setTheme(AppTheme.system);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },

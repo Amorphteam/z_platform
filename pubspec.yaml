@@ -84,6 +84,9 @@ flutter:
     - assets/icon/
     - assets/db/
   fonts:
+    - family: kuffi
+      fonts:
+        - asset: assets/font/kuffi.ttf
     - family: font1
       fonts:
         - asset: assets/font/font1.ttf

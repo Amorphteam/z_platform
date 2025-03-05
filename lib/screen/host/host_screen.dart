@@ -40,12 +40,27 @@ class _HostScreenState extends State<HostScreen> {
           backgroundColor: Theme.of(context).colorScheme.primary,
           selectedItemColor: Theme.of(context).colorScheme.secondaryContainer,
           unselectedItemColor: Theme.of(context).colorScheme.onSurface,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.check_mark_circled), label: 'اخترنا لكم'),
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.list_number_rtl), label: 'الفهرست'),
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.book), label: 'الكتب'),
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.search), label: 'البحث'),
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.bookmark), label: 'العلامات'),
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(_currentIndex == 0 ? CupertinoIcons.check_mark_circled_solid : CupertinoIcons.check_mark_circled),
+              label: 'اخترنا لكم',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_currentIndex == 1 ? CupertinoIcons.list_number_rtl : CupertinoIcons.list_bullet),
+              label: 'الفهرست',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_currentIndex == 2 ? CupertinoIcons.book_solid : CupertinoIcons.book),
+              label: 'الكتب',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_currentIndex == 3 ? CupertinoIcons.search_circle_fill : CupertinoIcons.search),
+              label: 'البحث',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_currentIndex == 4 ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark),
+              label: 'الإرشادات',
+            ),
           ],
         ),
       ),

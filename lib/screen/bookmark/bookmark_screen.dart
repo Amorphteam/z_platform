@@ -30,7 +30,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       appBar:  CustomAppBar(
       showSearchBar: false,
       title: "الحديث الشريف",
-      rightIcon: Icons.delete_sweep_rounded, // Example: Search icon
+      leftIcon: Icons.delete, // Example: Search icon
       onLeftTap: _clearAll,
     ),
       body: Column(
@@ -99,12 +99,39 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   }
 
   void _clearAll() {
-    if (_selectedSegment == 'Bookmark') {
-      BlocProvider.of<BookmarkCubit>(context).clearAllBookmarks();
-    } else {
-      BlocProvider.of<BookmarkCubit>(context).clearAllHistory();
-    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            title: Text('تأكيد الحذف'),
+            content: Text('هل أنت متأكد أنك تريد حذف جميع البيانات؟'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close dialog
+                },
+                child: Text('إلغاء'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close dialog
+                  if (_selectedSegment == 'Bookmark') {
+                    BlocProvider.of<BookmarkCubit>(context).clearAllBookmarks();
+                  } else {
+                    BlocProvider.of<BookmarkCubit>(context).clearAllHistory();
+                  }
+                },
+                child: Text('حذف', style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
+
 
   Widget _buildBookmarkBody(BookmarkState state) {
     return state.when(
