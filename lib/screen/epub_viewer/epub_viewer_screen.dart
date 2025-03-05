@@ -428,43 +428,43 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                                 color: Colors.red,
                               ),
                               'h1.tit1': Style(
-                                color: Colors.green[700],
+                                color: isDarkMode ? Colors.white: Colors.green[700],
                                 fontSize: FontSize(fontSize.size * 1.1),
                                 textAlign: TextAlign.center,
                                 fontFamily: fontFamily.name,
                               ),
                               'h2.tit2': Style(
-                                color: Colors.blue[900],
+                                color: isDarkMode ? Colors.white: Colors.green[900],
                                 fontSize: FontSize(fontSize.size),
                                 textAlign: TextAlign.center,
                                 fontFamily: fontFamily.name,
                               ),
                               'h3.tit3': Style(
-                                color: Colors.brown,
+                                color: isDarkMode ? Colors.white: Colors.brown,
                                 fontSize: FontSize(fontSize.size),
                                 textAlign: TextAlign.center,
                                 fontFamily: fontFamily.name,
                               ),
                               'h4.tit4': Style(
-                                color: Colors.red,
+                                color: isDarkMode ?  Colors.white: Colors.red,
                                 fontSize: FontSize(fontSize.size),
                                 textAlign: TextAlign.center,
                                 fontFamily: fontFamily.name,
                               ),
                               '.pagen': Style(
                                 textAlign: TextAlign.center,
-                                color: Colors.red,
+                                color: isDarkMode ? Color(0xfff9825e): Colors.red,
                                 fontSize: FontSize(fontSize.size),
                                 fontFamily: fontFamily.name,
                               ),
                               '.fnote': Style(
-                                color: Colors.blue[900],
+                                color: isDarkMode ? Color(0xFF8a8afa): Colors.blue[900],
                                 fontSize: FontSize(fontSize.size * 0.75),
                                 textAlign: TextAlign.justify,
                               ),
                               '.sher': Style(
                                 textAlign: TextAlign.center,
-                                color: Colors.red[800],
+                                color: isDarkMode ? Colors.white:Colors.red[800],
                                 fontSize: FontSize(fontSize.size * 0.8),
                               ),
                               '.psm': Style(
@@ -481,14 +481,14 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                               '.fn': Style(
-                                color: Color(0xFF000080),
+                                color: isDarkMode?  Color(0xff8a8afa): Color(0xFF000080),
                                 fontWeight: FontWeight.normal,
                                 fontSize: FontSize(fontSize.size * 0.75),
                                 textDecoration: TextDecoration.none,
                                 verticalAlign: VerticalAlign.top,
                               ),
                               '.fm': Style(
-                                color: Colors.green,
+                                color: isDarkMode ? Color(0xffa2e1a2): Colors.green,
                                 fontWeight: FontWeight.bold,
                                 fontSize: FontSize(fontSize.size * 0.75),
                                 textDecoration: TextDecoration.none,
@@ -496,16 +496,16 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                               '.quran': Style(
                                 fontWeight: FontWeight.bold,
                                 fontSize: FontSize(fontSize.size),
-                                color: Colors.green,
+                                color: isDarkMode ? Color(0xffa2e1a2):Colors.green,
                               ),
                               '.hadith': Style(
                                 fontSize: FontSize(fontSize.size),
-                                color: Colors.black,
+                                color: isDarkMode ? Color(0xffC1C1C1):Colors.black,
                               ),
                               '.hadith-num': Style(
                                 fontWeight: FontWeight.bold,
                                 fontSize: FontSize(fontSize.size),
-                                color: Colors.red,
+                                color: isDarkMode ? Color(0xfff9825e):Colors.red,
                               ),
                               '.shreah': Style(
                                 fontWeight: FontWeight.bold,
@@ -1110,7 +1110,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           const SizedBox(width: 32), // To balance the close button
                           Text(
                             first.name,
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'kuffi'),
                           ),
                           IconButton(
                             icon: const Icon(Icons.close),
@@ -1127,7 +1127,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         padding: const EdgeInsets.all(16),
                         child: Text(
                           first.det, // Display `det` field
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: 'font1'),
                         ),
                       ),
                     ),
@@ -1143,7 +1143,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                 color: Theme.of(context).colorScheme.surface,
                 child: Center(
                   child: Text(
-                    '  معجم رجال الحديث ${first.joz} : ${first.page}',
+                    '  معجم رجال الحديث ${first.joz} : ${first.page} ${first.harf}',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
