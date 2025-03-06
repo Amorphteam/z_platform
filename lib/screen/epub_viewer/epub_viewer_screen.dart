@@ -1147,7 +1147,7 @@ class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
                       Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.remove_circle_outline),
+                            icon: const Icon(Icons.text_decrease),
                             onPressed: () {
                               setState(() {
                                 if (_rejalFontSize > _minFontSize) {
@@ -1157,7 +1157,7 @@ class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
                             },
                           ),
                           IconButton(
-                            icon: const Icon(Icons.add_circle_outline),
+                            icon: const Icon(Icons.text_increase),
                             onPressed: () {
                               setState(() {
                                 if (_rejalFontSize < _maxFontSize) {
@@ -1168,13 +1168,19 @@ class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
                           ),
                         ],
                       ),
-                      Text(
-                        widget.rejal.name,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'kuffi'),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 28.0),
+                        child: Text(
+                          widget.rejal.name,
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'kuffi', color: Theme.of(context).colorScheme.secondary),
+                        ),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => Navigator.pop(context),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 48.0),
+                        child: IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () => Navigator.pop(context),
+                        ),
                       ),
                     ],
                   ),

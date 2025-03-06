@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "160579225281",
+    "project_id": "alhadith-apps",
+    "storage_bucket": "alhadith-apps.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160579225281:android:69df81d1e1e2f91a217640",
+        "android_client_info": {
+          "package_name": "org.masaha.alhadith"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkQGDSGbPX2dxeRkwljwtAF05JJtHe3eo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
