@@ -366,11 +366,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               scrollOffsetController: scrollOffsetController,
               itemPositionsListener: itemPositionsListener,
               scrollOffsetListener: scrollOffsetListener,
+              physics: const BouncingScrollPhysics(),
+              key: PageStorageKey('epub_content'),
               itemBuilder: (BuildContext context, int index) {
-                final double screenHeight = MediaQuery
-                    .of(context)
-                    .size
-                    .height; // Get screen height
+                final double screenHeight = MediaQuery.of(context).size.height;
 
                 return Padding(
                   padding: const EdgeInsets.only(top: 20.0),
@@ -390,12 +389,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       child: Container(
                         margin: const EdgeInsets.only(right: 16, left: 16),
                         decoration: BoxDecoration(
-                          color: Theme
-                              .of(context)
-                              .colorScheme
-                              .surface, // Set color here to use rounded corners
-                          borderRadius: BorderRadius.circular(
-                              10), // Adjust the radius to your liking
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: SelectionArea(
                           child: Html(
@@ -411,7 +406,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                               'p': Style(
                                 color: isDarkMode ? Colors.white : const Color(0xFF996633),
                                 textAlign: TextAlign.justify,
-                                margin: Margins.only(bottom: 10),
+                                margin: Margins.zero,
                                 fontSize: FontSize(fontSize.size),
                                 fontFamily: fontFamily.name,
                               ),
