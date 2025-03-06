@@ -5,6 +5,7 @@ import '../../widget/custom_appbar.dart';
 import 'cubit/bookmark_cubit.dart';
 import 'cubit/bookmark_state.dart';
 import 'widgets/reference_list_widget.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen({super.key});
@@ -16,6 +17,7 @@ class BookmarkScreen extends StatefulWidget {
 class _BookmarkScreenState extends State<BookmarkScreen> {
   String _selectedSegment = 'Bookmark';
 
+
   @override
   void initState() {
     super.initState();
@@ -23,17 +25,17 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Directionality(
-    textDirection: TextDirection.rtl,
-    child: Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar:  CustomAppBar(
-      showSearchBar: false,
-      title: "الحديث الشريف",
-      leftIcon: Icons.delete, // Example: Search icon
-      onLeftTap: _clearAll,
-    ),
-      body: Column(
+  Widget build(BuildContext context) => Scaffold(
+    backgroundColor: Theme.of(context).colorScheme.primary,
+    appBar:  CustomAppBar(
+    showSearchBar: false,
+    title: "الحديث الشريف",
+    leftIcon: Icons.delete, // Example: Search icon
+    onLeftTap: _clearAll,
+  ),
+    body: Directionality(
+      textDirection: TextDirection.rtl,
+      child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 0.0),
@@ -41,7 +43,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               segments: [
                 ButtonSegment(
                   value: 'Bookmark',
-                  label: const Text('العلامات'),
+                  label: const Text('الإرشادات'),
                   icon: _selectedSegment == 'Bookmark' ? const Icon(Icons.bookmark) : const Icon(Icons.bookmark),
                 ),
                 ButtonSegment(

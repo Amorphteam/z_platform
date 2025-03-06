@@ -37,9 +37,6 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
           title: "الحديث الشريف",
           leftIcon: Icons.info_outline_rounded, // Example: Menu icon
           rightIcon: Icons.dark_mode_outlined, // Example: Search icon
-          onLeftTap: () {
-            print("Left icon tapped!");
-          },
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         body: isLandscape

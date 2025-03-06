@@ -6,7 +6,7 @@ part 'rejal.g.dart';
 @freezed
 class Rejal with _$Rejal {
   factory Rejal({
-    @Default(null) int? id,
+    @Default(null) int? ID,
     required String name,
     required String name2,
     required String det,

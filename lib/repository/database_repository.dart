@@ -8,8 +8,20 @@ class DatabaseRepository {
   Future<List<Rejal>> getRejalsByIds(List<int> ids) async {
     final db = await DatabaseHelper.database;
     String idList = ids.map((id) => '?').join(',');
+    print('Searching for IDs: $ids');
+    print('SQL Query: SELECT * FROM rejal WHERE id IN ($idList)');
+
+    // First, let's check the table structure
+    final List<Map<String, dynamic>> tableInfo = await db.rawQuery('PRAGMA table_info(rejal)');
+    print('Table schema: $tableInfo');
+
     final List<Map<String, dynamic>> results =
-    await db.query('rejal', where: 'ID IN ($idList)', whereArgs: ids);
-    return results.map(Rejal.fromJson).toList();
+        await db.query('rejal', where: 'id IN ($idList)', whereArgs: ids);
+    print('Raw query results: $results');
+
+    final rejals = results.map(Rejal.fromJson).toList();
+    print('Parsed Rejal objects: ${rejals.first.ID}');
+
+    return rejals;
   }
 }

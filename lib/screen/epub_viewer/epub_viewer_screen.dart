@@ -76,6 +76,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   bool isDarkMode = false;
   final focusNode = FocusNode();
   final textEditingController = TextEditingController();
+  double _rejalFontSize = 18.0; // Default font size for rejal content
+  static const double _minFontSize = 14.0;
+  static const double _maxFontSize = 24.0;
+  static const double _fontSizeStep = 2.0;
 
   @override
   void didChangeDependencies() {
@@ -1084,74 +1088,16 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   void _showSingleRejalDialog(Rejal first) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Allows full-screen height
-      backgroundColor: Colors.transparent, // Optional: for rounded corners
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.9, // Almost full-screen
-        minChildSize: 0.5, // Allow dragging to half size
-        maxChildSize: 1.0, // Full-screen
+        initialChildSize: 0.9,
+        minChildSize: 0.5,
+        maxChildSize: 1.0,
         expand: false,
-        builder: (context, scrollController) => Directionality(
-          textDirection: TextDirection.rtl,
-          child: Stack(
-            children: [Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                child: Column(
-                  children: [
-                    // Close button
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SizedBox(width: 32), // To balance the close button
-                          Text(
-                            first.name,
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'kuffi'),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Scrollable content
-                    Expanded(
-                      child: SingleChildScrollView(
-                        controller: scrollController,
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          first.det, // Display `det` field
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: 'font1'),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 40,
-                color: Theme.of(context).colorScheme.surface,
-                child: Center(
-                  child: Text(
-                    '  معجم رجال الحديث ${first.joz} : ${first.page} ${first.harf}',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-              ),
-            ),
-
-            ],
-          ),
+        builder: (context, scrollController) => _RejalBottomSheetContent(
+          rejal: first,
+          scrollController: scrollController,
         ),
       ),
     );
@@ -1163,6 +1109,129 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
 
+}
+
+class _RejalBottomSheetContent extends StatefulWidget {
+  final Rejal rejal;
+  final ScrollController scrollController;
+
+  const _RejalBottomSheetContent({
+    required this.rejal,
+    required this.scrollController,
+  });
+
+  @override
+  State<_RejalBottomSheetContent> createState() => _RejalBottomSheetContentState();
+}
+
+class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
+  double _rejalFontSize = 18.0;
+  static const double _minFontSize = 14.0;
+  static const double _maxFontSize = 24.0;
+  static const double _fontSizeStep = 2.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              children: [
+                // Top bar with title and controls
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove_circle_outline),
+                            onPressed: () {
+                              setState(() {
+                                if (_rejalFontSize > _minFontSize) {
+                                  _rejalFontSize -= _fontSizeStep;
+                                }
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add_circle_outline),
+                            onPressed: () {
+                              setState(() {
+                                if (_rejalFontSize < _maxFontSize) {
+                                  _rejalFontSize += _fontSizeStep;
+                                }
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      Text(
+                        widget.rejal.name,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'kuffi'),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Scrollable content
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: widget.scrollController,
+                    padding: const EdgeInsets.all(16),
+                    child: Html(
+                      data: widget.rejal.det,
+                      style: {
+                        'html': Style(
+                          fontSize: FontSize(_rejalFontSize),
+                          lineHeight: LineHeight(1.5),
+                          textAlign: TextAlign.justify,
+                          fontFamily: 'font1',
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        'p': Style(
+                          textAlign: TextAlign.justify,
+                        ),
+                        'br': Style(
+                          display: Display.block,
+                        ),
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 40,
+              color: Theme.of(context).colorScheme.surface,
+              child: Center(
+                child: Text(
+                  '  معجم رجال الحديث ${widget.rejal.joz} : ${widget.rejal.page} / ${widget.rejal.ID}',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 

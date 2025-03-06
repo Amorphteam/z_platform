@@ -20,7 +20,7 @@ Rejal _$RejalFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Rejal {
-  int? get id => throw _privateConstructorUsedError;
+  int? get ID => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get name2 => throw _privateConstructorUsedError;
   String get det => throw _privateConstructorUsedError;
@@ -39,7 +39,7 @@ abstract class $RejalCopyWith<$Res> {
       _$RejalCopyWithImpl<$Res, Rejal>;
   @useResult
   $Res call(
-      {int? id,
+      {int? ID,
       String name,
       String name2,
       String det,
@@ -61,7 +61,7 @@ class _$RejalCopyWithImpl<$Res, $Val extends Rejal>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? ID = freezed,
     Object? name = null,
     Object? name2 = null,
     Object? det = null,
@@ -70,9 +70,9 @@ class _$RejalCopyWithImpl<$Res, $Val extends Rejal>
     Object? harf = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      ID: freezed == ID
+          ? _value.ID
+          : ID // ignore: cast_nullable_to_non_nullable
               as int?,
       name: null == name
           ? _value.name
@@ -110,7 +110,7 @@ abstract class _$$RejalImplCopyWith<$Res> implements $RejalCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int? id,
+      {int? ID,
       String name,
       String name2,
       String det,
@@ -130,7 +130,7 @@ class __$$RejalImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? ID = freezed,
     Object? name = null,
     Object? name2 = null,
     Object? det = null,
@@ -139,9 +139,9 @@ class __$$RejalImplCopyWithImpl<$Res>
     Object? harf = null,
   }) {
     return _then(_$RejalImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      ID: freezed == ID
+          ? _value.ID
+          : ID // ignore: cast_nullable_to_non_nullable
               as int?,
       name: null == name
           ? _value.name
@@ -175,7 +175,7 @@ class __$$RejalImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$RejalImpl implements _Rejal {
   _$RejalImpl(
-      {this.id = null,
+      {this.ID = null,
       required this.name,
       required this.name2,
       required this.det,
@@ -188,7 +188,7 @@ class _$RejalImpl implements _Rejal {
 
   @override
   @JsonKey()
-  final int? id;
+  final int? ID;
   @override
   final String name;
   @override
@@ -204,7 +204,7 @@ class _$RejalImpl implements _Rejal {
 
   @override
   String toString() {
-    return 'Rejal(id: $id, name: $name, name2: $name2, det: $det, joz: $joz, page: $page, harf: $harf)';
+    return 'Rejal(ID: $ID, name: $name, name2: $name2, det: $det, joz: $joz, page: $page, harf: $harf)';
   }
 
   @override
@@ -212,7 +212,7 @@ class _$RejalImpl implements _Rejal {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RejalImpl &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.ID, ID) || other.ID == ID) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.name2, name2) || other.name2 == name2) &&
             (identical(other.det, det) || other.det == det) &&
@@ -224,7 +224,7 @@ class _$RejalImpl implements _Rejal {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, name, name2, det, joz, page, harf);
+      Object.hash(runtimeType, ID, name, name2, det, joz, page, harf);
 
   @JsonKey(ignore: true)
   @override
@@ -242,7 +242,7 @@ class _$RejalImpl implements _Rejal {
 
 abstract class _Rejal implements Rejal {
   factory _Rejal(
-      {final int? id,
+      {final int? ID,
       required final String name,
       required final String name2,
       required final String det,
@@ -253,7 +253,7 @@ abstract class _Rejal implements Rejal {
   factory _Rejal.fromJson(Map<String, dynamic> json) = _$RejalImpl.fromJson;
 
   @override
-  int? get id;
+  int? get ID;
   @override
   String get name;
   @override

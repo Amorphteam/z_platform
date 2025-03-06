@@ -57,7 +57,6 @@ class _TocScreenState extends State<TocScreen> {
         title: "الحديث الشريف",
         leftIcon: Icons.info_outline_rounded,
         rightIcon: Icons.dark_mode_outlined,
-        onLeftTap: () => print("Left icon tapped!"),
         onSearch: _showSearchBar ? _filterItems : null,
         // Pass search function only if needed
         showSearchBar: _showSearchBar,
