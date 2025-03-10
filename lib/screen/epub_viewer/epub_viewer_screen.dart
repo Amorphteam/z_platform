@@ -22,6 +22,7 @@ import '../bookmark/cubit/bookmark_cubit.dart';
 import 'cubit/epub_viewer_cubit.dart';
 import 'internal_search/internal_search_screen.dart';
 import 'widgets/style_sheet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 typedef DataCallback = void Function(dynamic data);
 
@@ -80,6 +81,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   static const double _minFontSize = 14.0;
   static const double _maxFontSize = 24.0;
   static const double _fontSizeStep = 2.0;
+  static const String _rejalFontSizeKey = 'rejal_font_size';
 
   @override
   void didChangeDependencies() {
@@ -895,6 +897,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         }
       }
     });
+    _loadRejalFontSize();
   }
 
   void _updateCurrentPage(double newPage) {
@@ -1103,6 +1106,17 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     return words.length > 10 ? words.take(8).join(' ') + '...' : det;
   }
 
+  Future<void> _loadRejalFontSize() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _rejalFontSize = prefs.getDouble(_rejalFontSizeKey) ?? 18.0;
+    });
+  }
+
+  Future<void> _saveRejalFontSize(double fontSize) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_rejalFontSizeKey, fontSize);
+  }
 
 }
 
@@ -1124,6 +1138,25 @@ class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
   static const double _minFontSize = 14.0;
   static const double _maxFontSize = 24.0;
   static const double _fontSizeStep = 2.0;
+  static const String _rejalFontSizeKey = 'rejal_font_size';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRejalFontSize();
+  }
+
+  Future<void> _loadRejalFontSize() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _rejalFontSize = prefs.getDouble(_rejalFontSizeKey) ?? 18.0;
+    });
+  }
+
+  Future<void> _saveRejalFontSize(double fontSize) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_rejalFontSizeKey, fontSize);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1152,6 +1185,7 @@ class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
                               setState(() {
                                 if (_rejalFontSize > _minFontSize) {
                                   _rejalFontSize -= _fontSizeStep;
+                                  _saveRejalFontSize(_rejalFontSize);
                                 }
                               });
                             },
@@ -1162,6 +1196,7 @@ class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
                               setState(() {
                                 if (_rejalFontSize < _maxFontSize) {
                                   _rejalFontSize += _fontSizeStep;
+                                  _saveRejalFontSize(_rejalFontSize);
                                 }
                               });
                             },

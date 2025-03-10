@@ -94,35 +94,14 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       );
 
-  Padding buildLeftWidget(BuildContext context) {
-    return Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 30,
-                width: 30,
-                child: IconButton(
-                  onPressed: () async {
-                    openBookSelectionSheet(allBooks);
-                    context.read<SearchCubit>().resetState();
-                  },
-                  icon: const Icon(Icons.tune_rounded),
-                ),
-              ),
-              Directionality(
-                textDirection: TextDirection.rtl,
-                child: Text(' $_selectedBooksCount کتاب ',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelSmall
-                        ),
-              ),
-            ],
-          ),
-        );
+  Widget buildLeftWidget(BuildContext context) {
+    return IconButton(
+      onPressed: () async {
+        openBookSelectionSheet(allBooks);
+        context.read<SearchCubit>().resetState();
+      },
+      icon: const Icon(Icons.tune_rounded),
+    );
   }
 
   void openBookSelectionSheet(List<Book> books) async {

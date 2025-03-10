@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../bookmark/bookmark_screen.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
@@ -46,7 +47,11 @@ class _HostScreenState extends State<HostScreen> {
               label: 'اخترنا لكم',
             ),
             BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 1 ? CupertinoIcons.list_number_rtl : CupertinoIcons.list_bullet),
+              icon: SvgPicture.asset(
+                _currentIndex == 1 ? 'assets/icon/filled_toc.svg' : 'assets/icon/outline_toc.svg',
+                width: 24,
+                height: 24,
+              ),
               label: 'الفهرست',
             ),
             BottomNavigationBarItem(
@@ -59,7 +64,7 @@ class _HostScreenState extends State<HostScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(_currentIndex == 4 ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark),
-              label: 'الإرشادات',
+              label: 'الإشارات',
             ),
           ],
         ),

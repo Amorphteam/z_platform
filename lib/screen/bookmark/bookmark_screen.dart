@@ -43,7 +43,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               segments: [
                 ButtonSegment(
                   value: 'Bookmark',
-                  label: const Text('الإرشادات'),
+                  label: const Text('الإشارات'),
                   icon: _selectedSegment == 'Bookmark' ? const Icon(Icons.bookmark) : const Icon(Icons.bookmark),
                 ),
                 ButtonSegment(
@@ -114,16 +114,18 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 onPressed: () {
                   Navigator.of(context).pop(); // Close dialog
                 },
-                child: Text('إلغاء'),
+                child: Text('إلغاء', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   Navigator.of(context).pop(); // Close dialog
                   if (_selectedSegment == 'Bookmark') {
-                    BlocProvider.of<BookmarkCubit>(context).clearAllBookmarks();
+                    await BlocProvider.of<BookmarkCubit>(context).clearAllBookmarks();
                   } else {
-                    BlocProvider.of<BookmarkCubit>(context).clearAllHistory();
+                    await BlocProvider.of<BookmarkCubit>(context).clearAllHistory();
                   }
+                  // Force reload the current view
+                  _loadBookmarksOrHistory();
                 },
                 child: Text('حذف', style: TextStyle(color: Colors.red)),
               ),

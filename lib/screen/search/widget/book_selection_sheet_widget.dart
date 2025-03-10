@@ -57,7 +57,8 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
                   selectedBooks.values.every((value) => value)
                       ? "إلغاء الكل"
                       : "تحديد الكل",
-                  style: const TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface),
                 ),
               ),
             ],

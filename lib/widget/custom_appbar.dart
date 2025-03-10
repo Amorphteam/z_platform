@@ -98,7 +98,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   },
                   onSubmitted: widget.onSubmitted,
                   decoration: InputDecoration(
-                    hintText: "البحث في الفهرست",
+                    hintText: "اكتب شيئاً...",
                     hintStyle: TextStyle(
                       fontSize: 12,
                       color: isDarkMode ? Colors.grey[400] : Colors.grey[600], // Hint color
