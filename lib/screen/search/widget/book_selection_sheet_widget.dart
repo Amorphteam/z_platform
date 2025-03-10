@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../../../model/book_model.dart';
@@ -23,16 +21,25 @@ class BookSelectionSheetWidget extends StatefulWidget {
 
 class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
   late Map<String, bool> selectedBooks; // Tracks selected books and series
+  int _selectedCount = 0; // Track selected book count
 
   @override
   void initState() {
     super.initState();
     selectedBooks = Map.from(widget.initialSelectedBooks); // Use initial selected state
+    _updateSelectedCount(); // Initialize count
+  }
+
+  void _updateSelectedCount() {
+    setState(() {
+      _selectedCount = selectedBooks.entries
+          .where((entry) => entry.value && entry.key.length > 1)
+          .length;
+    });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
@@ -40,7 +47,7 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "اختر الکتب لبدء البحث",
+                "مجال البحث",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               TextButton(
@@ -51,6 +58,7 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
 
                     // Toggle selection
                     selectedBooks.updateAll((key, value) => !allSelected);
+                    _updateSelectedCount();
                   });
                 },
                 child: Text(
@@ -58,7 +66,7 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
                       ? "إلغاء الكل"
                       : "تحديد الكل",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface),
+                    color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -74,21 +82,37 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
               },
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context, selectedBooks);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.secondary, // Change this to your desired color
-              foregroundColor: Theme.of(context).colorScheme.primary, // Text color
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-            ),
-            child: const Text("موافق"),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Text('  سيكون البحث في $_selectedCount كتاباً ',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelSmall
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context, selectedBooks);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                ),
+                child: const Text("موافق"),
+              ),
+            ],
           ),
         ],
       ),
     );
-  }
 
   Widget _buildBookTile(Book book) {
     if (book.series == null || book.series!.isEmpty) {
@@ -100,6 +124,7 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
           onChanged: (value) {
             setState(() {
               selectedBooks[book.epub] = value!;
+              _updateSelectedCount();
             });
           },
         ),
@@ -122,6 +147,7 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
                   for (var series in book.series ?? []) {
                     selectedBooks[series.epub] = value;
                   }
+                  _updateSelectedCount();
                 });
               },
             ),
@@ -148,6 +174,7 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
 
                       // Update the parent book selection based on its series
                       selectedBooks[book.epub] = allSelected;
+                      _updateSelectedCount();
                     });
                   },
                 ),
