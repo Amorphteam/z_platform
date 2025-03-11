@@ -37,11 +37,26 @@ android {
     compileSdkVersion 35
     ndkVersion flutter.ndkVersion
 
-    buildTypes {
+
+
+    signingConfigs {
         release {
-            signingConfig signingConfigs.debug
+            keyAlias 'new-key-alias'
+            keyPassword '????'
+            storeFile file('/Users/???/???')
+            storePassword '?????'
         }
     }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false // Change to true if using ProGuard
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

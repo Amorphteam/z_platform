@@ -23,6 +23,22 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
   late Map<String, bool> selectedBooks; // Tracks selected books and series
   int _selectedCount = 0; // Track selected book count
 
+  String _getBookCountText(int count) {
+    if (count == 1) {
+      return 'سيكون البحث في كتاباً واحداً';
+    } else if (count == 2) {
+      return 'سيكون البحث في كتابين';
+    } else if (count >= 3 && count <= 10) {
+      return 'سيكون البحث في $_selectedCount كتب';
+    } else if (count >= 11 && count <= 99) {
+      return 'سيكون البحث في $_selectedCount كتاباً';
+    } else if (count >= 100 && count <= 9999) {
+      return 'سيكون البحث في $_selectedCount كتاب';
+    } else {
+      return 'سيكون البحث في $_selectedCount كتاب';
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -89,11 +105,10 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
                 padding: const EdgeInsets.all(8.0),
                 child: Directionality(
                   textDirection: TextDirection.rtl,
-                  child: Text('  سيكون البحث في $_selectedCount كتاباً ',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall
+                  child: Text(
+                    _getBookCountText(_selectedCount),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.labelSmall
                   ),
                 ),
               ),
