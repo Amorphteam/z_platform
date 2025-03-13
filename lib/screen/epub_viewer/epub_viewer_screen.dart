@@ -18,7 +18,6 @@ import '../../model/tree_toc_model.dart';
 import '../../repository/database_repository.dart';
 import '../../util/epub_helper.dart';
 import '../../util/page_helper.dart';
-import '../../util/search_helper.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
 import 'cubit/epub_viewer_cubit.dart';
 import 'internal_search/internal_search_screen.dart';
@@ -94,7 +93,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
   @override
   Widget build(BuildContext context) {
-     isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     if (_chapter != null) {
       context
@@ -106,7 +105,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     } else {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-          overlays: SystemUiOverlay.values,);
+        overlays: SystemUiOverlay.values,);
     }
 
     return BlocConsumer<EpubViewerCubit, EpubViewerState>(
@@ -129,143 +128,143 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         );
       },
       builder: (context, state) => Scaffold(
-          body: Stack(
-            children: [
-              if (isSliderVisible)
-                AppBar(
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  leading: IconButton(
-                    icon: isSearchOpen
-                        ? Icon(Icons.close, color: Theme.of(context).colorScheme.onSurfaceVariant)
-                        : Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onSurfaceVariant),
+        body: Stack(
+          children: [
+            if (isSliderVisible)
+              AppBar(
+                backgroundColor: Theme.of(context).colorScheme.surface,
+                leading: IconButton(
+                  icon: isSearchOpen
+                      ? Icon(Icons.close, color: Theme.of(context).colorScheme.onSurfaceVariant)
+                      : Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  onPressed: () {
+                    if (isSearchOpen) {
+                      _toggleSearch(false);
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+                title: isSearchOpen
+                    ? TextField(
+                  autofocus: true,
+                  focusNode: focusNode,
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                    hintText: 'أدخل كلمة لبدء البحث ...',
+                    border: InputBorder.none,
+                    suffixIcon: IconButton(
+                      icon: SvgPicture.asset('assets/icon/search.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      onPressed: () {
+                        if (textEditingController.text.isNotEmpty) {
+                          final String searchQuery = textEditingController.text;
+                          _search(searchQuery);
+                        }
+                      },
+                    ),
+                  ),
+                  onSubmitted: _search,
+                )
+                    : const SizedBox.shrink(),
+                actions: isSearchOpen || isAboutUsBook
+                    ? null // No actions when search is open or when it's About Us page
+                    : [
+                  IconButton(
+                    icon: SvgPicture.asset('assets/icon/search.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    onPressed: () => _toggleSearch(true),
+                  ),
+                  IconButton(
+                    icon: SvgPicture.asset('assets/icon/font.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
                     onPressed: () {
-                      if (isSearchOpen) {
-                        _toggleSearch(false);
+                      _showBottomSheet(
+                        context, context.read<EpubViewerCubit>(),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: SvgPicture.asset(
+                      isBookmarked
+                          ? 'assets/icon/bookmarked.svg'
+                          : 'assets/icon/bookmark.svg',
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    onPressed: () {
+                      _toggleBookmark();
+                      if (isBookmarked) {
+                        _addBookmark(context);
                       } else {
-                        Navigator.of(context).pop();
+                        _removeBookmark(context);
                       }
                     },
                   ),
-                  title: isSearchOpen
-                      ? TextField(
-                    autofocus: true,
-                    focusNode: focusNode,
-                    controller: textEditingController,
-                    decoration: InputDecoration(
-                      hintText: 'أدخل كلمة لبدء البحث ...',
-                      border: InputBorder.none,
-                      suffixIcon: IconButton(
-                        icon: SvgPicture.asset('assets/icon/search.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
-                        onPressed: () {
-                          if (textEditingController.text.isNotEmpty) {
-                            final String searchQuery = textEditingController.text;
-                            _search(searchQuery);
-                          }
-                        },
-                      ),
-                    ),
-                    onSubmitted: _search,
-                  )
-                      : const SizedBox.shrink(),
-                  actions: isSearchOpen || isAboutUsBook
-                      ? null // No actions when search is open or when it's About Us page
-                      : [
-                    IconButton(
-                      icon: SvgPicture.asset('assets/icon/search.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
-                      onPressed: () => _toggleSearch(true),
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset('assets/icon/font.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
-                      onPressed: () {
-                        _showBottomSheet(
-                          context, context.read<EpubViewerCubit>(),
-                        );
-                      },
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        isBookmarked
-                            ? 'assets/icon/bookmarked.svg'
-                            : 'assets/icon/bookmark.svg',
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                      onPressed: () {
-                        _toggleBookmark();
-                        if (isBookmarked) {
-                          _addBookmark(context);
-                        } else {
-                          _removeBookmark(context);
-                        }
-                      },
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset('assets/icon/list.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
-                      onPressed: () {
-                        _openInternalToc(context);
-                      },
-                    ),
-                  ],
-                ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  margin: EdgeInsets.only(
-                      top: !isSliderVisible
-                          ? 0
-                          : kToolbarHeight +
-                          MediaQuery.of(context).padding.top,),
-                  child: state.when(
-                      loaded: (content, _, tocList) {
-                        _storeContentLoaded(content, context, state, tocList);
-                        // context.read<EpubViewerCubit>().emitLastPageSeen();
-
-                        if (widget.referenceModel?.navIndex !=null){
-                          final double doubleValue = double.parse(widget.referenceModel!.navIndex);
-                          final int intValue = doubleValue.toInt();
-                          context.read<EpubViewerCubit>().emitCustomPageSeen((intValue).toString());
-                        }
-                        if (widget.historyModel?.navIndex !=null){
-                          final double doubleValue = double.parse(widget.historyModel!.navIndex);
-                          final int intValue = doubleValue.toInt();
-                          context.read<EpubViewerCubit>().emitCustomPageSeen((intValue).toString());
-                        }
-                        if (widget.searchModel?.pageIndex !=null){
-                          context.read<EpubViewerCubit>().emitCustomPageSeen((widget.searchModel!.pageIndex - 1).toString() ?? '0');
-                          Future.delayed(const Duration(milliseconds: 500), () {
-                            context.read<EpubViewerCubit>().highlightContent(widget.searchModel!.pageIndex, widget.searchModel!.searchedWord!);
-                          });
-                        }
-                        context.read<EpubViewerCubit>().loadUserPreferences();
-                        context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-                        return _buildCurrentUi(context, _content);
-                      },
-                      contentHighlighted: (content, page) {
-                        _orginalContent = _content;
-                        _content = content;
-                        _jumpTo(pageNumber: page);
-                        return _buildCurrentUi(context, content);
-                      },
-                      bookmarkAbsent: () => _buildCurrentUi(context, _content),
-                      bookmarkPresent: () => _buildCurrentUi(context, _content),
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      error: (error) => _buildCurrentUi(context, _content),
-                      initial: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      pageChanged: (int? pageNumber) => _buildCurrentUi(context, _content),
-                      styleChanged: (fontSize,
-                          lineHeight,
-                          fontFamily,) => _buildCurrentUi(context, _content),
-                      bookmarkAdded: (int? status) => _buildCurrentUi(context, _content),
-                      historyAdded: (int? status) => _buildCurrentUi(context, _content),
-                      searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content),),
-                ),
+                  IconButton(
+                    icon: SvgPicture.asset('assets/icon/list.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    onPressed: () {
+                      _openInternalToc(context);
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                margin: EdgeInsets.only(
+                  top: !isSliderVisible
+                      ? 0
+                      : kToolbarHeight +
+                      MediaQuery.of(context).padding.top,),
+                child: state.when(
+                  loaded: (content, _, tocList) {
+                    _storeContentLoaded(content, context, state, tocList);
+                    // context.read<EpubViewerCubit>().emitLastPageSeen();
+
+                    if (widget.referenceModel?.navIndex !=null){
+                      final double doubleValue = double.parse(widget.referenceModel!.navIndex);
+                      final int intValue = doubleValue.toInt();
+                      context.read<EpubViewerCubit>().emitCustomPageSeen((intValue).toString());
+                    }
+                    if (widget.historyModel?.navIndex !=null){
+                      final double doubleValue = double.parse(widget.historyModel!.navIndex);
+                      final int intValue = doubleValue.toInt();
+                      context.read<EpubViewerCubit>().emitCustomPageSeen((intValue).toString());
+                    }
+                    if (widget.searchModel?.pageIndex !=null){
+                      context.read<EpubViewerCubit>().emitCustomPageSeen((widget.searchModel!.pageIndex - 1).toString() ?? '0');
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        context.read<EpubViewerCubit>().highlightContent(widget.searchModel!.pageIndex, widget.searchModel!.searchedWord!);
+                      });
+                    }
+                    context.read<EpubViewerCubit>().loadUserPreferences();
+                    context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
+                    return _buildCurrentUi(context, _content);
+                  },
+                  contentHighlighted: (content, page) {
+                    _orginalContent = _content;
+                    _content = content;
+                    _jumpTo(pageNumber: page);
+                    return _buildCurrentUi(context, content);
+                  },
+                  bookmarkAbsent: () => _buildCurrentUi(context, _content),
+                  bookmarkPresent: () => _buildCurrentUi(context, _content),
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  error: (error) => _buildCurrentUi(context, _content),
+                  initial: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  pageChanged: (int? pageNumber) => _buildCurrentUi(context, _content),
+                  styleChanged: (fontSize,
+                      lineHeight,
+                      fontFamily,) => _buildCurrentUi(context, _content),
+                  bookmarkAdded: (int? status) => _buildCurrentUi(context, _content),
+                  historyAdded: (int? status) => _buildCurrentUi(context, _content),
+                  searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content),),
+              ),
+            ),
+          ],
         ),
+      ),
     );
   }
 
@@ -297,158 +296,58 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     }
   }
 
-  void showSearchResultsDialog(BuildContext context, List<SearchModel> searchResults) {
-    final Map<String, List<SearchModel>> resultsByBook = {};
-    final Map<String, bool> isSearchingBook = {};
-    final Map<String, int> currentResultCount = {};
-
-    // Group results by book
-    for (var result in searchResults) {
-      resultsByBook.putIfAbsent(result.bookAddress!, () => []).add(result);
-      currentResultCount[result.bookAddress!] = 10;
-    }
-
+  void showSearchResultsDialog(
+      BuildContext context, List<SearchModel> searchResults,) {
     showDialog(
       context: context,
-      builder: (BuildContext context) => StatefulBuilder(
-        builder: (context, setState) => Dialog(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.height * 0.8,
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                // Header
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'كل النتائج: ${searchResults.length}',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-                const Divider(),
-                // Content
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: resultsByBook.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final bookAddress = resultsByBook.keys.elementAt(index);
-                      final bookResults = resultsByBook[bookAddress]!;
-                      final isSearching = isSearchingBook[bookAddress] ?? false;
-
-                      return Card(
-                        margin: const EdgeInsets.only(bottom: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Book header with search button
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.surfaceVariant,
-                                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Padding(
+          padding: const EdgeInsets.only(right: 16.0, left: 16, top: 8, bottom: 8),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text('كل النتائج: ${searchResults.length}',
+              style: Theme.of(context).textTheme.titleSmall,),
+          ),
+        ),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: searchResults.length,
+            itemBuilder: (BuildContext context, int index) {
+              final result = searchResults[index];
+              return ListTile(
+                title: GestureDetector(
+                  onTap: () {
+                    this.context.read<EpubViewerCubit>().highlightContent(result.pageIndex, searchedWord);
+                    Navigator.of(context).pop(); // Close the dialog on selection
+                  },
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: Html(
+                            data: result.spanna.toString(),
+                            style: {
+                              'html': Style(
+                                fontSize: FontSize.small,
+                                textAlign: TextAlign.justify,
+                                color: Colors.black,
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      bookResults.first.bookTitle ?? 'Unknown Book',
-                                      style: Theme.of(context).textTheme.titleMedium,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  if (isSearching)
-                                    const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(strokeWidth: 2),
-                                    )
-                                  else
-                                    ElevatedButton.icon(
-                                      style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                      ),
-                                      onPressed: () async {
-                                        setState(() {
-                                          isSearchingBook[bookAddress] = true;
-                                        });
-
-                                        try {
-                                          final epubBook = await EpubReader.readBook(
-                                            (await rootBundle.load('assets/epub/$bookAddress')).buffer.asUint8List(),
-                                          );
-                                          
-                                          final newResults = await SearchHelper().searchSingleBook(
-                                            bookAddress,
-                                            searchedWord,
-                                            epubBook,
-                                          );
-
-                                          setState(() {
-                                            resultsByBook[bookAddress] = newResults;
-                                            currentResultCount[bookAddress] = newResults.length;
-                                            isSearchingBook[bookAddress] = false;
-                                          });
-                                        } catch (e) {
-                                          setState(() {
-                                            isSearchingBook[bookAddress] = false;
-                                          });
-                                          print('Error searching book: $e');
-                                        }
-                                      },
-                                      icon: const Icon(Icons.search),
-                                      label: const Text('بحث في هذا الكتاب'),
-                                    ),
-                                ],
+                              'mark': Style(
+                                backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
                               ),
-                            ),
-                            // Results for this book
-                            ...bookResults.map((result) => ListTile(
-                              title: GestureDetector(
-                                onTap: () {
-                                  this.context.read<EpubViewerCubit>().highlightContent(result.pageIndex, searchedWord);
-                                  Navigator.of(context).pop();
-                                },
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Directionality(
-                                        textDirection: TextDirection.rtl,
-                                        child: Html(
-                                          data: result.spanna.toString(),
-                                          style: {
-                                            'html': Style(
-                                              fontSize: FontSize.small,
-                                              textAlign: TextAlign.justify,
-                                              color: Colors.black,
-                                            ),
-                                            'mark': Style(
-                                              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-                                            ),
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )).toList(),
-                          ],
+                            },
+                          ),
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
@@ -712,65 +611,65 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       builder: (context) => Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
-            content: Form(
-              key: formKey,
-              child: TextFormField(
-                controller: pageController,
-                autofocus: true,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: 'أدخل رقم الصفحة (بين 1 و ${_content.length})',
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey, width: 1), // Grey underline when not focused
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey, width: 1), // Black underline when focused
-                  ),
-                  errorBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 1.5), // Red underline for validation errors
-                  ),
-                  focusedErrorBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2), // Red underline when error & focused
-                  ),
+          content: Form(
+            key: formKey,
+            child: TextFormField(
+              controller: pageController,
+              autofocus: true,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: 'أدخل رقم الصفحة (بين 1 و ${_content.length})',
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width: 1), // Grey underline when not focused
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'يرجى إدخال رقم الصفحة';
-                  }
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width: 1), // Black underline when focused
+                ),
+                errorBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.5), // Red underline for validation errors
+                ),
+                focusedErrorBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 2), // Red underline when error & focused
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'يرجى إدخال رقم الصفحة';
+                }
+                final int? pageNumber = int.tryParse(value);
+                if (pageNumber == null || pageNumber <= 0 || pageNumber > _content.length) {
+                  return ' الرقم يجب أن يكون بين ١ و ${_content.length}';
+                }
+                return null;  // Means the input is valid
+              },
+              onFieldSubmitted: (value) {
+                if (formKey.currentState!.validate()) {
                   final int? pageNumber = int.tryParse(value);
-                  if (pageNumber == null || pageNumber <= 0 || pageNumber > _content.length) {
-                    return ' الرقم يجب أن يكون بين ١ و ${_content.length}';
-                  }
-                  return null;  // Means the input is valid
-                },
-                onFieldSubmitted: (value) {
-                  if (formKey.currentState!.validate()) {
-                    final int? pageNumber = int.tryParse(value);
-                    _jumpTo(pageNumber: pageNumber! - 1);
-                    Navigator.of(context).pop();
-                  }
-                },
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('إلغاء', style: Theme.of(context).textTheme.labelLarge),
-                onPressed: () {
+                  _jumpTo(pageNumber: pageNumber! - 1);
                   Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('انتقل',  style: Theme.of(context).textTheme.labelLarge),
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    final int? pageNumber = int.tryParse(pageController.text);
-                    _jumpTo(pageNumber: pageNumber! - 1);
-                    Navigator.of(context).pop();
-                  }
-                },
-              ),
-            ],
+                }
+              },
+            ),
           ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('إلغاء', style: Theme.of(context).textTheme.labelLarge),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('انتقل',  style: Theme.of(context).textTheme.labelLarge),
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  final int? pageNumber = int.tryParse(pageController.text);
+                  _jumpTo(pageNumber: pageNumber! - 1);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -822,68 +721,68 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) => NotificationListener<DraggableScrollableNotification>(
-          onNotification: (notification) {
-            // When the sheet is fully expanded, show the AppBar
-            showAppBar.value = notification.extent == notification.maxExtent;
-            return true; // Return true to cancel the notification bubbling.
-          },
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: DraggableScrollableSheet(
-              expand: false,
-              initialChildSize: 0.5,
-              minChildSize: 0.25,
-              maxChildSize: 1.0,
-              builder: (BuildContext context, ScrollController scrollController) => Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 26, right: 16, left: 16),
-                      // Reserve space for the AppBar-like header
-                      child: EpubChapterListWidget(
-                        tocTreeList: _tocList ?? [],
-                        scrollController: scrollController,
-                        epubViewerCubit: this.context.read<EpubViewerCubit>(),
-                        onClose: () {
-                          Future.delayed(const Duration(milliseconds: 300), () {
-                            Navigator.pop(context);
-                          });
-                        },
-                      ),
-                    ),
-                    // Use ValueListenableBuilder to react to changes in showAppBar
-                    ValueListenableBuilder<bool>(
-                      valueListenable: showAppBar,
-                      builder: (context, value, child) {
-                        if (value) {
-                          return Positioned(
-                          top: 20,
-                          left: 0,
-                          right: 0,
-                          child: SafeArea(
-                            child: Container(
-                              height: 56,
-                              // Standard AppBar height
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              alignment: Alignment.centerRight,
-                              color: Colors.transparent,
-                              // Adjust the color as needed
-                              child: IconButton(
-                                icon: const Icon(Icons.arrow_back),
-                                onPressed: () => Navigator.pop(context),
-                              ),
+        onNotification: (notification) {
+          // When the sheet is fully expanded, show the AppBar
+          showAppBar.value = notification.extent == notification.maxExtent;
+          return true; // Return true to cancel the notification bubbling.
+        },
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: DraggableScrollableSheet(
+            expand: false,
+            initialChildSize: 0.5,
+            minChildSize: 0.25,
+            maxChildSize: 1.0,
+            builder: (BuildContext context, ScrollController scrollController) => Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 26, right: 16, left: 16),
+                  // Reserve space for the AppBar-like header
+                  child: EpubChapterListWidget(
+                    tocTreeList: _tocList ?? [],
+                    scrollController: scrollController,
+                    epubViewerCubit: this.context.read<EpubViewerCubit>(),
+                    onClose: () {
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        Navigator.pop(context);
+                      });
+                    },
+                  ),
+                ),
+                // Use ValueListenableBuilder to react to changes in showAppBar
+                ValueListenableBuilder<bool>(
+                  valueListenable: showAppBar,
+                  builder: (context, value, child) {
+                    if (value) {
+                      return Positioned(
+                        top: 20,
+                        left: 0,
+                        right: 0,
+                        child: SafeArea(
+                          child: Container(
+                            height: 56,
+                            // Standard AppBar height
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            alignment: Alignment.centerRight,
+                            color: Colors.transparent,
+                            // Adjust the color as needed
+                            child: IconButton(
+                              icon: const Icon(Icons.arrow_back),
+                              onPressed: () => Navigator.pop(context),
                             ),
                           ),
-                        );
-                        } else {
-                          return const SizedBox.shrink();
-                        } // If false, don't show anything
-                      },
-                    ),
-                  ],
+                        ),
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    } // If false, don't show anything
+                  },
                 ),
+              ],
             ),
           ),
         ),
+      ),
     );
   }
 
@@ -957,13 +856,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   _loadEpubFromTableOfContents() {
     _bookPath = widget.tocModel!.epubChapter.ContentFileName;
     _loadAndParseEpub(
-        bookPath: widget.tocModel!.bookPath, fileName: _bookPath!,);
+      bookPath: widget.tocModel!.bookPath, fileName: _bookPath!,);
   }
 
   _loadEpubFromSearchResult() {
     _bookPath = widget.searchModel!.bookAddress;
     _loadAndParseEpub(
-        bookPath: _bookPath!,);
+      bookPath: _bookPath!,);
   }
 
   _loadEpubFromCategory() {
@@ -981,7 +880,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   @override
   void initState() {
     super.initState();
-     _buildCurrentUi(context, null);
+    _buildCurrentUi(context, null);
     _determineEpubSourceAndLoad();
     itemPositionsListener.itemPositions.addListener(() {
       final positions = itemPositionsListener.itemPositions.value;
@@ -989,7 +888,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         final int firstVisibleItemIndex = positions
             .where((position) => position.itemLeadingEdge < 1)
             .reduce(
-                (max, position) => position.index > max.index ? position : max,)
+              (max, position) => position.index > max.index ? position : max,)
             .index;
 
         if (_currentIndex != firstVisibleItemIndex) {
@@ -1021,7 +920,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     final pageHelper = PageHelper();
     pageHelper.saveBookData(widget.referenceModel?.bookPath?? _bookPath!, _currentPage);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values,);
+      overlays: SystemUiOverlay.values,);
     itemPositionsListener.itemPositions.removeListener(() {});
     focusNode.dispose();
     textEditingController.dispose();
@@ -1047,9 +946,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
 
   String _getAppBarTitle(EpubViewerState state) => state.maybeWhen(
-      loaded: (_, title, __) => title,
-      orElse: () => '',
-    );
+    loaded: (_, title, __) => title,
+    orElse: () => '',
+  );
 
 
   _changeStyle(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
@@ -1114,8 +1013,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
   Future<void> _handleFragment(String fragment) async {
     List<String> ids = fragment.split('#').last.split(',');
-      final databaseRepository = DatabaseRepository();
-      List<Rejal> rejals = await databaseRepository.getRejalsByIds(ids.map(int.parse).toList());
+    final databaseRepository = DatabaseRepository();
+    List<Rejal> rejals = await databaseRepository.getRejalsByIds(ids.map(int.parse).toList());
     if (rejals.isEmpty) {
       // If no data is found, show a default message
       await showDialog(
@@ -1268,7 +1167,8 @@ class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20))),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            ),
             child: Column(
               children: [
                 // Top bar with title and controls

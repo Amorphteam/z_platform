@@ -148,11 +148,31 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
       final epubData = await rootBundle.load('assets/epub/${bookResult.bookAddress}');
       final epubBook = await EpubReader.readBook(epubData.buffer.asUint8List());
 
-      // Perform a new search in this book without limit
-      final results = await SearchHelper().searchSingleBook(
-        bookResult.bookAddress!,
+      // Extract HTML content
+      final List<HtmlFileInfo> spine = await extractHtmlContentWithEmbeddedImages(epubBook);
+      
+      // Extract spine items from EPUB
+      final spineItems = epubBook.Schema?.Package?.Spine?.Items;
+      final List<String> idRefs = [];
+
+      if (spineItems != null) {
+        for (final item in spineItems) {
+          if (item.IdRef != null) {
+            idRefs.add(item.IdRef!);
+          }
+        }
+      }
+
+      // Reorder HTML files based on spine
+      final epubNewContent = reorderHtmlFilesBasedOnSpine(spine, idRefs);
+      final spineHtmlContent = epubNewContent.map((info) => info.modifiedHtmlContent).toList();
+
+      // Perform a new search in this book without limit using searchHtmlContents
+      final results = await SearchHelper().searchHtmlContents(
+        spineHtmlContent,
         widget.searchQuery,
-        epubBook,
+        bookResult.bookTitle,
+        bookResult.bookAddress,
         null, // null means no limit
       );
 
