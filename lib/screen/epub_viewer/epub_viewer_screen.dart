@@ -18,6 +18,7 @@ import '../../model/tree_toc_model.dart';
 import '../../repository/database_repository.dart';
 import '../../util/epub_helper.dart';
 import '../../util/page_helper.dart';
+import '../../util/search_helper.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
 import 'cubit/epub_viewer_cubit.dart';
 import 'internal_search/internal_search_screen.dart';
@@ -296,61 +297,161 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     }
   }
 
-  void showSearchResultsDialog(
-      BuildContext context, List<SearchModel> searchResults,) {
+  void showSearchResultsDialog(BuildContext context, List<SearchModel> searchResults) {
+    final Map<String, List<SearchModel>> resultsByBook = {};
+    final Map<String, bool> isSearchingBook = {};
+    final Map<String, int> currentResultCount = {};
+
+    // Group results by book
+    for (var result in searchResults) {
+      resultsByBook.putIfAbsent(result.bookAddress!, () => []).add(result);
+      currentResultCount[result.bookAddress!] = 10;
+    }
+
     showDialog(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (context, setState) => Dialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          title: Padding(
-            padding: const EdgeInsets.only(right: 16.0, left: 16, top: 8, bottom: 8),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text('كل النتائج: ${searchResults.length}',
-                  style: Theme.of(context).textTheme.titleSmall,),
-            ),
-          ),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: searchResults.length,
-            itemBuilder: (BuildContext context, int index) {
-              final result = searchResults[index];
-              return ListTile(
-                title: GestureDetector(
-                  onTap: () {
-                    this.context.read<EpubViewerCubit>().highlightContent(result.pageIndex, searchedWord);
-                    Navigator.of(context).pop(); // Close the dialog on selection
-                  },
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Html(
-                            data: result.spanna.toString(),
-                            style: {
-                              'html': Style(
-                                fontSize: FontSize.small,
-                                textAlign: TextAlign.justify,
-                                color: Colors.black,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height * 0.8,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                // Header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'كل النتائج: ${searchResults.length}',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                const Divider(),
+                // Content
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: resultsByBook.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final bookAddress = resultsByBook.keys.elementAt(index);
+                      final bookResults = resultsByBook[bookAddress]!;
+                      final isSearching = isSearchingBook[bookAddress] ?? false;
+
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Book header with search button
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.surfaceVariant,
+                                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                               ),
-                              'mark': Style(
-                                backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      bookResults.first.bookTitle ?? 'Unknown Book',
+                                      style: Theme.of(context).textTheme.titleMedium,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  if (isSearching)
+                                    const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(strokeWidth: 2),
+                                    )
+                                  else
+                                    ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          isSearchingBook[bookAddress] = true;
+                                        });
+
+                                        try {
+                                          final epubBook = await EpubReader.readBook(
+                                            (await rootBundle.load('assets/epub/$bookAddress')).buffer.asUint8List(),
+                                          );
+                                          
+                                          final newResults = await SearchHelper().searchSingleBook(
+                                            bookAddress,
+                                            searchedWord,
+                                            epubBook,
+                                          );
+
+                                          setState(() {
+                                            resultsByBook[bookAddress] = newResults;
+                                            currentResultCount[bookAddress] = newResults.length;
+                                            isSearchingBook[bookAddress] = false;
+                                          });
+                                        } catch (e) {
+                                          setState(() {
+                                            isSearchingBook[bookAddress] = false;
+                                          });
+                                          print('Error searching book: $e');
+                                        }
+                                      },
+                                      icon: const Icon(Icons.search),
+                                      label: const Text('بحث في هذا الكتاب'),
+                                    ),
+                                ],
                               ),
-                            },
-                          ),
+                            ),
+                            // Results for this book
+                            ...bookResults.map((result) => ListTile(
+                              title: GestureDetector(
+                                onTap: () {
+                                  this.context.read<EpubViewerCubit>().highlightContent(result.pageIndex, searchedWord);
+                                  Navigator.of(context).pop();
+                                },
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Directionality(
+                                        textDirection: TextDirection.rtl,
+                                        child: Html(
+                                          data: result.spanna.toString(),
+                                          style: {
+                                            'html': Style(
+                                              fontSize: FontSize.small,
+                                              textAlign: TextAlign.justify,
+                                              color: Colors.black,
+                                            ),
+                                            'mark': Style(
+                                              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                                            ),
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )).toList(),
+                          ],
                         ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
-              );
-            },
+              ],
+            ),
           ),
         ),
-        ),
+      ),
     );
   }
 
@@ -1167,8 +1268,7 @@ class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            ),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20))),
             child: Column(
               children: [
                 // Top bar with title and controls
