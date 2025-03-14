@@ -82,6 +82,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   static const double _maxFontSize = 24.0;
   static const double _fontSizeStep = 2.0;
   static const String _rejalFontSizeKey = 'rejal_font_size';
+  List<SearchModel> _currentSearchResults = [];
+  int _currentSearchIndex = 0;
 
   @override
   void didChangeDependencies() {
@@ -115,6 +117,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             _jumpTo(pageNumber: page);
           },
           searchResultsFound: (searchResults) {
+            setState(() {
+              _currentSearchResults = searchResults;
+              _currentSearchIndex = 0;
+            });
             showSearchResultsDialog(context, searchResults);
           },
           styleChanged: (fontSize, lineSpace, fontFamily){
@@ -262,6 +268,63 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content),),
                 ),
               ),
+              // Add floating navigation buttons when search results exist
+              if (_currentSearchResults.isNotEmpty)
+                Positioned(
+                  bottom: 100,
+                  right: 16,
+                  child: Column(
+                    children: [
+                      FloatingActionButton(
+                        heroTag: "prevSearch",
+                        mini: true,
+                        backgroundColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+                        child: Icon(Icons.arrow_upward, color: Theme.of(context).colorScheme.surface,),
+                        onPressed: () {
+                          if (_currentSearchIndex > 0) {
+                            setState(() {
+                              _currentSearchIndex--;
+                              context.read<EpubViewerCubit>().highlightContent(
+                                _currentSearchResults[_currentSearchIndex].pageIndex,
+                                searchedWord
+                              );
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '${_currentSearchIndex + 1}/${_currentSearchResults.length}',
+                          style: TextStyle(color: Theme.of(context).colorScheme.surface),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      FloatingActionButton(
+                        heroTag: "nextSearch",
+                        mini: true,
+                        backgroundColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+                        child: Icon(Icons.arrow_downward, color: Theme.of(context).colorScheme.surface),
+                        onPressed: () {
+                          if (_currentSearchIndex < _currentSearchResults.length - 1) {
+                            setState(() {
+                              _currentSearchIndex++;
+                              context.read<EpubViewerCubit>().highlightContent(
+                                _currentSearchResults[_currentSearchIndex].pageIndex,
+                                searchedWord
+                              );
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),
@@ -307,45 +370,60 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text('كل النتائج: ${searchResults.length}',
-                  style: Theme.of(context).textTheme.titleSmall,),
+                  style: Theme.of(context).textTheme.titleSmall),
             ),
           ),
         content: SizedBox(
           width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: searchResults.length,
-            itemBuilder: (BuildContext context, int index) {
-              final result = searchResults[index];
-              return ListTile(
-                title: GestureDetector(
-                  onTap: () {
-                    this.context.read<EpubViewerCubit>().highlightContent(result.pageIndex, searchedWord);
-                    Navigator.of(context).pop(); // Close the dialog on selection
-                  },
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Html(
-                            data: result.spanna.toString(),
-                            style: {
-                              'html': Style(
-                                fontSize: FontSize.small,
-                                textAlign: TextAlign.justify,
-                                color: Colors.black,
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setDialogState) {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: searchResults.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final result = searchResults[index];
+                  
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _currentSearchIndex = index;
+                      });
+                      this.context.read<EpubViewerCubit>().highlightContent(
+                          result.pageIndex, 
+                          searchedWord);
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            Expanded(
+                              child: Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Html(
+                                  data: result.spanna.toString(),
+                                  style: {
+                                    'html': Style(
+                                      fontSize: FontSize.small,
+                                      textAlign: TextAlign.justify,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                    'mark': Style(
+                                      backgroundColor: Colors.yellow,
+                                    ),
+                                  },
+                                ),
                               ),
-                              'mark': Style(
-                                backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-                              ),
-                            },
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               );
             },
           ),
@@ -1167,8 +1245,7 @@ class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            ),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20))),
             child: Column(
               children: [
                 // Top bar with title and controls
@@ -1264,7 +1341,7 @@ class _RejalBottomSheetContentState extends State<_RejalBottomSheetContent> {
               ),
             ),
           ),
-        ],
+          ],
       ),
     );
   }

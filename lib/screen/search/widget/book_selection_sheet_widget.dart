@@ -25,7 +25,7 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
 
   String _getBookCountText(int count) {
     if (count == 1) {
-      return 'سيكون البحث في كتاباً واحداً';
+      return 'سيكون البحث في كتاب واحد';
     } else if (count == 2) {
       return 'سيكون البحث في كتابين';
     } else if (count >= 3 && count <= 10) {

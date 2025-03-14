@@ -51,6 +51,7 @@ class _HostScreenState extends State<HostScreen> {
                 _currentIndex == 1 ? 'assets/icon/filled_toc.svg' : 'assets/icon/outline_toc.svg',
                 width: 24,
                 height: 24,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               label: 'الفهرست',
             ),

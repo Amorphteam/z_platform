@@ -42,9 +42,9 @@ android {
     signingConfigs {
         release {
             keyAlias 'new-key-alias'
-            keyPassword '????'
-            storeFile file('/Users/???/???')
-            storePassword '?????'
+            keyPassword 'Amorph!@#'
+            storeFile file('/Users/alibayati/Desktop/new_keystore.jks')
+            storePassword 'Amorph!@#'
         }
     }
 
