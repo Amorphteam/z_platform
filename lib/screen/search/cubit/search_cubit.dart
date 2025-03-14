@@ -14,15 +14,21 @@ part 'search_cubit.freezed.dart';
 class SearchCubit extends Cubit<SearchState> {
   SearchCubit() : super(const SearchState.initial());
   List<EpubBookLocal> epubBooks = [];
-  Future<void> search(String searchTerm) async {
+
+  Future<void> search(String searchTerm, {int? maxResultsPerBook}) async {
     try {
       emit(const SearchState.loading());
       final Set<SearchModel> uniqueResults = {};
 
-      await SearchHelper().searchAllBooks(epubBooks, searchTerm, (partialResults) {
-        uniqueResults.addAll(partialResults);
-        emit(SearchState.loaded(searchResults: uniqueResults.toList()));
-      });
+      await SearchHelper().searchAllBooks(
+        epubBooks, 
+        searchTerm, 
+        (partialResults) {
+          uniqueResults.addAll(partialResults);
+          emit(SearchState.loaded(searchResults: uniqueResults.toList()));
+        },
+        maxResultsPerBook,
+      );
 
       emit(SearchState.loaded(searchResults: uniqueResults.toList()));
     } catch (error) {

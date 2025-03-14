@@ -22,9 +22,14 @@ class SearchHelper {
   bool _isSearchStopped = false;
 
 
-  Future<void> searchAllBooks(List<EpubBookLocal> allBooks, String word, Function(List<SearchModel>) onPartialResults) async {
+  Future<void> searchAllBooks(
+    List<EpubBookLocal> allBooks, 
+    String word, 
+    Function(List<SearchModel>) onPartialResults,
+    [int? maxResultsPerBook]
+  ) async {
     final receivePort = ReceivePort();
-    await Isolate.spawn(_searchAllBooks, SearchTask(allBooks, word, receivePort.sendPort));
+    await Isolate.spawn(_searchAllBooks, SearchTask(allBooks, word, receivePort.sendPort, maxResultsPerBook));
 
     await for (final message in receivePort) {
       if (message is List<SearchModel>) {
@@ -46,9 +51,7 @@ class SearchHelper {
   }
 
   Future<void> _searchAllBooks(SearchTask task) async {
-    // Create a ReceivePort to get messages from the main isolate
     final port = ReceivePort();
-    // Send the port to the main isolate
     task.sendPort.send(port.sendPort);
 
     final List<SearchModel> allResults = [];
@@ -56,12 +59,10 @@ class SearchHelper {
     for (final epubBook in task.allBooks) {
       if (_isSearchStopped) break;
 
-      // Extract necessary information
       final bookName = epubBook.epubBook?.Title;
-      final bookAddress =epubBook.bookPath;
+      final bookAddress = epubBook.bookPath;
       final List<HtmlFileInfo> epubContent = await extractHtmlContentWithEmbeddedImages(epubBook.epubBook!);
 
-      // Extract spine items from EPUB
       final spineItems = epubBook.epubBook?.Schema?.Package?.Spine?.Items;
       final List<String> idRefs = [];
 
@@ -73,22 +74,21 @@ class SearchHelper {
         }
       }
 
-      // Reorder HTML files based on spine
       final epubNewContent = reorderHtmlFilesBasedOnSpine(epubContent, idRefs);
       final spineHtmlContent = epubNewContent.map((info) => info.modifiedHtmlContent).toList();
 
-      // Search HTML contents in the book
-      final result = await searchHtmlContents(spineHtmlContent, task.word, bookName, bookAddress);
+      final result = await searchHtmlContents(
+        spineHtmlContent, 
+        task.word, 
+        bookName, 
+        bookAddress,
+        task.maxResultsPerBook
+      );
 
-      // Accumulate results for this book
       allResults.addAll(result);
-
-      // Send intermediate results back to the main isolate
-      task.sendPort.send(List<SearchModel>.from(allResults)); // Send a copy to avoid race conditions
-
+      task.sendPort.send(List<SearchModel>.from(allResults));
     }
 
-    // Send the final accumulated results after processing all books
     task.sendPort.send('done');
   }
 
@@ -135,26 +135,33 @@ class SearchHelper {
     return tempResult;
   }
 
-  // Your existing searchHtmlContents function remains as is
-
-  Future<List<SearchModel>> searchHtmlContents(List<String> htmlContents, String searchWord, String? bookName, String? bookAddress) async {
+  Future<List<SearchModel>> searchHtmlContents(
+    List<String> htmlContents, 
+    String searchWord, 
+    String? bookName, 
+    String? bookAddress,
+    [int? maxResultsPerBook]
+  ) async {
     final List<SearchModel> results = [];
+    final normalizedSearchWord = removeArabicDiacritics(searchWord);
+    int bookResultCount = 0;
 
-    final normalizedSearchWord = removeArabicDiacritics(searchWord); // Normalize search term
-
-    for (int i = 0; i < htmlContents.length; i++) {
+    for (int i = 0; i < htmlContents.length && (maxResultsPerBook == null || bookResultCount < maxResultsPerBook); i++) {
       final String pageContent = _removeHtmlTags(htmlContents[i]);
       SearchIndex searchIndex = _searchInString(pageContent, normalizedSearchWord, 0);
 
-      while (searchIndex.startIndex >= 0) {
+      while (searchIndex.startIndex >= 0 && (maxResultsPerBook == null || bookResultCount < maxResultsPerBook)) {
         results.add(SearchModel(
           pageIndex: i + 1,
-          searchedWord: searchWord,  // Keep original input for display
+          searchedWord: searchWord,
           searchCount: results.length + 1,
           spanna: _getHighlightedSection(searchIndex, pageContent),
           bookAddress: bookAddress,
           bookTitle: bookName,
         ));
+
+        bookResultCount++;
+        if (maxResultsPerBook != null && bookResultCount >= maxResultsPerBook) break;
 
         searchIndex = _searchInString(pageContent, normalizedSearchWord, searchIndex.lastIndex + 1);
       }
@@ -191,6 +198,50 @@ class SearchHelper {
     final text = parse(htmlString).documentElement!.text;
     return removeArabicDiacritics(text); // Normalize Arabic text
   }
+
+  Future<List<SearchModel>> searchSingleBook(
+    String bookPath, 
+    String searchWord, 
+    EpubBook? epubBook,
+    [int? maxResultsPerBook]
+  ) async {
+    final List<SearchModel> results = [];
+    final normalizedSearchWord = removeArabicDiacritics(searchWord);
+    int bookResultCount = 0;
+
+    try {
+      final List<HtmlFileInfo> spine = await extractHtmlContentWithEmbeddedImages(epubBook!);
+      final spineHtmlContent = spine.map((info) => info.modifiedHtmlContent).toList();
+      final spineHtmlFileName = spine.map((info) => info.fileName).toList();
+      final spineHtmlIndex = spine.map((info) => info.pageIndex).toList();
+
+      for (int i = 0; i < spineHtmlContent.length && (maxResultsPerBook == null || bookResultCount < maxResultsPerBook); i++) {
+        final String pageContent = _removeHtmlTags(spineHtmlContent[i]);
+        SearchIndex searchIndex = _searchInString(pageContent, normalizedSearchWord, 0);
+
+        while (searchIndex.startIndex >= 0 && (maxResultsPerBook == null || bookResultCount < maxResultsPerBook)) {
+          results.add(SearchModel(
+            pageIndex: spineHtmlIndex[i],
+            searchedWord: searchWord,
+            searchCount: results.length + 1,
+            spanna: _getHighlightedSection(searchIndex, pageContent),
+            bookAddress: bookPath,
+            bookTitle: epubBook.Title,
+            pageId: spineHtmlFileName[i],
+          ));
+
+          bookResultCount++;
+          if (maxResultsPerBook != null && bookResultCount >= maxResultsPerBook) break;
+
+          searchIndex = _searchInString(pageContent, normalizedSearchWord, searchIndex.lastIndex + 1);
+        }
+      }
+    } catch (e) {
+      print('Error searching in book: ${e.toString()}');
+    }
+
+    return results;
+  }
 }
 
 class SearchIndex {
@@ -203,8 +254,9 @@ class SearchIndex {
 
 class SearchTask {
 
-  SearchTask(this.allBooks, this.word, this.sendPort);
+  SearchTask(this.allBooks, this.word, this.sendPort, [this.maxResultsPerBook]);
   final List<EpubBookLocal> allBooks;
   final String word;
   final SendPort sendPort;
+  final int? maxResultsPerBook;
 }
