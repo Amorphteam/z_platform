@@ -236,9 +236,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         }
                         if (widget.searchModel?.pageIndex !=null){
                           context.read<EpubViewerCubit>().emitCustomPageSeen((widget.searchModel!.pageIndex - 1).toString() ?? '0');
-                          Future.delayed(const Duration(milliseconds: 500), () {
-                            context.read<EpubViewerCubit>().highlightContent(widget.searchModel!.pageIndex, widget.searchModel!.searchedWord!);
-                          });
+                          _search(widget.searchModel!.searchedWord!);
+                          // Future.delayed(const Duration(milliseconds: 500), () {
+                          //   context.read<EpubViewerCubit>().highlightContent(widget.searchModel!.pageIndex, widget.searchModel!.searchedWord!);
+                          // });
                         }
                         context.read<EpubViewerCubit>().loadUserPreferences();
                         context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());

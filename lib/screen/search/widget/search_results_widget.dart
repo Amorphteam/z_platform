@@ -36,6 +36,19 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
     });
 
     try {
+      // Check if this is the first time loading more results for this book
+      final isFirstLoad = _lastResultIndex[bookTitle] == null;
+      
+      // If it's the first load, reset everything
+      if (isFirstLoad) {
+        setState(() {
+          _expandedResults[bookTitle] = [];
+          _lastResultIndex[bookTitle] = 0;
+          _totalResultsCount[bookTitle] = 0;
+        });
+
+      }
+
       // Get the last result index for this book
       final lastIndex = _lastResultIndex[bookTitle] ?? 0;
       
@@ -47,11 +60,16 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
           if (_expandedResults[bookTitle] == null) {
             _expandedResults[bookTitle] = [];
           }
-          _expandedResults[bookTitle]!.addAll(newResults);
+          
+          // Sort results by page index
+          final allResults = [..._expandedResults[bookTitle]!, ...newResults];
+          allResults.sort((a, b) => a.pageIndex.compareTo(b.pageIndex));
+          
+          _expandedResults[bookTitle] = allResults;
           _loadingStates[bookTitle] = false;
           _lastResultIndex[bookTitle] = lastIndex + newResults.length;
           
-          // Update total results count by adding new results to existing count
+          // Update total results count
           final initialCount = widget.searchResults.where((result) => result.bookTitle == bookTitle).length;
           final expandedCount = _expandedResults[bookTitle]?.length ?? 0;
           _totalResultsCount[bookTitle] = initialCount + expandedCount;
@@ -112,8 +130,20 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
       final epubNewContent = reorderHtmlFilesBasedOnSpine(spine, idRefs);
       final spineHtmlContent = epubNewContent.map((info) => info.modifiedHtmlContent).toList();
 
+      // Get all existing results for this book
+      final existingResults = [
+        ...widget.searchResults.where((r) => r.bookTitle == bookTitle),
+        ...(_expandedResults[bookTitle] ?? [])
+      ];
+
+      // Create a set of unique page numbers for existing results
+      final existingPageNumbers = <int>{};
+      for (final result in existingResults) {
+        existingPageNumbers.add(result.pageIndex);
+      }
+
       // Perform a new search in this book
-      final results = await SearchHelper().searchHtmlContents(
+      final allResults = await SearchHelper().searchHtmlContents(
         spineHtmlContent,
         widget.searchQuery,
         bookResult.bookTitle,
@@ -121,8 +151,23 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
         null, // Get all results
       );
 
+      // Filter out duplicates based on page number only
+      final uniqueResults = <SearchModel>[];
+      final seenPageNumbers = <int>{};
+      
+      for (final result in allResults) {
+        // Skip if we've seen this page number before
+        if (!existingPageNumbers.contains(result.pageIndex) && !seenPageNumbers.contains(result.pageIndex)) {
+          seenPageNumbers.add(result.pageIndex);
+          uniqueResults.add(result);
+        }
+      }
+
+      // Sort results by page index
+      uniqueResults.sort((a, b) => a.pageIndex.compareTo(b.pageIndex));
+
       // Get the next 10 results starting from startIndex
-      final nextResults = results.skip(startIndex).take(10).toList();
+      final nextResults = uniqueResults.skip(startIndex).take(10).toList();
       
       return nextResults;
     } catch (e) {
