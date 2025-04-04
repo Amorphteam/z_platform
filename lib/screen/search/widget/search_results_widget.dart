@@ -22,111 +22,51 @@ class SearchResultsWidget extends StatefulWidget {
 }
 
 class _SearchResultsWidgetState extends State<SearchResultsWidget> {
-  Future<void> loadMoreResults(String? bookTitle) async {
+  final Map<String, List<SearchModel>> _expandedResults = {};
+  final Map<String, bool> _loadingStates = {};
+  final Map<String, int> _totalResultsCount = {};
+  final Map<String, int> _lastResultIndex = {}; // Track the last result index for each book
+
+  Future<void> loadMoreResults(String bookTitle) async {
     if (bookTitle == null) return;
 
+    setState(() {
+      _loadingStates[bookTitle] = true;
+    });
+
     try {
-      // Show loading dialog
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return AlertDialog(
-                title: Text('نتائج البحث في $bookTitle'),
-                content: SizedBox(
-                  width: double.maxFinite,
-                  child: FutureBuilder<List<SearchModel>>(
-                    future: _fetchAllResultsForBook(bookTitle),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircularProgressIndicator(),
-                              SizedBox(height: 16),
-                              Text('جاري تحميل النتائج...'),
-                            ],
-                          ),
-                        );
-                      }
-
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Text('حدث خطأ: ${snapshot.error}'),
-                        );
-                      }
-
-                      final results = snapshot.data ?? [];
-                      if (results.isEmpty) {
-                        return const Center(
-                          child: Text('لا توجد نتائج إضافية'),
-                        );
-                      }
-
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: results.length,
-                        itemBuilder: (context, index) {
-                          final result = results[index];
-                          return Column(
-                            children: [
-                              ListTile(
-                                title: GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context); // Close dialog
-                                    openEpub(context: context, search: result);
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '${result.pageIndex}',
-                                        style: Theme.of(context).textTheme.titleMedium,
-                                      ),
-                                      Expanded(
-                                        child: Html(
-                                          data: result.spanna ?? '',
-                                          style: {
-                                            'html': Style(
-                                              fontSize: FontSize.medium,
-                                              lineHeight: LineHeight(1.2),
-                                              textAlign: TextAlign.right,
-                                            ),
-                                            'mark': Style(
-                                              backgroundColor: Colors.yellow,
-                                            ),
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Divider(
-                                thickness: 0.3,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('إغلاق'),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      );
+      // Get the last result index for this book
+      final lastIndex = _lastResultIndex[bookTitle] ?? 0;
+      
+      // Fetch next batch of results
+      final newResults = await _fetchAllResultsForBook(bookTitle, lastIndex);
+      
+      if (newResults.isNotEmpty) {
+        setState(() {
+          if (_expandedResults[bookTitle] == null) {
+            _expandedResults[bookTitle] = [];
+          }
+          _expandedResults[bookTitle]!.addAll(newResults);
+          _loadingStates[bookTitle] = false;
+          _lastResultIndex[bookTitle] = lastIndex + newResults.length;
+          _totalResultsCount[bookTitle] = _expandedResults[bookTitle]!.length;
+        });
+      } else {
+        setState(() {
+          _loadingStates[bookTitle] = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('تم تحميل جميع النتائج'),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     } catch (e) {
+      setState(() {
+        _loadingStates[bookTitle] = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('حدث خطأ أثناء تحميل المزيد من النتائج: $e'),
@@ -136,7 +76,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
     }
   }
 
-  Future<List<SearchModel>> _fetchAllResultsForBook(String bookTitle) async {
+  Future<List<SearchModel>> _fetchAllResultsForBook(String bookTitle, int startIndex) async {
     try {
       // Find the book path from the existing results
       final bookResult = widget.searchResults.firstWhere(
@@ -167,16 +107,19 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
       final epubNewContent = reorderHtmlFilesBasedOnSpine(spine, idRefs);
       final spineHtmlContent = epubNewContent.map((info) => info.modifiedHtmlContent).toList();
 
-      // Perform a new search in this book without limit using searchHtmlContents
+      // Perform a new search in this book
       final results = await SearchHelper().searchHtmlContents(
         spineHtmlContent,
         widget.searchQuery,
         bookResult.bookTitle,
         bookResult.bookAddress,
-        null, // null means no limit
+        null, // Get all results
       );
 
-      return results;
+      // Get the next 10 results starting from startIndex
+      final nextResults = results.skip(startIndex).take(10).toList();
+      
+      return nextResults;
     } catch (e) {
       print('Error searching book: $e');
       rethrow;
@@ -198,12 +141,15 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
         child: ListView.builder(
           itemCount: widget.searchResults.length,
           itemBuilder: (context, index) {
-            // Separate results by book
-            if (index == 0 || widget.searchResults[index].bookTitle != widget.searchResults[index - 1].bookTitle) {
-              // Calculate count of results for the current book
-              final currentBookResults = widget.searchResults.where((result) => result.bookTitle == widget.searchResults[index].bookTitle).toList();
+            final currentBookTitle = widget.searchResults[index].bookTitle;
+            final isFirstResultOfBook = index == 0 || widget.searchResults[index].bookTitle != widget.searchResults[index - 1].bookTitle;
+            final isLastResultOfBook = index == widget.searchResults.length - 1 || widget.searchResults[index].bookTitle != widget.searchResults[index + 1].bookTitle;
+            final expandedResults = _expandedResults[currentBookTitle] ?? [];
+            final isLoading = _loadingStates[currentBookTitle] ?? false;
+            final initialResultsCount = widget.searchResults.where((result) => result.bookTitle == currentBookTitle).length;
+            final totalResultsCount = _totalResultsCount[currentBookTitle] ?? initialResultsCount;
 
-              // Display a header for each book with result count
+            if (isFirstResultOfBook) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -216,120 +162,168 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Tooltip(
-                              message: 'تحميل المزيد',
-                              child: IconButton(
-                                icon: const Icon(Icons.sync),
-                                onPressed: () => loadMoreResults(widget.searchResults[index].bookTitle),
-                              ),
-                            ),
-                            Text(
-                              'load more',
-                              style: Theme.of(context).textTheme.titleSmall,
+                            Row(
+                              children: [
+
+                                Text(
+                                  '$totalResultsCount',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ],
                             ),
                             Expanded(
                               child: Text(
                                 textAlign: TextAlign.right,
-                                '${widget.searchResults[index].bookTitle}',
+                                currentBookTitle!,
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
                             ),
-
                           ],
                         ),
                       ),
                     ),
                   ),
-                  ListTile(
-
-                    title: GestureDetector(
-                      onTap: () {
-                        openEpub(context: context, search: widget.searchResults[index]);
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            '${widget.searchResults[index].pageIndex}',
-                            style: Theme.of(context).textTheme.titleMedium,
+                  ..._buildResultList(widget.searchResults[index]),
+                  if (expandedResults.isNotEmpty) ...[
+                    ...expandedResults.map((result) => _buildResultList(result)).expand((x) => x),
+                  ],
+                  if (isLastResultOfBook) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Card(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  isLoading
+                                      ? const SizedBox(
+                                          width: 24,
+                                          height: 24,
+                                          child: CircularProgressIndicator(strokeWidth: 2),
+                                        )
+                                      : Tooltip(
+                                          message: 'تحميل المزيد',
+                                          child: IconButton(
+                                            icon: const Icon(Icons.sync),
+                                            onPressed: () => loadMoreResults(currentBookTitle!),
+                                          ),
+                                        ),
+                                  Text(
+                                    '($totalResultsCount)',
+                                    style: Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                'المزيد من النتائج',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: Html(
-                              data: widget.searchResults[index].spanna ?? '',
-                              style: {
-                                'html': Style(
-                                  fontSize: FontSize.medium,
-                                  lineHeight: LineHeight(1.2),
-                                  textAlign: TextAlign.right,
-                                ),
-                                'mark': Style(
-                                  backgroundColor: Colors.yellow,
-                                ),
-                              },
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-                    child: Divider(
-                      thickness: 0.3,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
+                  ],
                 ],
               );
             } else {
-              // Display subsequent results for the same book
+              // Show all results for the current book
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  ListTile(
-                    title: GestureDetector(
-                      onTap: () {
-                        openEpub(context: context, search: widget.searchResults[index]);
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            '${widget.searchResults[index].pageIndex}',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Expanded(
-                            child: Html(
-                              data: widget.searchResults[index].spanna ?? '',
-                              style: {
-                                'html': Style(
-                                  fontSize: FontSize.large,
-                                  lineHeight: LineHeight(1.2),
-                                  textAlign: TextAlign.right,
+                  ..._buildResultList(widget.searchResults[index]),
+                  if (isLastResultOfBook) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                isLoading
+                                    ? const SizedBox(
+                                        width: 24,
+                                        height: 24,
+                                        child: CircularProgressIndicator(strokeWidth: 2),
+                                      )
+                                    : Tooltip(
+                                        message: 'تحميل المزيد',
+                                        child: IconButton(
+                                          icon: Icon(Icons.sync, color: Theme.of(context).colorScheme.secondary),
+                                          onPressed: () => loadMoreResults(currentBookTitle!),
+                                        ),
+                                      ),
+                                Text(
+                                  ' ($totalResultsCount)    ',
+                                  style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),
                                 ),
-                                'mark': Style(
-                                  backgroundColor: Colors.yellow,
-                                ),
-                              },
+                              ],
                             ),
-                          ),
-                        ],
+                            Text(
+                              'المزيد من النتائج',
+                              style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-                    child: Divider(
-                      thickness: 0.3,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
+                  ],
                 ],
               );
             }
           },
         ),
       ),
-
     ],
   );
+
+  List<Widget> _buildResultList(SearchModel result) {
+    return [
+      ListTile(
+        title: GestureDetector(
+          onTap: () {
+            openEpub(context: context, search: result);
+          },
+          child: Row(
+            children: [
+              Text(
+                '${result.pageIndex}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Expanded(
+                child: Html(
+                  data: result.spanna ?? '',
+                  style: {
+                    'html': Style(
+                      fontSize: FontSize.medium,
+                      lineHeight: LineHeight(1.2),
+                      textAlign: TextAlign.right,
+                    ),
+                    'mark': Style(
+                      backgroundColor: Colors.yellow,
+                    ),
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+        child: Divider(
+          thickness: 0.3,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+    ];
+  }
 }
 
 
