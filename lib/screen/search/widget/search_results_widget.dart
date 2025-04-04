@@ -26,6 +26,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
   final Map<String, bool> _loadingStates = {};
   final Map<String, int> _totalResultsCount = {};
   final Map<String, int> _lastResultIndex = {}; // Track the last result index for each book
+  final Map<String, bool> _isExpanded = {}; // Track which books are expanded
 
   Future<void> loadMoreResults(String bookTitle) async {
     if (bookTitle == null) return;
@@ -49,7 +50,11 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
           _expandedResults[bookTitle]!.addAll(newResults);
           _loadingStates[bookTitle] = false;
           _lastResultIndex[bookTitle] = lastIndex + newResults.length;
-          _totalResultsCount[bookTitle] = _expandedResults[bookTitle]!.length;
+          
+          // Update total results count by adding new results to existing count
+          final initialCount = widget.searchResults.where((result) => result.bookTitle == bookTitle).length;
+          final expandedCount = _expandedResults[bookTitle]?.length ?? 0;
+          _totalResultsCount[bookTitle] = initialCount + expandedCount;
         });
       } else {
         setState(() {
@@ -129,14 +134,14 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
   @override
   Widget build(BuildContext context) => Column(
     children: [
-      Padding(
-        padding: const EdgeInsets.only(right: 16.0, left: 16, top: 8, bottom: 8),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text('كل النتائج: ${widget.searchResults.length}',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),),
-        ),
-      ),
+      // Padding(
+      //   padding: const EdgeInsets.only(right: 16.0, left: 16, top: 8, bottom: 8),
+      //   child: Align(
+      //     alignment: Alignment.centerLeft,
+      //     child: Text('كل النتائج: ${widget.searchResults.length}',
+      //       style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),),
+      //   ),
+      // ),
       Expanded(
         child: ListView.builder(
           itemCount: widget.searchResults.length,
@@ -148,6 +153,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
             final isLoading = _loadingStates[currentBookTitle] ?? false;
             final initialResultsCount = widget.searchResults.where((result) => result.bookTitle == currentBookTitle).length;
             final totalResultsCount = _totalResultsCount[currentBookTitle] ?? initialResultsCount;
+            final isExpanded = _isExpanded[currentBookTitle] ?? false;
 
             if (isFirstResultOfBook) {
               return Column(
@@ -164,7 +170,17 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                           children: [
                             Row(
                               children: [
-
+                                IconButton(
+                                  icon: Icon(
+                                    isExpanded ? Icons.expand_less : Icons.expand_more,
+                                    color: Theme.of(context).colorScheme.secondary,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isExpanded[currentBookTitle!] = !isExpanded;
+                                    });
+                                  },
+                                ),
                                 Text(
                                   '$totalResultsCount',
                                   style: Theme.of(context).textTheme.titleSmall,
@@ -183,55 +199,57 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                       ),
                     ),
                   ),
-                  ..._buildResultList(widget.searchResults[index]),
-                  if (expandedResults.isNotEmpty) ...[
-                    ...expandedResults.map((result) => _buildResultList(result)).expand((x) => x),
-                  ],
-                  if (isLastResultOfBook) ...[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Card(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  isLoading
-                                      ? const SizedBox(
-                                          width: 24,
-                                          height: 24,
-                                          child: CircularProgressIndicator(strokeWidth: 2),
-                                        )
-                                      : Tooltip(
-                                          message: 'تحميل المزيد',
-                                          child: IconButton(
-                                            icon: const Icon(Icons.sync),
-                                            onPressed: () => loadMoreResults(currentBookTitle!),
+                  if (isExpanded) ...[
+                    ..._buildResultList(widget.searchResults[index]),
+                    if (expandedResults.isNotEmpty) ...[
+                      ...expandedResults.map((result) => _buildResultList(result)).expand((x) => x),
+                    ],
+                    if (isLastResultOfBook) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Card(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    isLoading
+                                        ? const SizedBox(
+                                            width: 24,
+                                            height: 24,
+                                            child: CircularProgressIndicator(strokeWidth: 2),
+                                          )
+                                        : Tooltip(
+                                            message: 'تحميل المزيد',
+                                            child: IconButton(
+                                              icon: const Icon(Icons.sync),
+                                              onPressed: () => loadMoreResults(currentBookTitle!),
+                                            ),
                                           ),
-                                        ),
-                                  Text(
-                                    '($totalResultsCount)',
-                                    style: Theme.of(context).textTheme.titleSmall,
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                'المزيد من النتائج',
-                                style: Theme.of(context).textTheme.titleSmall,
-                              ),
-                            ],
+                                    Text(
+                                      '($totalResultsCount)',
+                                      style: Theme.of(context).textTheme.titleSmall,
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  'المزيد من النتائج',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ],
                 ],
               );
-            } else {
-              // Show all results for the current book
+            } else if (isExpanded) {
+              // Show all results for the current book only if expanded
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -276,6 +294,8 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                   ],
                 ],
               );
+            } else {
+              return const SizedBox.shrink(); // Hide results when collapsed
             }
           },
         ),
