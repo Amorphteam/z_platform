@@ -68,7 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ],
               )),
-              loaded: (searchResults) =>
+              loaded: (searchResults, isRunningSearch) =>
                   SearchResultsWidget(
                     searchResults: searchResults,
                     searchQuery: _currentSearchQuery,

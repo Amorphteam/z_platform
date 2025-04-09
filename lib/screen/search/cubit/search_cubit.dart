@@ -15,7 +15,7 @@ class SearchCubit extends Cubit<SearchState> {
   SearchCubit() : super(const SearchState.initial());
   List<EpubBookLocal> epubBooks = [];
 
-  Future<void> search(String searchTerm, {int? maxResultsPerBook}) async {
+  Future<void> search(String searchTerm, {int? maxResultsPerBook, void Function()? onComplete}) async {
     try {
       emit(const SearchState.loading());
       final Set<SearchModel> uniqueResults = {};
@@ -25,12 +25,16 @@ class SearchCubit extends Cubit<SearchState> {
         searchTerm, 
         (partialResults) {
           uniqueResults.addAll(partialResults);
-          emit(SearchState.loaded(searchResults: uniqueResults.toList()));
+          emit(SearchState.loaded(searchResults: uniqueResults.toList(), isRuningSearch: true));
         },
         maxResultsPerBook,
       );
 
-      emit(SearchState.loaded(searchResults: uniqueResults.toList()));
+
+      // Call the onComplete callback if provided
+      if (onComplete == null) {
+        emit(SearchState.loaded(searchResults: uniqueResults.toList(), isRuningSearch: false));
+      }
     } catch (error) {
       emit(SearchState.error(error: error.toString()));
     }

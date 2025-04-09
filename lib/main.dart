@@ -56,9 +56,10 @@ class MyApp extends StatelessWidget {
       onTertiaryContainer: Color(0xFF00201D),
       errorContainer: Color(0xFFFFDAD6),
       onErrorContainer: Color(0xFF410002),
+      surfaceContainerHighest: Color(0xFFE2E4D4),
       onSurfaceVariant: Color(0xFF45483C),
       outline: Color(0xFF76786B),
-      outlineVariant: Color(0xFFC6C8B9), background: Color(0xFFFBF9F1), onBackground: Color(0xFF1B1C17),
+      outlineVariant: Color(0xFFC6C8B9),
     );
 
     const ColorScheme darkColorScheme = ColorScheme(
@@ -72,8 +73,6 @@ class MyApp extends StatelessWidget {
       onError: Color(0xFFFFFFFF),
       surface: Color(0xFF111111),
       onSurface: Color(0xFFa0a0af),
-      background: Color(0xFF111111),
-      onBackground: Color(0xFFa0a0af),
     );
 
     final ThemeData lightTheme = ThemeData(
