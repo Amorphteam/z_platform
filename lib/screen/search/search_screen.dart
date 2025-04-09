@@ -40,9 +40,6 @@ class _SearchScreenState extends State<SearchScreen> {
           },
           onSubmitted: (query) async {
             _currentSearchQuery = query; // Store the search query
-            await context
-                .read<SearchCubit>()
-                .storeEpubBooks(_globalSelectedBooks);
             await context.read<SearchCubit>().search(query, maxResultsPerBook: 10);
           },
         ),
@@ -59,13 +56,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('جاری البحث'),
-                  ),
+                  // CircularProgressIndicator(
+                  //   color: Theme.of(context).colorScheme.secondary,
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Text('جاری البحث'),
+                  // ),
                 ],
               )),
               loaded: (searchResults, isRunningSearch) =>
@@ -88,10 +85,11 @@ class _SearchScreenState extends State<SearchScreen> {
                           .where((entry) => entry.value && entry.key.length > 1)
                           .length;
                     });
+                    // Store EPUB files when books are first loaded
+                    context.read<SearchCubit>().storeEpubBooks(_globalSelectedBooks);
                   }
                 });
-                return const SizedBox
-                    .shrink(); // Use this to return an empty widget
+                return const SizedBox.shrink();
               },
               error: (error) => Center(child: Text('Error: $error')),
             ),
