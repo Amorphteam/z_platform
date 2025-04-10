@@ -324,9 +324,12 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           onTap: () {
                             showSearchResultsDialog(context, _currentSearchResults);
                           },
-                          child: Text(
-                            '${_currentSearchIndex + 1}/${_currentSearchResults.length}',
-                            style: TextStyle(color: Theme.of(context).colorScheme.surface),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              '${_currentSearchIndex + 1}/${_currentSearchResults.length}',
+                              style: TextStyle(color: Theme.of(context).colorScheme.surface),
+                            ),
                           ),
                         ),
                       ),
