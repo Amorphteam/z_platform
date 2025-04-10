@@ -327,7 +327,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              '${_currentSearchIndex + 1}/${_currentSearchResults.length}',
+                              '${_currentSearchResults.length}/${_currentSearchIndex + 1}',
                               style: TextStyle(color: Theme.of(context).colorScheme.surface),
                             ),
                           ),
