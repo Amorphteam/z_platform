@@ -91,6 +91,22 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
     // Save the cubit reference safely.
     _epubViewerCubit = context.read<EpubViewerCubit>();
+
+    // If we have a search model, set up the initial search state
+    if (widget.searchModel != null) {
+      setState(() {
+        _currentSearchResults = [widget.searchModel!];
+        _currentSearchIndex = 0;
+        searchedWord = widget.searchModel!.searchedWord!;
+      });
+      // Trigger the highlight after a short delay to ensure content is loaded
+      Future.delayed(const Duration(milliseconds: 500), () {
+        context.read<EpubViewerCubit>().highlightContent(
+          widget.searchModel!.pageIndex,
+          widget.searchModel!.searchedWord!
+        );
+      });
+    }
   }
 
   @override
@@ -119,9 +135,23 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           searchResultsFound: (searchResults) {
             setState(() {
               _currentSearchResults = searchResults;
-              _currentSearchIndex = 0;
+              // Find the index of the current search result if we're opening from search
+              if (widget.searchModel != null) {
+                _currentSearchIndex = searchResults.indexWhere(
+                  (result) => result.pageIndex == widget.searchModel!.pageIndex
+                );
+                if (_currentSearchIndex == -1) _currentSearchIndex = 0;
+              } else {
+                _currentSearchIndex = 0;
+              }
             });
-            showSearchResultsDialog(context, searchResults);
+            // Remove the dialog and directly highlight the first result
+            if (searchResults.isNotEmpty) {
+              context.read<EpubViewerCubit>().highlightContent(
+                searchResults[_currentSearchIndex].pageIndex,
+                searchedWord
+              );
+            }
           },
           styleChanged: (fontSize, lineSpace, fontFamily){
             print('loadUserPreferences $lineSpace add $fontFamily');
@@ -281,17 +311,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         mini: true,
                         backgroundColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
                         child: Icon(Icons.arrow_upward, color: Theme.of(context).colorScheme.surface,),
-                        onPressed: () {
-                          if (_currentSearchIndex > 0) {
-                            setState(() {
-                              _currentSearchIndex--;
-                              context.read<EpubViewerCubit>().highlightContent(
-                                _currentSearchResults[_currentSearchIndex].pageIndex,
-                                searchedWord
-                              );
-                            });
-                          }
-                        },
+                        onPressed: _navigateToPreviousResult,
                       ),
                       const SizedBox(height: 8),
                       Container(
@@ -300,9 +320,14 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Text(
-                          '${_currentSearchIndex + 1}/${_currentSearchResults.length}',
-                          style: TextStyle(color: Theme.of(context).colorScheme.surface),
+                        child: GestureDetector(
+                          onTap: () {
+                            showSearchResultsDialog(context, _currentSearchResults);
+                          },
+                          child: Text(
+                            '${_currentSearchIndex + 1}/${_currentSearchResults.length}',
+                            style: TextStyle(color: Theme.of(context).colorScheme.surface),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -311,17 +336,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         mini: true,
                         backgroundColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
                         child: Icon(Icons.arrow_downward, color: Theme.of(context).colorScheme.surface),
-                        onPressed: () {
-                          if (_currentSearchIndex < _currentSearchResults.length - 1) {
-                            setState(() {
-                              _currentSearchIndex++;
-                              context.read<EpubViewerCubit>().highlightContent(
-                                _currentSearchResults[_currentSearchIndex].pageIndex,
-                                searchedWord
-                              );
-                            });
-                          }
-                        },
+                        onPressed: _navigateToNextResult,
                       ),
                     ],
                   ),
@@ -758,6 +773,40 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   void _search(String value) {
     searchedWord = value;
     context.read<EpubViewerCubit>().searchUsingHtmlList(value);
+  }
+
+  void _handleSearchResultTap(SearchModel result) {
+    setState(() {
+      _currentSearchIndex = _currentSearchResults.indexOf(result);
+    });
+    context.read<EpubViewerCubit>().highlightContent(
+      result.pageIndex,
+      searchedWord
+    );
+  }
+
+  void _navigateToNextResult() {
+    if (_currentSearchIndex < _currentSearchResults.length - 1) {
+      setState(() {
+        _currentSearchIndex++;
+      });
+      context.read<EpubViewerCubit>().highlightContent(
+        _currentSearchResults[_currentSearchIndex].pageIndex,
+        searchedWord
+      );
+    }
+  }
+
+  void _navigateToPreviousResult() {
+    if (_currentSearchIndex > 0) {
+      setState(() {
+        _currentSearchIndex--;
+      });
+      context.read<EpubViewerCubit>().highlightContent(
+        _currentSearchResults[_currentSearchIndex].pageIndex,
+        searchedWord
+      );
+    }
   }
 
   _openInternalSearch(BuildContext context) {

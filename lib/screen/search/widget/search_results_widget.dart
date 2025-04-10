@@ -209,7 +209,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                     child: Card(
                       color: Theme.of(context).colorScheme.onPrimary,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -226,10 +226,10 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                     });
                                   },
                                 ),
-                                Text(
-                                  '$totalResultsCount',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
+                                // Text(
+                                //   '$totalResultsCount',
+                                //   style: Theme.of(context).textTheme.titleSmall,
+                                // ),
                               ],
                             ),
                             Expanded(
