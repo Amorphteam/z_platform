@@ -61,12 +61,9 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
           if (_expandedResults[bookTitle] == null) {
             _expandedResults[bookTitle] = [];
           }
-          
-          // Get all initial results for this book
-          final initialResults = widget.searchResults.where((result) => result.bookTitle == bookTitle).toList();
-          
+
           // Combine all results: initial + expanded + new
-          final allResults = [...initialResults, ..._expandedResults[bookTitle]!, ...newResults];
+          final allResults = [ ..._expandedResults[bookTitle]!, ...newResults];
           
           // Remove duplicates based on pageIndex
           final uniqueResults = <SearchModel>[];
@@ -272,7 +269,10 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                     ),
                   ),
                   if (isExpanded) ...[
-                    ..._buildResultList(widget.searchResults[index]),
+                    ...widget.searchResults
+                        .where((result) => result.bookTitle == currentBookTitle)
+                        .map((result) => _buildResultList(result))
+                        .expand((x) => x),
                     if (expandedResults.isNotEmpty) ...[
                       ...expandedResults.map((result) => _buildResultList(result)).expand((x) => x),
                     ],
@@ -325,7 +325,6 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  ..._buildResultList(widget.searchResults[index]),
                   if (isLastResultOfBook) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
