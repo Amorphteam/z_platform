@@ -383,15 +383,24 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: Padding(
-            padding: const EdgeInsets.only(right: 16.0, left: 16, top: 8, bottom: 8),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text('كل النتائج: ${searchResults.length}',
-                  style: Theme.of(context).textTheme.titleSmall),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => Navigator.of(context).pop(),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0, left: 16, top: 8, bottom: 8),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text('كل النتائج: ${searchResults.length}',
+                    style: Theme.of(context).textTheme.titleSmall),
+              ),
+            ),
+          ],
+        ),
         content: SizedBox(
           width: double.maxFinite,
           child: StatefulBuilder(
@@ -399,36 +408,31 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               return ListView.builder(
                 shrinkWrap: true,
                 itemCount: searchResults.length,
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (context, index) {
                   final result = searchResults[index];
-
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _currentSearchIndex = index;
-                      });
-                      this.context.read<EpubViewerCubit>().highlightContent(
-                          result.pageIndex,
-                          searchedWord);
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: ListTile(
-                        title: Row(
-                          children: [
-                            Expanded(
-                              child: Directionality(
-                                textDirection: TextDirection.rtl,
+                  return Column(
+                    children: [
+                      ListTile(
+                        dense: true,
+                        title: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            openEpub(context: context, search: result);
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                '${result.pageIndex}',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              Expanded(
                                 child: Html(
-                                  data: result.spanna.toString(),
+                                  data: result.spanna ?? '',
                                   style: {
                                     'html': Style(
-                                      fontSize: FontSize.small,
-                                      textAlign: TextAlign.justify,
-                                      color: Theme.of(context).colorScheme.onSurface,
+                                      fontSize: FontSize.medium,
+                                      lineHeight: LineHeight(1.2),
+                                      textAlign: TextAlign.right,
                                     ),
                                     'mark': Style(
                                       backgroundColor: Colors.yellow,
@@ -436,11 +440,17 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                                   },
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                      if (index < searchResults.length - 1)
+                        Divider(
+                          height: 1,
+                          thickness: 0.3,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                    ],
                   );
                 },
               );
