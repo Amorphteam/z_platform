@@ -216,6 +216,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
             final initialResultsCount = widget.searchResults.where((result) => result.bookTitle == currentBookTitle).length;
             final totalResultsCount = _totalResultsCount[currentBookTitle] ?? initialResultsCount;
             final isExpanded = _isExpanded[currentBookTitle] ?? false;
+            final shouldShowLoadMore = initialResultsCount >= SearchHelper.MAX_RESULTS_PER_BOOK;
 
             if (isFirstResultOfBook) {
               return Column(
@@ -277,45 +278,47 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                       ...expandedResults.map((result) => _buildResultList(result)).expand((x) => x),
                     ],
                     if (isLastResultOfBook) ...[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Card(
-                          color: Theme.of(context).colorScheme.surface,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    isLoading
-                                        ? const SizedBox(
-                                            width: 24,
-                                            height: 24,
-                                            child: CircularProgressIndicator(strokeWidth: 2),
-                                          )
-                                        : Tooltip(
-                                            message: 'تحميل المزيد',
-                                            child: IconButton(
-                                              icon: const Icon(Icons.sync),
-                                              onPressed: () => loadMoreResults(currentBookTitle!),
+                      if (shouldShowLoadMore) ...[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Card(
+                            color: Theme.of(context).colorScheme.surface,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      isLoading
+                                          ? const SizedBox(
+                                              width: 24,
+                                              height: 24,
+                                              child: CircularProgressIndicator(strokeWidth: 2),
+                                            )
+                                          : Tooltip(
+                                              message: 'تحميل المزيد',
+                                              child: IconButton(
+                                                icon: const Icon(Icons.sync),
+                                                onPressed: () => loadMoreResults(currentBookTitle!),
+                                              ),
                                             ),
-                                          ),
-                                    Text(
-                                      '($totalResultsCount)',
-                                      style: Theme.of(context).textTheme.titleSmall,
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  'المزيد من النتائج',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                              ],
+                                      Text(
+                                        '($totalResultsCount)',
+                                        style: Theme.of(context).textTheme.titleSmall,
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    'المزيد من النتائج',
+                                    style: Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ],
                   ],
                 ],
@@ -325,7 +328,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if (isLastResultOfBook) ...[
+                  if (isLastResultOfBook && shouldShowLoadMore) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Padding(
@@ -347,12 +350,10 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                           onTap: () => loadMoreResults(currentBookTitle!),
                                           child: Row(
                                             children: [
-
                                              Padding(
                                                padding: const EdgeInsets.all(8.0),
                                                child: Icon(Icons.sync, color: Theme.of(context).colorScheme.secondary),
                                              ),
-
                                               Text(
                                                 'المزيد من النتائج',
                                                 style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),
@@ -361,13 +362,8 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                           ),
                                         ),
                                       ),
-                                // Text(
-                                //   ' ($totalResultsCount)    ',
-                                //   style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),
-                                // ),
                               ],
                             ),
-
                           ],
                         ),
                       ),

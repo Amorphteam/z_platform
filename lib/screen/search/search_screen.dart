@@ -4,6 +4,7 @@ import 'package:hadith/screen/search/widget/book_selection_sheet_widget.dart';
 import 'package:hadith/screen/search/widget/search_results_widget.dart';
 
 import '../../model/book_model.dart';
+import '../../util/search_helper.dart';
 import '../../widget/custom_appbar.dart';
 import '../../widget/search_bar_widget.dart';
 import 'cubit/search_cubit.dart';
@@ -40,7 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
           },
           onSubmitted: (query) async {
             _currentSearchQuery = query; // Store the search query
-            await context.read<SearchCubit>().search(query, maxResultsPerBook: 10);
+            await context.read<SearchCubit>().search(query, maxResultsPerBook: MAX_RESULTS_PER_BOOK);
           },
         ),
         body: Padding(

@@ -260,3 +260,5 @@ class SearchTask {
   final SendPort sendPort;
   final int? maxResultsPerBook;
 }
+
+const MAX_RESULTS_PER_BOOK = 10;
