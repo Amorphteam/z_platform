@@ -216,7 +216,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
             final initialResultsCount = widget.searchResults.where((result) => result.bookTitle == currentBookTitle).length;
             final totalResultsCount = _totalResultsCount[currentBookTitle] ?? initialResultsCount;
             final isExpanded = _isExpanded[currentBookTitle] ?? false;
-            final shouldShowLoadMore = initialResultsCount >= SearchHelper.MAX_RESULTS_PER_BOOK;
+            final shouldShowLoadMore = initialResultsCount >= MAX_RESULTS_PER_BOOK;
 
             if (isFirstResultOfBook) {
               return Column(
