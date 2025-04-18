@@ -24,6 +24,7 @@ import 'cubit/epub_viewer_cubit.dart';
 import 'internal_search/internal_search_screen.dart';
 import 'widgets/style_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 typedef DataCallback = void Function(dynamic data);
 
@@ -85,6 +86,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   static const String _rejalFontSizeKey = 'rejal_font_size';
   List<SearchModel> _currentSearchResults = [];
   int _currentSearchIndex = 0;
+  final Map<int, dom.Document> _htmlCache = {};
+  final Map<int, String> _processedContentCache = {};
 
   @override
   void didChangeDependencies() {
@@ -252,6 +255,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       MediaQuery.of(context).padding.top,),
                 child: state.when(
                   loaded: (content, _, tocList) {
+
                     _storeContentLoaded(content, context, state, tocList);
                     // context.read<EpubViewerCubit>().emitLastPageSeen();
 
@@ -274,8 +278,11 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         }
                         context.read<EpubViewerCubit>().loadUserPreferences();
                         context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-                        return _buildCurrentUi(context, _content);
-                      },
+
+
+                    return _buildCurrentUi(context, _content);
+
+                  },
                       contentHighlighted: (content, page) {
                         _orginalContent = _content;
                         _content = content;
@@ -285,7 +292,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       bookmarkAbsent: () => _buildCurrentUi(context, _content),
                       bookmarkPresent: () => _buildCurrentUi(context, _content),
                       loading: () => const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(color: Colors.red,),
                       ),
                       error: (error) => _buildCurrentUi(context, _content),
                       initial: () => const Center(
@@ -354,7 +361,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   void _storeContentLoaded(List<String> htmlContent, BuildContext context,
       EpubViewerState state, List<EpubChapter>? tocList,) {
     // Convert each content page's numbers from Latin to Arabic
-    _content = htmlContent.map((content) => convertLatinNumbersToArabic(content)).toList();
+    _content = htmlContent;
     _orginalContent = _content;
     _bookName = _getAppBarTitle(state);
     _tocList = tocList;
@@ -478,6 +485,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               scrollOffsetListener: scrollOffsetListener,
               physics: const BouncingScrollPhysics(),
               key: PageStorageKey('epub_content'),
+              addAutomaticKeepAlives: true,
+              addRepaintBoundaries: true,
+              initialScrollIndex: _currentPage.toInt(),
               itemBuilder: (BuildContext context, int index) {
                 final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -503,132 +513,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: SelectionArea(
-                          child: Html(
-                            data: content[index],
-                            onAnchorTap: _handleAnchorTap,
-                            style: {
-                              'body': Style(
-                                direction: TextDirection.rtl,
-                                textAlign: TextAlign.justify,
-                                lineHeight: LineHeight(lineHeight.size),
-                                textDecoration: TextDecoration.none,
-                              ),
-                              'p': Style(
-                                color: isDarkMode ? Colors.white : const Color(0xFF996633),
-                                textAlign: TextAlign.justify,
-                                margin: Margins.zero,
-                                fontSize: FontSize(fontSize.size),
-                                fontFamily: fontFamily.name,
-                              ),
-                              'p.center': Style(
-                                color: isDarkMode ? Colors.white : const Color(0xFF996633),
-                                textAlign: TextAlign.center,
-                                margin: Margins.zero,
-                                fontSize: FontSize(fontSize.size),
-                                fontFamily: fontFamily.name,
-                              ),
-                              'a': Style(
-                                textDecoration: TextDecoration.none,
-                              ),
-                              'a:link': Style(
-                                color: const Color(0xFF2484C6),
-                              ),
-                              'a:visited': Style(
-                                color: Colors.red,
-                              ),
-                              'h1.tit1': Style(
-                                color: isDarkMode ? Colors.white: Colors.green[700],
-                                fontSize: FontSize(fontSize.size * 1.1),
-                                textAlign: TextAlign.center,
-                                fontFamily: fontFamily.name,
-                              ),
-                              'h2.tit2': Style(
-                                color: isDarkMode ? Colors.white: Colors.green[900],
-                                fontSize: FontSize(fontSize.size),
-                                textAlign: TextAlign.center,
-                                fontFamily: fontFamily.name,
-                              ),
-                              'h3.tit3': Style(
-                                color: isDarkMode ? Colors.white: Colors.brown,
-                                fontSize: FontSize(fontSize.size),
-                                textAlign: TextAlign.center,
-                                fontFamily: fontFamily.name,
-                              ),
-                              'h4.tit4': Style(
-                                color: isDarkMode ?  Colors.white: Colors.red,
-                                fontSize: FontSize(fontSize.size),
-                                textAlign: TextAlign.center,
-                                fontFamily: fontFamily.name,
-                              ),
-                              '.pagen': Style(
-                                textAlign: TextAlign.center,
-                                color: isDarkMode ? Color(0xfff9825e): Colors.red,
-                                fontSize: FontSize(fontSize.size),
-                                fontFamily: fontFamily.name,
-                              ),
-                              '.fnote': Style(
-                                color: isDarkMode ? Color(0xFF8a8afa): Colors.blue[900],
-                                fontSize: FontSize(fontSize.size * 0.75),
-                                textAlign: TextAlign.justify,
-                              ),
-                              '.sher': Style(
-                                textAlign: TextAlign.center,
-                                color: isDarkMode ? Colors.white:Colors.red[800],
-                                fontSize: FontSize(fontSize.size * 0.8),
-                              ),
-                              '.psm': Style(
-                                textAlign: TextAlign.center,
-                                color: Colors.red[800],
-                                fontSize: FontSize(fontSize.size * 0.8),
-                              ),
-                              '.msaleh': Style(
-                                color: Colors.purple,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              '.onwan': Style(
-                                color: Colors.teal[700],
-                                fontWeight: FontWeight.bold,
-                              ),
-                              '.fn': Style(
-                                color: isDarkMode?  Color(0xff8a8afa): Color(0xFF000080),
-                                fontWeight: FontWeight.normal,
-                                fontSize: FontSize(fontSize.size * 0.75),
-                                textDecoration: TextDecoration.none,
-                                verticalAlign: VerticalAlign.top,
-                              ),
-                              '.fm': Style(
-                                color: isDarkMode ? Color(0xffa2e1a2): Colors.green,
-                                fontWeight: FontWeight.bold,
-                                fontSize: FontSize(fontSize.size * 0.75),
-                                textDecoration: TextDecoration.none,
-                              ),
-                              '.quran': Style(
-                                fontWeight: FontWeight.bold,
-                                fontSize: FontSize(fontSize.size),
-                                color: isDarkMode ? Color(0xffa2e1a2):Colors.green,
-                              ),
-                              '.hadith': Style(
-                                fontSize: FontSize(fontSize.size),
-                                color: isDarkMode ? Color(0xffC1C1C1):Colors.black,
-                              ),
-                              '.hadith-num': Style(
-                                fontWeight: FontWeight.bold,
-                                fontSize: FontSize(fontSize.size),
-                                color: isDarkMode ? Color(0xfff9825e):Colors.red,
-                              ),
-                              '.shreah': Style(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purple[900],
-                              ),
-                              '.kalema': Style(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.pink[700],
-                              ),
-                              'mark': Style(
-                                backgroundColor: Colors.yellow,
-                              ),
-                            },
-                          ),
+                          child: _buildHtmlContent(index, content[index]),
                         ),
                       ),
                     ),
@@ -708,6 +593,280 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         ],
       );
     }
+  }
+
+  Widget _buildHtmlContent(int index, String content) {
+    // Check cache first
+    if (_processedContentCache.containsKey(index)) {
+      return Html(
+        data: _processedContentCache[index]!,
+        onAnchorTap: _handleAnchorTap,
+        style: {
+          'body': Style(
+            direction: TextDirection.rtl,
+            textAlign: TextAlign.justify,
+            lineHeight: LineHeight(lineHeight.size),
+            textDecoration: TextDecoration.none,
+          ),
+          'p': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF996633),
+            textAlign: TextAlign.justify,
+            margin: Margins.zero,
+            fontSize: FontSize(fontSize.size),
+            fontFamily: fontFamily.name,
+          ),
+          'p.center': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF996633),
+            textAlign: TextAlign.center,
+            margin: Margins.zero,
+            fontSize: FontSize(fontSize.size),
+            fontFamily: fontFamily.name,
+          ),
+          'a': Style(
+            textDecoration: TextDecoration.none,
+          ),
+          'a:link': Style(
+            color: const Color(0xFF2484C6),
+          ),
+          'a:visited': Style(
+            color: Colors.red,
+          ),
+          'h1.tit1': Style(
+            color: isDarkMode ? Colors.white: Colors.green[700],
+            fontSize: FontSize(fontSize.size * 1.1),
+            textAlign: TextAlign.center,
+            fontFamily: fontFamily.name,
+          ),
+          'h2.tit2': Style(
+            color: isDarkMode ? Colors.white: Colors.green[900],
+            fontSize: FontSize(fontSize.size),
+            textAlign: TextAlign.center,
+            fontFamily: fontFamily.name,
+          ),
+          'h3.tit3': Style(
+            color: isDarkMode ? Colors.white: Colors.brown,
+            fontSize: FontSize(fontSize.size),
+            textAlign: TextAlign.center,
+            fontFamily: fontFamily.name,
+          ),
+          'h3': Style(
+            color: isDarkMode ? Colors.white: Colors.brown,
+            fontSize: FontSize(fontSize.size),
+            textAlign: TextAlign.center,
+            fontFamily: fontFamily.name,
+          ),
+          'h4.tit4': Style(
+            color: isDarkMode ?  Colors.white: Colors.red,
+            fontSize: FontSize(fontSize.size),
+            textAlign: TextAlign.center,
+            fontFamily: fontFamily.name,
+          ),
+          '.pagen': Style(
+            textAlign: TextAlign.center,
+            color: isDarkMode ? Color(0xfff9825e): Colors.red,
+            fontSize: FontSize(fontSize.size),
+            fontFamily: fontFamily.name,
+          ),
+          '.fnote': Style(
+            color: isDarkMode ? Color(0xFF8a8afa): Colors.blue[900],
+            fontSize: FontSize(fontSize.size * 0.75),
+            textAlign: TextAlign.justify,
+          ),
+          '.sher': Style(
+            textAlign: TextAlign.center,
+            color: isDarkMode ? Colors.white:Colors.red[800],
+            fontSize: FontSize(fontSize.size * 0.8),
+          ),
+          '.psm': Style(
+            textAlign: TextAlign.center,
+            color: Colors.red[800],
+            fontSize: FontSize(fontSize.size * 0.8),
+          ),
+          '.msaleh': Style(
+            color: Colors.purple,
+            fontWeight: FontWeight.bold,
+          ),
+          '.onwan': Style(
+            color: Colors.teal[700],
+            fontWeight: FontWeight.bold,
+          ),
+          '.fn': Style(
+            color: isDarkMode?  Color(0xff8a8afa): Color(0xFF000080),
+            fontWeight: FontWeight.normal,
+            fontSize: FontSize(fontSize.size * 0.75),
+            textDecoration: TextDecoration.none,
+            verticalAlign: VerticalAlign.top,
+          ),
+          '.fm': Style(
+            color: isDarkMode ? Color(0xffa2e1a2): Colors.green,
+            fontWeight: FontWeight.bold,
+            fontSize: FontSize(fontSize.size * 0.75),
+            textDecoration: TextDecoration.none,
+          ),
+          '.quran': Style(
+            fontWeight: FontWeight.bold,
+            fontSize: FontSize(fontSize.size),
+            color: isDarkMode ? Color(0xffa2e1a2):Colors.green,
+          ),
+          '.hadith': Style(
+            fontSize: FontSize(fontSize.size),
+            color: isDarkMode ? Color(0xffC1C1C1):Colors.black,
+          ),
+          '.hadith-num': Style(
+            fontWeight: FontWeight.bold,
+            fontSize: FontSize(fontSize.size),
+            color: isDarkMode ? Color(0xfff9825e):Colors.red,
+          ),
+          '.shreah': Style(
+            fontWeight: FontWeight.bold,
+            color: Colors.purple[900],
+          ),
+          '.kalema': Style(
+            fontWeight: FontWeight.bold,
+            color: Colors.pink[700],
+          ),
+          'mark': Style(
+            backgroundColor: Colors.yellow,
+          ),
+        },
+      );
+    }
+
+    // Process and cache the content
+    final processedContent = _processHtmlContent(content);
+    _processedContentCache[index] = processedContent;
+
+    return Html(
+      data: processedContent,
+      onAnchorTap: _handleAnchorTap,
+      style: {
+        'body': Style(
+          direction: TextDirection.rtl,
+          textAlign: TextAlign.justify,
+          lineHeight: LineHeight(lineHeight.size),
+          textDecoration: TextDecoration.none,
+        ),
+        'p': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF996633),
+          textAlign: TextAlign.justify,
+          margin: Margins.zero,
+          fontSize: FontSize(fontSize.size),
+          fontFamily: fontFamily.name,
+        ),
+        'p.center': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF996633),
+          textAlign: TextAlign.center,
+          margin: Margins.zero,
+          fontSize: FontSize(fontSize.size),
+          fontFamily: fontFamily.name,
+        ),
+        'a': Style(
+          textDecoration: TextDecoration.none,
+        ),
+        'a:link': Style(
+          color: const Color(0xFF2484C6),
+        ),
+        'a:visited': Style(
+          color: Colors.red,
+        ),
+        'h1.tit1': Style(
+          color: isDarkMode ? Colors.white: Colors.green[700],
+          fontSize: FontSize(fontSize.size * 1.1),
+          textAlign: TextAlign.center,
+          fontFamily: fontFamily.name,
+        ),
+        'h2.tit2': Style(
+          color: isDarkMode ? Colors.white: Colors.green[900],
+          fontSize: FontSize(fontSize.size),
+          textAlign: TextAlign.center,
+          fontFamily: fontFamily.name,
+        ),
+        'h3.tit3': Style(
+          color: isDarkMode ? Colors.white: Colors.brown,
+          fontSize: FontSize(fontSize.size),
+          textAlign: TextAlign.center,
+          fontFamily: fontFamily.name,
+        ),
+        'h4.tit4': Style(
+          color: isDarkMode ?  Colors.white: Colors.red,
+          fontSize: FontSize(fontSize.size),
+          textAlign: TextAlign.center,
+          fontFamily: fontFamily.name,
+        ),
+        '.pagen': Style(
+          textAlign: TextAlign.center,
+          color: isDarkMode ? Color(0xfff9825e): Colors.red,
+          fontSize: FontSize(fontSize.size),
+          fontFamily: fontFamily.name,
+        ),
+        '.fnote': Style(
+          color: isDarkMode ? Color(0xFF8a8afa): Colors.blue[900],
+          fontSize: FontSize(fontSize.size * 0.75),
+          textAlign: TextAlign.justify,
+        ),
+        '.sher': Style(
+          textAlign: TextAlign.center,
+          color: isDarkMode ? Colors.white:Colors.red[800],
+          fontSize: FontSize(fontSize.size * 0.8),
+        ),
+        '.psm': Style(
+          textAlign: TextAlign.center,
+          color: Colors.red[800],
+          fontSize: FontSize(fontSize.size * 0.8),
+        ),
+        '.msaleh': Style(
+          color: Colors.purple,
+          fontWeight: FontWeight.bold,
+        ),
+        '.onwan': Style(
+          color: Colors.teal[700],
+          fontWeight: FontWeight.bold,
+        ),
+        '.fn': Style(
+          color: isDarkMode?  Color(0xff8a8afa): Color(0xFF000080),
+          fontWeight: FontWeight.normal,
+          fontSize: FontSize(fontSize.size * 0.75),
+          textDecoration: TextDecoration.none,
+          verticalAlign: VerticalAlign.top,
+        ),
+        '.fm': Style(
+          color: isDarkMode ? Color(0xffa2e1a2): Colors.green,
+          fontWeight: FontWeight.bold,
+          fontSize: FontSize(fontSize.size * 0.75),
+          textDecoration: TextDecoration.none,
+        ),
+        '.quran': Style(
+          fontWeight: FontWeight.bold,
+          fontSize: FontSize(fontSize.size),
+          color: isDarkMode ? Color(0xffa2e1a2):Colors.green,
+        ),
+        '.hadith': Style(
+          fontSize: FontSize(fontSize.size),
+          color: isDarkMode ? Color(0xffC1C1C1):Colors.black,
+        ),
+        '.hadith-num': Style(
+          fontWeight: FontWeight.bold,
+          fontSize: FontSize(fontSize.size),
+          color: isDarkMode ? Color(0xfff9825e):Colors.red,
+        ),
+        '.shreah': Style(
+          fontWeight: FontWeight.bold,
+          color: Colors.purple[900],
+        ),
+        '.kalema': Style(
+          fontWeight: FontWeight.bold,
+          color: Colors.pink[700],
+        ),
+        'mark': Style(
+          backgroundColor: Colors.yellow,
+        ),
+      },
+    );
+  }
+
+  String _processHtmlContent(String content) {
+    // Add any preprocessing logic here if needed
+    return content;
   }
 
   void _showPageJumpDialog(BuildContext context) {
@@ -1022,22 +1181,29 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   @override
   void initState() {
     super.initState();
-     _buildCurrentUi(context, null);
+    _buildCurrentUi(context, null);
     _determineEpubSourceAndLoad();
-    itemPositionsListener.itemPositions.addListener(() {
-      final positions = itemPositionsListener.itemPositions.value;
-      if (positions.isNotEmpty) {
-        final int firstVisibleItemIndex = positions
-            .where((position) => position.itemLeadingEdge < 1)
-            .reduce(
-                (max, position) => position.index > max.index ? position : max,)
-            .index;
 
-        if (_currentIndex != firstVisibleItemIndex) {
-          _currentIndex = firstVisibleItemIndex;
-          _updateCurrentPage(firstVisibleItemIndex.toDouble());
+    // Debounce the item positions listener to reduce rebuilds
+    Timer? _debounceTimer;
+    itemPositionsListener.itemPositions.addListener(() {
+      if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+      _debounceTimer = Timer(const Duration(milliseconds: 100), () {
+        if (!mounted) return;
+        final positions = itemPositionsListener.itemPositions.value;
+        if (positions.isNotEmpty) {
+          final int firstVisibleItemIndex = positions
+              .where((position) => position.itemLeadingEdge < 1)
+              .reduce(
+                  (max, position) => position.index > max.index ? position : max,)
+              .index;
+
+          if (_currentIndex != firstVisibleItemIndex) {
+            _currentIndex = firstVisibleItemIndex;
+            _updateCurrentPage(firstVisibleItemIndex.toDouble());
+          }
         }
-      }
+      });
     });
     _loadRejalFontSize();
   }
@@ -1047,9 +1213,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       setState(() {
         _currentPage = newPage;
       });
+      // Debounce the bookmark check to reduce database calls
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) {
+          context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
+        }
+      });
     }
-    context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-
   }
 
   @override
@@ -1066,6 +1236,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     itemPositionsListener.itemPositions.removeListener(() {});
     focusNode.dispose();
     textEditingController.dispose();
+    _htmlCache.clear();
+    _processedContentCache.clear();
 
     super.dispose();
   }

@@ -74,6 +74,9 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       }
 
       _storeEpubDetails(epubBook, reorderHtmlFilesBasedOnSpine(epubContent, idRefs), assetPath);
+          emit(const EpubViewerState.loading());
+          await Future.delayed(const Duration(milliseconds: 350));
+
       emit(EpubViewerState.loaded(content: _spineHtmlContent!,
         epubTitle: _bookTitle ?? '',
         tocTreeList: _tocTreeList,),);
@@ -121,6 +124,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
 
   Future<void> jumpToPage({String? chapterFileName, int? newPage}) async {
+
     if (newPage != null) {
       emit(EpubViewerState.pageChanged(pageNumber: newPage));
     }
