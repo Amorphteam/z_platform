@@ -75,7 +75,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
       _storeEpubDetails(epubBook, reorderHtmlFilesBasedOnSpine(epubContent, idRefs), assetPath);
           emit(const EpubViewerState.loading());
-          await Future.delayed(const Duration(milliseconds: 350));
+          await Future.delayed(const Duration(milliseconds: 200));
 
       emit(EpubViewerState.loaded(content: _spineHtmlContent!,
         epubTitle: _bookTitle ?? '',

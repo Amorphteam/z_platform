@@ -50,6 +50,8 @@ class EpubViewerScreen extends StatefulWidget {
 
 class _EpubViewerScreenState extends State<EpubViewerScreen> {
   int _currentIndex = -1;
+  bool _hasHandledInitialPageJump = false;
+  int _initialPageIndex = 0;
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =
   ScrollOffsetController();
@@ -114,6 +116,47 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _buildCurrentUi(context, null);
+    _determineEpubSourceAndLoad();
+    
+    // Set initial page based on the source
+    if (widget.referenceModel?.navIndex != null) {
+      final double doubleValue = double.parse(widget.referenceModel!.navIndex);
+      _initialPageIndex = doubleValue.toInt();
+    } else if (widget.historyModel?.navIndex != null) {
+      final double doubleValue = double.parse(widget.historyModel!.navIndex);
+      _initialPageIndex = doubleValue.toInt();
+    } else if (widget.searchModel?.pageIndex != null) {
+      _initialPageIndex = widget.searchModel!.pageIndex - 1;
+    }
+
+    // Debounce the item positions listener to reduce rebuilds
+    Timer? _debounceTimer;
+    itemPositionsListener.itemPositions.addListener(() {
+      if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+      _debounceTimer = Timer(const Duration(milliseconds: 100), () {
+        if (!mounted) return;
+        final positions = itemPositionsListener.itemPositions.value;
+        if (positions.isNotEmpty) {
+          final int firstVisibleItemIndex = positions
+              .where((position) => position.itemLeadingEdge < 1)
+              .reduce(
+                  (max, position) => position.index > max.index ? position : max,)
+              .index;
+
+          if (_currentIndex != firstVisibleItemIndex) {
+            _currentIndex = firstVisibleItemIndex;
+            _updateCurrentPage(firstVisibleItemIndex.toDouble());
+          }
+        }
+      });
+    });
+    _loadRejalFontSize();
+  }
+
+  @override
   Widget build(BuildContext context) {
     isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
@@ -133,8 +176,18 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     return BlocConsumer<EpubViewerCubit, EpubViewerState>(
       listener: (context, state) {
         state.maybeWhen(
-          pageChanged: (page) {
-            _jumpTo(pageNumber: page);
+          loaded: (content, _, tocList) {
+            _storeContentLoaded(content, context, state, tocList);
+            
+            if (!_hasHandledInitialPageJump) {
+              _hasHandledInitialPageJump = true;
+              if (widget.searchModel?.searchedWord != null) {
+                _search(widget.searchModel!.searchedWord!);
+              }
+            }
+            
+            context.read<EpubViewerCubit>().loadUserPreferences();
+            context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
           },
           searchResultsFound: (searchResults) {
             setState(() {
@@ -255,33 +308,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       MediaQuery.of(context).padding.top,),
                 child: state.when(
                   loaded: (content, _, tocList) {
-
                     _storeContentLoaded(content, context, state, tocList);
-                    // context.read<EpubViewerCubit>().emitLastPageSeen();
-
-                        if (widget.referenceModel?.navIndex !=null){
-                          final double doubleValue = double.parse(widget.referenceModel!.navIndex);
-                          final int intValue = doubleValue.toInt();
-                          context.read<EpubViewerCubit>().emitCustomPageSeen((intValue).toString());
-                        }
-                        if (widget.historyModel?.navIndex !=null){
-                          final double doubleValue = double.parse(widget.historyModel!.navIndex);
-                          final int intValue = doubleValue.toInt();
-                          context.read<EpubViewerCubit>().emitCustomPageSeen((intValue).toString());
-                        }
-                        if (widget.searchModel?.pageIndex !=null){
-                          context.read<EpubViewerCubit>().emitCustomPageSeen((widget.searchModel!.pageIndex - 1).toString() ?? '0');
-                          _search(widget.searchModel!.searchedWord!);
-                          // Future.delayed(const Duration(milliseconds: 500), () {
-                          //   context.read<EpubViewerCubit>().highlightContent(widget.searchModel!.pageIndex, widget.searchModel!.searchedWord!);
-                          // });
-                        }
-                        context.read<EpubViewerCubit>().loadUserPreferences();
-                        context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-
-
+                    
                     return _buildCurrentUi(context, _content);
-
                   },
                       contentHighlighted: (content, page) {
                         _orginalContent = _content;
@@ -487,7 +516,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               key: PageStorageKey('epub_content'),
               addAutomaticKeepAlives: true,
               addRepaintBoundaries: true,
-              initialScrollIndex: _currentPage.toInt(),
+              initialScrollIndex: _initialPageIndex,
               itemBuilder: (BuildContext context, int index) {
                 final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -1179,51 +1208,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _buildCurrentUi(context, null);
-    _determineEpubSourceAndLoad();
-
-    // Debounce the item positions listener to reduce rebuilds
-    Timer? _debounceTimer;
-    itemPositionsListener.itemPositions.addListener(() {
-      if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-      _debounceTimer = Timer(const Duration(milliseconds: 100), () {
-        if (!mounted) return;
-        final positions = itemPositionsListener.itemPositions.value;
-        if (positions.isNotEmpty) {
-          final int firstVisibleItemIndex = positions
-              .where((position) => position.itemLeadingEdge < 1)
-              .reduce(
-                  (max, position) => position.index > max.index ? position : max,)
-              .index;
-
-          if (_currentIndex != firstVisibleItemIndex) {
-            _currentIndex = firstVisibleItemIndex;
-            _updateCurrentPage(firstVisibleItemIndex.toDouble());
-          }
-        }
-      });
-    });
-    _loadRejalFontSize();
-  }
-
-  void _updateCurrentPage(double newPage) {
-    if (_currentPage != newPage) {
-      setState(() {
-        _currentPage = newPage;
-      });
-      // Debounce the bookmark check to reduce database calls
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (mounted) {
-          context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
-        }
-      });
-    }
-  }
-
-  @override
-  dispose() {
+  void dispose() {
     // Save the history before disposing
     if (_epubViewerCubit != null) {
       _saveHistory(); // Save the last visited page before disposing
@@ -1430,6 +1415,20 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   Future<void> _saveRejalFontSize(double fontSize) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble(_rejalFontSizeKey, fontSize);
+  }
+
+  void _updateCurrentPage(double newPage) {
+    if (_currentPage != newPage) {
+      setState(() {
+        _currentPage = newPage;
+      });
+      // Debounce the bookmark check to reduce database calls
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) {
+          context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
+        }
+      });
+    }
   }
 
 }
