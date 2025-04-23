@@ -457,7 +457,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         title: GestureDetector(
                           onTap: () {
                             Navigator.of(context).pop();
-                            openEpub(context: context, search: result);
+                            setState(() {
+                              _currentSearchIndex = _currentSearchResults.indexOf(result);
+                            });
+                            _jumpTo(pageNumber: result.pageIndex - 1);
                           },
                           child: Row(
                             children: [
