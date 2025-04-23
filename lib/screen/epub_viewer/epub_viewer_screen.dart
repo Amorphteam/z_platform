@@ -327,7 +327,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       initial: () => const Center(
                         child: CircularProgressIndicator(),
                       ),
-                      pageChanged: (int? pageNumber) => _buildCurrentUi(context, _content),
+                      pageChanged: (int? pageNumber) {
+                        _jumpTo(pageNumber: pageNumber);
+                        return _buildCurrentUi(context, _content);
+                      },
                       styleChanged: (fontSize,
                           lineHeight,
                           fontFamily,) => _buildCurrentUi(context, _content),
