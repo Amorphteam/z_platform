@@ -52,13 +52,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   int _currentIndex = -1;
   bool _hasHandledInitialPageJump = false;
   int _initialPageIndex = 0;
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ScrollOffsetController scrollOffsetController =
-  ScrollOffsetController();
-  final ItemPositionsListener itemPositionsListener =
-  ItemPositionsListener.create();
-  final ScrollOffsetListener scrollOffsetListener =
-  ScrollOffsetListener.create();
+  late final ItemScrollController itemScrollController;
+  late final ScrollOffsetController scrollOffsetController;
+  late final ItemPositionsListener itemPositionsListener;
+  late final ScrollOffsetListener scrollOffsetListener;
   String _bookName = '';
   PageHelper pageHelper = PageHelper();
   double _currentPage = 0;
@@ -90,6 +87,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   int _currentSearchIndex = 0;
   final Map<int, dom.Document> _htmlCache = {};
   final Map<int, String> _processedContentCache = {};
+  bool _isControllerInitialized = false;
+
 
   @override
   void didChangeDependencies() {
@@ -118,6 +117,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   @override
   void initState() {
     super.initState();
+    _initializeControllers();
     _buildCurrentUi(context, null);
     _determineEpubSourceAndLoad();
     
@@ -1152,6 +1152,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     });
   }
 
+  void _initializeControllers() {
+    itemScrollController = ItemScrollController();
+    scrollOffsetController = ScrollOffsetController();
+    itemPositionsListener = ItemPositionsListener.create();
+    scrollOffsetListener = ScrollOffsetListener.create();
+    _isControllerInitialized = true;
+  }
   _determineEpubSourceAndLoad() {
     if (widget.referenceModel != null) {
       _loadEpubFromBookmark();
@@ -1264,12 +1271,18 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   _jumpTo({int? pageNumber}) {
-    itemScrollController.jumpTo(index: pageNumber ?? 0);
-    _currentPage = pageNumber?.toDouble() ?? _currentPage;
-    context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
+    if (!_isControllerInitialized || pageNumber == null) return;
 
+    try {
+      itemScrollController.jumpTo(index: pageNumber);
+      _currentPage = pageNumber.toDouble();
+      if (_bookPath != null) {
+        context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
+      }
+    } catch (e) {
+      debugPrint('Error jumping to page: $e');
+    }
   }
-
   _storeCurrentPage({int? currentPageNumber}) {
     final newPage = currentPageNumber?.toDouble() ?? 0.0;
     if (_currentPage != newPage) {

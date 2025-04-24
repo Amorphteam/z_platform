@@ -84,6 +84,10 @@ class MyApp extends StatelessWidget {
       ),
       colorScheme: lightColorScheme,
       fontFamily: 'SFProDisplay',
+      textSelectionTheme: const TextSelectionThemeData(
+        selectionColor: Color(0xFF90CAF9), // Light blue color for selection
+        selectionHandleColor: Color(0xFF90CAF9),
+      ),
     );
 
     final ThemeData darkTheme = ThemeData(
@@ -95,6 +99,10 @@ class MyApp extends StatelessWidget {
       ),
       colorScheme: darkColorScheme,
       fontFamily: 'SFProDisplay',
+      textSelectionTheme: const TextSelectionThemeData(
+        selectionColor: Color(0xFF90CAF9), // Light blue color for selection
+        selectionHandleColor: Color(0xFF90CAF9),
+      ),
     );
 
     return BlocProvider(
