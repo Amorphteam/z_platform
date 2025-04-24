@@ -1,4 +1,3 @@
-
 class SearchModel {
   SearchModel({
     this.searchedWord,
@@ -22,11 +21,13 @@ class SearchModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! SearchModel) return false;
-    return bookAddress == other.bookAddress && pageIndex == other.pageIndex;
+    return bookAddress == other.bookAddress && 
+           pageIndex == other.pageIndex && 
+           spanna == other.spanna;
   }
 
   @override
-  int get hashCode => Object.hash(bookAddress, pageIndex);
+  int get hashCode => Object.hash(bookAddress, pageIndex, spanna);
 }
 
 

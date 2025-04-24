@@ -6,8 +6,7 @@ import 'package:epub_parser/epub_parser.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zahra/model/history_model.dart';
-
+import '../../../model/history_model.dart';
 import '../../../model/reference_model.dart';
 import '../../../model/search_model.dart';
 import '../../../model/style_model.dart';
@@ -75,6 +74,9 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       }
 
       _storeEpubDetails(epubBook, reorderHtmlFilesBasedOnSpine(epubContent, idRefs), assetPath);
+          emit(const EpubViewerState.loading());
+          await Future.delayed(const Duration(milliseconds: 200));
+
       emit(EpubViewerState.loaded(content: _spineHtmlContent!,
         epubTitle: _bookTitle ?? '',
         tocTreeList: _tocTreeList,),);
@@ -122,6 +124,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
 
   Future<void> jumpToPage({String? chapterFileName, int? newPage}) async {
+
     if (newPage != null) {
       emit(EpubViewerState.pageChanged(pageNumber: newPage));
     }

@@ -20,7 +20,9 @@ mixin _$SearchState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(
+            List<SearchModel> searchResults, bool isRuningSearch)
+        loaded,
     required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) =>
@@ -29,7 +31,8 @@ mixin _$SearchState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) =>
@@ -38,7 +41,8 @@ mixin _$SearchState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -132,7 +136,9 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(
+            List<SearchModel> searchResults, bool isRuningSearch)
+        loaded,
     required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) {
@@ -144,7 +150,8 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) {
@@ -156,7 +163,8 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -252,7 +260,9 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(
+            List<SearchModel> searchResults, bool isRuningSearch)
+        loaded,
     required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) {
@@ -264,7 +274,8 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) {
@@ -276,7 +287,8 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -338,7 +350,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<SearchModel> searchResults});
+  $Res call({List<SearchModel> searchResults, bool isRuningSearch});
 }
 
 /// @nodoc
@@ -353,12 +365,17 @@ class __$$LoadedImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? searchResults = null,
+    Object? isRuningSearch = null,
   }) {
     return _then(_$LoadedImpl(
       searchResults: null == searchResults
           ? _value._searchResults
           : searchResults // ignore: cast_nullable_to_non_nullable
               as List<SearchModel>,
+      isRuningSearch: null == isRuningSearch
+          ? _value.isRuningSearch
+          : isRuningSearch // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -366,7 +383,9 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl({required final List<SearchModel> searchResults})
+  const _$LoadedImpl(
+      {required final List<SearchModel> searchResults,
+      required this.isRuningSearch})
       : _searchResults = searchResults;
 
   final List<SearchModel> _searchResults;
@@ -378,8 +397,11 @@ class _$LoadedImpl implements _Loaded {
   }
 
   @override
+  final bool isRuningSearch;
+
+  @override
   String toString() {
-    return 'SearchState.loaded(searchResults: $searchResults)';
+    return 'SearchState.loaded(searchResults: $searchResults, isRuningSearch: $isRuningSearch)';
   }
 
   @override
@@ -388,12 +410,14 @@ class _$LoadedImpl implements _Loaded {
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
             const DeepCollectionEquality()
-                .equals(other._searchResults, _searchResults));
+                .equals(other._searchResults, _searchResults) &&
+            (identical(other.isRuningSearch, isRuningSearch) ||
+                other.isRuningSearch == isRuningSearch));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_searchResults));
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_searchResults), isRuningSearch);
 
   @JsonKey(ignore: true)
   @override
@@ -406,11 +430,13 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(
+            List<SearchModel> searchResults, bool isRuningSearch)
+        loaded,
     required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) {
-    return loaded(searchResults);
+    return loaded(searchResults, isRuningSearch);
   }
 
   @override
@@ -418,11 +444,12 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(searchResults);
+    return loaded?.call(searchResults, isRuningSearch);
   }
 
   @override
@@ -430,13 +457,14 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(searchResults);
+      return loaded(searchResults, isRuningSearch);
     }
     return orElse();
   }
@@ -483,10 +511,12 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements SearchState {
-  const factory _Loaded({required final List<SearchModel> searchResults}) =
-      _$LoadedImpl;
+  const factory _Loaded(
+      {required final List<SearchModel> searchResults,
+      required final bool isRuningSearch}) = _$LoadedImpl;
 
   List<SearchModel> get searchResults;
+  bool get isRuningSearch;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -564,7 +594,9 @@ class _$LoadedListImpl implements _LoadedList {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(
+            List<SearchModel> searchResults, bool isRuningSearch)
+        loaded,
     required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) {
@@ -576,7 +608,8 @@ class _$LoadedListImpl implements _LoadedList {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) {
@@ -588,7 +621,8 @@ class _$LoadedListImpl implements _LoadedList {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -715,7 +749,9 @@ class _$errorImpl implements _error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<SearchModel> searchResults) loaded,
+    required TResult Function(
+            List<SearchModel> searchResults, bool isRuningSearch)
+        loaded,
     required TResult Function(List<Book> books) loadedList,
     required TResult Function(String error) error,
   }) {
@@ -727,7 +763,8 @@ class _$errorImpl implements _error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<SearchModel> searchResults)? loaded,
+    TResult? Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult? Function(List<Book> books)? loadedList,
     TResult? Function(String error)? error,
   }) {
@@ -739,7 +776,8 @@ class _$errorImpl implements _error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<SearchModel> searchResults)? loaded,
+    TResult Function(List<SearchModel> searchResults, bool isRuningSearch)?
+        loaded,
     TResult Function(List<Book> books)? loadedList,
     TResult Function(String error)? error,
     required TResult orElse(),
