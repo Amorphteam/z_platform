@@ -88,7 +88,7 @@ class RejalBottomSheetContentState extends State<RejalBottomSheetContent> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 28.0),
+                        padding: const EdgeInsets.only(top: 48.0),
                         child: Text(
                           widget.rejal.name,
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'kuffi', color: Theme.of(context).colorScheme.secondary),
@@ -109,9 +109,9 @@ class RejalBottomSheetContentState extends State<RejalBottomSheetContent> {
                 Expanded(
                   child: SingleChildScrollView(
                     controller: widget.scrollController,
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Html(
-                      data: widget.rejal.det,
+                      data: widget.rejal.det.replaceAll('.', '. <br>'),
                       style: {
                         'html': Style(
                           fontSize: FontSize(_rejalFontSize),

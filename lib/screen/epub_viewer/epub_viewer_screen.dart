@@ -672,7 +672,19 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             textAlign: TextAlign.center,
             fontFamily: fontFamily.name,
           ),
+          'h1': Style(
+            color: isDarkMode ? Colors.white: Colors.green[700],
+            fontSize: FontSize(fontSize.size * 1.1),
+            textAlign: TextAlign.center,
+            fontFamily: fontFamily.name,
+          ),
           'h2.tit2': Style(
+            color: isDarkMode ? Colors.white: Colors.green[900],
+            fontSize: FontSize(fontSize.size),
+            textAlign: TextAlign.center,
+            fontFamily: fontFamily.name,
+          ),
+          'h2': Style(
             color: isDarkMode ? Colors.white: Colors.green[900],
             fontSize: FontSize(fontSize.size),
             textAlign: TextAlign.center,
@@ -696,6 +708,12 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             textAlign: TextAlign.center,
             fontFamily: fontFamily.name,
           ),
+          'h4': Style(
+            color: isDarkMode ?  Colors.white: Colors.red,
+            fontSize: FontSize(fontSize.size),
+            textAlign: TextAlign.center,
+            fontFamily: fontFamily.name,
+          ),
           '.pagen': Style(
             textAlign: TextAlign.center,
             color: isDarkMode ? Color(0xfff9825e): Colors.red,
@@ -703,7 +721,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             fontFamily: fontFamily.name,
           ),
           '.fnote': Style(
-            color: isDarkMode ? Color(0xFF8a8afa): Colors.blue[900],
+            color: isDarkMode ? Color(0xffC1C1C1): Colors.blue[900],
             fontSize: FontSize(fontSize.size * 0.75),
             textAlign: TextAlign.justify,
           ),
@@ -726,7 +744,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             fontWeight: FontWeight.bold,
           ),
           '.fn': Style(
-            color: isDarkMode?  Color(0xff8a8afa): Color(0xFF000080),
+            color: isDarkMode?  Color(0xffC1C1C1): Color(0xFF000080),
             fontWeight: FontWeight.normal,
             fontSize: FontSize(fontSize.size * 0.75),
             textDecoration: TextDecoration.none,

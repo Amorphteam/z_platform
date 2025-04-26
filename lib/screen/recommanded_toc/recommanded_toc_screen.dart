@@ -39,33 +39,7 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
           rightIcon: Icons.dark_mode_outlined, // Example: Search icon
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        body: isLandscape
-            ? Row(
-          children: [
-            Expanded(
-              child: BlocBuilder<RecommandedTocCubit, RecommandedTocState>(
-                builder: (context, state) => state.when(
-                  initial: () => const Center(
-                      child: Text('Tap to start fetching...')),
-                  loading: () => const Center(
-                      child: CircularProgressIndicator()),
-                  loaded: (items) {
-                    return _buildSelectedTocList(items, context);
-                  },
-                  error: (message) =>
-                      Center(child: SelectionArea(child: Text(message))),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: Theme.of(context).colorScheme.primary,
-                padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
-              ),
-            ),
-          ],
-        )
-            : BlocBuilder<RecommandedTocCubit, RecommandedTocState>(
+        body: BlocBuilder<RecommandedTocCubit, RecommandedTocState>(
           builder: (context, state) => state.when(
             initial: () => const Center(
                 child: Text('Tap to start fetching...')),

@@ -100,8 +100,8 @@ class MyApp extends StatelessWidget {
       colorScheme: darkColorScheme,
       fontFamily: 'SFProDisplay',
       textSelectionTheme: const TextSelectionThemeData(
-        selectionColor: Color(0xFF90CAF9), // Light blue color for selection
-        selectionHandleColor: Color(0xFF90CAF9),
+        selectionColor: Color(0x4490CAF9), // Light blue color for selection
+        selectionHandleColor: Color(0xFFa0a0af),
       ),
     );
 
