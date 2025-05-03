@@ -38,7 +38,7 @@ class _HostScreenState extends State<HostScreen> {
             });
           },
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
           selectedItemColor: Theme.of(context).colorScheme.secondaryContainer,
           unselectedItemColor: Theme.of(context).colorScheme.onSurface,
           items: [

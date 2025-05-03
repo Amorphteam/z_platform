@@ -30,7 +30,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: CustomAppBar(
           showSearchBar: true,
           title: "الحديث الشريف",

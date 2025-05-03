@@ -45,6 +45,7 @@ class RejalBottomSheetContentState extends State<RejalBottomSheetContent> {
 
   @override
   Widget build(BuildContext context) {
+    final content = widget.rejal.det.replaceAll('.', '. <br>').replaceFirst('&', '<h1>').replaceFirst('&', '</h1>');
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Stack(
@@ -106,18 +107,26 @@ class RejalBottomSheetContentState extends State<RejalBottomSheetContent> {
                 ),
 
                 // Scrollable content
+
                 Expanded(
                   child: SingleChildScrollView(
                     controller: widget.scrollController,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Html(
-                      data: widget.rejal.det.replaceAll('.', '. <br>'),
+                      data: content,
                       style: {
                         'html': Style(
                           fontSize: FontSize(_rejalFontSize),
                           lineHeight: LineHeight(1.5),
                           textAlign: TextAlign.justify,
                           fontFamily: 'font1',
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        'h1': Style(
+                          fontSize: FontSize(_rejalFontSize + 1),
+                          fontWeight: FontWeight.bold,
+                          textAlign: TextAlign.justify,
+                          fontFamily: 'kuffi',
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                         'p': Style(

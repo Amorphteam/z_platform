@@ -26,7 +26,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: Theme.of(context).colorScheme.primary,
+    backgroundColor: Theme.of(context).colorScheme.surface,
     appBar:  CustomAppBar(
     showSearchBar: false,
     title: "الحديث الشريف",
@@ -66,7 +66,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                   if (states.contains(MaterialState.selected)) {
                     return Theme.of(context).colorScheme.onSecondary;
                   } else {
-                    return Theme.of(context).colorScheme.primary;
+                    return Theme.of(context).colorScheme.surface;
                   }
                 }),
               ),

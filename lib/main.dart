@@ -40,13 +40,13 @@ class MyApp extends StatelessWidget {
 
     const ColorScheme lightColorScheme = ColorScheme(
       brightness: Brightness.light,
-      primary: Color(0xFFFFFFFF),
+      primary: Color(0xFF1B1C17),
       onPrimary: Color(0xFFEEEEEE),
       secondary: Colors.blue,
       onSecondary: Color(0xFFFFFFFF),
       error: Color(0xFFBA1A1A),
       onError: Color(0xFFFFFFFF),
-      surface: Color(0xFFFBF9F1),
+      surface: Color(0xFFFFFFFF),
       onSurface: Color(0xFF1B1C17),
       primaryContainer: Color(0xFFCDEF84),
       onPrimaryContainer: Color(0xFF141F00),
@@ -57,14 +57,14 @@ class MyApp extends StatelessWidget {
       errorContainer: Color(0xFFFFDAD6),
       onErrorContainer: Color(0xFF410002),
       surfaceContainerHighest: Color(0xFFE2E4D4),
-      onSurfaceVariant: Color(0xFF45483C),
+      onSurfaceVariant: Color(0xFFf6f8f7),
       outline: Color(0xFF76786B),
       outlineVariant: Color(0xFFC6C8B9),
     );
 
     const ColorScheme darkColorScheme = ColorScheme(
       brightness: Brightness.dark,
-      primary: Color(0xFF111111),
+      primary: Color(0xFFFFFFFF),
       onPrimary: Color(0xFFEEEEEE),
       secondary: Colors.blue,
       onSecondary: Color(0xFF111111),
@@ -72,7 +72,8 @@ class MyApp extends StatelessWidget {
       secondaryContainer: Color(0xFFFFFFFF),
       onError: Color(0xFFFFFFFF),
       surface: Color(0xFF111111),
-      onSurface: Color(0xFFa0a0af),
+      onSurface: Color(0xFFEEEEEE),
+      onSurfaceVariant: Color(0xFF121413),
     );
 
     final ThemeData lightTheme = ThemeData(
@@ -84,9 +85,13 @@ class MyApp extends StatelessWidget {
       ),
       colorScheme: lightColorScheme,
       fontFamily: 'SFProDisplay',
+      appBarTheme: const AppBarTheme(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+      ),
       textSelectionTheme: const TextSelectionThemeData(
-        selectionColor: Color(0xFF90CAF9), // Light blue color for selection
-        selectionHandleColor: Color(0xFF90CAF9),
+        selectionColor: Color(0xFF90CAF9), // Red color for selection
+        selectionHandleColor: Color(0xFF90CAF9), // Red color for handles
       ),
     );
 
@@ -99,9 +104,13 @@ class MyApp extends StatelessWidget {
       ),
       colorScheme: darkColorScheme,
       fontFamily: 'SFProDisplay',
+      appBarTheme: const AppBarTheme(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+      ),
       textSelectionTheme: const TextSelectionThemeData(
-        selectionColor: Color(0x4490CAF9), // Light blue color for selection
-        selectionHandleColor: Color(0xFFa0a0af),
+        selectionColor: Color(0x4490CAF9), // Red color for selection
+        selectionHandleColor: Color(0xFFa0a0af), // Red color for handles
       ),
     );
 

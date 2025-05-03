@@ -47,7 +47,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       mainAxisSize: MainAxisSize.min,
       children: [
         AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
           elevation: 0,
           leading: widget.leftIcon != null
               ? IconButton(
@@ -77,53 +77,56 @@ class _CustomAppBarState extends State<CustomAppBar> {
               : [], // Hide if rightIcon is null
         ),
         if (widget.showSearchBar) // Conditionally show search bar
-          Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Theme(
-                data: ThemeData(
-                  textSelectionTheme: TextSelectionThemeData(
-                    cursorColor: isDarkMode
-                        ? Colors.white
-                        : Colors.black, // Cursor color
-                  ),
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: (value) {
-                    setState(() {}); // Refresh UI when text changes
-                    if (widget.onSearch != null) widget.onSearch!(value);
-                  },
-                  onSubmitted: widget.onSubmitted,
-                  decoration: InputDecoration(
-                    hintText: "اكتب شيئاً...",
-                    hintStyle: TextStyle(
-                      fontSize: 12,
-                      color: isDarkMode ? Colors.grey[400] : Colors.grey[600], // Hint color
+          Container(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            child: Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Theme(
+                  data: ThemeData(
+                    textSelectionTheme: TextSelectionThemeData(
+                      cursorColor: isDarkMode
+                          ? Colors.white
+                          : Colors.black, // Cursor color
                     ),
-                    prefixIcon: Icon(Icons.search,
-                        color: isDarkMode ? Colors.white : Colors.black54),
-                    suffixIcon: _searchController.text.isNotEmpty
-                        ? IconButton(
-                      icon: Icon(Icons.clear, color: isDarkMode ? Colors.white : Colors.black54),
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() {}); // Refresh UI to hide the clear button
-                        if (widget.onSearch != null) widget.onSearch!(''); // Clear search callback
-                      },
-                    )
-                        : null, // Hide clear button if no text
-                    filled: true,
-                    fillColor: isDarkMode ? Colors.grey[900] : Colors.grey[200], // Background color
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   ),
-                  style: TextStyle(color: isDarkMode ? Colors.white : Colors.black), // Text color
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      setState(() {}); // Refresh UI when text changes
+                      if (widget.onSearch != null) widget.onSearch!(value);
+                    },
+                    onSubmitted: widget.onSubmitted,
+                    decoration: InputDecoration(
+                      hintText: "اكتب شيئاً...",
+                      hintStyle: TextStyle(
+                        fontSize: 12,
+                        color: isDarkMode ? Colors.grey[400] : Colors.grey[600], // Hint color
+                      ),
+                      prefixIcon: Icon(Icons.search,
+                          color: isDarkMode ? Colors.white : Colors.black54),
+                      suffixIcon: _searchController.text.isNotEmpty
+                          ? IconButton(
+                        icon: Icon(Icons.clear, color: isDarkMode ? Colors.white : Colors.black54),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {}); // Refresh UI to hide the clear button
+                          if (widget.onSearch != null) widget.onSearch!(''); // Clear search callback
+                        },
+                      )
+                          : null, // Hide clear button if no text
+                      filled: true,
+                      fillColor: isDarkMode ? Colors.grey[900] : Colors.grey[300], // Background color
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                    ),
+                    style: TextStyle(color: isDarkMode ? Colors.white : Colors.black), // Text color
+                  ),
                 ),
               ),
             ),

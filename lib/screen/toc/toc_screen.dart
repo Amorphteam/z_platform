@@ -52,7 +52,7 @@ class _TocScreenState extends State<TocScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: CustomAppBar(
         title: "الحديث الشريف",
         leftIcon: Icons.info_outline_rounded,
@@ -139,7 +139,7 @@ class _TocScreenState extends State<TocScreen> {
         alignment: Alignment.center,
         margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
         child: Card(
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.surface,
           elevation: 0,
           child: Container(
             margin: const EdgeInsets.all(8.0),

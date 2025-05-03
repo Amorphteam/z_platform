@@ -38,7 +38,7 @@ class _RecommandedTocScreenState extends State<RecommandedTocScreen> {
           leftIcon: Icons.info_outline_rounded, // Example: Menu icon
           rightIcon: Icons.dark_mode_outlined, // Example: Search icon
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: BlocBuilder<RecommandedTocCubit, RecommandedTocState>(
           builder: (context, state) => state.when(
             initial: () => const Center(
