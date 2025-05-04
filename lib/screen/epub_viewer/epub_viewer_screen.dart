@@ -905,6 +905,22 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     return content;
   }
 
+  // Helper function to convert Arabic numbers to Latin numbers
+  String _convertArabicToLatin(String input) {
+    final arabicToLatin = {
+      '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
+      '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'
+    };
+
+    String result = input;
+    arabicToLatin.forEach((arabic, latin) {
+      result = result.replaceAll(arabic, latin);
+    });
+    return result;
+  }
+
+
+
   void _showPageJumpDialog(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final TextEditingController pageController = TextEditingController();
@@ -939,7 +955,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                 if (value == null || value.isEmpty) {
                   return 'يرجى إدخال رقم الصفحة';
                 }
-                final int? pageNumber = int.tryParse(value);
+                // Convert Arabic numbers to Latin before parsing
+                final String latinValue = _convertArabicToLatin(value);
+                final int? pageNumber = int.tryParse(latinValue);
                 if (pageNumber == null || pageNumber <= 0 || pageNumber > _content.length) {
                   return ' الرقم يجب أن يكون بين ١ و ${_content.length}';
                 }
@@ -947,7 +965,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               },
               onFieldSubmitted: (value) {
                 if (formKey.currentState!.validate()) {
-                  final int? pageNumber = int.tryParse(value);
+                  final String latinValue = _convertArabicToLatin(value);
+                  final int? pageNumber = int.tryParse(latinValue);
                   _jumpTo(pageNumber: pageNumber! - 1);
                   Navigator.of(context).pop();
                 }
@@ -965,7 +984,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               child: Text('انتقل',  style: Theme.of(context).textTheme.labelLarge),
               onPressed: () {
                 if (formKey.currentState!.validate()) {
-                  final int? pageNumber = int.tryParse(pageController.text);
+                  final String latinValue = _convertArabicToLatin(pageController.text);
+                  final int? pageNumber = int.tryParse(latinValue);
                   _jumpTo(pageNumber: pageNumber! - 1);
                   Navigator.of(context).pop();
                 }
