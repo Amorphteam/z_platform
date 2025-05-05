@@ -21,6 +21,10 @@ void main() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   lockOrientation(); // Lock orientation based on device type
 
+  // Run checkLastUpdate in the background
+  final hijriDates = await Future.microtask(() => DateHelper().getHijriDates());
+  final todayHijri = await Future.microtask(() => DateHelper().getTodayCalendarHijri(qamariDate: hijriDates));
+  print(todayHijri);
 
   runApp(
     ChangeNotifierProvider(
