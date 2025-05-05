@@ -30,7 +30,7 @@ class DateHelper {
     return lastDate != newDate;
   }
 
-  Future<QamariDateModel> getHijriDate() async {
+  Future<QamariDateModel> getHijriDates() async {
     try {
       final date = await ApiClient().getLastHijriDataUpdateTimestamp();
       final hasDateChanged = await DateHelper.isDateChanged(date);
@@ -110,7 +110,7 @@ class DateHelper {
   }
 
   static String getToday() {
-    final format = DateFormat('d-M-yyyy', 'ar');
+    final format = DateFormat('d-M-yyyy', 'en');
     return format.format(DateTime.now());
   }
 
@@ -147,5 +147,30 @@ class DateHelper {
 
       return AMPM(ampm: 'pm', tomorrow: false);
     }
+  }
+
+  Future<String?> getTodayCalendarHijri({required QamariDateModel qamariDate, int dayDiff = 0}) async {
+    final currentDate = getToday();
+    final parts = currentDate.split('-');
+    if (parts.length != 3) return null;
+
+    final day = int.tryParse(parts[0]);
+    final month = int.tryParse(parts[1])?.toInt() ?? 0;
+    final year = int.tryParse(parts[2]);
+
+    if (day == null || month == null || year == null) return null;
+
+    if (qamariDate.data.isEmpty) return null;
+
+    // Find the matching date in the Qamari data
+    final matchingDate = qamariDate.data.firstWhere(
+      (date) => date.gDate == '${day.toString().padLeft(2, '0')}/${month.toString().padLeft(2, '0')}/$year',
+      orElse: () => qamariDate.data.first,
+    );
+
+    // Apply the day difference
+    final adjustedDay = matchingDate.hDay + dayDiff;
+    
+    return '${matchingDate.hYear}-${matchingDate.hMonth.toString().padLeft(2, '0')}-${adjustedDay.toString().padLeft(2, '0')}';
   }
 }

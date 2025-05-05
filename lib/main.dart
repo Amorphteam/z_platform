@@ -10,19 +10,18 @@ import 'package:zahra/route_generator.dart';
 import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:zahra/util/date_helper.dart';
 import 'package:zahra/util/theme_helper.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'api/api_client.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await initializeDateFormatting('ar'); // Initialize Arabic locale
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   lockOrientation(); // Lock orientation based on device type
 
-  // Run checkLastUpdate in the background
-  final hijriDate = await Future.microtask(DateHelper().getHijriDate);
-  print('hijriDate: ${hijriDate.data}');
-  
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeHelper(),
