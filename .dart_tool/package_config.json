@@ -158,6 +158,18 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "dio",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/dio-5.8.0+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "dio_web_adapter",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/dio_web_adapter-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "dotted_border",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/dotted_border-2.1.0",
       "packageUri": "lib/",
@@ -344,6 +356,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "intl",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/intl-0.19.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "io",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/io-1.0.4",
       "packageUri": "lib/",
@@ -522,6 +540,12 @@
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/quiver-3.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "retrofit",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/retrofit-4.4.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "scrollable_positioned_list",
@@ -734,7 +758,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-05-04T06:01:06.060569Z",
+  "generated": "2025-05-04T07:10:06.580370Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///Users/alibayati/fvm/versions/3.24.5",
