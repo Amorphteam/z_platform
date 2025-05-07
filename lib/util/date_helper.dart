@@ -1,11 +1,12 @@
+import 'package:hadith/util/prayer_time.dart';
+import 'package:hadith/util/time_zone_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zahra/model/time_zone_model.dart';
-import 'package:zahra/util/prayer_time.dart';
-import 'package:zahra/util/time_zone_helper.dart';
 import '../api/api_client.dart';
 import '../model/qamari_date_model.dart';
 import 'dart:convert';
+
+import '../model/time_zone_model.dart';
 
 class AMPM {
   final String ampm;
