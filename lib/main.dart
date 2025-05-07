@@ -1,7 +1,4 @@
 import 'dart:math';
-// import 'package:firebase_analytics/firebase_analytics.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,11 +11,30 @@ import 'package:hadith/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:hadith/util/theme_helper.dart';
 import 'package:provider/provider.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  try {
+    await Firebase.initializeApp();
+    await initializeDateFormatting('ar'); // Initialize Arabic locale
+
+    // Run date operations in background
+    // await Future.microtask(() async {
+    //   await TimeZoneHelper.initialize(); // Initialize TimeZoneHelper
+    //   final hijriDates = await DateHelper().getHijriDates();
+    //   final todayHijri = await DateHelper().getTodayCalendarHijri(qamariDate: hijriDates);
+    //   final AMPM = await DateHelper.handleAMPM();
+    //   print('Now in hijri: $todayHijri / ${AMPM?.ampm}');
+    // });
+
+  } catch (e) {
+    print('Error during initialization: $e');
+  }
+
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   lockOrientation(); // Lock orientation based on device type
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeHelper(),
@@ -26,6 +42,9 @@ void main() async {
     ),
   );
 }
+
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
