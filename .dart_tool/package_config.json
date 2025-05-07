@@ -290,6 +290,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "flutter_timezone",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/flutter_timezone-1.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_web_plugins",
       "rootUri": "file:///Users/alibayati/fvm/versions/3.24.1/packages/flutter_web_plugins",
       "packageUri": "lib/",
@@ -686,6 +692,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "timezone",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/timezone-0.9.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "timing",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/timing-1.0.1",
       "packageUri": "lib/",
@@ -758,7 +770,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-05-05T10:02:36.402645Z",
+  "generated": "2025-05-07T04:53:42.147848Z",
   "generator": "pub",
   "generatorVersion": "3.5.1",
   "flutterRoot": "file:///Users/alibayati/fvm/versions/3.24.1",

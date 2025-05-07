@@ -182,6 +182,10 @@ flutter_svg
 2.12
 file:///Users/alibayati/.pub-cache/hosted/pub.dev/flutter_svg-1.0.3/
 file:///Users/alibayati/.pub-cache/hosted/pub.dev/flutter_svg-1.0.3/lib/
+flutter_timezone
+2.12
+file:///Users/alibayati/.pub-cache/hosted/pub.dev/flutter_timezone-1.0.8/
+file:///Users/alibayati/.pub-cache/hosted/pub.dev/flutter_timezone-1.0.8/lib/
 freezed
 2.17
 file:///Users/alibayati/.pub-cache/hosted/pub.dev/freezed-2.5.2/
@@ -438,6 +442,10 @@ test_api
 3.2
 file:///Users/alibayati/.pub-cache/hosted/pub.dev/test_api-0.7.2/
 file:///Users/alibayati/.pub-cache/hosted/pub.dev/test_api-0.7.2/lib/
+timezone
+2.19
+file:///Users/alibayati/.pub-cache/hosted/pub.dev/timezone-0.9.4/
+file:///Users/alibayati/.pub-cache/hosted/pub.dev/timezone-0.9.4/lib/
 timing
 2.14
 file:///Users/alibayati/.pub-cache/hosted/pub.dev/timing-1.0.1/
