@@ -1,5 +1,8 @@
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zahra/model/time_zone_model.dart';
+import 'package:zahra/util/prayer_time.dart';
+import 'package:zahra/util/time_zone_helper.dart';
 import '../api/api_client.dart';
 import '../model/qamari_date_model.dart';
 import 'dart:convert';
@@ -119,11 +122,20 @@ class DateHelper {
     return format.format(DateTime.now());
   }
 
-  static AMPM? getAMPM({
+  static Future<TimeZoneModel?> getTimeZone() async {
+     final currentTimeZone = await TimeZoneHelper.getTimeZone();
+     return currentTimeZone;
+  }
+
+  static List<double?> getCoordinate(TimeZoneModel timeZone) {
+    return [timeZone.latitude, timeZone.longitude];
+  }
+
+  static Future<AMPM?> getAMPM({
     required double latitude,
     required double longitude,
     required List<String> sunTimes,
-  }) {
+  }) async {
     final sunRise = getDate(sunTimes[0]);
     final sunSet = getDate(sunTimes[1]);
 
@@ -172,5 +184,47 @@ class DateHelper {
     final adjustedDay = matchingDate.hDay + dayDiff;
     
     return '${matchingDate.hYear}-${matchingDate.hMonth.toString().padLeft(2, '0')}-${adjustedDay.toString().padLeft(2, '0')}';
+  }
+
+  static List<String> getSunRiseSunSet(double? latitude, double? longitude) {
+    final pt = PrayTime();
+    pt.setTimeFormat(pt.time24); // time24
+    pt.setCalcMethod(pt.custom); // custom
+    pt.setAsrJuristic(pt.shafii); // shafii
+    pt.setAdjustHighLats(pt.angleBased); // angleBased
+    
+    final offsets = [0, -120, 0, 0, 0, 0, 0, 0]; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
+    pt.tune(offsets);
+
+    final now = DateTime.now();
+    final prayerTimes = pt.getPrayerTimes(now, latitude??0, longitude??0, pt.getTimeZone());
+    
+    return [prayerTimes[1], prayerTimes[4]]; // Return sunrise and sunset times
+  }
+
+  static Future<AMPM?> handleAMPM() async {
+    try {
+      // 1. Get timezone
+      final timeZone = await getTimeZone();
+      if (timeZone == null) return null;
+
+      // 2. Get coordinates from timezone
+      final coordinates = getCoordinate(timeZone);
+      if (coordinates.length != 2) return null;
+
+      // 3. Get sunrise and sunset times
+      final sunTimes = getSunRiseSunSet(coordinates[0]??0, coordinates[1]??0);
+      if (sunTimes.length != 2) return null;
+
+      // 4. Calculate AM/PM
+      return getAMPM(
+        latitude: coordinates[0]??0,
+        longitude: coordinates[1]??0,
+        sunTimes: sunTimes,
+      );
+    } catch (e) {
+      print('Error in getAMPMWithLocation: $e');
+      return null;
+    }
   }
 }

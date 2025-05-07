@@ -10,21 +10,33 @@ import 'package:zahra/route_generator.dart';
 import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:zahra/util/date_helper.dart';
 import 'package:zahra/util/theme_helper.dart';
+import 'package:zahra/util/time_zone_helper.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'api/api_client.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await initializeDateFormatting('ar'); // Initialize Arabic locale
+  
+  try {
+    await Firebase.initializeApp();
+    await initializeDateFormatting('ar'); // Initialize Arabic locale
+
+    // Run date operations in background
+    // await Future.microtask(() async {
+    //   await TimeZoneHelper.initialize(); // Initialize TimeZoneHelper
+    //   final hijriDates = await DateHelper().getHijriDates();
+    //   final todayHijri = await DateHelper().getTodayCalendarHijri(qamariDate: hijriDates);
+    //   final AMPM = await DateHelper.handleAMPM();
+    //   print('Now in hijri: $todayHijri / ${AMPM?.ampm}');
+    // });
+
+  } catch (e) {
+    print('Error during initialization: $e');
+  }
+
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   lockOrientation(); // Lock orientation based on device type
-
-  // Run checkLastUpdate in the background
-  final hijriDates = await Future.microtask(() => DateHelper().getHijriDates());
-  final todayHijri = await Future.microtask(() => DateHelper().getTodayCalendarHijri(qamariDate: hijriDates));
-  print(todayHijri);
 
   runApp(
     ChangeNotifierProvider(
