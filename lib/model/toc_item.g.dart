@@ -9,12 +9,16 @@ part of 'toc_item.dart';
 _$TocItemImpl _$$TocItemImplFromJson(Map<String, dynamic> json) =>
     _$TocItemImpl(
       level: (json['level'] as num).toInt(),
-      key: json['key'] as String,
+      key: json['key'] as String?,
       title: json['title'] as String,
-      id: (json['id'] as num).toInt(),
-      parentId: (json['parentId'] as num).toInt(),
+      id: (json['id'] as num?)?.toInt(),
+      parentId: (json['parentId'] as num?)?.toInt(),
       childs: (json['childs'] as List<dynamic>?)
               ?.map((e) => TocItem.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      items: (json['items'] as List<dynamic>?)
+              ?.map((e) => Items.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
     );
@@ -27,4 +31,18 @@ Map<String, dynamic> _$$TocItemImplToJson(_$TocItemImpl instance) =>
       'id': instance.id,
       'parentId': instance.parentId,
       'childs': instance.childs,
+      'items': instance.items,
+    };
+
+_$ItemsImpl _$$ItemsImplFromJson(Map<String, dynamic> json) => _$ItemsImpl(
+      addressType: json['addressType'] as String?,
+      addressNo: (json['addressNo'] as num?)?.toInt(),
+      text: json['text'] as String?,
+    );
+
+Map<String, dynamic> _$$ItemsImplToJson(_$ItemsImpl instance) =>
+    <String, dynamic>{
+      'addressType': instance.addressType,
+      'addressNo': instance.addressNo,
+      'text': instance.text,
     };

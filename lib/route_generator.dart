@@ -4,6 +4,8 @@ import 'package:zahra/screen/bookmark/bookmark_screen.dart';
 import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:zahra/screen/epub_viewer/cubit/epub_viewer_cubit.dart';
 import 'package:zahra/screen/epub_viewer/epub_viewer_screen.dart';
+import 'package:zahra/screen/host/cubit/host_cubit.dart';
+import 'package:zahra/screen/host/host_screen.dart';
 import 'package:zahra/screen/library/cubit/library_cubit.dart';
 import 'package:zahra/screen/library/library_screen.dart';
 import 'package:zahra/screen/search/cubit/search_cubit.dart';
@@ -22,9 +24,9 @@ class RouteGenerator {
       case '/searchScreen':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-              create: (context) => LibraryCubit(),
-              child: LibraryScreen(),
-            ),
+            create: (context) => HostCubit(),
+            child: const HostScreen(),
+          ),
         );
       case '/epubViewer':
         if (args != null) {

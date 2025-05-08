@@ -28,7 +28,7 @@ class _TocScreenState extends State<TocScreen> {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
-    context.read<TocCubit>().fetchItems(id: widget.id);
+    context.read<TocCubit>().fetchItems();
     if (widget.title != null && widget.title!.contains('\n')) {
       widget.title = widget.title!.replaceAll('\n', ' ');
     }
@@ -168,7 +168,7 @@ class _TocScreenState extends State<TocScreen> {
   }
 
   Widget _buildTocTree(List<TocItem> items, BuildContext context) {
-    final rootItems = items.where((item) => item.parentId == 0).toList();
+    final rootItems = items.where((item) => item.childs!.isNotEmpty).toList();
 
     return ListView(
       children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
@@ -268,8 +268,8 @@ class _TocScreenState extends State<TocScreen> {
   );
 
   void _navigateTo(BuildContext context, TocItem item) {
-    final String bookPath = item.key.split('_').first;
-    final String sectionName = item.key.split('_').last;
+    final String bookPath = item.key?.split('_').first??'';
+    final String sectionName = item.key?.split('_').last??'0';
     final int sectionNumber = int.parse(sectionName);
     final String sectionNumberString = (sectionNumber - 1).toString();
     NavigationHelper.openBook(context, bookPath, sectionNumberString);
