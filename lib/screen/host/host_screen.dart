@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:zahra/screen/home/cubit/home_cubit.dart';
+import 'package:zahra/screen/home/home_screen.dart';
 
 import '../bookmark/bookmark_screen.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
@@ -36,7 +38,6 @@ class _HostScreenState extends State<HostScreen> {
             });
           },
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
           selectedItemColor: Theme.of(context).colorScheme.secondaryContainer,
           unselectedItemColor: Theme.of(context).colorScheme.onSurface,
           items: [
@@ -93,8 +94,8 @@ class _HostScreenState extends State<HostScreen> {
     switch (index) {
       case 0:
         return BlocProvider(
-          create: (context) => TocCubit(),
-          child: TocScreen(),
+          create: (context) => HomeCubit(),
+          child: HomeScreen(),
         );
       case 1:
         return BlocProvider(
