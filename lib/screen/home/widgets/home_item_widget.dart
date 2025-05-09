@@ -28,17 +28,36 @@ class HomeItemWidget extends StatelessWidget {
           children: [
             // Multiple background images
             Positioned.fill(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(
-                  (MediaQuery.of(context).size.width / 24).ceil(),
-                  (index) => Image.asset(
-                    'assets/image/bk_item.png',
-                    width: 20,
-                    height: 20,
-                    fit: BoxFit.cover,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Divider(
+                      color: Colors.grey,
+                      height: 0.5,
+                    ),
                   ),
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(
+                      (MediaQuery.of(context).size.width / 24).ceil(),
+                      (index) => Image.asset(
+                        'assets/image/bk_item.png',
+                        width: 20,
+                        height: 20,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Divider(
+                      color: Colors.grey,
+                      height: 0.5,
+                    ),
+                  ),
+                ],
               ),
             ),
             // Teal card with text
