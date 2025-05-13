@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final halfMediaHeight = MediaQuery.of(context).size.height / 1.7;
+    final halfMediaHeight = MediaQuery.of(context).size.height / 2.3;
     context.read<HomeCubit>().fetchItems();
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
