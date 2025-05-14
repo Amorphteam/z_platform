@@ -7,6 +7,8 @@ import 'package:zahra/screen/home/cubit/home_cubit.dart';
 import 'package:zahra/screen/home/widgets/home_item_widget.dart';
 import 'package:zahra/util/navigation_helper.dart';
 
+import '../../model/book_model.dart';
+import '../../util/epub_helper.dart';
 import '../hekam/hekam_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -129,8 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildContentList() {
-    return BlocBuilder<HomeCubit, HomeState>(
+  Widget _buildContentList() => BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) => state.when(
         initial: () => const SliverFillRemaining(
           child: Center(child: Text('Tap to start fetching...')),
@@ -210,6 +211,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     builder: (context) => const HekamScreen(),
                                   ),
                                 );
+                              } else if (itemIndex == 0){
+                                openEpub(context: context, book: Book(epub: 'khotab.epub'));
+                              } else if (itemIndex == 4){
+                                openEpub(context: context, book: Book(epub: 'letters.epub'));
                               }
                             },
                           );
@@ -236,7 +241,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
 
   @override
   void dispose() {
