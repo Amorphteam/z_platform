@@ -84,6 +84,8 @@ flutter:
     - assets/image/
     - assets/epub/
     - assets/icon/
+    - assets/db/
+
   fonts:
     - family: font1
       fonts:
