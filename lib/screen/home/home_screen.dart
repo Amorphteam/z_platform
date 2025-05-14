@@ -138,8 +138,15 @@ class _HomeScreenState extends State<HomeScreen> {
         loaded: (items) => SliverToBoxAdapter(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              color: Colors.teal,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? 'assets/image/back_tazhib_dark.png'
+                      : 'assets/image/back_tazhib_light.png',
+                ),
+                fit: BoxFit.cover,
+              ),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),

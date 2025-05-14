@@ -68,7 +68,7 @@ class HomeItemWidget extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Color(0xFFaec5c1).withOpacity(0.8),
+                  color: Color(0xFFb5c8c9).withOpacity(0.8),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: Colors.white,
