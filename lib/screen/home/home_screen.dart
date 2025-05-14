@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:zahra/screen/home/cubit/home_cubit.dart';
 import 'package:zahra/screen/home/widgets/home_item_widget.dart';
 import 'package:zahra/util/navigation_helper.dart';
@@ -135,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
         loading: () => const SliverFillRemaining(
           child: Center(child: CircularProgressIndicator()),
         ),
-        loaded: (items) => SliverToBoxAdapter(
+        loaded: (items, hekamText) => SliverToBoxAdapter(
           child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -157,13 +158,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                  child: const Text(
-                    ' قيمة كل امرئ ما يحسنه',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  child: state.maybeWhen(
+                    loaded: (_, hekamText) => Html(
+                      data: hekamText ?? 'قيمة كل امرئ ما يحسنه',
+                      style: {
+                        "body": Style(
+                          textAlign: TextAlign.center,
+                          color: Colors.white,
+                          fontSize: FontSize(20),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      },
+                    ),
+                    orElse: () => const Text(
+                      'قيمة كل امرئ ما يحسنه',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
