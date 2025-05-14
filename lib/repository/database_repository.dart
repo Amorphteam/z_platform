@@ -26,6 +26,17 @@ class DatabaseRepository {
     }
   }
 
+  Future<void> toggleFavorite(int id) async {
+    try {
+      final hekam = await getHekamById(id);
+      if (hekam != null) {
+        await _dbHelper.updateHekamFavorite(id, !hekam.isFavorite);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // Add more table operations here as needed
   // For example:
   // Future<List<Category>> getAllCategories() async { ... }

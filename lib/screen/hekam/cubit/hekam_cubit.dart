@@ -26,13 +26,13 @@ class HekamCubit extends Cubit<HekamState> {
       final currentState = state;
       if (currentState is _Loaded) {
         final updatedHekam = currentState.hekam.map((item) {
-          // if (item.id == id) {
-          //   return item.copyWith(isFavorite: !item.isFavorite);
-          // }
+          if (item.id == id) {
+            return item.copyWith(isFavorite: !item.isFavorite);
+          }
           return item;
         }).toList();
         emit(HekamState.loaded(updatedHekam));
-        // TODO: Implement favorite toggle in database
+        await _databaseRepository.toggleFavorite(id);
       }
     } catch (e) {
       emit(HekamState.error(e.toString()));

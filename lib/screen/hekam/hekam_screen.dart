@@ -69,8 +69,8 @@ class HekamScreen extends StatelessWidget {
                               ),
                               IconButton(
                                 icon: Icon(
-                                  true ? Icons.favorite : Icons.favorite_border,
-                                  color: true ? Colors.red : null,
+                                  item.isFavorite ? Icons.favorite : Icons.favorite_border,
+                                  color: item.isFavorite ? Colors.red : null,
                                 ),
                                 onPressed: () {
                                   context.read<HekamCubit>().toggleFavorite(item.id);

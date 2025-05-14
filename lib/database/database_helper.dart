@@ -48,4 +48,14 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
+
+  Future<void> updateHekamFavorite(int id, bool isFavorite) async {
+    final db = await database;
+    await db.update(
+      'hekam',
+      {'isFavorite': isFavorite ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 } 
