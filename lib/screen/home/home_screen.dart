@@ -7,6 +7,8 @@ import 'package:zahra/screen/home/cubit/home_cubit.dart';
 import 'package:zahra/screen/home/widgets/home_item_widget.dart';
 import 'package:zahra/util/navigation_helper.dart';
 
+import '../hekam/hekam_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -200,6 +202,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             text: items[itemIndex],
                             isLast: itemIndex == items.length - 1,
                             isFirst: itemIndex == 0,
+                            onTap: () {
+                              if (itemIndex == 3) {  // Third item (index 2)
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const HekamScreen(),
+                                  ),
+                                );
+                              }
+                            },
                           );
                         } else {
                           return Padding(
