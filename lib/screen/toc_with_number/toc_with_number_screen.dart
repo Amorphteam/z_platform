@@ -24,20 +24,43 @@ class TocWithNumberScreen extends StatefulWidget {
 
 class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
   final ValueNotifier<double> _opacityNotifier = ValueNotifier(0.0);
+  List<TocItem> _allItems = [];
+  List<TocItem> _filteredItems = [];
+  String searchedWord = '';
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<TocWithNumberCubit>().fetchItems();
+  }
+
+  void _filterItems(String query) {
+    setState(() {
+      searchedWord = query;
+      if (query.isEmpty) {
+        _filteredItems = List.from(_allItems);
+      } else {
+        _filteredItems = _allItems
+            .where((item) => item.title.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
-    context.read<TocWithNumberCubit>().fetchItems();
     if (widget.title != null && widget.title!.contains('\n')) {
       widget.title = widget.title!.replaceAll('\n', ' ');
     }
     return Scaffold(
-      appBar: CustomAppBar(title: 'الخطب والمواعظ',showSearchBar: true, onSearch: (value){
-        
-      },),
+      appBar: CustomAppBar(
+        title: 'الخطب والمواعظ',
+        showSearchBar: true,
+        onSearch: _filterItems,
+      ),
       body: isLandscape
           ? Row(
         children: [
@@ -72,7 +95,11 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
                         loading: () => const Center(
                             child: CircularProgressIndicator()),
                         loaded: (items) {
-                          return _buildTocTree(items, context);
+                          if (_allItems.isEmpty) {
+                            _allItems = List.from(items);
+                            _filteredItems = List.from(items);
+                          }
+                          return _buildTocTree(_filteredItems, context);
                         },
                         error: (message) =>
                             Center(child: SelectionArea(child: Text(message))),
@@ -162,11 +189,11 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
   }
 
   Widget _buildTocTree(List<TocItem> items, BuildContext context) {
-    return ListView(
-      children: items.map((item) => _buildTocItem(item, context)).toList(),
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) => _buildCardView(items[index], context),
     );
   }
-
 
   Widget _buildTocItem(TocItem item, BuildContext context, {bool isNestedParent = false}) {
     if (item.childs == null || item.childs!.isEmpty) {
@@ -194,7 +221,6 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
       );
     }
   }
-
 
   Widget _buildCardView(TocItem item, BuildContext context) => Container(
     alignment: Alignment.center,
