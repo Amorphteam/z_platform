@@ -12,6 +12,8 @@ import 'package:zahra/screen/search/cubit/search_cubit.dart';
 import 'package:zahra/screen/search/search_screen.dart';
 import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
 import 'package:zahra/screen/toc/toc_screen.dart';
+import 'package:zahra/screen/toc_with_number/cubit/toc_with_number_cubit.dart';
+import 'package:zahra/screen/toc_with_number/toc_with_number_screen.dart';
 import 'model/book_model.dart';
 import 'model/reference_model.dart';
 import 'model/search_model.dart';
@@ -21,6 +23,13 @@ class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments as Map<String, dynamic>?;
     switch (settings.name) {
+      case '/toc_with_number':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => TocWithNumberCubit(),
+            child: TocWithNumberScreen(),
+          ),
+        );
       case '/searchScreen':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(

@@ -16,11 +16,11 @@ class TocCubit extends Cubit<TocState> {
     try {
       emit(const TocState.loading());
       if (id == null) {
-        final items = await _jsonRepository.fetchAllJsonToc();
+        final items = await _jsonRepository.fetchAllJsonToc('assets/json/jsonlist.json');
         emit(TocState.loaded(items));
         return;
       }
-      final items = await _jsonRepository.fetchJsonTocById(id);
+      final items = await _jsonRepository.fetchJsonTocById(id, 'assets/json/jsonlist.json');
       emit(TocState.loaded(items));
     } catch (e) {
       emit(TocState.error(e.toString()));

@@ -32,6 +32,14 @@ class NavigationHelper {
     );
   }
 
+  static void navigateToTocWithNumber(
+     BuildContext context, String? title,) {
+    Navigator.of(context).pushNamed(
+      '/toc_with_number',
+      arguments: {'title': title},
+    );
+  }
+
   static void navigateToDetail(
       SubItems? subItem, ItemModel? item, BuildContext context, String? title,) {
     final int id = subItem?.id ?? item?.linkTo?.id ?? 0;

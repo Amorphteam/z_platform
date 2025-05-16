@@ -213,6 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               } else if (itemIndex == 0){
                                 openEpub(context: context, book: Book(epub: 'khotab.epub'));
+                              } else if (itemIndex == 1){
+                                NavigationHelper.navigateToTocWithNumber(context, 'title');
                               } else if (itemIndex == 4){
                                 openEpub(context: context, book: Book(epub: 'letters.epub'));
                               }
