@@ -46,7 +46,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
       mainAxisSize: MainAxisSize.min,
       children: [
         AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
           leading: widget.leftIcon != null
               ? IconButton(

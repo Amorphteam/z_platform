@@ -23,7 +23,6 @@ class TocWithNumberScreen extends StatefulWidget {
 }
 
 class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
-  final ValueNotifier<double> _opacityNotifier = ValueNotifier(0.0);
   List<TocItem> _allItems = [];
   List<TocItem> _filteredItems = [];
   String searchedWord = '';
@@ -56,6 +55,7 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
       widget.title = widget.title!.replaceAll('\n', ' ');
     }
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.outlineVariant,
       appBar: CustomAppBar(
         title: 'الخطب والمواعظ',
         showSearchBar: true,
@@ -65,56 +65,31 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
           ? Row(
         children: [
           Expanded(
-            child: Stack(
-              children: [
-                AnimatedBuilder(
-                  animation: _opacityNotifier,
-                  builder: (_, __) => Container(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withOpacity(_opacityNotifier.value),
-                  ),
-                ),
-                NotificationListener<ScrollNotification>(
-                  onNotification: (scrollNotification) {
-                    if (scrollNotification is ScrollUpdateNotification) {
-                      final pixels = scrollNotification.metrics.pixels;
-                      _opacityNotifier.value =
-                          (pixels / 560).clamp(0.0, 1.0);
+            child: Padding(
+              padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 0),
+              child: BlocBuilder<TocWithNumberCubit, TocWithNumberState>(
+                builder: (context, state) => state.when(
+                  initial: () => const Center(
+                      child: Text('Tap to start fetching...')),
+                  loading: () => const Center(
+                      child: CircularProgressIndicator()),
+                  loaded: (items) {
+                    if (_allItems.isEmpty) {
+                      _allItems = List.from(items);
+                      _filteredItems = List.from(items);
                     }
-                    return true;
+                    return _buildTocTree(_filteredItems, context);
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 0),
-
-                    child: BlocBuilder<TocWithNumberCubit, TocWithNumberState>(
-                      builder: (context, state) => state.when(
-                        initial: () => const Center(
-                            child: Text('Tap to start fetching...')),
-                        loading: () => const Center(
-                            child: CircularProgressIndicator()),
-                        loaded: (items) {
-                          if (_allItems.isEmpty) {
-                            _allItems = List.from(items);
-                            _filteredItems = List.from(items);
-                          }
-                          return _buildTocTree(_filteredItems, context);
-                        },
-                        error: (message) =>
-                            Center(child: SelectionArea(child: Text(message))),
-                      ),
-                    ),
-                  ),
+                  error: (message) =>
+                      Center(child: SelectionArea(child: Text(message))),
                 ),
-              ],
+              ),
             ),
           ),
           Expanded(
             child: Container(
               color: Theme.of(context).colorScheme.primary,
               padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
-
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -134,7 +109,7 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
           : Stack(
         children: [
           !isLandscape ? Container(
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.outlineVariant,
           ):
           Align(
             alignment: Alignment.topCenter,
@@ -153,34 +128,21 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
               ),
             ),
           ),
-          AnimatedBuilder(
-            animation: _opacityNotifier,
-            builder: (_, __) => Container(
-              color: Theme.of(context)
-                  .colorScheme
-                  .primary
-                  .withOpacity(_opacityNotifier.value),
-            ),
-          ),
-          NotificationListener<ScrollNotification>(
-            onNotification: (scrollNotification) {
-              if (scrollNotification is ScrollUpdateNotification) {
-                final pixels = scrollNotification.metrics.pixels;
-                _opacityNotifier.value =
-                    (pixels / 560).clamp(0.0, 1.0);
-              }
-              return true;
-            },
-            child: BlocBuilder<TocWithNumberCubit, TocWithNumberState>(
-              builder: (context, state) => state.when(
-                initial: () =>
-                const Center(child: Text('Tap to start fetching...')),
-                loading: () =>
-                const Center(child: CircularProgressIndicator()),
-                loaded: (items) => _buildTocTree(items, context),
-                error: (message) =>
-                    Center(child: SelectionArea(child: Text(message))),
-              ),
+          BlocBuilder<TocWithNumberCubit, TocWithNumberState>(
+            builder: (context, state) => state.when(
+              initial: () =>
+              const Center(child: Text('Tap to start fetching...')),
+              loading: () =>
+              const Center(child: CircularProgressIndicator()),
+              loaded: (items) {
+                if (_allItems.isEmpty) {
+                  _allItems = List.from(items);
+                  _filteredItems = List.from(items);
+                }
+                return _buildTocTree(_filteredItems, context);
+              },
+              error: (message) =>
+                  Center(child: SelectionArea(child: Text(message))),
             ),
           ),
         ],
@@ -190,8 +152,8 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
 
   Widget _buildTocTree(List<TocItem> items, BuildContext context) {
     return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) => _buildCardView(items[index], context),
+      itemCount: _filteredItems.length,
+      itemBuilder: (context, index) => _buildCardView(_filteredItems[index], context),
     );
   }
 
@@ -225,45 +187,57 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
   Widget _buildCardView(TocItem item, BuildContext context) => Container(
     alignment: Alignment.center,
     margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-    child: Card(
-      color: Theme.of(context).colorScheme.onPrimary,
-      elevation: 0,
-      child: Container(
-        margin: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () => _navigateTo(context, item),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
+    child: Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () => _navigateTo(context, item),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 0,
+                        child: SizedBox(
+                          height: 85,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                item.title,
+                                textAlign: TextAlign.start,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    elevation: 0,
+                    color: Colors.white,
+                    child: Container(
+                      height: 85,
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Center(
                         child: Text(
-                          item.title,
-                          textAlign: TextAlign.justify,
+                          item.key?.split('_').last ?? '',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        item.key?.split('_').last ?? '',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: const Color(0xFFCFA355),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     ),
   );
@@ -302,11 +276,5 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
     final int sectionNumber = int.parse(sectionName);
     final String sectionNumberString = (sectionNumber - 1).toString();
     NavigationHelper.openBook(context, bookPath, sectionNumberString);
-  }
-
-  @override
-  void dispose() {
-    _opacityNotifier.dispose();
-    super.dispose();
   }
 } 
