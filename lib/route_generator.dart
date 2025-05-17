@@ -4,6 +4,8 @@ import 'package:zahra/screen/bookmark/bookmark_screen.dart';
 import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:zahra/screen/epub_viewer/cubit/epub_viewer_cubit.dart';
 import 'package:zahra/screen/epub_viewer/epub_viewer_screen.dart';
+import 'package:zahra/screen/hekam/cubit/hekam_cubit.dart';
+import 'package:zahra/screen/hekam/hekam_screen.dart';
 import 'package:zahra/screen/host/cubit/host_cubit.dart';
 import 'package:zahra/screen/host/host_screen.dart';
 import 'package:zahra/screen/library/cubit/library_cubit.dart';
@@ -24,17 +26,30 @@ class RouteGenerator {
     final args = settings.arguments as Map<String, dynamic>?;
     switch (settings.name) {
       case '/toc_with_number':
-        return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => TocWithNumberCubit(),
-            child: TocWithNumberScreen(),
-          ),
-        );
+        if (args != null){
+          final String? jsonPath = args['jsonPath'];
+          final String? title = args['title'];
+
+          return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+              create: (context) => TocWithNumberCubit(),
+              child: TocWithNumberScreen(jsonPath: jsonPath??'', title: title,),
+            ),
+          );
+        }
+        return _errorRoute();
       case '/searchScreen':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => HostCubit(),
             child: const HostScreen(),
+          ),
+        );
+      case '/hekam':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => HekamCubit(),
+            child: const HekamScreen(),
           ),
         );
       case '/epubViewer':

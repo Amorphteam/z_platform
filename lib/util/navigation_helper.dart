@@ -33,10 +33,10 @@ class NavigationHelper {
   }
 
   static void navigateToTocWithNumber(
-     BuildContext context, String? title,) {
+     BuildContext context, String? title, String? jsonPath,) {
     Navigator.of(context).pushNamed(
       '/toc_with_number',
-      arguments: {'title': title},
+      arguments: {'title': title, 'jsonPath': jsonPath},
     );
   }
 

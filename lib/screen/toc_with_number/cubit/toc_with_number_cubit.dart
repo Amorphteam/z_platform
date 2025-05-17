@@ -7,11 +7,11 @@ class TocWithNumberCubit extends Cubit<TocWithNumberState> {
   TocWithNumberCubit() : super(const TocWithNumberState.initial());
   final JsonRepository _jsonRepository = JsonRepository();
 
-  Future<void> fetchItems({int? id}) async {
+  Future<void> fetchItems({int? id, required String jsonPath}) async {
     try {
       emit(const TocWithNumberState.loading());
       if (id == null) {
-        final items = await _jsonRepository.fetchAllJsonToc('assets/json/khotab_index.json');
+        final items = await _jsonRepository.fetchAllJsonToc(jsonPath);
         emit(TocWithNumberState.loaded(items));
         return;
       }

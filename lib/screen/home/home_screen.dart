@@ -204,19 +204,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             isLast: itemIndex == items.length - 1,
                             isFirst: itemIndex == 0,
                             onTap: () {
-                              if (itemIndex == 3) {  // Third item (index 2)
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HekamScreen(),
-                                  ),
-                                );
-                              } else if (itemIndex == 0){
-                                openEpub(context: context, book: Book(epub: 'khotab.epub'));
+                              if (itemIndex == 0){
+                                openEpub(context: context, book: Book(epub: 'moqadameh.epub'));
                               } else if (itemIndex == 1){
-                                NavigationHelper.navigateToTocWithNumber(context, 'title');
+                                NavigationHelper.navigateToTocWithNumber(context, 'الخطب والأوامر', 'assets/json/khotab_index.json');
+                              } else if (itemIndex == 2) {
+                                NavigationHelper.navigateToTocWithNumber(context, 'الكتب والرسائل', 'assets/json/letters_index.json');
+                              } else if (itemIndex == 3) {
+                                Navigator.of(context).pushNamed(
+                                  '/hekam',
+                                );
                               } else if (itemIndex == 4){
-                                openEpub(context: context, book: Book(epub: 'letters.epub'));
+                                openEpub(context: context, book: Book(epub: 'ghareeb.epub'));
                               }
                             },
                           );

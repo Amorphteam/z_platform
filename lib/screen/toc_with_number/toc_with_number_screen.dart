@@ -13,11 +13,12 @@ class TocWithNumberScreen extends StatefulWidget {
     super.key,
     this.id,
     this.title,
+    required this.jsonPath
   });
 
   int? id;
   String? title;
-
+  String jsonPath;
   @override
   State<TocWithNumberScreen> createState() => _TocWithNumberScreenState();
 }
@@ -30,7 +31,7 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<TocWithNumberCubit>().fetchItems();
+    context.read<TocWithNumberCubit>().fetchItems(jsonPath: widget.jsonPath);
   }
 
   void _filterItems(String query) {
@@ -57,7 +58,7 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.outlineVariant,
       appBar: CustomAppBar(
-        title: 'الخطب والمواعظ',
+        title: widget.title ?? '',
         showSearchBar: true,
         onSearch: _filterItems,
       ),

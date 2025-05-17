@@ -58,7 +58,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
             widget.title,
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontFamily: 'kuffi',
               fontSize: 18,
               fontWeight: FontWeight.normal,
             ),
