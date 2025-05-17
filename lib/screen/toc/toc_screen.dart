@@ -268,11 +268,82 @@ class _TocScreenState extends State<TocScreen> {
   );
 
   void _navigateTo(BuildContext context, TocItem item) {
-    final String bookPath = item.key?.split('_').first??'';
-    final String sectionName = item.key?.split('_').last??'0';
-    final int sectionNumber = int.parse(sectionName);
-    final String sectionNumberString = (sectionNumber - 1).toString();
-    NavigationHelper.openBook(context, bookPath, sectionNumberString);
+    if (item.items == null || item.items!.isEmpty) return;
+    
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (context, scrollController) => Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Theme.of(context).dividerColor,
+                    width: 1,
+                  ),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  Expanded(
+                    child: Text(
+                      item.title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  const SizedBox(width: 48), // For balance
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                controller: scrollController,
+                padding: const EdgeInsets.all(16),
+                itemCount: item.items!.length,
+                itemBuilder: (context, index) {
+                  final myItem = item.items![index];
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      onTap: () {
+                        if (myItem.addressNo != null) {
+                          final String sectionNumberString = (myItem.addressNo! - 1).toString();
+                          Navigator.pop(context); // Close the bottom sheet after navigation
+                          NavigationHelper.openBook(context, myItem.addressType ?? '', sectionNumberString);
+                        }
+                      },
+                      title: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Text(
+                          myItem.text ?? '',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override

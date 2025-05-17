@@ -88,7 +88,7 @@ class HomeItemWidget extends StatelessWidget {
                           child: Text(
                             text,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.titleLarge
+                            style: Theme.of(context).textTheme.titleMedium
                           ),
                         ),
                       ),
