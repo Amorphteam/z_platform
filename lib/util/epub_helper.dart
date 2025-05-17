@@ -105,7 +105,12 @@ String embedImagesInHtmlContent(EpubTextContentFile htmlFile,
 
 
 List<HtmlFileInfo> reorderHtmlFilesBasedOnSpine(List<HtmlFileInfo> htmlFiles, List<String>? spineItems) {
-  if (spineItems == null || spineItems.isEmpty) return htmlFiles;
+  // If spine items are empty or null, ensure we still have a properly ordered list
+  if (spineItems == null || spineItems.isEmpty) {
+    // Sort the HTML files by their page index to ensure consistent ordering
+    htmlFiles.sort((a, b) => a.pageIndex.compareTo(b.pageIndex));
+    return htmlFiles;
+  }
 
   final Map<String, HtmlFileInfo> htmlFilesMap = {
     for (final file in htmlFiles) file.fileName.replaceAll('Text/', ''): file,
@@ -118,6 +123,13 @@ List<HtmlFileInfo> reorderHtmlFilesBasedOnSpine(List<HtmlFileInfo> htmlFiles, Li
       orderedFiles.add(file);
     }
   }
+  
+  // If no files were ordered by spine, fall back to the original sorted list
+  if (orderedFiles.isEmpty) {
+    htmlFiles.sort((a, b) => a.pageIndex.compareTo(b.pageIndex));
+    return htmlFiles;
+  }
+  
   return orderedFiles;
 }
 
