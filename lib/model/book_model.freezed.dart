@@ -27,8 +27,12 @@ mixin _$Book {
   String get epub => throw _privateConstructorUsedError;
   List<Series>? get series => throw _privateConstructorUsedError;
 
+  /// Serializes this Book to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Book
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BookCopyWith<Book> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -56,6 +60,8 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Book
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -118,6 +124,8 @@ class __$$BookImplCopyWithImpl<$Res>
   __$$BookImplCopyWithImpl(_$BookImpl _value, $Res Function(_$BookImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Book
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -211,12 +219,14 @@ class _$BookImpl implements _Book {
             const DeepCollectionEquality().equals(other._series, _series));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, title, author, description,
       image, epub, const DeepCollectionEquality().hash(_series));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Book
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BookImplCopyWith<_$BookImpl> get copyWith =>
@@ -253,8 +263,11 @@ abstract class _Book implements Book {
   String get epub;
   @override
   List<Series>? get series;
+
+  /// Create a copy of Book
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BookImplCopyWith<_$BookImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -270,8 +283,12 @@ mixin _$Series {
   String? get image => throw _privateConstructorUsedError;
   String get epub => throw _privateConstructorUsedError;
 
+  /// Serializes this Series to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Series
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SeriesCopyWith<Series> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -293,6 +310,8 @@ class _$SeriesCopyWithImpl<$Res, $Val extends Series>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Series
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -340,6 +359,8 @@ class __$$SeriesImplCopyWithImpl<$Res>
       _$SeriesImpl _value, $Res Function(_$SeriesImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Series
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -403,11 +424,13 @@ class _$SeriesImpl implements _Series {
             (identical(other.epub, epub) || other.epub == epub));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, title, description, image, epub);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Series
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SeriesImplCopyWith<_$SeriesImpl> get copyWith =>
@@ -438,8 +461,11 @@ abstract class _Series implements Series {
   String? get image;
   @override
   String get epub;
+
+  /// Create a copy of Series
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SeriesImplCopyWith<_$SeriesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

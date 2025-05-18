@@ -24,8 +24,12 @@ mixin _$QamariDateModel {
   int get statusCode => throw _privateConstructorUsedError;
   bool get success => throw _privateConstructorUsedError;
 
+  /// Serializes this QamariDateModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of QamariDateModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $QamariDateModelCopyWith<QamariDateModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$QamariDateModelCopyWithImpl<$Res, $Val extends QamariDateModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of QamariDateModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -92,6 +98,8 @@ class __$$QamariDateModelImplCopyWithImpl<$Res>
       _$QamariDateModelImpl _value, $Res Function(_$QamariDateModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of QamariDateModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -157,12 +165,14 @@ class _$QamariDateModelImpl implements _QamariDateModel {
             (identical(other.success, success) || other.success == success));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType,
       const DeepCollectionEquality().hash(_data), statusCode, success);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of QamariDateModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$QamariDateModelImplCopyWith<_$QamariDateModelImpl> get copyWith =>
@@ -192,8 +202,11 @@ abstract class _QamariDateModel implements QamariDateModel {
   int get statusCode;
   @override
   bool get success;
+
+  /// Create a copy of QamariDateModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$QamariDateModelImplCopyWith<_$QamariDateModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -209,8 +222,12 @@ mixin _$QamariData {
   int get hMonth => throw _privateConstructorUsedError;
   int get hYear => throw _privateConstructorUsedError;
 
+  /// Serializes this QamariData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of QamariData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $QamariDataCopyWith<QamariData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -234,6 +251,8 @@ class _$QamariDataCopyWithImpl<$Res, $Val extends QamariData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of QamariData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -282,6 +301,8 @@ class __$$QamariDataImplCopyWithImpl<$Res>
       _$QamariDataImpl _value, $Res Function(_$QamariDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of QamariData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -348,11 +369,13 @@ class _$QamariDataImpl implements _QamariData {
             (identical(other.hYear, hYear) || other.hYear == hYear));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, gDate, hDay, hMonth, hYear);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of QamariData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$QamariDataImplCopyWith<_$QamariDataImpl> get copyWith =>
@@ -384,8 +407,11 @@ abstract class _QamariData implements QamariData {
   int get hMonth;
   @override
   int get hYear;
+
+  /// Create a copy of QamariData
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$QamariDataImplCopyWith<_$QamariDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

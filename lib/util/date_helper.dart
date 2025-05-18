@@ -238,7 +238,6 @@ class DateHelper {
       // Get dates
       final hijriDates = await DateHelper().getHijriDates();
       final todayHijri = await DateHelper().getTodayCalendarHijri(qamariDate: hijriDates);
-      final ampm = await DateHelper.handleAMPM();
       
       if (todayHijri == null) {
         return [];
@@ -255,13 +254,6 @@ class DateHelper {
       
       // Get occasions
       final occasions = await DatabaseRepository().getOccasionsByDate(day, month);
-      
-      // Modify occasions if it's PM time
-      if (ampm?.ampm == 'pm' && occasions.isNotEmpty) {
-        return occasions.map((occasion) => 
-          occasion.copyWith(occasion: '${occasion.occasion}_dark')
-        ).toList();
-      }
       
       return occasions;
     } catch (e) {

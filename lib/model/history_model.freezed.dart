@@ -26,8 +26,12 @@ mixin _$HistoryModel {
   String get bookPath => throw _privateConstructorUsedError;
   String get navIndex => throw _privateConstructorUsedError;
 
+  /// Serializes this HistoryModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of HistoryModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $HistoryModelCopyWith<HistoryModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +60,8 @@ class _$HistoryModelCopyWithImpl<$Res, $Val extends HistoryModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of HistoryModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -114,6 +120,8 @@ class __$$HistoryModelImplCopyWithImpl<$Res>
       _$HistoryModelImpl _value, $Res Function(_$HistoryModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HistoryModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -192,12 +200,14 @@ class _$HistoryModelImpl implements _HistoryModel {
                 other.navIndex == navIndex));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, title, bookName, bookPath, navIndex);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HistoryModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HistoryModelImplCopyWith<_$HistoryModelImpl> get copyWith =>
@@ -232,8 +242,11 @@ abstract class _HistoryModel implements HistoryModel {
   String get bookPath;
   @override
   String get navIndex;
+
+  /// Create a copy of HistoryModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HistoryModelImplCopyWith<_$HistoryModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

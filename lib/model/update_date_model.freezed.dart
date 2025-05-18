@@ -20,7 +20,9 @@ mixin _$UpdateDate {
   int get statusCode => throw _privateConstructorUsedError;
   bool get success => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdateDate
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UpdateDateCopyWith<UpdateDate> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -44,6 +46,8 @@ class _$UpdateDateCopyWithImpl<$Res, $Val extends UpdateDate>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UpdateDate
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -87,6 +91,8 @@ class __$$UpdateDateImplCopyWithImpl<$Res>
       _$UpdateDateImpl _value, $Res Function(_$UpdateDateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UpdateDate
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -143,7 +149,9 @@ class _$UpdateDateImpl implements _UpdateDate {
   @override
   int get hashCode => Object.hash(runtimeType, data, statusCode, success);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UpdateDate
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UpdateDateImplCopyWith<_$UpdateDateImpl> get copyWith =>
@@ -162,8 +170,11 @@ abstract class _UpdateDate implements UpdateDate {
   int get statusCode;
   @override
   bool get success;
+
+  /// Create a copy of UpdateDate
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdateDateImplCopyWith<_$UpdateDateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

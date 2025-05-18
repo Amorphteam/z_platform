@@ -6,6 +6,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:zahra/screen/home/cubit/home_cubit.dart';
 import 'package:zahra/screen/home/widgets/home_item_widget.dart';
 import 'package:zahra/util/navigation_helper.dart';
+import 'package:zahra/util/date_helper.dart';
+import 'package:zahra/model/occasion.dart';
 
 import '../../model/book_model.dart';
 import '../../repository/database_repository.dart';
@@ -23,9 +25,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final ValueNotifier<double> _opacityNotifier = ValueNotifier(0.0);
 
   @override
+  void initState() {
+    super.initState();
+    context.read<HomeCubit>().fetchItems();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final halfMediaHeight = MediaQuery.of(context).size.height / 2.3;
-    context.read<HomeCubit>().fetchItems();
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
@@ -43,17 +50,52 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             color: Theme.of(context).colorScheme.primary,
             padding: const EdgeInsets.only(top: 40.0, bottom: 40),
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    Theme.of(context).brightness == Brightness.dark
-                        ? 'assets/image/landimage_dark.jpg'
-                        : 'assets/image/landimage_light.jpg',
+            child: BlocBuilder<HomeCubit, HomeState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  loaded: (_, __, occasions) {
+                    if (occasions != null && occasions.isNotEmpty) {
+                      final occasion = occasions.first;
+                      return Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                              Theme.of(context).brightness == Brightness.dark
+                                  ? 'assets/image/${occasion.occasion}_dark.jpg'
+                                  : 'assets/image/${occasion.occasion}.jpg',
+                            ),
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                      );
+                    }
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            Theme.of(context).brightness == Brightness.dark
+                                ? 'assets/image/landimage_dark.jpg'
+                                : 'assets/image/landimage_light.jpg',
+                          ),
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                    );
+                  },
+                  orElse: () => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          Theme.of(context).brightness == Brightness.dark
+                              ? 'assets/image/landimage_dark.jpg'
+                              : 'assets/image/landimage_light.jpg',
+                        ),
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
                   ),
-                  fit: BoxFit.fitHeight,
-                ),
-              ),
+                );
+              },
             ),
           ),
         ),
@@ -73,16 +115,55 @@ class _HomeScreenState extends State<HomeScreen> {
           alignment: Alignment.topCenter,
           child: Container(
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  Theme.of(context).brightness == Brightness.dark
-                      ? 'assets/image/landimage_dark.jpg'
-                      : 'assets/image/landimage_light.jpg',
-                ),
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.topCenter,
-              ),
+            child: BlocBuilder<HomeCubit, HomeState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  loaded: (_, __, occasions) {
+                    if (occasions != null && occasions.isNotEmpty) {
+                      final occasion = occasions.first;
+                      return Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                              Theme.of(context).brightness == Brightness.dark
+                                  ? 'assets/image/${occasion.occasion}_dark.jpg'
+                                  : 'assets/image/${occasion.occasion}.jpg',
+                            ),
+                            fit: BoxFit.fitWidth,
+                            alignment: Alignment.topCenter,
+                          ),
+                        ),
+                      );
+                    }
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            Theme.of(context).brightness == Brightness.dark
+                                ? 'assets/image/landimage_dark.jpg'
+                                : 'assets/image/landimage_light.jpg',
+                          ),
+                          fit: BoxFit.fitWidth,
+                          alignment: Alignment.topCenter,
+                        ),
+                      ),
+                    );
+                  },
+                  orElse: () => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          Theme.of(context).brightness == Brightness.dark
+                              ? 'assets/image/landimage_dark.jpg'
+                              : 'assets/image/landimage_light.jpg',
+                        ),
+                        fit: BoxFit.fitWidth,
+                        alignment: Alignment.topCenter,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -140,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
         loading: () => const SliverFillRemaining(
           child: Center(child: CircularProgressIndicator()),
         ),
-        loaded: (items, hekamText) => SliverToBoxAdapter(
+        loaded: (items, hekamText, occasions) => SliverToBoxAdapter(
           child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -163,8 +244,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                   child: state.maybeWhen(
-                    loaded: (_, hekamText) => Html(
-                      data: hekamText ?? 'قيمة كل امرئ ما يحسنه',
+                    loaded: (_, onScreenText, __) => Html(
+                      data: onScreenText ?? 'قيمة كل امرئ ما يحسنه',
                       style: {
                         "body": Style(
                           textAlign: TextAlign.center,

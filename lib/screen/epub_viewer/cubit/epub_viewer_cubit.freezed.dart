@@ -148,6 +148,9 @@ class _$EpubViewerStateCopyWithImpl<$Res, $Val extends EpubViewerState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -164,6 +167,9 @@ class __$$InitialImplCopyWithImpl<$Res>
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -342,6 +348,9 @@ class __$$LoadingImplCopyWithImpl<$Res>
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -524,6 +533,8 @@ class __$$LoadedImplCopyWithImpl<$Res>
       _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -602,7 +613,9 @@ class _$LoadedImpl implements _Loaded {
       epubTitle,
       const DeepCollectionEquality().hash(_tocTreeList));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
@@ -756,7 +769,10 @@ abstract class _Loaded implements EpubViewerState {
   List<String> get content;
   String get epubTitle;
   List<EpubChapter>? get tocTreeList;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -778,6 +794,8 @@ class __$$errorImplCopyWithImpl<$Res>
       _$errorImpl _value, $Res Function(_$errorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -816,7 +834,9 @@ class _$errorImpl implements _error {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$errorImplCopyWith<_$errorImpl> get copyWith =>
@@ -965,7 +985,10 @@ abstract class _error implements EpubViewerState {
   const factory _error({required final String error}) = _$errorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$errorImplCopyWith<_$errorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -987,6 +1010,8 @@ class __$$PageChangedImplCopyWithImpl<$Res>
       _$PageChangedImpl _value, $Res Function(_$PageChangedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1026,7 +1051,9 @@ class _$PageChangedImpl implements _PageChanged {
   @override
   int get hashCode => Object.hash(runtimeType, pageNumber);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PageChangedImplCopyWith<_$PageChangedImpl> get copyWith =>
@@ -1175,7 +1202,10 @@ abstract class _PageChanged implements EpubViewerState {
   const factory _PageChanged({final int? pageNumber}) = _$PageChangedImpl;
 
   int? get pageNumber;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PageChangedImplCopyWith<_$PageChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1200,6 +1230,8 @@ class __$$StyleChangedImplCopyWithImpl<$Res>
       _$StyleChangedImpl _value, $Res Function(_$StyleChangedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1258,7 +1290,9 @@ class _$StyleChangedImpl implements _StyleChanged {
   int get hashCode =>
       Object.hash(runtimeType, fontSize, lineHeight, fontFamily);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$StyleChangedImplCopyWith<_$StyleChangedImpl> get copyWith =>
@@ -1412,7 +1446,10 @@ abstract class _StyleChanged implements EpubViewerState {
   FontSizeCustom? get fontSize;
   LineHeightCustom? get lineHeight;
   FontFamily? get fontFamily;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$StyleChangedImplCopyWith<_$StyleChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1434,6 +1471,8 @@ class __$$BookmarkAddedImplCopyWithImpl<$Res>
       _$BookmarkAddedImpl _value, $Res Function(_$BookmarkAddedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1472,7 +1511,9 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
   @override
   int get hashCode => Object.hash(runtimeType, status);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BookmarkAddedImplCopyWith<_$BookmarkAddedImpl> get copyWith =>
@@ -1621,7 +1662,10 @@ abstract class _BookmarkAdded implements EpubViewerState {
   const factory _BookmarkAdded({final int? status}) = _$BookmarkAddedImpl;
 
   int? get status;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BookmarkAddedImplCopyWith<_$BookmarkAddedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1643,6 +1687,8 @@ class __$$HistoryAddedImplCopyWithImpl<$Res>
       _$HistoryAddedImpl _value, $Res Function(_$HistoryAddedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1681,7 +1727,9 @@ class _$HistoryAddedImpl implements _HistoryAdded {
   @override
   int get hashCode => Object.hash(runtimeType, status);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HistoryAddedImplCopyWith<_$HistoryAddedImpl> get copyWith =>
@@ -1830,7 +1878,10 @@ abstract class _HistoryAdded implements EpubViewerState {
   const factory _HistoryAdded({final int? status}) = _$HistoryAddedImpl;
 
   int? get status;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HistoryAddedImplCopyWith<_$HistoryAddedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1852,6 +1903,8 @@ class __$$SearchResultsFoundImplCopyWithImpl<$Res>
       $Res Function(_$SearchResultsFoundImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1899,7 +1952,9 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_searchResults));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SearchResultsFoundImplCopyWith<_$SearchResultsFoundImpl> get copyWith =>
@@ -2051,7 +2106,10 @@ abstract class _SearchResultsFound implements EpubViewerState {
       _$SearchResultsFoundImpl;
 
   List<SearchModel> get searchResults;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SearchResultsFoundImplCopyWith<_$SearchResultsFoundImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2070,6 +2128,9 @@ class __$$BookmarkPresentImplCopyWithImpl<$Res>
   __$$BookmarkPresentImplCopyWithImpl(
       _$BookmarkPresentImpl _value, $Res Function(_$BookmarkPresentImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2248,6 +2309,9 @@ class __$$BookmarkAbsentImplCopyWithImpl<$Res>
   __$$BookmarkAbsentImplCopyWithImpl(
       _$BookmarkAbsentImpl _value, $Res Function(_$BookmarkAbsentImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2429,6 +2493,8 @@ class __$$ContentHighlightedImplCopyWithImpl<$Res>
       $Res Function(_$ContentHighlightedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2485,7 +2551,9 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
   int get hashCode => Object.hash(runtimeType,
       const DeepCollectionEquality().hash(_content), highlightedIndex);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ContentHighlightedImplCopyWith<_$ContentHighlightedImpl> get copyWith =>
@@ -2638,7 +2706,10 @@ abstract class _ContentHighlighted implements EpubViewerState {
 
   List<String> get content;
   int get highlightedIndex;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ContentHighlightedImplCopyWith<_$ContentHighlightedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
