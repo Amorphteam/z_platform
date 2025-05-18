@@ -1,6 +1,8 @@
 import 'package:zahra/database/database_helper.dart';
 import 'package:zahra/model/hekam.dart';
 import 'package:zahra/model/occasion.dart';
+import 'package:zahra/model/onscreen.dart';
+import 'dart:math';
 
 class DatabaseRepository {
   final DatabaseHelper _dbHelper;
@@ -44,6 +46,31 @@ class DatabaseRepository {
       return results.map((map) => Occasion.fromJson(map)).toList();
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<Onscreen?> getRandomOnscreenText() async {
+    try {
+      final result = await _dbHelper.getRandomOnscreenText();
+      print('result is ${result.toString()}');
+      if (result == null) return null;
+      
+      // Ensure text_ar is not null
+      if (result['text_ar'] == null) {
+        print('Warning: text_ar is null in database result');
+        return null;
+      }
+      
+      try {
+        return Onscreen.fromJson(result);
+      } catch (e) {
+        print('Error parsing Onscreen from JSON: $e');
+        print('JSON data: $result');
+        return null;  // Return null instead of rethrowing
+      }
+    } catch (e) {
+      print('Error in getRandomOnscreenText: $e');
+      return null;  // Return null instead of rethrowing
     }
   }
 

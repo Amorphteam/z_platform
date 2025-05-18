@@ -67,4 +67,23 @@ class DatabaseHelper {
       whereArgs: [day, month],
     );
   }
+
+  Future<Map<String, dynamic>?> getRandomOnscreenText() async {
+    final db = await database;
+    final results = await db.query(
+      'onscreen',
+      columns: ['id', 'text_ar'],
+      orderBy: 'RANDOM()',
+      limit: 1,
+    );
+    
+    if (results.isEmpty) return null;
+    
+    final result = results.first;
+    // Ensure proper type casting
+    return {
+      'id': result['id'] as int,
+      'text_ar': result['text_ar'] as String,
+    };
+  }
 } 

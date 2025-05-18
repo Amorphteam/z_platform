@@ -22,10 +22,9 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> fetchItems() async {
     try {
       emit(const HomeState.loading());
-      final hekam = await _databaseRepository.getAllHekam();
-      if (hekam.isNotEmpty) {
-        final randomHekam = hekam[DateTime.now().millisecondsSinceEpoch % hekam.length];
-        emit(HomeState.loaded(items, hekamText: randomHekam.asl));
+      final randomText = await _databaseRepository.getRandomOnscreenText();
+      if (randomText != null) {
+        emit(HomeState.loaded(items, hekamText: randomText.textAr));
       } else {
         emit(HomeState.loaded(items));
       }
