@@ -8,6 +8,7 @@ import 'package:zahra/screen/home/widgets/home_item_widget.dart';
 import 'package:zahra/util/navigation_helper.dart';
 
 import '../../model/book_model.dart';
+import '../../repository/database_repository.dart';
 import '../../util/epub_helper.dart';
 import '../hekam/hekam_screen.dart';
 

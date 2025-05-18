@@ -1,5 +1,6 @@
 import 'package:zahra/database/database_helper.dart';
 import 'package:zahra/model/hekam.dart';
+import 'package:zahra/model/occasion.dart';
 
 class DatabaseRepository {
   final DatabaseHelper _dbHelper;
@@ -32,6 +33,15 @@ class DatabaseRepository {
       if (hekam != null) {
         await _dbHelper.updateHekamFavorite(id, !hekam.isFavorite);
       }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Occasion>> getOccasionsByDate(int day, int month) async {
+    try {
+      final results = await _dbHelper.getOccasionsByDate(day, month);
+      return results.map((map) => Occasion.fromJson(map)).toList();
     } catch (e) {
       rethrow;
     }

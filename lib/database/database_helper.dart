@@ -58,4 +58,13 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
+
+  Future<List<Map<String, dynamic>>> getOccasionsByDate(int day, int month) async {
+    final db = await database;
+    return await db.query(
+      'occasions',
+      where: 'day = ? AND month = ?',
+      whereArgs: [day, month],
+    );
+  }
 } 

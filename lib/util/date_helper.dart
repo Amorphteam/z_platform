@@ -1,9 +1,11 @@
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zahra/model/time_zone_model.dart';
+import 'package:zahra/repository/database_repository.dart';
 import 'package:zahra/util/prayer_time.dart';
 import 'package:zahra/util/time_zone_helper.dart';
 import '../api/api_client.dart';
+import '../model/occasion.dart';
 import '../model/qamari_date_model.dart';
 import 'dart:convert';
 
@@ -225,6 +227,46 @@ class DateHelper {
     } catch (e) {
       print('Error in getAMPMWithLocation: $e');
       return null;
+    }
+  }
+
+  static Future<List<Occasion>> getOccasionsForCurrentDate() async {
+    try {
+      // Initialize timezone
+      await TimeZoneHelper.initialize();
+      
+      // Get dates
+      final hijriDates = await DateHelper().getHijriDates();
+      final todayHijri = await DateHelper().getTodayCalendarHijri(qamariDate: hijriDates);
+      final ampm = await DateHelper.handleAMPM();
+      
+      if (todayHijri == null) {
+        return [];
+      }
+
+      // Parse the Hijri date
+      final parts = todayHijri.split('-');
+      if (parts.length != 3) {
+        return [];
+      }
+
+      final month = int.tryParse(parts[1]) ?? 0;
+      final day = int.tryParse(parts[2]) ?? 0;
+      
+      // Get occasions
+      final occasions = await DatabaseRepository().getOccasionsByDate(day, month);
+      
+      // Modify occasions if it's PM time
+      if (ampm?.ampm == 'pm' && occasions.isNotEmpty) {
+        return occasions.map((occasion) => 
+          occasion.copyWith(occasion: '${occasion.occasion}_dark')
+        ).toList();
+      }
+      
+      return occasions;
+    } catch (e) {
+      print('Error getting occasions: $e');
+      return [];
     }
   }
 }
