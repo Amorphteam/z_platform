@@ -13,6 +13,8 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Function(String)? onSearch; // Optional
   final Function(String)? onSubmitted; // Optional
   final bool showSearchBar; // Toggle for search bar
+  final Color? backgroundColor;
+  final bool showBackgroundImage;
 
   const CustomAppBar({
     Key? key,
@@ -25,6 +27,8 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.showSearchBar = true,
     this.leftWidget,
     this.onSubmitted, // Default: show search bar
+    this.backgroundColor,
+    this.showBackgroundImage = false,
   }) : super(key: key);
 
   @override
@@ -47,6 +51,22 @@ class _CustomAppBarState extends State<CustomAppBar> {
       children: [
         AppBar(
           elevation: 0,
+          backgroundColor: widget.backgroundColor,
+          flexibleSpace: widget.showBackgroundImage
+              ? Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        isDarkMode
+                            ? 'assets/image/back_tazhib_dark.png'
+                            : 'assets/image/back_tazhib_light.png',
+                      ),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                )
+              : null,
           leading: widget.leftIcon != null
               ? IconButton(
             icon: Icon(widget.leftIcon,

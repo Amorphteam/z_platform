@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final halfMediaHeight = MediaQuery.of(context).size.height / 2.3;
+    final halfMediaHeight = MediaQuery.of(context).size.height / 2.4;
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
@@ -251,7 +251,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           textAlign: TextAlign.center,
                           color: Colors.white,
                           fontSize: FontSize(20),
-                          fontWeight: FontWeight.bold,
                         ),
                       },
                     ),
@@ -261,7 +260,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

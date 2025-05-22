@@ -83,13 +83,10 @@ class HomeItemWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Text(
-                            text,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.titleMedium
-                          ),
+                        child: Text(
+                          text,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.titleLarge
                         ),
                       ),
                       Image.asset(
