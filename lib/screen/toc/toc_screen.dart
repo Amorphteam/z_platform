@@ -33,12 +33,10 @@ class _TocScreenState extends State<TocScreen> {
       widget.title = widget.title!.replaceAll('\n', ' ');
     }
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white, // Maintain consistent icon color
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(
           widget.title ?? '',
           style: const TextStyle(color: Colors.white),

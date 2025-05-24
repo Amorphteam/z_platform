@@ -56,8 +56,8 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
       widget.title = widget.title!.replaceAll('\n', ' ');
     }
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.outlineVariant,
       appBar: CustomAppBar(
+        backgroundImage: 'assets/image/back_tazhib_light.png',
         title: widget.title ?? '',
         showSearchBar: true,
         onSearch: _filterItems,
@@ -110,7 +110,6 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
           : Stack(
         children: [
           !isLandscape ? Container(
-            color: Theme.of(context).colorScheme.outlineVariant,
           ):
           Align(
             alignment: Alignment.topCenter,
@@ -188,53 +187,45 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
   Widget _buildCardView(TocItem item, BuildContext context) => Container(
     alignment: Alignment.center,
     margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-    child: Container(
+    child: GestureDetector(
+      onTap: () => _navigateTo(context, item),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: GestureDetector(
-              onTap: () => _navigateTo(context, item),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 0,
-                        child: SizedBox(
-                          height: 85,
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                item.title,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ),
-                          ),
-                        ),
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Card(
+                color: Colors.white,
+                elevation: 0,
+                child: SizedBox(
+                  height: 60,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        maxLines: 2,
+                        item.title,
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                   ),
-                  Card(
-                    elevation: 0,
-                    color: Colors.white,
-                    child: Container(
-                      height: 85,
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Center(
-                        child: Text(
-                          item.key?.split('_').last ?? '',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+              ),
+            ),
+          ),
+          Card(
+            elevation: 0,
+            color: Colors.white,
+            child: Container(
+              height: 60,
+              width: 60,
+              child: Center(
+                child: Text(
+                  item.key?.split('_').last ?? '',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
             ),
           ),
