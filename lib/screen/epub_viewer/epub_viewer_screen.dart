@@ -228,7 +228,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           children: [
             if (isSliderVisible)
               AppBar(
-                backgroundColor: Theme.of(context).colorScheme.surface,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 leading: IconButton(
                   icon: isSearchOpen
                       ? Icon(Icons.close, color: Theme.of(context).colorScheme.onSurfaceVariant)
@@ -639,7 +639,11 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       return Html(
         data: _processedContentCache[index]!,
         style: {
+          'html': Style(
+            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+          ),
           'body': Style(
+            backgroundColor: isDarkMode ? Colors.black : Colors.white,
             direction: TextDirection.rtl,
             textAlign: TextAlign.justify,
             lineHeight: LineHeight(lineHeight.size),
@@ -1161,6 +1165,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     final ValueNotifier<bool> showAppBar = ValueNotifier(false);
 
     showModalBottomSheet(
+      backgroundColor: isDarkMode ? Colors.black : Colors.white,
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) => NotificationListener<DraggableScrollableNotification>(

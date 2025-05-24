@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:zahra/model/hekam.dart';
 
+import '../../../util/style_helper.dart';
+
 class TranslationBottomSheet extends StatefulWidget {
   final Hekam hekam;
 
@@ -18,98 +20,6 @@ class TranslationBottomSheet extends StatefulWidget {
 class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
   String selectedTranslation = 'All';
 
-  Map<String, Style> get translationStyles => {
-    "body": Style(
-      fontSize: FontSize(16),
-      color: Theme.of(context).textTheme.bodyLarge?.color,
-      textAlign: TextAlign.right,
-      direction: TextDirection.rtl,
-      textDecoration: TextDecoration.none,
-    ),
-    "p": Style(
-      textAlign: TextAlign.justify,
-      margin: Margins.only(top: 0, bottom: 10),
-      fontFamily: 'Lotus Qazi Light',
-    ),
-    "p.center": Style(
-      textAlign: TextAlign.center,
-    ),
-    "p.sher": Style(
-      textAlign: TextAlign.center,
-      color: const Color(0xFF990000),
-      fontSize: FontSize(16),
-      margin: Margins.only(top: 10, bottom: 10),
-    ),
-    "p.english": Style(
-      color: const Color(0xFF800000),
-      direction: TextDirection.ltr,
-    ),
-    "p.arabic": Style(
-      color: const Color(0xFF000080),
-      direction: TextDirection.rtl,
-    ),
-    "p.farsi": Style(
-      color: const Color(0xFF006400),
-      fontSize: FontSize(16),
-      margin: Margins.only(top: 10, bottom: 10),
-      fontFamily: 'nazanin',
-    ),
-    "p.farsi-title": Style(
-      color: const Color(0xFF000080),
-      fontSize: FontSize(16),
-      margin: Margins.only(top: 10, bottom: 10),
-      fontFamily: 'nazaninBold',
-    ),
-    "h1": Style(
-      color: const Color(0xFF00AA00),
-      fontSize: FontSize(16),
-      margin: Margins.only(top: 0, bottom: 10),
-      textAlign: TextAlign.center,
-      fontFamily: 'Lotus Qazi Bold',
-    ),
-    "h2": Style(
-      color: const Color(0xFF000080),
-      fontSize: FontSize(16),
-      margin: Margins.only(top: 0, bottom: 10),
-      textAlign: TextAlign.center,
-      fontFamily: 'Lotus Qazi Bold',
-    ),
-    "h3": Style(
-      color: const Color(0xFF800000),
-      fontSize: FontSize(16),
-      margin: Margins.only(top: 0, bottom: 10),
-      textAlign: TextAlign.center,
-      fontFamily: 'Lotus Qazi Bold',
-    ),
-    "h4": Style(
-      color: Colors.red,
-      fontSize: FontSize(16),
-      margin: Margins.only(top: 0, bottom: 0),
-      textAlign: TextAlign.center,
-      fontFamily: 'Lotus Qazi Bold',
-    ),
-    ".fn": Style(
-      color: Colors.blue,
-      fontWeight: FontWeight.normal,
-      fontSize: FontSize(12),
-      textDecoration: TextDecoration.none,
-      verticalAlign: VerticalAlign.top,
-    ),
-    ".fm": Style(
-      color: const Color(0xFF008000),
-      fontWeight: FontWeight.bold,
-      fontSize: FontSize(12),
-      textDecoration: TextDecoration.none,
-    ),
-    ".quran": Style(
-      fontWeight: FontWeight.bold,
-      color: Colors.green,
-    ),
-    ".hadith": Style(
-      fontWeight: FontWeight.bold,
-      color: const Color(0xFF008080),
-    ),
-  };
 
   List<String> get availableTranslations {
     final translations = <String>['All'];
@@ -207,7 +117,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.english1!,
-                                  style: translationStyles,
+                                  style: StyleHelper.getStyles(context),
                                 ),
                               ],
                             ),
@@ -233,7 +143,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.farsi1!,
-                                  style: translationStyles,
+                                  style: StyleHelper.getStyles(context),
                                 ),
                               ],
                             ),
@@ -259,7 +169,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.farsi2!,
-                                  style: translationStyles,
+                                  style: StyleHelper.getStyles(context),
                                 ),
                               ],
                             ),
@@ -285,7 +195,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.farsi3!,
-                                  style: translationStyles,
+                                  style: StyleHelper.getStyles(context),
                                 ),
                               ],
                             ),
@@ -311,7 +221,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.farsi4!,
-                                  style: translationStyles,
+                                  style: StyleHelper.getStyles(context),
                                 ),
                               ],
                             ),
