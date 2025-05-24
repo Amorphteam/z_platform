@@ -5,6 +5,7 @@ import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
 import 'package:zahra/util/navigation_helper.dart';
 
 import '../../model/toc_item.dart';
+import '../../widget/custom_appbar.dart';
 
 class TocScreen extends StatefulWidget {
   TocScreen({
@@ -33,15 +34,11 @@ class _TocScreenState extends State<TocScreen> {
       widget.title = widget.title!.replaceAll('\n', ' ');
     }
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white, // Maintain consistent icon color
-        ),
-        title: Text(
-          widget.title ?? '',
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
+      appBar: CustomAppBar(
+      backgroundImage: 'assets/image/back_tazhib_light.png',
+      title: widget.title ?? '',
+      showSearchBar: true,
+    ),
       body: isLandscape
           ? Row(
         children: [
@@ -53,7 +50,7 @@ class _TocScreenState extends State<TocScreen> {
                   builder: (_, __) => Container(
                     color: Theme.of(context)
                         .colorScheme
-                        .primary
+                        .surface
                         .withOpacity(_opacityNotifier.value),
                   ),
                 ),
@@ -89,7 +86,7 @@ class _TocScreenState extends State<TocScreen> {
           ),
           Expanded(
             child: Container(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.surface,
               padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
 
               child: Container(
@@ -111,7 +108,7 @@ class _TocScreenState extends State<TocScreen> {
           : Stack(
         children: [
           !isLandscape ? Container(
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.surface,
           ):
           Align(
             alignment: Alignment.topCenter,
@@ -135,7 +132,7 @@ class _TocScreenState extends State<TocScreen> {
             builder: (_, __) => Container(
               color: Theme.of(context)
                   .colorScheme
-                  .primary
+                  .surface
                   .withOpacity(_opacityNotifier.value),
             ),
           ),
@@ -185,9 +182,10 @@ class _TocScreenState extends State<TocScreen> {
           bottom: 6,
         ),
         child: Card(
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: Theme.of(context).colorScheme.primaryContainer,
           elevation: 0,
           child: ExpansionTile(
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             title: _buildCardTitle(item, context),
             iconColor: const Color(0xFFCFA355),
             collapsedIconColor: const Color(0xFFCFA355),
@@ -206,7 +204,7 @@ class _TocScreenState extends State<TocScreen> {
     alignment: Alignment.center,
     margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
     child: Card(
-      color: Theme.of(context).colorScheme.onPrimary,
+      color: Theme.of(context).colorScheme.primaryContainer,
       elevation: 0,
       child: Container(
         margin: const EdgeInsets.all(8.0),
@@ -271,7 +269,7 @@ class _TocScreenState extends State<TocScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -317,6 +315,7 @@ class _TocScreenState extends State<TocScreen> {
                 itemBuilder: (context, index) {
                   final myItem = item.items![index];
                   return Card(
+                    color: Theme.of(context).colorScheme.onPrimary,
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
                       onTap: () {

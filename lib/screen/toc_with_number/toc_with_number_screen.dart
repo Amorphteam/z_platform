@@ -178,7 +178,7 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
           bottom: 6,
         ),
         child: Card(
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: Theme.of(context).colorScheme.primaryContainer,
           elevation: 0,
           child: ExpansionTile(
             title: _buildCardTitle(item, context),
