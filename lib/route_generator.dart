@@ -49,7 +49,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => HekamCubit(),
-            child: const HekamScreen(),
+            child: HekamScreen(),
           ),
         );
       case '/epubViewer':

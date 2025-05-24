@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
       onError: Color(0xFFFFFFFF),
       surface: Color(0xffd2ceca),
       onSurface: Color(0xFF1B1C17),
-      primaryContainer: Color(0xFFCDEF84),
+      primaryContainer: Color(0xFFebebeb),
       onPrimaryContainer: Color(0xFF141F00),
       secondaryContainer: Color(0xFF007d81),
       onSecondaryContainer: Color(0xFF171E09),
@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       colorScheme: lightColorScheme,
-      fontFamily: 'almarai',
+      fontFamily: 'SFProDisplay',
     );
 
     final ThemeData darkTheme = ThemeData(
@@ -106,7 +106,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       colorScheme: darkColorScheme,
-      fontFamily: 'almarai',
+      fontFamily: 'SFProDisplay',
     );
 
     return BlocProvider(

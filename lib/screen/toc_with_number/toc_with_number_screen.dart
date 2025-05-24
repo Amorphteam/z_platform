@@ -47,6 +47,16 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
     });
   }
 
+  String _toArabicNumber(String number) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    
+    for (int i = 0; i < english.length; i++) {
+      number = number.replaceAll(english[i], arabic[i]);
+    }
+    return number;
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLandscape =
@@ -196,20 +206,38 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
             child: Directionality(
               textDirection: TextDirection.rtl,
               child: Card(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.primaryContainer,
                 elevation: 0,
                 child: SizedBox(
                   height: 60,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        maxLines: 2,
-                        item.title,
-                        textAlign: TextAlign.start,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final textSpan = TextSpan(
+                        text: item.title,
                         style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ),
+                      );
+                      final textPainter = TextPainter(
+                        text: textSpan,
+                        textDirection: TextDirection.rtl,
+                        maxLines: 2,
+                      )..layout(maxWidth: constraints.maxWidth - 16); // Account for padding
+
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: textPainter.didExceedMaxLines 
+                              ? Alignment.topRight 
+                              : Alignment.centerRight,
+                          child: Text(
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            item.title,
+                            textAlign: TextAlign.start,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -217,13 +245,13 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
           ),
           Card(
             elevation: 0,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.primaryContainer,
             child: Container(
               height: 60,
               width: 60,
               child: Center(
                 child: Text(
-                  item.key?.split('_').last ?? '',
+                  _toArabicNumber(item.key?.split('_').last ?? ''),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
@@ -252,7 +280,7 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            item.key?.split('_').last ?? '',
+            _toArabicNumber(item.key?.split('_').last ?? ''),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: const Color(0xFFCFA355),
             ),

@@ -108,3 +108,18 @@ flutter:
     - family: almarai
       fonts:
         - asset: assets/font/almarai.ttf
+    - family: SFProDisplay
+      fonts:
+        - asset: assets/font/SFArabic.ttf
+    - family: Lotus Qazi Bold
+      fonts:
+        - asset: assets/font/LotusQaziBold.ttf
+    - family: Lotus Qazi Light
+      fonts:
+        - asset: assets/font/LotusQaziLight.ttf
+    - family: nazanin
+      fonts:
+        - asset: assets/font/NazaninNormal.ttf
+    - family: nazaninBold
+      fonts:
+        - asset: assets/font/NazaninBold.ttf

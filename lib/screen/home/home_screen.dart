@@ -251,6 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           textAlign: TextAlign.center,
                           color: Colors.white,
                           fontSize: FontSize(20),
+                            fontFamily: 'almarai'
                         ),
                       },
                     ),
@@ -260,6 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
+                        fontFamily: 'almarai',
                       ),
                     ),
                   ),
