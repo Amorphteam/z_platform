@@ -7,6 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:zahra/model/word.dart';
+import 'package:zahra/screen/epub_viewer/widgets/RejalBottomSheetContent.dart';
 import 'package:zahra/screen/epub_viewer/widgets/toc_tree_list_widget.dart';
 import '../../model/book_model.dart';
 import '../../model/history_model.dart';
@@ -14,6 +16,7 @@ import '../../model/reference_model.dart';
 import '../../model/search_model.dart';
 import '../../model/style_model.dart';
 import '../../model/tree_toc_model.dart';
+import '../../repository/database_repository.dart';
 import '../../util/epub_helper.dart';
 import '../../util/page_helper.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
@@ -633,6 +636,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     if (_processedContentCache.containsKey(index)) {
       return Html(
         data: _processedContentCache[index]!,
+        onAnchorTap: _handleAnchorTap,
         style: {
           'body': Style(
             direction: TextDirection.rtl,
@@ -809,6 +813,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     _processedContentCache[index] = processedContent;
 
     return Html(
+      onAnchorTap: _handleAnchorTap,
       data: processedContent,
       style: {
         'body': Style(
@@ -1445,6 +1450,59 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     }
   }
 
+  void _handleAnchorTap(String? href, Map<String, String> attributes, dom.Element? element) {
+    if (href != null) {
+      final Uri uri = Uri.parse(href);
+      if (uri.fragment.isNotEmpty) {
+        _handleFragment(href);
+      } else {
+        debugPrint('Anchor href: $href'); // For cases without `#`
+      }
+    }
+  }
+
+  Future<void> _handleFragment(String fragment) async {
+    String ids = fragment.split('#').last;
+    final databaseRepository = DatabaseRepository();
+    Word? word = await databaseRepository.getWordById(int.parse(ids));
+      // If no data is found, show a default message
+    if (word == null) {
+      await showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(
+              title: const Text('Error'),
+              content: const Text('No details found for this reference.'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+      );
+    }
+      _showSingleWordDialog(word);
+
+  }
+
+  void _showSingleWordDialog(Word? word) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.9,
+        minChildSize: 0.5,
+        maxChildSize: 1.0,
+        expand: false,
+        builder: (context, scrollController) => WordBottomSheetContent(
+          word: word,
+          scrollController: scrollController,
+        ),
+      ),
+    );
+  }
 }
 
 

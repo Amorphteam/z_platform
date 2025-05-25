@@ -2,6 +2,7 @@ import 'package:zahra/database/database_helper.dart';
 import 'package:zahra/model/hekam.dart';
 import 'package:zahra/model/occasion.dart';
 import 'package:zahra/model/onscreen.dart';
+import 'package:zahra/model/word.dart';
 import 'dart:math';
 
 class DatabaseRepository {
@@ -71,6 +72,35 @@ class DatabaseRepository {
     } catch (e) {
       print('Error in getRandomOnscreenText: $e');
       return null;  // Return null instead of rethrowing
+    }
+  }
+
+  // Word operations
+  Future<Word?> getWordById(int id) async {
+    try {
+      final results = await _dbHelper.getWordById(id);
+      if (results.isEmpty) return null;
+      return Word.fromJson(results.first);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Word>> getAllWords() async {
+    try {
+      final results = await _dbHelper.getWords();
+      return results.map((map) => Word.fromJson(map)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Word>> searchWords(String query) async {
+    try {
+      final results = await _dbHelper.searchWords(query);
+      return results.map((map) => Word.fromJson(map)).toList();
+    } catch (e) {
+      rethrow;
     }
   }
 

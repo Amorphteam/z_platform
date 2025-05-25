@@ -86,4 +86,36 @@ class DatabaseHelper {
       'text_ar': result['text_ar'] as String,
     };
   }
+
+  Future<List<Map<String, dynamic>>> getWordsById(int id) async {
+    final db = await database;
+    return await db.query(
+      'words',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getWords() async {
+    final db = await database;
+    return await db.query('words');
+  }
+
+  Future<List<Map<String, dynamic>>> getWordById(int id) async {
+    final db = await database;
+    return await db.query(
+      'words',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> searchWords(String query) async {
+    final db = await database;
+    return await db.query(
+      'words',
+      where: 'word LIKE ? OR saleh LIKE ? OR abdah LIKE ?',
+      whereArgs: ['%$query%', '%$query%', '%$query%'],
+    );
+  }
 } 
