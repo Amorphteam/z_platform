@@ -14,10 +14,10 @@ class HomeCubit extends Cubit<HomeState> {
   final DatabaseRepository _databaseRepository = DatabaseRepository();
   final List<String> items = [
     'مقدمة الشريف الرضي',
-    'الخُـــطَـــِب والأوامــر',
-    'الكُـــتُــب والرَّســـائِل',
-    'الحــــِكَم والمــــواعظ',
-    'غـــــريب الكــــلمات',
+    'الخُـــطَــــب والأوامــر',
+    'الـكُــتُــب والـرَّســـائِل',
+    'الـحِــــكَم والـمــواعـظ',
+    'غَـــــريبُ الـكـــلـمـات',
   ];
 
   HomeCubit() : super(const HomeState.initial());

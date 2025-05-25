@@ -75,11 +75,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   bool isDarkMode = false;
   final focusNode = FocusNode();
   final textEditingController = TextEditingController();
-  double _rejalFontSize = 18.0; // Default font size for rejal content
-  static const double _minFontSize = 14.0;
-  static const double _maxFontSize = 24.0;
-  static const double _fontSizeStep = 2.0;
-  static const String _rejalFontSizeKey = 'rejal_font_size';
   List<SearchModel> _currentSearchResults = [];
   int _currentSearchIndex = 0;
   final Map<int, dom.Document> _htmlCache = {};
@@ -547,7 +542,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       child: Container(
                         margin: const EdgeInsets.only(right: 16, left: 16),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
+                          color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: SelectionArea(
@@ -639,11 +634,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       return Html(
         data: _processedContentCache[index]!,
         style: {
-          'html': Style(
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          ),
           'body': Style(
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
             direction: TextDirection.rtl,
             textAlign: TextAlign.justify,
             lineHeight: LineHeight(lineHeight.size),

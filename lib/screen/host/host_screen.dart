@@ -42,8 +42,8 @@ class _HostScreenState extends State<HostScreen> {
           unselectedItemColor: Theme.of(context).colorScheme.onSurface,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 0 ? CupertinoIcons.check_mark_circled_solid : CupertinoIcons.check_mark_circled),
-              label: 'اخترنا لكم',
+              icon: Icon(_currentIndex == 0 ? Icons.home : Icons.home_outlined),
+              label: 'الرئيسية',
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(

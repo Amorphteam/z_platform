@@ -22,10 +22,10 @@ class HomeItemWidget extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(
-          bottom: isLast ? 0 : 12,
+          bottom: isLast ? 0 : 4,
           left: 16,
           right: 16,
-          top: isFirst ? 8 : 8,
+          top: isFirst ? 4 : 4,
         ),
         child: Container(
           height: 80,
@@ -93,8 +93,8 @@ class HomeItemWidget extends StatelessWidget {
                       SvgPicture.asset(
                         'assets/image/ali-kofi.svg',
                         color: Theme.of(context).colorScheme.secondaryContainer,
-                        width: 40,
-                        height: 40,
+                        width: 50,
+                        height: 50,
                         fit: BoxFit.cover,),
                     ],
                   ),
