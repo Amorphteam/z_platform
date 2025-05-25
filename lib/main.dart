@@ -112,7 +112,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => BookmarkCubit(),
       child: MaterialApp(
-        title: 'المعارف الفاطمية',
+        title: 'نهج البلاغة',
         debugShowCheckedModeBanner: false,
         theme: lightTheme,
         darkTheme: darkTheme,

@@ -221,15 +221,15 @@ class _HomeScreenState extends State<HomeScreen> {
         loading: () => const SliverFillRemaining(
           child: Center(child: CircularProgressIndicator()),
         ),
-        loaded: (items, hekamText, occasions) => SliverToBoxAdapter(
+        loaded: (items, hekamText, _) => SliverToBoxAdapter(
           child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
                   Theme.of(context).brightness == Brightness.dark
-                      ? 'assets/image/back_tazhib_dark.png'
-                      : 'assets/image/back_tazhib_light.png',
+                      ? 'assets/image/back_tazhib_dark.jpg'
+                      : 'assets/image/back_tazhib_light.jpg',
                 ),
                 fit: BoxFit.cover,
               ),

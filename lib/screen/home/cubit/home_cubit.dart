@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:zahra/model/item_model.dart';
 import 'package:zahra/model/occasion.dart';
+import 'package:zahra/model/onscreen.dart';
 import 'package:zahra/repository/database_repository.dart';
 import 'package:zahra/util/date_helper.dart';
 import '../../../repository/json_repository.dart';
@@ -25,16 +26,19 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       emit(const HomeState.loading());
       
-      // Fetch occasions
+
+      // Emit state with just items and occasions
+      emit(HomeState.loaded(items));
+
+      // First, get occasions
       final occasions = await DateHelper.getOccasionsForCurrentDate();
-      
-      // Fetch random text
+
+      // Then fetch the text separately
       final randomText = await _databaseRepository.getRandomOnscreenText();
       
+      // Update state with the text
       if (randomText != null) {
         emit(HomeState.loaded(items, hekamText: randomText.textAr, occasions: occasions));
-      } else {
-        emit(HomeState.loaded(items, occasions: occasions));
       }
     } catch (e) {
       emit(HomeState.error(e.toString()));

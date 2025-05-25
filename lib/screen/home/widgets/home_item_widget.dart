@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeItemWidget extends StatelessWidget {
   final String text;
@@ -89,8 +90,9 @@ class HomeItemWidget extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'almarai')
                         ),
                       ),
-                      Image.asset(
-                        'assets/image/ali_kofi_light.png',
+                      SvgPicture.asset(
+                        'assets/image/ali-kofi.svg',
+                        color: Theme.of(context).colorScheme.secondaryContainer,
                         width: 40,
                         height: 40,
                         fit: BoxFit.cover,),
