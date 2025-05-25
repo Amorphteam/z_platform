@@ -115,7 +115,7 @@ class WordBottomSheetContentState extends State<WordBottomSheetContent> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        buildCard(context, saleh, 'محمد عبده:'  ),
+                        buildCard(context, abdah, 'محمد عبده:'  ),
                         buildCard(context, saleh, 'صبحي صالح:'  ),
                       ],
                     ),
@@ -131,14 +131,15 @@ class WordBottomSheetContentState extends State<WordBottomSheetContent> {
 
   Card buildCard(BuildContext context, String? saleh, String? title) {
     return Card(
+      elevation: 0,
                         color: Theme.of(context).colorScheme.primaryContainer,
                         margin: const EdgeInsets.only(bottom: 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(title??'محمد عبده:', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontFamily: 'almarai', color: Theme.of(context).colorScheme.onPrimaryContainer),),
+                              padding: const EdgeInsets.only(top: 16.0, right: 16.0),
+                              child: Text(title??'محمد عبده:', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontFamily: 'almarai', color: Theme.of(context).colorScheme.secondaryContainer),),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
