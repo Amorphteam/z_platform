@@ -51,7 +51,7 @@ iOS: https://apps.apple.com/app/zahra-app''';
             backgroundColor: Theme.of(context).colorScheme.surface,
             appBar: CustomAppBar(
               rightIcon: showFavorites ? Icons.star_rate_rounded : Icons.star_border_outlined,
-              backgroundImage: 'assets/image/back_tazhib_light.png',
+              backgroundImage: 'assets/image/back_tazhib_light.jpg',
               title: showFavorites ? 'المفضلة' : 'الحكم والمواعظ',
               showSearchBar: true,
               onRightTap: _toggleFavorites,

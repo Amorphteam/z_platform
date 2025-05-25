@@ -23,6 +23,29 @@ class TocScreen extends StatefulWidget {
 
 class _TocScreenState extends State<TocScreen> {
   final ValueNotifier<double> _opacityNotifier = ValueNotifier(0.0);
+  List<TocItem> _allItems = [];
+  List<TocItem> _filteredItems = [];
+  String searchedWord = '';
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<TocCubit>().fetchItems();
+  }
+
+  void _filterItems(String query) {
+    setState(() {
+      searchedWord = query;
+      if (query.isEmpty) {
+        _filteredItems = _allItems;
+      } else {
+        _filteredItems = _allItems
+            .where((item) =>
+                item.title.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +58,11 @@ class _TocScreenState extends State<TocScreen> {
     }
     return Scaffold(
       appBar: CustomAppBar(
-      backgroundImage: 'assets/image/back_tazhib_light.png',
-      title: widget.title ?? '',
-      showSearchBar: true,
-    ),
+        backgroundImage: 'assets/image/back_tazhib_light.jpg',
+        title: widget.title ?? 'الفهرست',
+        showSearchBar: true,
+        onSearch: _filterItems,
+      ),
       body: isLandscape
           ? Row(
         children: [
@@ -73,7 +97,9 @@ class _TocScreenState extends State<TocScreen> {
                         loading: () => const Center(
                             child: CircularProgressIndicator()),
                         loaded: (items) {
-                          return _buildTocTree(items, context);
+                          _allItems = items;
+                          _filteredItems = searchedWord.isEmpty ? items : _filteredItems;
+                          return _buildTocTree(_filteredItems, context);
                         },
                         error: (message) =>
                             Center(child: SelectionArea(child: Text(message))),
@@ -151,7 +177,11 @@ class _TocScreenState extends State<TocScreen> {
                 const Center(child: Text('Tap to start fetching...')),
                 loading: () =>
                 const Center(child: CircularProgressIndicator()),
-                loaded: (items) => _buildTocTree(items, context),
+                loaded: (items) {
+                  _allItems = items;
+                  _filteredItems = searchedWord.isEmpty ? items : _filteredItems;
+                  return _buildTocTree(_filteredItems, context);
+                },
                 error: (message) =>
                     Center(child: SelectionArea(child: Text(message))),
               ),
@@ -163,11 +193,18 @@ class _TocScreenState extends State<TocScreen> {
   }
 
   Widget _buildTocTree(List<TocItem> items, BuildContext context) {
-    final rootItems = items.where((item) => item.childs!.isNotEmpty).toList();
-
-    return ListView(
-      children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
-    );
+    if (searchedWord.isNotEmpty) {
+      return ListView.builder(
+        itemCount: _filteredItems.length,
+        itemBuilder: (context, index) =>
+            _buildCardView(_filteredItems[index], context),
+      );
+    } else {
+      final rootItems = items.where((item) => item.childs!.isNotEmpty).toList();
+      return ListView(
+        children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
+      );
+    }
   }
 
 

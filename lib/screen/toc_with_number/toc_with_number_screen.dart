@@ -67,7 +67,7 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
     }
     return Scaffold(
       appBar: CustomAppBar(
-        backgroundImage: 'assets/image/back_tazhib_light.png',
+        backgroundImage: 'assets/image/back_tazhib_light.jpg',
         title: widget.title ?? '',
         showSearchBar: true,
         onSearch: _filterItems,
