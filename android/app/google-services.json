@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1010887723342",
+    "project_id": "nahj-apps",
+    "storage_bucket": "nahj-apps.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010887723342:android:fe122024f66850da09b61f",
+        "android_client_info": {
+          "package_name": "org.masaha.nahj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwqkltTHpPlJsHagTibT_hStwB9W04AFc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
