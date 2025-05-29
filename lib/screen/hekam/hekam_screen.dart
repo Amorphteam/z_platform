@@ -18,6 +18,21 @@ class HekamScreen extends StatefulWidget {
 class _HekamScreenState extends State<HekamScreen> {
   bool isDarkMode = false;
   bool showFavorites = false;
+  String _searchQuery = '';
+
+  String _removeDiacritics(String text) {
+    return text
+        .replaceAll(RegExp(r'[ًٌٍَُِّْ]'), '') // Arabic diacritics
+        .replaceAll(RegExp(r'[.ـ:،]'), '') // Arabic punctuation
+        .replaceAll(RegExp(r'\s+'), ' ') // Normalize spaces
+        .trim();
+  }
+
+  void _filterHekam(String query) {
+    setState(() {
+      _searchQuery = query;
+    });
+  }
 
   String _cleanHtmlText(String htmlText) {
     final document = html_parser.parse(htmlText);
@@ -46,25 +61,32 @@ iOS: https://apps.apple.com/app/zahra-app''';
     return BlocProvider(
       create: (context) => HekamCubit()..fetchHekam(),
       child: Builder(
-        builder: (context) {
-          return Scaffold(
+        builder: (context) => Scaffold(
             backgroundColor: Theme.of(context).colorScheme.surface,
             appBar: CustomAppBar(
               rightIcon: showFavorites ? Icons.star_rate_rounded : Icons.star_border_outlined,
               backgroundImage: 'assets/image/back_tazhib_light.jpg',
               title: showFavorites ? 'المفضلة' : 'الحكم والمواعظ',
               showSearchBar: true,
+              onSearch: _filterHekam,
               onRightTap: _toggleFavorites,
             ),
             body: BlocBuilder<HekamCubit, HekamState>(
-              builder: (context, state) {
-                return state.when(
+              builder: (context, state) => state.when(
                   initial: () => const Center(child: CircularProgressIndicator()),
                   loading: () => const Center(child: CircularProgressIndicator()),
                   loaded: (hekam) {
-                    final items = showFavorites 
+                    var items = showFavorites
                         ? hekam.where((item) => item.isFavorite).toList()
-                        : hekam;
+                        : hekam.toList();
+
+                    // Apply search filter if there's a search query
+                    if (_searchQuery.isNotEmpty) {
+                      final cleanQuery = _removeDiacritics(_searchQuery.toLowerCase());
+                      items = items.where((item) => _removeDiacritics(_cleanHtmlText(item.asl)
+                          .toLowerCase())
+                          .contains(cleanQuery)).toList();
+                    }
 
                     if (showFavorites && items.isEmpty) {
                       return Center(
@@ -280,11 +302,9 @@ iOS: https://apps.apple.com/app/zahra-app''';
                     );
                   },
                   error: (message) => Center(child: Text(message)),
-                );
-              },
+                ),
             ),
-          );
-        },
+          ),
       ),
     );
   }
