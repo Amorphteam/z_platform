@@ -43,8 +43,13 @@ void main() async {
 void configureOneSignal() {
   // Enable verbose logging for debugging (remove in production)
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  
   // Initialize with your OneSignal App ID
   OneSignal.initialize("dc7d3a2d-c66a-4344-a0fe-f47795bfd2c3");
+  
+  // Configure notification appearance
+  OneSignal.User.pushSubscription.optIn();
+  
   // Use this method to prompt for push notifications.
   // We recommend removing this method after testing and instead use In-App Messages to prompt for notification permission.
   OneSignal.Notifications.requestPermission(false);

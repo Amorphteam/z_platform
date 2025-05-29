@@ -44,6 +44,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "auto_size_text",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/auto_size_text-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "bloc",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/bloc-8.1.4",
       "packageUri": "lib/",
@@ -860,7 +866,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-05-27T03:24:25.343837Z",
+  "generated": "2025-05-29T04:00:50.873389Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///Users/alibayati/fvm/versions/3.24.5",

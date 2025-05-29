@@ -33,6 +33,7 @@ class _SearchScreenState extends State<SearchScreen> {
         appBar: CustomAppBar(
           showSearchBar: true,
           title: "الحديث الشريف",
+          backgroundImage: 'assets/image/back_tazhib_light.jpg',
           leftWidget: buildLeftWidget(context),
           onLeftTap: () {
             openBookSelectionSheet(allBooks);
@@ -103,7 +104,7 @@ class _SearchScreenState extends State<SearchScreen> {
         openBookSelectionSheet(allBooks);
         context.read<SearchCubit>().resetState();
       },
-      icon: const Icon(Icons.tune_rounded),
+      icon: const Icon(Icons.tune_rounded, color: Colors.white),
     );
   }
 

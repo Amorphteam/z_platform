@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -17,6 +18,14 @@ import '../hekam/hekam_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  static final String randomImagePath = _getRandomImagePath();
+
+  static String _getRandomImagePath() {
+    final random = Random();
+    final imageNumber = random.nextInt(7) + 1; // Random number between 1 and 7
+    return 'assets/image/$imageNumber.jpg';
+  }
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -24,15 +33,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ValueNotifier<double> _opacityNotifier = ValueNotifier(0.0);
 
-  @override
-  void initState() {
-    super.initState();
-    context.read<HomeCubit>().fetchItems();
-  }
+  String _getDarkImagePath(String basePath) => basePath.replaceAll('.jpg', '_dark.jpg');
 
   @override
   Widget build(BuildContext context) {
-    final halfMediaHeight = MediaQuery.of(context).size.height / 2.4;
+    final halfMediaHeight = MediaQuery.of(context).size.height / 2.7;
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
@@ -40,8 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildLandscapeLayout(BuildContext context) {
-    return Row(
+  Widget _buildLandscapeLayout(BuildContext context) => Row(
       children: [
         Expanded(
           child: _buildScrollableContent(context, false),
@@ -51,12 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Theme.of(context).colorScheme.primary,
             padding: const EdgeInsets.only(top: 40.0, bottom: 40),
             child: BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) {
-                return state.maybeWhen(
+              builder: (context, state) => state.maybeWhen(
                   loaded: (_, __, occasions) {
                     if (occasions != null && occasions.isNotEmpty) {
                       final occasion = occasions.first;
                       return Container(
+                        height: MediaQuery.of(context).size.height / 2,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: AssetImage(
@@ -64,47 +68,46 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ? 'assets/image/${occasion.occasion}_dark.jpg'
                                   : 'assets/image/${occasion.occasion}.jpg',
                             ),
-                            fit: BoxFit.fitHeight,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       );
                     }
                     return Container(
+                      height: MediaQuery.of(context).size.height / 2,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
                             Theme.of(context).brightness == Brightness.dark
-                                ? 'assets/image/landimage_dark.jpg'
-                                : 'assets/image/landimage_light.jpg',
+                                ? _getDarkImagePath(HomeScreen.randomImagePath)
+                                : HomeScreen.randomImagePath,
                           ),
-                          fit: BoxFit.fitHeight,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     );
                   },
                   orElse: () => Container(
+                    height: MediaQuery.of(context).size.height / 2,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(
                           Theme.of(context).brightness == Brightness.dark
-                              ? 'assets/image/landimage_dark.jpg'
-                              : 'assets/image/landimage_light.jpg',
+                              ? _getDarkImagePath(HomeScreen.randomImagePath)
+                              : HomeScreen.randomImagePath,
                         ),
-                        fit: BoxFit.fitHeight,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                );
-              },
+                ),
             ),
           ),
         ),
       ],
     );
-  }
 
-  Widget _buildPortraitLayout(BuildContext context, double halfMediaHeight) {
-    return Stack(
+  Widget _buildPortraitLayout(BuildContext context, double halfMediaHeight) => Stack(
       children: [
         Container(
           decoration: BoxDecoration(
@@ -115,9 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
           alignment: Alignment.topCenter,
           child: Container(
             width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 2,
             child: BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) {
-                return state.maybeWhen(
+              builder: (context, state) => state.maybeWhen(
                   loaded: (_, __, occasions) {
                     if (occasions != null && occasions.isNotEmpty) {
                       final occasion = occasions.first;
@@ -129,8 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ? 'assets/image/${occasion.occasion}_dark.jpg'
                                   : 'assets/image/${occasion.occasion}.jpg',
                             ),
-                            fit: BoxFit.fitWidth,
-                            alignment: Alignment.topCenter,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       );
@@ -140,11 +142,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         image: DecorationImage(
                           image: AssetImage(
                             Theme.of(context).brightness == Brightness.dark
-                                ? 'assets/image/landimage_dark.jpg'
-                                : 'assets/image/landimage_light.jpg',
+                                ? _getDarkImagePath(HomeScreen.randomImagePath)
+                                : HomeScreen.randomImagePath,
                           ),
-                          fit: BoxFit.fitWidth,
-                          alignment: Alignment.topCenter,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     );
@@ -154,26 +155,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       image: DecorationImage(
                         image: AssetImage(
                           Theme.of(context).brightness == Brightness.dark
-                              ? 'assets/image/landimage_dark.jpg'
-                              : 'assets/image/landimage_light.jpg',
+                              ? _getDarkImagePath(HomeScreen.randomImagePath)
+                              : HomeScreen.randomImagePath,
                         ),
-                        fit: BoxFit.fitWidth,
-                        alignment: Alignment.topCenter,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                );
-              },
+                ),
             ),
           ),
         ),
         _buildScrollableContent(context, true, halfMediaHeight),
       ],
     );
-  }
 
-  Widget _buildScrollableContent(BuildContext context, bool isPortrait, [double? halfMediaHeight]) {
-    return Stack(
+  Widget _buildScrollableContent(BuildContext context, bool isPortrait, [double? halfMediaHeight]) => Stack(
       children: [
         AnimatedBuilder(
           animation: _opacityNotifier,
@@ -211,7 +208,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
     );
-  }
 
   Widget _buildContentList() => BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) => state.when(
@@ -233,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 fit: BoxFit.cover,
               ),
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
@@ -244,18 +240,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                   child: state.maybeWhen(
-                    loaded: (_, onScreenText, __) => Html(
-                      data: onScreenText ?? 'قيمة كل امرئ ما يحسنه',
-                      style: {
-                        "body": Style(
-                          textAlign: TextAlign.center,
-                          color: Colors.white,
-                          fontSize: FontSize(20),
-                            fontFamily: 'almarai'
-                        ),
-                      },
+                    loaded: (_, onScreenText, __) => AutoSizeText(
+                      onScreenText ?? 'قيمة كل امرئ ما يحسنه',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'almarai',
+                      ),
+                      maxLines: 1,
+                      minFontSize: 12,
                     ),
-                    orElse: () => const Text(
+                    orElse: () => const AutoSizeText(
                       'قيمة كل امرئ ما يحسنه',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -263,6 +259,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 20,
                         fontFamily: 'almarai',
                       ),
+                      maxLines: 1,
+                      minFontSize: 12,
                     ),
                   ),
                 ),
@@ -302,9 +300,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           );
                         } else {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                            child: const Divider(
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 24.0),
+                            child: Divider(
                               height: 1,
                               thickness: 1,
                               color: Colors.black,

@@ -23,6 +23,19 @@ class HostScreen extends StatefulWidget {
 
 class _HostScreenState extends State<HostScreen> {
   int _currentIndex = 0;
+  late final HomeCubit _homeCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _homeCubit = HomeCubit()..fetchItems();
+  }
+
+  @override
+  void dispose() {
+    _homeCubit.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +67,16 @@ class _HostScreenState extends State<HostScreen> {
               ),
               label: 'الفهرست',
             ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(_currentIndex == 2 ? CupertinoIcons.book_solid : CupertinoIcons.book),
+            //   label: 'الكتب',
+            // ),
             BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 2 ? CupertinoIcons.book_solid : CupertinoIcons.book),
-              label: 'الكتب',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 3 ? CupertinoIcons.search_circle_fill : CupertinoIcons.search),
+              icon: Icon(_currentIndex == 2 ? CupertinoIcons.search_circle_fill : CupertinoIcons.search),
               label: 'البحث',
             ),
             BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 4 ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark),
+              icon: Icon(_currentIndex == 3 ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark),
               label: 'الإشارات',
             ),
           ],
@@ -81,9 +94,9 @@ class _HostScreenState extends State<HostScreen> {
         return 'الفهرست';
       case 2:
         return 'الكتب';
-      case 3:
+      case 2:
         return 'البحث';
-      case 4:
+      case 3:
         return 'العلامات';
       default:
         return '';
@@ -93,8 +106,8 @@ class _HostScreenState extends State<HostScreen> {
   Widget _getScreen(int index) {
     switch (index) {
       case 0:
-        return BlocProvider(
-          create: (context) => HomeCubit(),
+        return BlocProvider.value(
+          value: _homeCubit,
           child: HomeScreen(),
         );
       case 1:
@@ -102,17 +115,17 @@ class _HostScreenState extends State<HostScreen> {
           create: (context) => TocCubit(),
           child: TocScreen(),
         );
+      // case 2:
+      //   return BlocProvider(
+      //     create: (context) => LibraryCubit(),
+      //     child: const LibraryScreen(),
+      //   );
       case 2:
-        return BlocProvider(
-          create: (context) => LibraryCubit(),
-          child: const LibraryScreen(),
-        );
-      case 3:
         return BlocProvider(
           create: (context) => SearchCubit(),
           child: const SearchScreen(),
         );
-      case 4:
+      case 3:
         return BlocProvider(
           create: (context) => BookmarkCubit(),
           child: const BookmarkScreen(),

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -84,10 +85,12 @@ class HomeItemWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           text,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'almarai')
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'almarai'),
+                          maxLines: 1,
+                          minFontSize: 12,
                         ),
                       ),
                       SvgPicture.asset(
