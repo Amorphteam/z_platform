@@ -32,7 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: CustomAppBar(
           showSearchBar: true,
-          title: "الحديث الشريف",
+          title: "البحث العام",
           backgroundImage: 'assets/image/back_tazhib_light.jpg',
           leftWidget: buildLeftWidget(context),
           onLeftTap: () {

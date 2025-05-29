@@ -45,8 +45,8 @@ class WordBottomSheetContentState extends State<WordBottomSheetContent> {
 
   @override
   Widget build(BuildContext context) {
-    final saleh = widget.word?.saleh?.replaceAll('.', '. <br>').replaceFirst('&', '<h1>').replaceFirst('&', '</h1>');
-    final abdah = widget.word?.abdah?.replaceAll('.', '. <br>').replaceFirst('&', '<h1>').replaceFirst('&', '</h1>');
+    final saleh = widget.word?.saleh?.replaceAll('.', '. <br>').replaceFirst('&', '<h1>').replaceFirst('&', '</h1>') ?? '';
+    final abdah = widget.word?.abdah?.replaceAll('.', '. <br>').replaceFirst('&', '<h1>').replaceFirst('&', '</h1>') ?? '';
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Stack(
@@ -59,7 +59,7 @@ class WordBottomSheetContentState extends State<WordBottomSheetContent> {
               children: [
                 // Top bar with title and controls
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.only(right: 16, left: 16, top: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -90,13 +90,6 @@ class WordBottomSheetContentState extends State<WordBottomSheetContent> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 48.0),
-                        child: Text(
-                          widget.word?.word??'',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'almarai', color: Theme.of(context).colorScheme.secondary),
-                        ),
-                      ),
-                      Padding(
                         padding: const EdgeInsets.only(right: 48.0),
                         child: IconButton(
                           icon: const Icon(Icons.close),
@@ -106,7 +99,13 @@ class WordBottomSheetContentState extends State<WordBottomSheetContent> {
                     ],
                   ),
                 ),
-
+                Padding(
+                  padding: const EdgeInsets.only(top: 0.0, bottom: 20),
+                  child: Text(
+                    widget.word?.word ?? 'کلمه',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'almarai', color: Theme.of(context).colorScheme.secondary),
+                  ),
+                ),
                 // Scrollable content
 
                 Expanded(
@@ -115,8 +114,10 @@ class WordBottomSheetContentState extends State<WordBottomSheetContent> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        buildCard(context, abdah, 'محمد عبده:'  ),
-                        buildCard(context, saleh, 'صبحي صالح:'  ),
+                        if (abdah != null && abdah.isNotEmpty)
+                          buildCard(context, abdah, 'محمد عبده:'),
+                        if (saleh != null && saleh.isNotEmpty)
+                          buildCard(context, saleh, 'صبحي صالح:'),
                       ],
                     ),
                   ),

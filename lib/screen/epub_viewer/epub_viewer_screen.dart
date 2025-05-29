@@ -8,7 +8,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:zahra/model/word.dart';
-import 'package:zahra/screen/epub_viewer/widgets/RejalBottomSheetContent.dart';
+import 'package:zahra/screen/epub_viewer/widgets/WordBottomSheetContent.dart';
 import 'package:zahra/screen/epub_viewer/widgets/toc_tree_list_widget.dart';
 import '../../model/book_model.dart';
 import '../../model/history_model.dart';
@@ -1233,22 +1233,23 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   _showBottomSheet(BuildContext context, EpubViewerCubit cubit) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Set this property to true
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        // Calculate the maximum height based on content
-        final double maxContentHeight = MediaQuery.of(context).size.height * 0.8;
-
-        return ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight: maxContentHeight,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                StyleSheet(epubViewerCubit: cubit, lineSpace: lineHeight, fontFamily: fontFamily, fontSize: fontSize),
-              ],
-            ),
-          ),
+        return DraggableScrollableSheet(
+          initialChildSize: 0.5,
+          minChildSize: 0.25,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: Column(
+                children: [
+                  StyleSheet(epubViewerCubit: cubit, lineSpace: lineHeight, fontFamily: fontFamily, fontSize: fontSize),
+                ],
+              ),
+            );
+          },
         );
       },
     );
@@ -1492,9 +1493,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.9,
-        minChildSize: 0.5,
-        maxChildSize: 1.0,
+        initialChildSize: 0.5,
+        minChildSize: 0.25,
+        maxChildSize: 0.9,
         expand: false,
         builder: (context, scrollController) => WordBottomSheetContent(
           word: word,

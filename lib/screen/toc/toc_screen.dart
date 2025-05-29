@@ -59,9 +59,11 @@ class _TocScreenState extends State<TocScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         backgroundImage: 'assets/image/back_tazhib_light.jpg',
-        title: widget.title ?? 'الفهرست',
+        title: widget.title ?? 'الفهرست الموضوعي',
         showSearchBar: true,
         onSearch: _filterItems,
+        leftWidget: SizedBox(), // This will hide the back button
+
       ),
       body: isLandscape
           ? Row(
@@ -216,7 +218,7 @@ class _TocScreenState extends State<TocScreen> {
         margin: EdgeInsets.only(
           right: 16.0,
           left: isNestedParent ? 0.0 : 16.0,
-          bottom: 6,
+          bottom: 0,
         ),
         child: Card(
           color: Theme.of(context).colorScheme.primaryContainer,
@@ -239,7 +241,7 @@ class _TocScreenState extends State<TocScreen> {
 
   Widget _buildCardView(TocItem item, BuildContext context) => Container(
     alignment: Alignment.center,
-    margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+    margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
     child: Card(
       color: Theme.of(context).colorScheme.primaryContainer,
       elevation: 0,
@@ -282,7 +284,7 @@ class _TocScreenState extends State<TocScreen> {
   );
 
   Widget _buildCardTitle(TocItem item, BuildContext context) => Container(
-    margin: const EdgeInsets.symmetric(vertical: 8.0),
+    margin: EdgeInsets.zero,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -306,7 +308,7 @@ class _TocScreenState extends State<TocScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -336,6 +338,7 @@ class _TocScreenState extends State<TocScreen> {
                   ),
                   Expanded(
                     child: Text(
+                      textAlign: TextAlign.center,
                       item.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
@@ -352,13 +355,13 @@ class _TocScreenState extends State<TocScreen> {
                 itemBuilder: (context, index) {
                   final myItem = item.items![index];
                   return Card(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    elevation: 0,
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
                       onTap: () {
                         if (myItem.addressNo != null) {
                           final String sectionNumberString = (myItem.addressNo! - 1).toString();
-                          Navigator.pop(context); // Close the bottom sheet after navigation
                           NavigationHelper.openBook(context, myItem.addressType ?? '', sectionNumberString);
                         }
                       },

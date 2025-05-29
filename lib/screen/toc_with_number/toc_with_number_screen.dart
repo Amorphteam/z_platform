@@ -252,7 +252,7 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
               child: Center(
                 child: Text(
                   _toArabicNumber(item.key?.split('_').last ?? ''),
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
             ),

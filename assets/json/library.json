@@ -1,198 +1,23 @@
 [
  {
-    "title": "وسائل الشيعة",
-    "author": "الشيخ الحر العاملي",
+    "title": "نهج البلاغة",
+    "author": "الشريف الرضي",
     "description": "",
-    "image": "assets/image/.jpg",
+    "image": "nahj.jpg",
     "epub": "",
     "series": [
       {
-        "title": "ج1 ـ كتاب الطهارة1",
+        "title": "الخطب والأوامر",
         "description": "",
-        "image": "assets/image/1.jpg",
-        "epub": "1.epub"
+        "image": "nahj.jpg",
+        "epub": "khotab.epub"
       },
       {
-        "title": "ج2 ـ كتاب الطهارة2",
+        "title": "الكتب والرسائل",
         "description": "",
-        "image": "assets/image/2.jpg",
-        "epub": "2.epub"
-      },
-      {
-        "title": "ج3 ـ كتاب الطهارة3",
-        "description": "",
-        "image": "assets/image/3.jpg",
-        "epub": "3.epub"
-      },
-      {
-        "title": "ج4 ـ كتاب الصلاة1",
-        "description": "",
-        "image": "assets/image/4.jpg",
-        "epub": "4.epub"
-      },
-      {
-        "title": "ج5 ـ كتاب الصلاة2",
-        "description": "",
-        "image": "assets/image/5.jpg",
-        "epub": "5.epub"
-      },
-      {
-        "title": "ج6 ـ كتاب الصلاة3",
-        "description": "",
-        "image": "assets/image/6.jpg",
-        "epub": "6.epub"
-      },
-      {
-        "title": "ج7 ـ كتاب الصلاة4",
-        "description": "",
-        "image": "assets/image/7.jpg",
-        "epub": "7.epub"
-      },
-      {
-        "title": "ج8 ـ كتاب الصلاة5",
-        "description": "",
-        "image": "assets/image/8.jpg",
-        "epub": "8.epub"
-      },
-      {
-        "title": "ج9 ـ كتاب الزكاة والخمس",
-        "description": "",
-        "image": "assets/image/9.jpg",
-        "epub": "9.epub"
-      },
-      {
-        "title": "ج10 ـ كتاب الصوم",
-        "description": "",
-        "image": "assets/image/10.jpg",
-        "epub": "10.epub"
-      },
-      {
-        "title": "ج11 ـ كتاب الحج1",
-        "description": "",
-        "image": "assets/image/11.jpg",
-        "epub": "11.epub"
-      },
-      {
-        "title": "ج12 ـ كتاب الحج2",
-        "description": "",
-        "image": "assets/image/12.jpg",
-        "epub": "12.epub"
-      },
-      {
-        "title": "ج13 ـ كتاب الحج3",
-        "description": "",
-        "image": "assets/image/13.jpg",
-        "epub": "13.epub"
-      },
-      {
-        "title": "ج14 ـ كتاب الحج4",
-        "description": "",
-        "image": "assets/image/14.jpg",
-        "epub": "14.epub"
-      },
-      {
-        "title": "ج15 ـ كتاب الجهاد",
-        "description": "",
-        "image": "assets/image/15.jpg",
-        "epub": "15.epub"
-      },
-      {
-        "title": "ج16 ـ كتاب الجهاد - الأمر بالمعروف",
-        "description": "",
-        "image": "assets/image/16.jpg",
-        "epub": "16.epub"
-      },
-      {
-        "title": "ج17 ـ كتاب التجارة",
-        "description": "",
-        "image": "assets/image/17.jpg",
-        "epub": "17.epub"
-      },
-      {
-        "title": "ج18 ـ كتاب التجارة - الصلح",
-        "description": "",
-        "image": "assets/image/18.jpg",
-        "epub": "18.epub"
-      },
-      {
-        "title": "ج19 ـ كتاب الشركة - الوصايا",
-        "description": "",
-        "image": "assets/image/19.jpg",
-        "epub": "19.epub"
-      },
-      {
-        "title": "ج20 ـ كتاب النكاح1",
-        "description": "",
-        "image": "assets/image/20.jpg",
-        "epub": "20.epub"
-      },
-      {
-        "title": "ج21 ـ كتاب النكاح2",
-        "description": "",
-        "image": "assets/image/21.jpg",
-        "epub": "21.epub"
-      },
-      {
-        "title": "ج22 ـ كتاب الطلاق - اللعان",
-        "description": "",
-        "image": "assets/image/22.jpg",
-        "epub": "22.epub"
-      },
-      {
-        "title": "ج23 ـ كتاب العتق",
-        "description": "",
-        "image": "assets/image/23.jpg",
-        "epub": "23.epub"
-      },
-      {
-        "title": "ج24 ـ كتاب الأطعمة والأشربة1",
-        "description": "",
-        "image": "assets/image/24.jpg",
-        "epub": "24.epub"
-      },
-      {
-        "title": "ج25 ـ كتاب الأطعمة والأشربة2",
-        "description": "",
-        "image": "assets/image/25.jpg",
-        "epub": "25.epub"
-      },
-      {
-        "title": "ج26 ـ كتاب الإرث",
-        "description": "",
-        "image": "assets/image/26.jpg",
-        "epub": "26.epub"
-      },
-      {
-        "title": "ج27 ـ كتاب القضاء والشهادات",
-        "description": "",
-        "image": "assets/image/27.jpg",
-        "epub": "27.epub"
-      },
-      {
-        "title": "ج28 ـ كتاب الحدود والتعزيرات",
-        "description": "",
-        "image": "assets/image/28.jpg",
-        "epub": "28.epub"
-      },
-      {
-        "title": "ج29 ـ كتاب القصاص والديات",
-        "description": "",
-        "image": "assets/image/29.jpg",
-        "epub": "29.epub"
-      },
-      {
-        "title": "ج30 ـ الخاتمة",
-        "description": "",
-        "image": "assets/image/30.jpg",
-        "epub": "30.epub"
+        "image": "nahj.jpg",
+        "epub": "letters.epub"
       }
     ]
-  },
-  {
-    "title": "وسائل الشيعة بدون مجلد",
-    "author": "الشيخ الحر العاملي",
-    "description": "",
-    "image": "assets/image/.jpg",
-    "epub": "33.epub"
   }
 ]

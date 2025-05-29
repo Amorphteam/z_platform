@@ -117,10 +117,11 @@ iOS: https://apps.apple.com/app/zahra-app''';
                       itemBuilder: (context, index) {
                         final item = items[index];
                         return Card(
+                          elevation: 0,
                           color: Theme.of(context).colorScheme.primaryContainer,
                           margin: const EdgeInsets.only(bottom: 16),
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [

@@ -18,21 +18,21 @@ class TranslationBottomSheet extends StatefulWidget {
 }
 
 class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
-  String selectedTranslation = 'All';
+  String selectedTranslation = 'الكل';
 
 
   List<String> get availableTranslations {
-    final translations = <String>['All'];
+    final translations = <String>['الكل'];
     if (widget.hekam.english1 != null) translations.add('English');
-    if (widget.hekam.farsi1 != null) translations.add('فارسی ۱');
-    if (widget.hekam.farsi2 != null) translations.add('فارسی ۲');
-    if (widget.hekam.farsi3 != null) translations.add('فارسی ۳');
-    if (widget.hekam.farsi4 != null) translations.add('فارسی ۴');
+    if (widget.hekam.farsi1 != null) translations.add('فارسي ـ جعفري');
+    if (widget.hekam.farsi2 != null) translations.add('فارسي ـ انصاريان');
+    if (widget.hekam.farsi3 != null) translations.add('فارسي ـ فيض الإسلام');
+    if (widget.hekam.farsi4 != null) translations.add('فارسي ـ شهيدي');
     return translations;
   }
 
   bool shouldShowTranslation(String title) {
-    if (selectedTranslation == 'All') return true;
+    if (selectedTranslation == 'الكل') return true;
     return title == selectedTranslation;
   }
 
@@ -58,7 +58,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(2.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -82,6 +82,13 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: FilterChip(
+                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                          labelStyle: TextStyle(
+                            color: selectedTranslation == translation 
+                                ? Colors.white 
+                                : Theme.of(context).colorScheme.onPrimaryContainer,
+                          ),
+                          checkmarkColor: Colors.white,
                           label: Text(translation),
                           selected: selectedTranslation == translation,
                           onSelected: (selected) {
@@ -125,7 +132,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                         ),
                         const SizedBox(height: 16),
                       ],
-                      if (widget.hekam.farsi1 != null && shouldShowTranslation('فارسی ۱')) ...[
+                      if (widget.hekam.farsi1 != null && shouldShowTranslation('فارسي ـ جعفري')) ...[
                         Card(
                           elevation: 0,
                           color: Theme.of(context).colorScheme.primaryContainer,
@@ -135,7 +142,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  'فارسی ۱',
+                                  'فارسي ـ جعفري',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -151,7 +158,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                         ),
                         const SizedBox(height: 16),
                       ],
-                      if (widget.hekam.farsi2 != null && shouldShowTranslation('فارسی ۲')) ...[
+                      if (widget.hekam.farsi2 != null && shouldShowTranslation('فارسي ـ انصاريان')) ...[
                         Card(
                           elevation: 0,
                           color: Theme.of(context).colorScheme.primaryContainer,
@@ -161,7 +168,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  'فارسی ۲',
+                                  'فارسي ـ انصاريان',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -177,7 +184,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                         ),
                         const SizedBox(height: 16),
                       ],
-                      if (widget.hekam.farsi3 != null && shouldShowTranslation('فارسی ۳')) ...[
+                      if (widget.hekam.farsi3 != null && shouldShowTranslation('فارسي ـ فيض الإسلام')) ...[
                         Card(
                           elevation: 0,
                           color: Theme.of(context).colorScheme.primaryContainer,
@@ -187,7 +194,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  'فارسی ۳',
+                                  'فارسي ـ فيض الإسلام',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -203,7 +210,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                         ),
                         const SizedBox(height: 16),
                       ],
-                      if (widget.hekam.farsi4 != null && shouldShowTranslation('فارسی ۴')) ...[
+                      if (widget.hekam.farsi4 != null && shouldShowTranslation('فارسي ـ شهيدي')) ...[
                         Card(
                           elevation: 0,
                           color: Theme.of(context).colorScheme.primaryContainer,
@@ -213,7 +220,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  'فارسی ۴',
+                                  'فارسي ـ شهيدي',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),

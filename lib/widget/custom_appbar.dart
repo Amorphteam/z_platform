@@ -50,7 +50,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
       children: [
         AppBar(
           elevation: 0,
-          
           backgroundColor: widget.backgroundImage != null ? Colors.transparent : null,
           flexibleSpace: widget.backgroundImage != null
               ? Container(
@@ -78,12 +77,15 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       color: Colors.white),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-          title: Text(
-            widget.title,
-            style: TextStyle(
-              color: widget.backgroundImage != null ? Colors.white : Theme.of(context).colorScheme.secondary,
-              fontSize: 18,
-              fontWeight: FontWeight.normal,
+          title: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              widget.title,
+              style: TextStyle(
+                color: widget.backgroundImage != null ? Colors.white : Theme.of(context).colorScheme.secondary,
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ),
           centerTitle: true,
