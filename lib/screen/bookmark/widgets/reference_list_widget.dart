@@ -35,7 +35,8 @@ class ReferenceListWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Card(
-              color: Theme.of(context).colorScheme.surface,
+              color: Theme.of(context).colorScheme.primaryContainer,
+              elevation: 0,
               child: SizedBox(
                 width: double.infinity,
                 child: Padding(
@@ -73,7 +74,7 @@ class ReferenceListWidget extends StatelessWidget {
                             child: CircleAvatar(
                               radius: 12,
                               backgroundColor:
-                                  Theme.of(context).colorScheme.surface,
+                                  Theme.of(context).colorScheme.primaryContainer,
                               child: Icon(
                                 Icons.close_rounded,
                                 color: Theme.of(context).colorScheme.onSurface,
@@ -88,7 +89,7 @@ class ReferenceListWidget extends StatelessWidget {
                                 reference.title,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .labelSmall?.copyWith(color: const Color(0xFFFFffff))
+                                    .labelSmall
                                     ,
                                 textAlign: TextAlign.right,
                               ),

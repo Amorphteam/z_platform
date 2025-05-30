@@ -33,7 +33,8 @@ class HistoryListWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Card(
-              color: Theme.of(context).colorScheme.surface,
+              color: Theme.of(context).colorScheme.primaryContainer,
+              elevation: 0,
               child: SizedBox(
                 width: double.infinity,
                 child: Padding(
@@ -71,7 +72,7 @@ class HistoryListWidget extends StatelessWidget {
                             child: CircleAvatar(
                               radius: 12,
                               backgroundColor:
-                              Theme.of(context).colorScheme.surface,
+                              Theme.of(context).colorScheme.primaryContainer,
                               child: Icon(
                                 Icons.close_rounded,
                                 color: Theme.of(context).colorScheme.onSurface,

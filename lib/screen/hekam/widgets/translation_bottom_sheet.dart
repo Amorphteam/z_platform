@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zahra/model/hekam.dart';
+import 'package:zahra/util/style_helper.dart';
 
-import '../../../util/style_helper.dart';
+import '../../../model/style_model.dart';
 
 class TranslationBottomSheet extends StatefulWidget {
   final Hekam hekam;
@@ -19,7 +21,29 @@ class TranslationBottomSheet extends StatefulWidget {
 
 class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
   String selectedTranslation = 'الكل';
+  double _rejalFontSize = 18.0;
+  static const double _minFontSize = 14.0;
+  static const double _maxFontSize = 24.0;
+  static const double _fontSizeStep = 2.0;
+  static const String _rejalFontSizeKey = 'rejal_font_size';
 
+  @override
+  void initState() {
+    super.initState();
+    _loadRejalFontSize();
+  }
+
+  Future<void> _loadRejalFontSize() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _rejalFontSize = prefs.getDouble(_rejalFontSizeKey) ?? 18.0;
+    });
+  }
+
+  Future<void> _saveRejalFontSize(double fontSize) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_rejalFontSizeKey, fontSize);
+  }
 
   List<String> get availableTranslations {
     final translations = <String>['الكل'];
@@ -62,6 +86,32 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.text_decrease),
+                              onPressed: () {
+                                setState(() {
+                                  if (_rejalFontSize > _minFontSize) {
+                                    _rejalFontSize -= _fontSizeStep;
+                                    _saveRejalFontSize(_rejalFontSize);
+                                  }
+                                });
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.text_increase),
+                              onPressed: () {
+                                setState(() {
+                                  if (_rejalFontSize < _maxFontSize) {
+                                    _rejalFontSize += _fontSizeStep;
+                                    _saveRejalFontSize(_rejalFontSize);
+                                  }
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                         Text(
                           'الترجمة',
                           style: Theme.of(context).textTheme.titleLarge,
@@ -124,7 +174,18 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.english1!,
-                                  style: StyleHelper.getStyles(context),
+                                  style: {
+                                    ...StyleHelper.getStyles(context),
+                                    'html': Style(
+                                      fontSize: FontSize(_rejalFontSize),
+                                      textAlign: TextAlign.justify,
+                                      fontFamily: 'font1',
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                    'p': Style(
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  },
                                 ),
                               ],
                             ),
@@ -150,7 +211,18 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.farsi1!,
-                                  style: StyleHelper.getStyles(context),
+                                  style: {
+                                    ...StyleHelper.getStyles(context),
+                                    'html': Style(
+                                      fontSize: FontSize(_rejalFontSize),
+                                      textAlign: TextAlign.justify,
+                                      fontFamily: 'font1',
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                    'p': Style(
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  },
                                 ),
                               ],
                             ),
@@ -176,7 +248,18 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.farsi2!,
-                                  style: StyleHelper.getStyles(context),
+                                  style: {
+                                    ...StyleHelper.getStyles(context),
+                                    'html': Style(
+                                      fontSize: FontSize(_rejalFontSize),
+                                      textAlign: TextAlign.justify,
+                                      fontFamily: 'font1',
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                    'p': Style(
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  },
                                 ),
                               ],
                             ),
@@ -202,7 +285,18 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.farsi3!,
-                                  style: StyleHelper.getStyles(context),
+                                  style: {
+                                    ...StyleHelper.getStyles(context),
+                                    'html': Style(
+                                      fontSize: FontSize(_rejalFontSize),
+                                      textAlign: TextAlign.justify,
+                                      fontFamily: 'font1',
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                    'p': Style(
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  },
                                 ),
                               ],
                             ),
@@ -228,7 +322,18 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.farsi4!,
-                                  style: StyleHelper.getStyles(context),
+                                  style: {
+                                    ...StyleHelper.getStyles(context),
+                                    'html': Style(
+                                      fontSize: FontSize(_rejalFontSize),
+                                      textAlign: TextAlign.justify,
+                                      fontFamily: 'font1',
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                    'p': Style(
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  },
                                 ),
                               ],
                             ),
