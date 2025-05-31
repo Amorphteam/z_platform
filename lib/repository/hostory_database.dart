@@ -32,6 +32,12 @@ class HistoryDatabase {
     ''');
   }
 
+  Future<void> clearAllHistory() async {
+    final db = await instance.database;
+    await db.delete('history_database');
+  }
+
+
   Future<int> addHistory(HistoryModel historyModel) async {
     final db = await instance.database;
     return await db.insert('history_database', historyModel.toJson());
@@ -39,7 +45,11 @@ class HistoryDatabase {
 
   Future<List<HistoryModel>> getAllHistory() async {
     final db = await instance.database;
-    final List<Map<String, dynamic>> maps = await db.query('history_database');
+    final List<Map<String, dynamic>> maps = await db.query(
+        'history_database',
+        orderBy: 'id DESC' // Sorting by id in descending order (newest first)
+    );
+
     return List.generate(maps.length, (i) => HistoryModel(
       id: maps[i]['id'],
       title: maps[i]['title'],
@@ -48,6 +58,7 @@ class HistoryDatabase {
       navIndex: maps[i]['navIndex'],
     ));
   }
+
 
   Future<int> getCountOfAllHistory() async {
     final db = await instance.database;
