@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zahra/screen/bookmark/widgets/history_list_widget.dart';
+import '../../widget/custom_appbar.dart';
 import 'cubit/bookmark_cubit.dart';
 import 'cubit/bookmark_state.dart';
 import 'widgets/reference_list_widget.dart';
@@ -15,6 +16,7 @@ class BookmarkScreen extends StatefulWidget {
 class _BookmarkScreenState extends State<BookmarkScreen> {
   String _selectedSegment = 'Bookmark';
 
+
   @override
   void initState() {
     super.initState();
@@ -22,47 +24,56 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Column(
+  Widget build(BuildContext context) => Scaffold(
+    backgroundColor: Theme.of(context).colorScheme.primary,
+    appBar:  CustomAppBar(
+      showSearchBar: false,
+      backgroundImage: 'assets/image/back_tazhib_light.jpg',
+      title: "الإشارات",
+      leftIcon: Icons.delete, // Example: Search icon
+      onLeftTap: _clearAll,
+    ),
+    body: Directionality(
+      textDirection: TextDirection.rtl,
+      child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 58.0),
+            padding: const EdgeInsets.only(top: 0.0),
             child: SegmentedButton<String>(
-              segments: const [
+              segments: [
                 ButtonSegment(
                   value: 'Bookmark',
-                  label: Text('العلامات'),
-                  icon: Icon(Icons.bookmark),
+                  label: const Text('الإشارات'),
+                  icon: _selectedSegment == 'Bookmark' ? const Icon(Icons.bookmark) : const Icon(Icons.bookmark),
                 ),
                 ButtonSegment(
                   value: 'History',
-                  label: Text('السجل'),
-                  icon: Icon(Icons.history),
+                  label: const Text('السجل'),
+                  icon: _selectedSegment == 'History' ? const Icon(Icons.history) : const Icon(Icons.history),
                 ),
               ],
               selected: {_selectedSegment},
+              showSelectedIcon: false,
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.resolveWith((states) {
                   if (states.contains(MaterialState.selected)) {
-                    return Theme.of(context).colorScheme.primary;
+                    return Theme.of(context).colorScheme.primaryContainer;
                   } else {
-                    return Theme.of(context).colorScheme.onPrimary;
+                    return Theme.of(context).colorScheme.surface;
                   }
                 }),
                 backgroundColor: MaterialStateProperty.resolveWith((states) {
                   if (states.contains(MaterialState.selected)) {
                     return Theme.of(context).colorScheme.secondaryContainer;
                   } else {
-                    return Theme.of(context).colorScheme.onSecondary;
+                    return Colors.transparent;
                   }
                 }),
               ),
               onSelectionChanged: (newSelection) {
                 setState(() {
                   _selectedSegment = newSelection.first;
-                  _loadBookmarksOrHistory(); // Load data based on selection
+                  _loadBookmarksOrHistory();
                 });
               },
             ),
@@ -78,8 +89,8 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
 
   void _loadBookmarksOrHistory() {
     if (_selectedSegment == 'Bookmark') {
@@ -88,6 +99,43 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       BlocProvider.of<BookmarkCubit>(context).loadAllHistory();
     }
   }
+
+  void _clearAll() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            title: Text('تأكيد الحذف'),
+            content: Text('هل أنت متأكد أنك تريد حذف جميع البيانات؟'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close dialog
+                },
+                child: Text('إلغاء', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.of(context).pop(); // Close dialog
+                  if (_selectedSegment == 'Bookmark') {
+                    await BlocProvider.of<BookmarkCubit>(context).clearAllBookmarks();
+                  } else {
+                    await BlocProvider.of<BookmarkCubit>(context).clearAllHistory();
+                  }
+                  // Force reload the current view
+                  _loadBookmarksOrHistory();
+                },
+                child: Text('حذف', style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   Widget _buildBookmarkBody(BookmarkState state) {
     return state.when(
@@ -148,13 +196,11 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(color: const Color(0xFFffffff)),
               ),
               const SizedBox(height: 8),
               Text(
                 subtitle,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(color: const Color(0xFFffffff)),
               ),
             ],
           ),
