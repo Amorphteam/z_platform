@@ -7244,7 +7244,7 @@
               {
                 "level": 4,
                 "title": "1- الانحرافات فى شخصيّة عثمان",
-                "child": [],
+                "childs": [],
                 "items": [
                   {
                     "addressType": "khotab",
@@ -7271,7 +7271,7 @@
               {
                 "level": 4,
                 "title": "2- الإمام (ع) يهدى عثمان إلى طريق الحق",
-                "child": [],
+                "childs": [],
                 "items": [
                   {
                     "addressType": "khotab",
@@ -7288,7 +7288,7 @@
               {
                 "level": 4,
                 "title": "3- تجنّب الإمام (ع) في اغتيال عثمان",
-                "child": [],
+                "childs": [],
                 "items": [
                   {
                     "addressType": "khotab",
@@ -7300,7 +7300,7 @@
               {
                 "level": 4,
                 "title": "4- براءة الإمام على (ع) من قتل عثمان",
-                "child": [],
+                "childs": [],
                 "items": [
                   {
                     "addressType": "khotab",
@@ -7378,7 +7378,7 @@
       {
         "level": 2,
         "title": "الناكثون- حرب الجمل- طلحة و الزّبير و عائشة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -7540,7 +7540,7 @@
       {
         "level": 2,
         "title": "القاسطون- حرب صفّين",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -7612,7 +7612,7 @@
       {
         "level": 2,
         "title": "قضيّة التّحكيم",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -7669,7 +7669,7 @@
       {
         "level": 2,
         "title": "المارقون- الخوارج- حرب النّهروان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -7736,11 +7736,11 @@
       {
         "level": 2,
         "title": "المخالفون مع الامام",
-        "child": [
+        "childs": [
           {
             "level": 3,
             "title": "بنو أمية",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -7802,7 +7802,7 @@
           {
             "level": 3,
             "title": "معاوية بن أبى سفيان",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -7949,7 +7949,7 @@
           {
             "level": 3,
             "title": "عمرو بن العاص",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -7976,7 +7976,7 @@
           {
             "level": 3,
             "title": "أشعث بن قيس",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -7988,7 +7988,7 @@
           {
             "level": 3,
             "title": "مصقلة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -8000,7 +8000,7 @@
           {
             "level": 3,
             "title": "مسهر الطّائى",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -8012,7 +8012,7 @@
           {
             "level": 3,
             "title": "مروان",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -8029,7 +8029,7 @@
           {
             "level": 3,
             "title": "سعيد و عبد اللّه بن عمر",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -8041,7 +8041,7 @@
           {
             "level": 3,
             "title": "مغيرة بن شعبة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -8053,7 +8053,7 @@
           {
             "level": 3,
             "title": "أنس بن مالك",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -8065,7 +8065,7 @@
           {
             "level": 3,
             "title": "مغيرة بن الأخنس",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -8080,11 +8080,11 @@
       {
         "level": 2,
         "title": "أقرباء الإمام",
-        "child": [
+        "childs": [
           {
             "level": 3,
             "title": "فاطمة الزّهراء (سلام اللّه عليها)",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -8101,7 +8101,7 @@
           {
             "level": 3,
             "title": "مالك الأشتر",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -8128,7 +8128,7 @@
           {
             "level": 3,
             "title": "محمّد بن أبي بكر",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -8155,7 +8155,7 @@
           {
             "level": 3,
             "title": "عمّار بن ياسر- ابن تيهان- ذو الشّهادتين",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -8167,7 +8167,7 @@
           {
             "level": 3,
             "title": "أبو ذر",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -8179,7 +8179,7 @@
           {
             "level": 3,
             "title": "حمزة و جعفر الطيّار",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -8204,7 +8204,7 @@
       {
         "level": 2,
         "title": "السّقيفة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -8271,7 +8271,7 @@
       {
         "level": 2,
         "title": "تأثير كلمات الإمام (ع) في الأفراد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -8301,11 +8301,11 @@
   {
     "level": 1,
     "title": "5- المسائل الاجتماعيّة",
-    "child": [
+    "childs": [
       {
         "level": 2,
         "title": "تطوّر المجتمع و انحطاطه",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -8692,7 +8692,7 @@
       {
         "level": 2,
         "title": "الحرّيّة في النّقد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -8719,7 +8719,7 @@
       {
         "level": 2,
         "title": "سمات الحكومة الإسلاميّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -8746,7 +8746,7 @@
       {
         "level": 2,
         "title": "ثورة الشّعوب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -8778,7 +8778,7 @@
       {
         "level": 2,
         "title": "وضع القوانين",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -8830,11 +8830,11 @@
       {
         "level": 2,
         "title": "القضاء و القضاة",
-        "child": [
+        "childs": [
           {
             "level": 3,
             "title": "شرائط القضاة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -8846,7 +8846,7 @@
           {
             "level": 3,
             "title": "الوقوف على أعمال القضاة و سيرتهم",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -8858,7 +8858,7 @@
           {
             "level": 3,
             "title": "القصاص و الحدود",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -8870,7 +8870,7 @@
           {
             "level": 3,
             "title": "القتل",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -8882,7 +8882,7 @@
           {
             "level": 3,
             "title": "السّرقة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -8894,7 +8894,7 @@
           {
             "level": 3,
             "title": "الشّهادة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -8906,7 +8906,7 @@
           {
             "level": 3,
             "title": "الحلف- اليمين",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -8921,7 +8921,7 @@
       {
         "level": 2,
         "title": "العدالة الاجتماعيّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -8986,11 +8986,11 @@
   {
     "level": 1,
     "title": "6- المسائل الاقتصادية",
-    "child": [
+    "childs": [
       {
         "level": 2,
         "title": "من أين لك هذا",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -9012,11 +9012,11 @@
       {
         "level": 2,
         "title": "نظام التّجارة الإسلاميّة",
-        "child": [
+        "childs": [
           {
             "level": 3,
             "title": "التّعاطى المشروع",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9058,7 +9058,7 @@
           {
             "level": 3,
             "title": "تنازل الأسعار",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "",
@@ -9070,7 +9070,7 @@
           {
             "level": 3,
             "title": "المواقيت المشروعة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -9087,7 +9087,7 @@
           {
             "level": 3,
             "title": "المعيشة و التّعايش",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9104,7 +9104,7 @@
           {
             "level": 3,
             "title": "شرائط التّاجر",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9116,7 +9116,7 @@
           {
             "level": 3,
             "title": "قوانين الشّركات التّجاريّة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9128,7 +9128,7 @@
           {
             "level": 3,
             "title": "المنافع",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9140,7 +9140,7 @@
           {
             "level": 3,
             "title": "المسؤوليّات الماليّة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9152,7 +9152,7 @@
           {
             "level": 3,
             "title": "الحقوق الماليّة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9164,7 +9164,7 @@
           {
             "level": 3,
             "title": "أقسام الأموال",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9176,7 +9176,7 @@
           {
             "level": 3,
             "title": "العدالة في توزيع الثّروات",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9223,7 +9223,7 @@
           {
             "level": 3,
             "title": "القناعة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9250,7 +9250,7 @@
           {
             "level": 3,
             "title": "التّراكض للحياة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -9282,7 +9282,7 @@
           {
             "level": 3,
             "title": "مساوي العاطل",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -9294,7 +9294,7 @@
           {
             "level": 3,
             "title": "الفقر",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9336,7 +9336,7 @@
           {
             "level": 3,
             "title": "مكافحة الفقر",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9363,7 +9363,7 @@
           {
             "level": 3,
             "title": "مساوي الفقر",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9390,7 +9390,7 @@
           {
             "level": 3,
             "title": "الفقير و الغني",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9417,7 +9417,7 @@
           {
             "level": 3,
             "title": "تداول الثّروة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9434,7 +9434,7 @@
           {
             "level": 3,
             "title": "الإنفاق",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9486,7 +9486,7 @@
           {
             "level": 3,
             "title": "الصّدقات",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9513,7 +9513,7 @@
           {
             "level": 3,
             "title": "الإنفاق في سبيل اللّه",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9550,7 +9550,7 @@
           {
             "level": 3,
             "title": "كيفيّة الإنفاق و موارده",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9592,7 +9592,7 @@
           {
             "level": 3,
             "title": "الملك للّه وحده",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9604,7 +9604,7 @@
           {
             "level": 3,
             "title": "الغصب",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9616,7 +9616,7 @@
           {
             "level": 3,
             "title": "مساوئ الاحتكار",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -9668,7 +9668,7 @@
           {
             "level": 3,
             "title": "الارتشاء",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9680,7 +9680,7 @@
           {
             "level": 3,
             "title": "الاحتكار",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -9712,7 +9712,7 @@
           {
             "level": 3,
             "title": "الإرث",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9734,7 +9734,7 @@
           {
             "level": 3,
             "title": "القرض",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9751,7 +9751,7 @@
           {
             "level": 3,
             "title": "معاملة ذوي الإعسار",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9763,7 +9763,7 @@
           {
             "level": 3,
             "title": "الرّشوة و الرّبا",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9783,11 +9783,11 @@
       {
         "level": 2,
         "title": "بيت المال",
-        "child": [
+        "childs": [
           {
             "level": 3,
             "title": "طريقة أخذ بيت المال",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -9824,7 +9824,7 @@
           {
             "level": 3,
             "title": "التّساوي في المنافع العائدة من بيت المال",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9846,7 +9846,7 @@
           {
             "level": 3,
             "title": "مصاريف بيت المال",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -9873,7 +9873,7 @@
           {
             "level": 3,
             "title": "الخيانة لبيت المال",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -9918,7 +9918,7 @@
       {
         "level": 2,
         "title": "الزّكاة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -9945,7 +9945,7 @@
       {
         "level": 2,
         "title": "الخمس",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -9957,7 +9957,7 @@
       {
         "level": 2,
         "title": "الفيء",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -9984,7 +9984,7 @@
       {
         "level": 2,
         "title": "القطايع",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10001,7 +10001,7 @@
       {
         "level": 2,
         "title": "التّعمير و البناء",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -10031,11 +10031,11 @@
   {
     "level": 1,
     "title": "7- الحقّ و الباطل",
-    "child": [
+    "childs": [
       {
         "level": 2,
         "title": "معرفة الحقّ و الباطل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10257,7 +10257,7 @@
       {
         "level": 2,
         "title": "الشّبهة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10304,7 +10304,7 @@
       {
         "level": 2,
         "title": "مفاهيم الحقّ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10321,7 +10321,7 @@
       {
         "level": 2,
         "title": "العمل بالحقّ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10353,7 +10353,7 @@
       {
         "level": 2,
         "title": "كلام الحقّ و الباطل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10380,7 +10380,7 @@
       {
         "level": 2,
         "title": "المال الباطل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -10392,7 +10392,7 @@
       {
         "level": 2,
         "title": "أنصار الحقّ و الباطل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10434,7 +10434,7 @@
       {
         "level": 2,
         "title": "عدم المبالاة للحقّ و الباطل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -10446,7 +10446,7 @@
       {
         "level": 2,
         "title": "الصّمود في طريق الحقّ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10478,7 +10478,7 @@
       {
         "level": 2,
         "title": "الرّكون إلى الحق",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10510,7 +10510,7 @@
       {
         "level": 2,
         "title": "التّكتّل في طريق الحق",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10522,7 +10522,7 @@
       {
         "level": 2,
         "title": "الحقّ صعب غير أنّه يوصلنا إلى القمّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10584,7 +10584,7 @@
       {
         "level": 2,
         "title": "أثر السّلطة في تطبيق الحق",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10671,7 +10671,7 @@
       {
         "level": 2,
         "title": "الحقّ يؤخذ و لا يعطى",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10703,7 +10703,7 @@
       {
         "level": 2,
         "title": "الوقوف بوجه الحقّ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -10720,11 +10720,11 @@
       {
         "level": 2,
         "title": "الحقوق المتبادلة",
-        "child": [
+        "childs": [
           {
             "level": 3,
             "title": "حقّ اللّه سبحانه",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -10801,7 +10801,7 @@
           {
             "level": 3,
             "title": "حقوق الإنسان",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -10838,7 +10838,7 @@
           {
             "level": 3,
             "title": "الحقوق المتقابل بين الأب و ابنه",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -10855,7 +10855,7 @@
           {
             "level": 3,
             "title": "حقّ من يبدئ النّصيحة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -10867,7 +10867,7 @@
           {
             "level": 3,
             "title": "حقوق الأقلّيّات العائشة فى الوطن",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "letters",
@@ -10889,7 +10889,7 @@
           {
             "level": 3,
             "title": "حقّ العالم و الجاهل",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "hekam",
@@ -10907,11 +10907,11 @@
   {
     "level": 1,
     "title": "8- الجهاد",
-    "child": [
+    "childs": [
       {
         "level": 2,
         "title": "فلسفة الجهاد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11008,7 +11008,7 @@
       {
         "level": 2,
         "title": "الجهاد في اللّه وحده و تطوّر دينه",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11060,7 +11060,7 @@
       {
         "level": 2,
         "title": "سمات العدوّ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11092,7 +11092,7 @@
       {
         "level": 2,
         "title": "النّصيحة قبل أن بدأ الحرب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11124,7 +11124,7 @@
       {
         "level": 2,
         "title": "كيفيّة الجهاد و الحرب و آدابها",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11221,7 +11221,7 @@
       {
         "level": 2,
         "title": "نظام الحرب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11248,7 +11248,7 @@
       {
         "level": 2,
         "title": "أوان الحرب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11260,7 +11260,7 @@
       {
         "level": 2,
         "title": "التّنظيم العسكريّ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11272,7 +11272,7 @@
       {
         "level": 2,
         "title": "تأمين حياة الجنود",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11284,7 +11284,7 @@
       {
         "level": 2,
         "title": "التّيقّظ أمام العدوّ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11301,7 +11301,7 @@
       {
         "level": 2,
         "title": "أسرار الحرب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11313,7 +11313,7 @@
       {
         "level": 2,
         "title": "أنواع الجهاد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11335,7 +11335,7 @@
       {
         "level": 2,
         "title": "التّقاعس عن الجهاد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11402,7 +11402,7 @@
       {
         "level": 2,
         "title": "القوى المجاهدة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11434,7 +11434,7 @@
       {
         "level": 2,
         "title": "قادة الجهاد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11516,7 +11516,7 @@
       {
         "level": 2,
         "title": "تعيين أمراء الجيوش",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11548,7 +11548,7 @@
       {
         "level": 2,
         "title": "رسالة القواد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11565,7 +11565,7 @@
       {
         "level": 2,
         "title": "شرائط الجهاد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11617,7 +11617,7 @@
       {
         "level": 2,
         "title": "أوصاف المجاهدين",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11684,7 +11684,7 @@
       {
         "level": 2,
         "title": "طاعة القوّاد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11706,7 +11706,7 @@
       {
         "level": 2,
         "title": "الجهاد و التّرغيب إليه",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11753,7 +11753,7 @@
       {
         "level": 2,
         "title": "المعاهدة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11775,7 +11775,7 @@
       {
         "level": 2,
         "title": "التقيّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11807,7 +11807,7 @@
       {
         "level": 2,
         "title": "العون الإلهىّ .. في الجهاد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11824,7 +11824,7 @@
       {
         "level": 2,
         "title": "فضيلة الشّهادة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11866,7 +11866,7 @@
       {
         "level": 2,
         "title": "عدم البكاء على المجاهدين",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -11878,7 +11878,7 @@
       {
         "level": 2,
         "title": "اليقين و المثابرة رمز الانتصار فى الجهاد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11890,7 +11890,7 @@
       {
         "level": 2,
         "title": "التّعذيب في اللّه",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -11902,7 +11902,7 @@
       {
         "level": 2,
         "title": "الجنود فى مواقفهم الاضطراريّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -11917,7 +11917,7 @@
   {
     "level": 1,
     "title": "9- الدّنيا و الآخرة",
-    "child": [],
+    "childs": [],
     "items": [
       {
         "addressType": "khotab",
@@ -12619,11 +12619,11 @@
   {
     "level": 1,
     "title": "10- المعاد",
-    "child": [
+    "childs": [
       {
         "level": 2,
         "title": "أثر المعاد في الحياة البشريّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -12770,11 +12770,11 @@
       {
         "level": 2,
         "title": "الموت",
-        "child": [
+        "childs": [
           {
             "level": 3,
             "title": "الموت",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -13186,7 +13186,7 @@
           {
             "level": 3,
             "title": "فرار الانسان من الموت",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -13228,7 +13228,7 @@
           {
             "level": 3,
             "title": "سكرات الموت",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -13245,7 +13245,7 @@
           {
             "level": 3,
             "title": "الموت السّيّئ",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -13257,7 +13257,7 @@
           {
             "level": 3,
             "title": "الوقوف بوجه الموت",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -13274,7 +13274,7 @@
           {
             "level": 3,
             "title": "موقف المؤمن و غيره من الموت",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -13314,7 +13314,7 @@
       {
         "level": 2,
         "title": "القبر",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -13366,7 +13366,7 @@
       {
         "level": 2,
         "title": "عالم البرزخ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -13423,7 +13423,7 @@
       {
         "level": 2,
         "title": "الحشر",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -13455,7 +13455,7 @@
       {
         "level": 2,
         "title": "علائم القيامة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -13477,7 +13477,7 @@
       {
         "level": 2,
         "title": "إثبات المعاد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -13489,7 +13489,7 @@
       {
         "level": 2,
         "title": "القيامة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -13551,7 +13551,7 @@
       {
         "level": 2,
         "title": "احوال القيامة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -13578,7 +13578,7 @@
       {
         "level": 2,
         "title": "زاد الآخرة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -13630,7 +13630,7 @@
       {
         "level": 2,
         "title": "الصّراط",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -13642,7 +13642,7 @@
       {
         "level": 2,
         "title": "الحساب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -13819,7 +13819,7 @@
       {
         "level": 2,
         "title": "الجزاء: الثّواب و العقاب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -13986,7 +13986,7 @@
       {
         "level": 2,
         "title": "الشّفاعة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14003,7 +14003,7 @@
       {
         "level": 2,
         "title": "الجنّة و النّار",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14253,11 +14253,11 @@
   {
     "level": 1,
     "title": "11- العلم و العلوم",
-    "child": [
+    "childs": [
       {
         "level": 2,
         "title": "أهمية العلم",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14274,7 +14274,7 @@
       {
         "level": 2,
         "title": "التعلّم و التّعليم",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14311,7 +14311,7 @@
       {
         "level": 2,
         "title": "تحديد علم الإنسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14328,7 +14328,7 @@
       {
         "level": 2,
         "title": "الأواصر بين الفهم و العلم",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -14340,7 +14340,7 @@
       {
         "level": 2,
         "title": "العلم النّافع",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14357,7 +14357,7 @@
       {
         "level": 2,
         "title": "الجهل و الجهالة و الجاهل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14404,7 +14404,7 @@
       {
         "level": 2,
         "title": "الجهل المزرى",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -14416,7 +14416,7 @@
       {
         "level": 2,
         "title": "الجهل و تبيانه",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -14428,7 +14428,7 @@
       {
         "level": 2,
         "title": "عدم الاعتراف بالجهل و نتائجه",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -14440,7 +14440,7 @@
       {
         "level": 2,
         "title": "سمات الجهل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -14462,7 +14462,7 @@
       {
         "level": 2,
         "title": "مساوئ الجهل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14474,7 +14474,7 @@
       {
         "level": 2,
         "title": "قيمة العلم",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -14521,7 +14521,7 @@
       {
         "level": 2,
         "title": "الجمع بين العلم و العمل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -14543,12 +14543,12 @@
       {
         "level": 2,
         "title": "طبقات العلماء",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "level": 3,
             "title": "العالم الواقعي",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -14580,7 +14580,7 @@
           {
             "level": 3,
             "title": "العلماء .. و المتزّى بهم",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -14612,7 +14612,7 @@
           {
             "level": 3,
             "title": "الاختلاف بين العلماء المتزيفين",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -14624,7 +14624,7 @@
           {
             "level": 3,
             "title": "رسالة العلماء",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -14688,7 +14688,7 @@
       {
         "level": 2,
         "title": "الحكمة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14710,7 +14710,7 @@
       {
         "level": 2,
         "title": "اليقين",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14777,7 +14777,7 @@
       {
         "level": 2,
         "title": "الشّك",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -14799,7 +14799,7 @@
       {
         "level": 2,
         "title": "انواع العلوم",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -14816,7 +14816,7 @@
       {
         "level": 2,
         "title": "علم الحديث",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14833,7 +14833,7 @@
       {
         "level": 2,
         "title": "التّفقّه فى الدين",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -14845,7 +14845,7 @@
       {
         "level": 2,
         "title": "عدم التّسرع فى إبداء النّظريات",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14859,11 +14859,11 @@
   {
     "level": 1,
     "title": "12- الانسان",
-    "child": [
+    "childs": [
       {
         "level": 2,
         "title": "خلقة الانسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -14885,7 +14885,7 @@
       {
         "level": 2,
         "title": "عمر الانسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15002,7 +15002,7 @@
       {
         "level": 2,
         "title": "قيمة الإنسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15054,7 +15054,7 @@
       {
         "level": 2,
         "title": "روح الإنسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15071,7 +15071,7 @@
       {
         "level": 2,
         "title": "الأوليّات فى خلقة البشر",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15093,7 +15093,7 @@
       {
         "level": 2,
         "title": "معرفة الإنسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15110,7 +15110,7 @@
       {
         "level": 2,
         "title": "فلسفة خلقة الإنسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15172,7 +15172,7 @@
       {
         "level": 2,
         "title": "عجز الإنسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15194,7 +15194,7 @@
       {
         "level": 2,
         "title": "العقل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15566,7 +15566,7 @@
       {
         "level": 2,
         "title": "تنبؤات الانسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15598,7 +15598,7 @@
       {
         "level": 2,
         "title": "الغرائز الانسانيّة و تعادلها",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15655,7 +15655,7 @@
       {
         "level": 2,
         "title": "النّساء",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15737,7 +15737,7 @@
       {
         "level": 2,
         "title": "التّساوى فى الخلقة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -15757,11 +15757,11 @@
   {
     "level": 1,
     "title": "13- برنامج الحياة",
-    "child": [
+    "childs": [
       {
         "level": 2,
         "title": "طريقة التّكلّم",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -15918,7 +15918,7 @@
       {
         "level": 2,
         "title": "طريقة التّساؤل و الاجابة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -15945,7 +15945,7 @@
       {
         "level": 2,
         "title": "النّقد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -15962,7 +15962,7 @@
       {
         "level": 2,
         "title": "طريقة كتابة الرّسائل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -15979,7 +15979,7 @@
       {
         "level": 2,
         "title": "كفّ اللّسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -15996,7 +15996,7 @@
       {
         "level": 2,
         "title": "نظام التّعايش",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16048,7 +16048,7 @@
       {
         "level": 2,
         "title": "الزّواج",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -16080,7 +16080,7 @@
       {
         "level": 2,
         "title": "مواصلة الأرحام",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16127,7 +16127,7 @@
       {
         "level": 2,
         "title": "التّجمّل و النّظافة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16149,7 +16149,7 @@
       {
         "level": 2,
         "title": "المنهاج اليومي",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16166,7 +16166,7 @@
       {
         "level": 2,
         "title": "التّغذية",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16188,7 +16188,7 @@
       {
         "level": 2,
         "title": "السّلو",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16205,7 +16205,7 @@
       {
         "level": 2,
         "title": "الخمول و مكافحته",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16227,7 +16227,7 @@
       {
         "level": 2,
         "title": "الإعتبار",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16249,7 +16249,7 @@
       {
         "level": 2,
         "title": "الفتوّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16266,7 +16266,7 @@
       {
         "level": 2,
         "title": "التّحيّة و التّهنئة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16288,7 +16288,7 @@
       {
         "level": 2,
         "title": "النّكسة و الظّفر",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16310,7 +16310,7 @@
       {
         "level": 2,
         "title": "السّرور و الحزن",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16347,7 +16347,7 @@
       {
         "level": 2,
         "title": "الشّهامة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16359,7 +16359,7 @@
       {
         "level": 2,
         "title": "التّشاور",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -16396,7 +16396,7 @@
       {
         "level": 2,
         "title": "اللّوم",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16408,7 +16408,7 @@
       {
         "level": 2,
         "title": "قضاء الحوائج",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16423,11 +16423,11 @@
   {
     "level": 1,
     "title": "14- الاخلاق",
-    "child": [
+    "childs": [
       {
         "level": 2,
         "title": "الإحسان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16469,7 +16469,7 @@
       {
         "level": 2,
         "title": "الوحدة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -16481,7 +16481,7 @@
       {
         "level": 2,
         "title": "الاعتدال",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -16493,7 +16493,7 @@
       {
         "level": 2,
         "title": "الانتقاد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16505,7 +16505,7 @@
       {
         "level": 2,
         "title": "الاستفادة من الفرص",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -16562,7 +16562,7 @@
       {
         "level": 2,
         "title": "التّبذير و الاسراف",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16594,7 +16594,7 @@
       {
         "level": 2,
         "title": "المثابرة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16606,7 +16606,7 @@
       {
         "level": 2,
         "title": "الاحتفاظ بالأمانة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16633,7 +16633,7 @@
       {
         "level": 2,
         "title": "الافتراء",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16650,7 +16650,7 @@
       {
         "level": 2,
         "title": "التّمنّى",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16737,7 +16737,7 @@
       {
         "level": 2,
         "title": "الإخلاص",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16809,7 +16809,7 @@
       {
         "level": 2,
         "title": "الإيمان",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16881,7 +16881,7 @@
       {
         "level": 2,
         "title": "البخل- الشّحّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -16903,7 +16903,7 @@
       {
         "level": 2,
         "title": "البخل عار",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "",
@@ -16945,7 +16945,7 @@
       {
         "level": 2,
         "title": "البركة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -16957,7 +16957,7 @@
       {
         "level": 2,
         "title": "الهمّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -16974,7 +16974,7 @@
       {
         "level": 2,
         "title": "التّفكّر",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -17106,7 +17106,7 @@
       {
         "level": 2,
         "title": "الجهل و الفجور",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -17158,7 +17158,7 @@
       {
         "level": 2,
         "title": "التّجربة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -17195,7 +17195,7 @@
       {
         "level": 2,
         "title": "التّقوى",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -17532,7 +17532,7 @@
       {
         "level": 2,
         "title": "علائم المتّقين",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -17594,7 +17594,7 @@
       {
         "level": 2,
         "title": "التّحذير عن معصية اللّه و التّرغيب إلى طاعة اللّه",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -17611,7 +17611,7 @@
       {
         "level": 2,
         "title": "التّفاخر و التّنابذ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -17638,7 +17638,7 @@
       {
         "level": 2,
         "title": "التّملّق و المجاملة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -17695,7 +17695,7 @@
       {
         "level": 2,
         "title": "التّكبّر",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -17767,7 +17767,7 @@
       {
         "level": 2,
         "title": "التّلوّن",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -17779,7 +17779,7 @@
       {
         "level": 2,
         "title": "التّواضع",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -17811,7 +17811,7 @@
       {
         "level": 2,
         "title": "التّوبة و الاستغفار",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -18068,7 +18068,7 @@
       {
         "level": 2,
         "title": "الحرص",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -18095,7 +18095,7 @@
       {
         "level": 2,
         "title": "حسن الخلق",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -18127,7 +18127,7 @@
       {
         "level": 2,
         "title": "الحياء",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -18159,7 +18159,7 @@
       {
         "level": 2,
         "title": "الحسد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -18221,7 +18221,7 @@
       {
         "level": 2,
         "title": "الحلم- التّواضع",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -18313,7 +18313,7 @@
       {
         "level": 2,
         "title": "الخوف و الرّجاء",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -18355,7 +18355,7 @@
       {
         "level": 2,
         "title": "الخير و الشّرّ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -18747,7 +18747,7 @@
       {
         "level": 2,
         "title": "الخيانة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -18779,7 +18779,7 @@
       {
         "level": 2,
         "title": "الكذب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -18821,7 +18821,7 @@
       {
         "level": 2,
         "title": "حبّ الدّنيا",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -18848,7 +18848,7 @@
       {
         "level": 2,
         "title": "الصّداقة و العداوة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -18915,7 +18915,7 @@
       {
         "level": 2,
         "title": "كسب الأصدقاء",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -19112,7 +19112,7 @@
       {
         "level": 2,
         "title": "دراسة التّاريخ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -19224,7 +19224,7 @@
       {
         "level": 2,
         "title": "الرّئاء- التّصنّع",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -19256,7 +19256,7 @@
       {
         "level": 2,
         "title": "الرّأي",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -19298,7 +19298,7 @@
       {
         "level": 2,
         "title": "كتمان السّر",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -19325,7 +19325,7 @@
       {
         "level": 2,
         "title": "الزّهد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -19442,7 +19442,7 @@
       {
         "level": 2,
         "title": "الجود- الكرم",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -19474,7 +19474,7 @@
       {
         "level": 2,
         "title": "سوء الظّنّ",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -19506,7 +19506,7 @@
       {
         "level": 2,
         "title": "الكلام",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -19673,7 +19673,7 @@
       {
         "level": 2,
         "title": "النّميمة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -19695,7 +19695,7 @@
       {
         "level": 2,
         "title": "الشّجاعة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -19717,7 +19717,7 @@
       {
         "level": 2,
         "title": "الشّكر",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -19839,7 +19839,7 @@
       {
         "level": 2,
         "title": "البطنة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -19866,7 +19866,7 @@
       {
         "level": 2,
         "title": "الاجتناب من المزاح",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -19883,7 +19883,7 @@
       {
         "level": 2,
         "title": "الصّبر",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20120,7 +20120,7 @@
       {
         "level": 2,
         "title": "الصّدق",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20152,7 +20152,7 @@
       {
         "level": 2,
         "title": "الصّدقة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20169,7 +20169,7 @@
       {
         "level": 2,
         "title": "التّواصل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20181,7 +20181,7 @@
       {
         "level": 2,
         "title": "الطّاعة و المعصية",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20428,7 +20428,7 @@
       {
         "level": 2,
         "title": "الطّمع- الجشع",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20490,7 +20490,7 @@
       {
         "level": 2,
         "title": "العدل و الظّلم",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20687,7 +20687,7 @@
       {
         "level": 2,
         "title": "العجب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -20739,7 +20739,7 @@
       {
         "level": 2,
         "title": "العبادة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20831,7 +20831,7 @@
       {
         "level": 2,
         "title": "التّعفّف",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -20848,7 +20848,7 @@
       {
         "level": 2,
         "title": "العفاف- العفّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20890,7 +20890,7 @@
       {
         "level": 2,
         "title": "العفو- السّماح",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20952,7 +20952,7 @@
       {
         "level": 2,
         "title": "توخي معايب النّاس",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -20989,7 +20989,7 @@
       {
         "level": 2,
         "title": "العيد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -21001,7 +21001,7 @@
       {
         "level": 2,
         "title": "الغضب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -21048,7 +21048,7 @@
       {
         "level": 2,
         "title": "الغفلة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -21120,7 +21120,7 @@
       {
         "level": 2,
         "title": "الغيبة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -21137,7 +21137,7 @@
       {
         "level": 2,
         "title": "الغيرة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -21159,7 +21159,7 @@
       {
         "level": 2,
         "title": "القلب",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -21626,7 +21626,7 @@
       {
         "level": 2,
         "title": "القناعة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -21663,7 +21663,7 @@
       {
         "level": 2,
         "title": "العداوة و اضمارها",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -21690,7 +21690,7 @@
       {
         "level": 2,
         "title": "اللّجاجة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -21717,7 +21717,7 @@
       {
         "level": 2,
         "title": "اللّهو",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "hekam",
@@ -21734,7 +21734,7 @@
       {
         "level": 2,
         "title": "محاسبة النّفس",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -21761,7 +21761,7 @@
       {
         "level": 2,
         "title": "المؤاخاة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -21773,7 +21773,7 @@
       {
         "level": 2,
         "title": "الموعظة- النّصيحة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -21890,7 +21890,7 @@
       {
         "level": 2,
         "title": "المنّة",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "letters",
@@ -21902,7 +21902,7 @@
       {
         "level": 2,
         "title": "الوفاء بالعهد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -21964,11 +21964,11 @@
       {
         "level": 2,
         "title": "التّطابق بين العقيدة و العمل",
-        "child": [
+        "childs": [
           {
             "level": 3,
             "title": "العمل طبق العقيدة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -22035,7 +22035,7 @@
           {
             "level": 3,
             "title": "النّيّة",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -22082,7 +22082,7 @@
           {
             "level": 3,
             "title": "النّفاق و المنافق",
-            "child": [],
+            "childs": [],
             "items": [
               {
                 "addressType": "khotab",
@@ -22142,7 +22142,7 @@
       {
         "level": 2,
         "title": "الورع",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -22199,7 +22199,7 @@
       {
         "level": 2,
         "title": "أداء العهد",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -22256,7 +22256,7 @@
       {
         "level": 2,
         "title": "الهوى",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -22478,7 +22478,7 @@
       {
         "level": 2,
         "title": "ذكر اللّه تعالى",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -22510,7 +22510,7 @@
       {
         "level": 2,
         "title": "الدّعاء و العمل",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",
@@ -22582,7 +22582,7 @@
       {
         "level": 2,
         "title": "أدعية الإمام أمير المؤمنين (ع)",
-        "child": [],
+        "childs": [],
         "items": [
           {
             "addressType": "khotab",

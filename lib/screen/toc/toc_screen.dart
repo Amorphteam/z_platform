@@ -52,7 +52,6 @@ class _TocScreenState extends State<TocScreen> {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
-    context.read<TocCubit>().fetchItems();
     if (widget.title != null && widget.title!.contains('\n')) {
       widget.title = widget.title!.replaceAll('\n', ' ');
     }
@@ -202,7 +201,7 @@ class _TocScreenState extends State<TocScreen> {
             _buildCardView(_filteredItems[index], context),
       );
     } else {
-      final rootItems = items.where((item) => item.childs!.isNotEmpty).toList();
+      final rootItems = items.where((item) => item.level == 1).toList();
       return ListView(
         children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
       );
@@ -229,7 +228,6 @@ class _TocScreenState extends State<TocScreen> {
             iconColor: const Color(0xFFCFA355),
             collapsedIconColor: const Color(0xFFCFA355),
             children: item.childs!
-                .where((child) => child.parentId == item.id) // Ensure only direct children are added
                 .map((child) => _buildTocItem(child, context, isNestedParent: true))
                 .toList(),
           ),
@@ -241,12 +239,12 @@ class _TocScreenState extends State<TocScreen> {
 
   Widget _buildCardView(TocItem item, BuildContext context) => Container(
     alignment: Alignment.center,
-    margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
+    margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
     child: Card(
       color: Theme.of(context).colorScheme.primaryContainer,
       elevation: 0,
       child: Container(
-        margin: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(16.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
