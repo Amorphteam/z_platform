@@ -42,12 +42,12 @@ class ReferencesDatabase {
     final db = await instance.database;
     final List<Map<String, dynamic>> maps = await db.query('reference_database');
     return List.generate(maps.length, (i) => ReferenceModel(
-        id: maps[i]['id'],
-        title: maps[i]['title'],
-        bookName: maps[i]['bookName'],
-        bookPath: maps[i]['bookPath'],
-        navIndex: maps[i]['navIndex'],
-      ),);
+      id: maps[i]['id'],
+      title: maps[i]['title'],
+      bookName: maps[i]['bookName'],
+      bookPath: maps[i]['bookPath'],
+      navIndex: maps[i]['navIndex'],
+    ),);
   }
 
   Future<int> getCountOfAllReferences() async {
@@ -77,12 +77,12 @@ class ReferencesDatabase {
     );
 
     return List.generate(maps.length, (i) => ReferenceModel(
-        id: maps[i]['id'],
-        title: maps[i]['title'],
-        bookName: maps[i]['bookName'],
-        bookPath: maps[i]['bookPath'],
-        navIndex: maps[i]['navIndex'],
-      ),);
+      id: maps[i]['id'],
+      title: maps[i]['title'],
+      bookName: maps[i]['bookName'],
+      bookPath: maps[i]['bookPath'],
+      navIndex: maps[i]['navIndex'],
+    ),);
   }
 
   Future<List<ReferenceModel>> getFilterReference(String query) async {
@@ -90,12 +90,12 @@ class ReferencesDatabase {
     final List<Map<String, dynamic>> maps = await db.query('reference_database');
 
     List<ReferenceModel> filteredList = List.generate(maps.length, (i) => ReferenceModel(
-        id: maps[i]['id'],
-        title: maps[i]['title'],
-        bookName: maps[i]['bookName'],
-        bookPath: maps[i]['bookPath'],
-        navIndex: maps[i]['navIndex'],
-      ),);
+      id: maps[i]['id'],
+      title: maps[i]['title'],
+      bookName: maps[i]['bookName'],
+      bookPath: maps[i]['bookPath'],
+      navIndex: maps[i]['navIndex'],
+    ),);
 
     if (query.isNotEmpty) {
       filteredList = filteredList.where((item) => item.title.toLowerCase().contains(query.toLowerCase())).toList();
@@ -131,6 +131,11 @@ class ReferencesDatabase {
       where: 'bookPath = ? AND navIndex = ?',
       whereArgs: [bookPath, pageNumber],
     );
+  }
+
+  Future<void> clearAllReferences() async {
+    final db = await instance.database;
+    await db.delete('reference_database');
   }
 
 

@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:zahra/repository/hostory_database.dart';
-
 import '../../../model/reference_model.dart';
+import '../../../repository/hostory_database.dart';
 import '../../../repository/reference_database.dart';
 import 'bookmark_state.dart';
-
 
 class BookmarkCubit extends Cubit<BookmarkState> {
   BookmarkCubit() : super(const BookmarkState.initial());
@@ -17,6 +15,26 @@ class BookmarkCubit extends Cubit<BookmarkState> {
     try {
       final bookmarks = await referencesDatabase.getAllReferences();
       emit(BookmarkState.bookmarksLoaded(bookmarks));
+    } catch (error) {
+      emit(BookmarkState.error(error.toString()));
+    }
+  }
+
+  Future<void> clearAllBookmarks() async {
+    emit(const BookmarkState.loading());
+    try {
+      await referencesDatabase.clearAllReferences(); // New method to clear database
+      await loadAllBookmarks(); // Fetch updated (empty) list
+    } catch (error) {
+      emit(BookmarkState.error(error.toString()));
+    }
+  }
+
+  Future<void> clearAllHistory() async {
+    emit(const BookmarkState.loading());
+    try {
+      await historyDatabase.clearAllHistory(); // New method to clear database
+      await loadAllHistory(); // Fetch updated (empty) list
     } catch (error) {
       emit(BookmarkState.error(error.toString()));
     }
@@ -41,7 +59,6 @@ class BookmarkCubit extends Cubit<BookmarkState> {
       emit(BookmarkState.error(error.toString()));
     }
   }
-
 
   Future<void> filterBookmarks(String query) async {
     emit(const BookmarkState.loading());
