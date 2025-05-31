@@ -118,4 +118,22 @@ class DatabaseHelper {
       whereArgs: ['%$query%', '%$query%', '%$query%'],
     );
   }
+
+  Future<List<Map<String, dynamic>>> getKhotabTranslation(int mainId) async {
+    final db = await database;
+    return await db.query(
+      'translate_khotab',
+      where: 'main = ?',
+      whereArgs: [mainId],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getLettersTranslation(int mainId) async {
+    final db = await database;
+    return await db.query(
+      'translate_letters',
+      where: 'main = ?',
+      whereArgs: [mainId],
+    );
+  }
 } 

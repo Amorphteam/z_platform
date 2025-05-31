@@ -12,6 +12,7 @@ import '../../../model/search_model.dart';
 import '../../../model/style_model.dart';
 import '../../../repository/hostory_database.dart';
 import '../../../repository/reference_database.dart';
+import '../../../repository/database_repository.dart';
 import '../../../util/epub_helper.dart';
 import '../../../util/search_helper.dart';
 import '../../../util/style_helper.dart';
@@ -34,6 +35,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
   final searchHelper = SearchHelper();
+  final DatabaseRepository _databaseRepository = DatabaseRepository();
 
 
   Future<void> checkBookmark(String bookPath, String pageIndex) async {
@@ -306,6 +308,23 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     return highlightedContent;
   }
 
-
+  Future<void> getTranslation(String epubName, int pageNumber) async {
+    try {
+      // Check if it's a letter or khotab based on the epub name
+      if (epubName.toLowerCase().contains('letter')) {
+        final translation = await _databaseRepository.getLettersTranslation(pageNumber);
+        if (translation != null) {
+          emit(EpubViewerState.translationLoaded(translation: translation.toJson()));
+        }
+      } else if (epubName.toLowerCase().contains('khotab')) {
+        final translation = await _databaseRepository.getKhotabTranslation(pageNumber);
+        if (translation != null) {
+          emit(EpubViewerState.translationLoaded(translation: translation.toJson()));
+        }
+      }
+    } catch (error) {
+      emit(EpubViewerState.error(error: error.toString()));
+    }
+  }
 
 }

@@ -190,6 +190,17 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             context.read<EpubViewerCubit>().loadUserPreferences();
             context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
           },
+          translationLoaded: (translation) {
+            // Show the translation in a full page bottom sheet
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) {
+                return TranslationBottomSheetContent(translation: translation);
+              },
+            );
+          },
           searchResultsFound: (searchResults) {
             setState(() {
               _currentSearchResults = searchResults;
@@ -297,6 +308,15 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       _openInternalToc(context);
                     },
                   ),
+                  IconButton(
+                    icon: Icon(Icons.translate_rounded, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    onPressed: () {
+                      if (_bookPath != null) {
+                        context.read<EpubViewerCubit>().getTranslation(_bookPath!, _currentPage.toInt()+1);
+                      }
+                    },
+                  ),
+
                 ],
               ),
             Align(
@@ -337,7 +357,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           fontFamily,) => _buildCurrentUi(context, _content),
                       bookmarkAdded: (int? status) => _buildCurrentUi(context, _content),
                       historyAdded: (int? status) => _buildCurrentUi(context, _content),
-                      searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content),),
+                      searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content), translationLoaded: (Map<String, dynamic> translation) => _buildCurrentUi(context, _content),),
                 ),
               ),
               // Add floating navigation buttons when search results exist
@@ -458,7 +478,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         title: GestureDetector(
                           onTap: () {
                             Navigator.of(context).pop();
-                            setState(() {
+                            setDialogState(() {
                               _currentSearchIndex = _currentSearchResults.indexOf(result);
                             });
                             _jumpTo(pageNumber: result.pageIndex - 1);
@@ -1501,6 +1521,246 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           word: word,
           scrollController: scrollController,
         ),
+      ),
+    );
+  }
+
+  Widget _buildTranslationChip(BuildContext context, String title, bool isSelected, VoidCallback onTap) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: FilterChip(
+        label: Text(title),
+        selected: isSelected,
+        onSelected: (_) => onTap(),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        selectedColor: Theme.of(context).colorScheme.secondaryContainer,
+        checkmarkColor: Theme.of(context).colorScheme.onSecondaryContainer,
+        labelStyle: TextStyle(
+          color: isSelected 
+            ? Theme.of(context).colorScheme.onSecondaryContainer
+            : Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+    );
+  }
+}
+
+class TranslationBottomSheetContent extends StatefulWidget {
+  final Map<String, dynamic> translation;
+
+  const TranslationBottomSheetContent({
+    Key? key,
+    required this.translation,
+  }) : super(key: key);
+
+  @override
+  State<TranslationBottomSheetContent> createState() => _TranslationBottomSheetContentState();
+}
+
+class _TranslationBottomSheetContentState extends State<TranslationBottomSheetContent> {
+  String selectedTranslation = 'fa_jafari'; // Default selection
+  double _fontSize = 18.0;
+  static const double _minFontSize = 14.0;
+  static const double _maxFontSize = 24.0;
+  static const double _fontSizeStep = 2.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          children: [
+            // Top bar with title and controls
+            Padding(
+              padding: const EdgeInsets.only(right: 16, left: 16, top: 56),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.text_decrease),
+                        onPressed: () {
+                          setState(() {
+                            if (_fontSize > _minFontSize) {
+                              _fontSize -= _fontSizeStep;
+                            }
+                          });
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.text_increase),
+                        onPressed: () {
+                          setState(() {
+                            if (_fontSize < _maxFontSize) {
+                              _fontSize += _fontSizeStep;
+                            }
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Text(
+                    'الترجمة',
+                    style: Theme.of(context).textTheme.titleLarge
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+            // Translation chips
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  if (widget.translation['fa_jafari'] != null)
+                    _buildTranslationChip(
+                      context,
+                      'Jafari',
+                      selectedTranslation == 'fa_jafari',
+                      () => setState(() => selectedTranslation = 'fa_jafari'),
+                    ),
+                  if (widget.translation['fa_ansarian'] != null)
+                    _buildTranslationChip(
+                      context,
+                      'Ansarian',
+                      selectedTranslation == 'fa_ansarian',
+                      () => setState(() => selectedTranslation = 'fa_ansarian'),
+                    ),
+                  if (widget.translation['fa_faidh'] != null)
+                    _buildTranslationChip(
+                      context,
+                      'Faidh',
+                      selectedTranslation == 'fa_faidh',
+                      () => setState(() => selectedTranslation = 'fa_faidh'),
+                    ),
+                  if (widget.translation['fa_shahidi'] != null)
+                    _buildTranslationChip(
+                      context,
+                      'Shahidi',
+                      selectedTranslation == 'fa_shahidi',
+                      () => setState(() => selectedTranslation = 'fa_shahidi'),
+                    ),
+                  if (widget.translation['en1'] != null)
+                    _buildTranslationChip(
+                      context,
+                      'English',
+                      selectedTranslation == 'en1',
+                      () => setState(() => selectedTranslation = 'en1'),
+                    ),
+                ],
+              ),
+            ),
+            // Selected translation content
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    if (widget.translation[selectedTranslation] != null)
+                      buildCard(
+                        context,
+                        widget.translation[selectedTranslation].toString(),
+                        _getTranslationTitle(selectedTranslation),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getTranslationTitle(String key) {
+    switch (key) {
+      case 'fa_jafari':
+        return 'فارسي جعفري:';
+      case 'fa_ansarian':
+        return 'فارسي انصاريان:';
+      case 'fa_faidh':
+        return 'فارسي فائض:';
+      case 'fa_shahidi':
+        return 'فارسي شهيدي:';
+      case 'en1':
+        return 'English:';
+      default:
+        return '';
+    }
+  }
+
+  Widget _buildTranslationChip(BuildContext context, String title, bool isSelected, VoidCallback onTap) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: FilterChip(
+        label: Text(
+          title,
+          style: TextStyle(
+            fontFamily: 'almarai',
+            color: isSelected
+              ? Colors.white
+                : Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+        selected: isSelected,
+        onSelected: (_) => onTap(),
+        backgroundColor: isSelected ? Theme.of(context).colorScheme.secondaryContainer: Theme.of(context).colorScheme.primaryContainer,
+        checkmarkColor: Colors.white,
+      ),
+    );
+  }
+
+  Card buildCard(BuildContext context, String content, String title) {
+    return Card(
+      elevation: 0,
+      color: Theme.of(context).colorScheme.primaryContainer,
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0, right: 16.0),
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontFamily: 'almarai',
+                color: Theme.of(context).colorScheme.secondaryContainer,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Html(
+              data: content.replaceAll('.', '. <br>'),
+              style: {
+                'html': Style(
+                  fontSize: FontSize(_fontSize),
+                  lineHeight: LineHeight(1.5),
+                  textAlign: TextAlign.justify,
+                  fontFamily: 'font1',
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                'p': Style(
+                  textAlign: TextAlign.justify,
+                ),
+                'br': Style(
+                  display: Display.block,
+                ),
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

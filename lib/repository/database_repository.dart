@@ -3,7 +3,8 @@ import 'package:zahra/model/hekam.dart';
 import 'package:zahra/model/occasion.dart';
 import 'package:zahra/model/onscreen.dart';
 import 'package:zahra/model/word.dart';
-import 'dart:math';
+
+import '../model/translate_khotab.dart';
 
 class DatabaseRepository {
   final DatabaseHelper _dbHelper;
@@ -99,6 +100,27 @@ class DatabaseRepository {
     try {
       final results = await _dbHelper.searchWords(query);
       return results.map((map) => Word.fromJson(map)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Translation operations
+  Future<Translate?> getKhotabTranslation(int mainId) async {
+    try {
+      final results = await _dbHelper.getKhotabTranslation(mainId);
+      if (results.isEmpty) return null;
+      return Translate.fromJson(results.first);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Translate?> getLettersTranslation(int mainId) async {
+    try {
+      final results = await _dbHelper.getLettersTranslation(mainId);
+      if (results.isEmpty) return null;
+      return Translate.fromJson(results.first);
     } catch (e) {
       rethrow;
     }
