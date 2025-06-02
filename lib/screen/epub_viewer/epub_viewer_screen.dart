@@ -199,7 +199,14 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               builder: (context) {
                 return TranslationBottomSheetContent(translation: translation);
               },
-            );
+            ).then((_) {
+              // Emit the loaded state to preserve content
+              context.read<EpubViewerCubit>().emit(EpubViewerState.loaded(
+                content: _content,
+                epubTitle: _bookName,
+                tocTreeList: _tocList,
+              ));
+            });
           },
           searchResultsFound: (searchResults) {
             setState(() {
@@ -308,14 +315,14 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       _openInternalToc(context);
                     },
                   ),
-                  IconButton(
+                  (_bookPath!.contains('khotab') || _bookPath!.contains('letter')) ? IconButton(
                     icon: Icon(Icons.translate_rounded, color: Theme.of(context).colorScheme.onSurfaceVariant),
                     onPressed: () {
                       if (_bookPath != null) {
                         context.read<EpubViewerCubit>().getTranslation(_bookPath!, _currentPage.toInt()+1);
                       }
                     },
-                  ),
+                  ):Container(),
 
                 ],
               ),
