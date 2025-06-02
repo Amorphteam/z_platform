@@ -36,7 +36,7 @@ mixin _$EpubViewerState {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) =>
       throw _privateConstructorUsedError;
@@ -59,7 +59,7 @@ mixin _$EpubViewerState {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -81,7 +81,7 @@ mixin _$EpubViewerState {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -219,7 +219,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return initial();
@@ -245,7 +245,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return initial?.call();
   }
@@ -270,7 +270,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -407,7 +407,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return loading();
@@ -433,7 +433,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return loading?.call();
   }
@@ -458,7 +458,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -663,7 +663,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return loaded(content, epubTitle, tocTreeList);
@@ -689,7 +689,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return loaded?.call(content, epubTitle, tocTreeList);
   }
@@ -714,7 +714,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -891,7 +891,7 @@ class _$errorImpl implements _error {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return error(this.error);
@@ -917,7 +917,7 @@ class _$errorImpl implements _error {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return error?.call(this.error);
   }
@@ -942,7 +942,7 @@ class _$errorImpl implements _error {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1115,7 +1115,7 @@ class _$PageChangedImpl implements _PageChanged {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return pageChanged(pageNumber);
@@ -1141,7 +1141,7 @@ class _$PageChangedImpl implements _PageChanged {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return pageChanged?.call(pageNumber);
   }
@@ -1166,7 +1166,7 @@ class _$PageChangedImpl implements _PageChanged {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (pageChanged != null) {
@@ -1361,7 +1361,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return styleChanged(fontSize, lineHeight, fontFamily);
@@ -1387,7 +1387,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return styleChanged?.call(fontSize, lineHeight, fontFamily);
   }
@@ -1412,7 +1412,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (styleChanged != null) {
@@ -1589,7 +1589,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return bookmarkAdded(status);
@@ -1615,7 +1615,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return bookmarkAdded?.call(status);
   }
@@ -1640,7 +1640,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (bookmarkAdded != null) {
@@ -1812,7 +1812,7 @@ class _$HistoryAddedImpl implements _HistoryAdded {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return historyAdded(status);
@@ -1838,7 +1838,7 @@ class _$HistoryAddedImpl implements _HistoryAdded {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return historyAdded?.call(status);
   }
@@ -1863,7 +1863,7 @@ class _$HistoryAddedImpl implements _HistoryAdded {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (historyAdded != null) {
@@ -2045,7 +2045,7 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return searchResultsFound(searchResults);
@@ -2071,7 +2071,7 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return searchResultsFound?.call(searchResults);
   }
@@ -2096,7 +2096,7 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (searchResultsFound != null) {
@@ -2243,7 +2243,7 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return bookmarkPresent();
@@ -2269,7 +2269,7 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return bookmarkPresent?.call();
   }
@@ -2294,7 +2294,7 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (bookmarkPresent != null) {
@@ -2431,7 +2431,7 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return bookmarkAbsent();
@@ -2457,7 +2457,7 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return bookmarkAbsent?.call();
   }
@@ -2482,7 +2482,7 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (bookmarkAbsent != null) {
@@ -2665,7 +2665,7 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return contentHighlighted(content, highlightedIndex);
@@ -2691,7 +2691,7 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return contentHighlighted?.call(content, highlightedIndex);
   }
@@ -2716,7 +2716,7 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (contentHighlighted != null) {
@@ -2811,7 +2811,7 @@ abstract class _$$TranslationLoadedImplCopyWith<$Res> {
           $Res Function(_$TranslationLoadedImpl) then) =
       __$$TranslationLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({Map<String, dynamic> translation});
+  $Res call({Map<String, String> translation});
 }
 
 /// @nodoc
@@ -2833,7 +2833,7 @@ class __$$TranslationLoadedImplCopyWithImpl<$Res>
       translation: null == translation
           ? _value._translation
           : translation // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
+              as Map<String, String>,
     ));
   }
 }
@@ -2842,12 +2842,12 @@ class __$$TranslationLoadedImplCopyWithImpl<$Res>
 
 class _$TranslationLoadedImpl implements _TranslationLoaded {
   const _$TranslationLoadedImpl(
-      {required final Map<String, dynamic> translation})
+      {required final Map<String, String> translation})
       : _translation = translation;
 
-  final Map<String, dynamic> _translation;
+  final Map<String, String> _translation;
   @override
-  Map<String, dynamic> get translation {
+  Map<String, String> get translation {
     if (_translation is EqualUnmodifiableMapView) return _translation;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableMapView(_translation);
@@ -2901,7 +2901,7 @@ class _$TranslationLoadedImpl implements _TranslationLoaded {
     required TResult Function() bookmarkAbsent,
     required TResult Function(List<String> content, int highlightedIndex)
         contentHighlighted,
-    required TResult Function(Map<String, dynamic> translation)
+    required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
     return translationLoaded(translation);
@@ -2927,7 +2927,7 @@ class _$TranslationLoadedImpl implements _TranslationLoaded {
     TResult? Function()? bookmarkAbsent,
     TResult? Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult? Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return translationLoaded?.call(translation);
   }
@@ -2952,7 +2952,7 @@ class _$TranslationLoadedImpl implements _TranslationLoaded {
     TResult Function()? bookmarkAbsent,
     TResult Function(List<String> content, int highlightedIndex)?
         contentHighlighted,
-    TResult Function(Map<String, dynamic> translation)? translationLoaded,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (translationLoaded != null) {
@@ -3028,10 +3028,10 @@ class _$TranslationLoadedImpl implements _TranslationLoaded {
 
 abstract class _TranslationLoaded implements EpubViewerState {
   const factory _TranslationLoaded(
-          {required final Map<String, dynamic> translation}) =
+          {required final Map<String, String> translation}) =
       _$TranslationLoadedImpl;
 
-  Map<String, dynamic> get translation;
+  Map<String, String> get translation;
 
   /// Create a copy of EpubViewerState
   /// with the given fields replaced by the non-null parameter values.

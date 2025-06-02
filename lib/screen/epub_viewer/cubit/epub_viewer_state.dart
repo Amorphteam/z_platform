@@ -14,5 +14,5 @@ class EpubViewerState with _$EpubViewerState {
   const factory EpubViewerState.bookmarkPresent() = _BookmarkPresent;
   const factory EpubViewerState.bookmarkAbsent() = _BookmarkAbsent;
   const factory EpubViewerState.contentHighlighted({required List<String> content, required int highlightedIndex}) = _ContentHighlighted;
-  const factory EpubViewerState.translationLoaded({required Map<String, dynamic> translation}) = _TranslationLoaded;
+  const factory EpubViewerState.translationLoaded({required Map<String, String> translation}) = _TranslationLoaded;
 }

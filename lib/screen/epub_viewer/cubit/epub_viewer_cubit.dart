@@ -309,17 +309,88 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   }
 
   Future<void> getTranslation(String epubName, int pageNumber) async {
+    emit(const EpubViewerState.loading());
     try {
       // Check if it's a letter or khotab based on the epub name
       if (epubName.toLowerCase().contains('letter')) {
         final translation = await _databaseRepository.getLettersTranslation(pageNumber);
         if (translation != null) {
-          emit(EpubViewerState.translationLoaded(translation: translation.toJson()));
+          // List of translation EPUBs to load
+          final List<String> translationEpubs = [
+            'letters_en1.epub',
+            'letters_fa_ansarian.epub',
+            'letters_fa_faidh.epub',
+            'letters_fa_jafari.epub',
+            'letters_fa_shahidi.epub'
+          ];
+
+          final Map<String, String> translations = {};
+
+          // Load and process each translation EPUB
+          for (final epubPath in translationEpubs) {
+            try {
+              final translationEpub = await loadEpubFromAsset('assets/epub/$epubPath');
+              final List<HtmlFileInfo> translationContent = 
+                  await extractHtmlContentWithEmbeddedImages(translationEpub);
+              
+              if (translationContent.isNotEmpty && pageNumber > 0 && pageNumber <= translationContent.length) {
+                final htmlContent = translationContent[pageNumber - 1].modifiedHtmlContent;
+                // Extract the translator name from the epub path
+                final translatorName = epubPath.split('_').last.replaceAll('.epub', '');
+                translations[translatorName] = htmlContent;
+              }
+            } catch (e) {
+              print('Error loading translation from $epubPath: $e');
+              // Continue with other translations even if one fails
+              continue;
+            }
+          }
+
+          if (translations.isNotEmpty) {
+            emit(EpubViewerState.translationLoaded(translation: translations));
+          } else {
+            emit(EpubViewerState.error(error: 'No translation content found'));
+          }
         }
       } else if (epubName.toLowerCase().contains('khotab')) {
         final translation = await _databaseRepository.getKhotabTranslation(pageNumber);
         if (translation != null) {
-          emit(EpubViewerState.translationLoaded(translation: translation.toJson()));
+          // List of translation EPUBs to load
+          final List<String> translationEpubs = [
+            'khotab_en1.epub',
+            'khotab_fa_ansarian.epub',
+            'khotab_fa_faidh.epub',
+            'khotab_fa_jafari.epub',
+            'khotab_fa_shahidi.epub'
+          ];
+
+          final Map<String, String> translations = {};
+
+          // Load and process each translation EPUB
+          for (final epubPath in translationEpubs) {
+            try {
+              final translationEpub = await loadEpubFromAsset('assets/epub/$epubPath');
+              final List<HtmlFileInfo> translationContent = 
+                  await extractHtmlContentWithEmbeddedImages(translationEpub);
+              
+              if (translationContent.isNotEmpty && pageNumber > 0 && pageNumber <= translationContent.length) {
+                final htmlContent = translationContent[pageNumber - 1].modifiedHtmlContent;
+                // Extract the translator name from the epub path
+                final translatorName = epubPath.split('_').last.replaceAll('.epub', '');
+                translations[translatorName] = htmlContent;
+              }
+            } catch (e) {
+              print('Error loading translation from $epubPath: $e');
+              // Continue with other translations even if one fails
+              continue;
+            }
+          }
+
+          if (translations.isNotEmpty) {
+            emit(EpubViewerState.translationLoaded(translation: translations));
+          } else {
+            emit(EpubViewerState.error(error: 'No translation content found'));
+          }
         }
       }
     } catch (error) {

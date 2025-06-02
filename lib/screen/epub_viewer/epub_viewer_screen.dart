@@ -19,6 +19,7 @@ import '../../model/tree_toc_model.dart';
 import '../../repository/database_repository.dart';
 import '../../util/epub_helper.dart';
 import '../../util/page_helper.dart';
+import '../../util/style_helper.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
 import 'cubit/epub_viewer_cubit.dart';
 import 'internal_search/internal_search_screen.dart';
@@ -1565,7 +1566,7 @@ class TranslationBottomSheetContent extends StatefulWidget {
 }
 
 class _TranslationBottomSheetContentState extends State<TranslationBottomSheetContent> {
-  String selectedTranslation = 'fa_jafari'; // Default selection
+  String selectedTranslation = 'jafari'; // Default selection
   double _fontSize = 18.0;
   static const double _minFontSize = 14.0;
   static const double _maxFontSize = 24.0;
@@ -1630,33 +1631,33 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
-                  if (widget.translation['fa_jafari'] != null)
+                  if (widget.translation['jafari'] != null)
                     _buildTranslationChip(
                       context,
                       'Jafari',
-                      selectedTranslation == 'fa_jafari',
-                      () => setState(() => selectedTranslation = 'fa_jafari'),
+                      selectedTranslation == 'jafari',
+                      () => setState(() => selectedTranslation = 'jafari'),
                     ),
-                  if (widget.translation['fa_ansarian'] != null)
+                  if (widget.translation['ansarian'] != null)
                     _buildTranslationChip(
                       context,
                       'Ansarian',
-                      selectedTranslation == 'fa_ansarian',
-                      () => setState(() => selectedTranslation = 'fa_ansarian'),
+                      selectedTranslation == 'ansarian',
+                      () => setState(() => selectedTranslation = 'ansarian'),
                     ),
-                  if (widget.translation['fa_faidh'] != null)
+                  if (widget.translation['faidh'] != null)
                     _buildTranslationChip(
                       context,
                       'Faidh',
-                      selectedTranslation == 'fa_faidh',
-                      () => setState(() => selectedTranslation = 'fa_faidh'),
+                      selectedTranslation == 'faidh',
+                      () => setState(() => selectedTranslation = 'faidh'),
                     ),
-                  if (widget.translation['fa_shahidi'] != null)
+                  if (widget.translation['shahidi'] != null)
                     _buildTranslationChip(
                       context,
                       'Shahidi',
-                      selectedTranslation == 'fa_shahidi',
-                      () => setState(() => selectedTranslation = 'fa_shahidi'),
+                      selectedTranslation == 'shahidi',
+                      () => setState(() => selectedTranslation = 'shahidi'),
                     ),
                   if (widget.translation['en1'] != null)
                     _buildTranslationChip(
@@ -1692,13 +1693,13 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
 
   String _getTranslationTitle(String key) {
     switch (key) {
-      case 'fa_jafari':
+      case 'jafari':
         return 'فارسي جعفري:';
-      case 'fa_ansarian':
+      case 'ansarian':
         return 'فارسي انصاريان:';
-      case 'fa_faidh':
+      case 'faidh':
         return 'فارسي فائض:';
-      case 'fa_shahidi':
+      case 'shahidi':
         return 'فارسي شهيدي:';
       case 'en1':
         return 'English:';
@@ -1749,22 +1750,19 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Html(
-              data: content.replaceAll('.', '. <br>'),
-              style: {
-                'html': Style(
-                  fontSize: FontSize(_fontSize),
-                  lineHeight: LineHeight(1.5),
-                  textAlign: TextAlign.justify,
-                  fontFamily: 'font1',
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-                'p': Style(
-                  textAlign: TextAlign.justify,
-                ),
-                'br': Style(
-                  display: Display.block,
-                ),
-              },
+              data: content,
+                style: {
+                  ...StyleHelper.getStyles(context),
+                  'html': Style(
+                    fontSize: FontSize(_fontSize),
+                    textAlign: TextAlign.justify,
+                    fontFamily: 'font1',
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  'p': Style(
+                    textAlign: TextAlign.justify,
+                  ),
+                }
             ),
           ),
         ],
