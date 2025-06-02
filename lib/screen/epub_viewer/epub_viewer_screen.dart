@@ -1717,14 +1717,15 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
           style: TextStyle(
             fontFamily: 'almarai',
             color: isSelected
-              ? Colors.white
+                ? Theme.of(context).colorScheme.surface
                 : Theme.of(context).colorScheme.onSurface,
           ),
         ),
         selected: isSelected,
         onSelected: (_) => onTap(),
-        backgroundColor: isSelected ? Theme.of(context).colorScheme.secondaryContainer: Theme.of(context).colorScheme.primaryContainer,
-        checkmarkColor: Colors.white,
+        checkmarkColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Colors.transparent,
+        selectedColor: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }

@@ -97,14 +97,16 @@ class MyApp extends StatelessWidget {
 
     const ColorScheme darkColorScheme = ColorScheme(
       brightness: Brightness.dark,
-      primary: Color(0xFF19192d),
+      primary: Color(0xff070707),
       onPrimary: Color(0xFF111111),
-      secondary: Color(0xFF5A6147),
+      secondary: Color(0xFFFFFFFF),
       onSecondary: Color(0xFFFFFFFF),
+      primaryContainer: Color(0xFF121212),
       error: Color(0xFFBA1A1A),
       onError: Color(0xFFFFFFFF),
-      surface: Color(0xFF111111),
-      onSurface: Color(0xFFa0a0af),
+      surface: Color(0xFF000000),
+      onSecondaryContainer: Color(0xFF1FD7DD),
+      onSurface: Color(0xffffffff),
     );
 
     final ThemeData lightTheme = ThemeData(

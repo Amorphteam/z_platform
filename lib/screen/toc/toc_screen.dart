@@ -260,7 +260,7 @@ class _TocScreenState extends State<TocScreen> {
                         child: Text(
                           item.title,
                           textAlign: TextAlign.justify,
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: Theme.of(context).textTheme.bodyLarge
                         ),
                       ),
                     ),

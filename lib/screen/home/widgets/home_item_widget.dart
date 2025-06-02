@@ -18,6 +18,7 @@ class HomeItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -40,7 +41,7 @@ class HomeItemWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2.0),
                       child: Divider(
-                        color: Colors.grey,
+                        color: isDarkMode ? Colors.grey.withOpacity(0.3) : Colors.grey,
                         height: 0.5,
                       ),
                     ),
@@ -59,7 +60,7 @@ class HomeItemWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2.0),
                       child: Divider(
-                        color: Colors.grey,
+                        color: isDarkMode ? Colors.grey.withOpacity(0.3) : Colors.grey,
                         height: 0.5,
                       ),
                     ),
@@ -74,7 +75,7 @@ class HomeItemWidget extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Color(0xFFb5c8c9).withOpacity(0.8),
+                    color: isDarkMode ? Theme.of(context).colorScheme.onSecondaryContainer.withOpacity(0.5) : Color(0xFFb5c8c9).withOpacity(0.8),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: Colors.white,
@@ -88,7 +89,7 @@ class HomeItemWidget extends StatelessWidget {
                         child: AutoSizeText(
                           text,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'almarai'),
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'almarai', color: Theme.of(context).colorScheme.onSecondaryContainer),
                           maxLines: 1,
                           minFontSize: 12,
                         ),

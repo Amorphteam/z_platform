@@ -59,7 +59,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                   if (states.contains(MaterialState.selected)) {
                     return Theme.of(context).colorScheme.primaryContainer;
                   } else {
-                    return Theme.of(context).colorScheme.surface;
+                    return Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
                   }
                 }),
                 backgroundColor: MaterialStateProperty.resolveWith((states) {

@@ -132,13 +132,13 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: FilterChip(
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                          backgroundColor: Colors.transparent,
                           labelStyle: TextStyle(
-                            color: selectedTranslation == translation 
-                                ? Colors.white 
-                                : Theme.of(context).colorScheme.onPrimaryContainer,
+                            color: selectedTranslation == translation
+                                          ? Theme.of(context).colorScheme.surface
+                                            : Theme.of(context).colorScheme.onSurface,
                           ),
-                          checkmarkColor: Colors.white,
+                          checkmarkColor: Theme.of(context).colorScheme.surface,
                           label: Text(translation),
                           selected: selectedTranslation == translation,
                           onSelected: (selected) {
