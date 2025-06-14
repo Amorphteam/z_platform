@@ -116,6 +116,11 @@ class MyApp extends StatelessWidget {
           const TextStyle(),
         ),
       ),
+      textSelectionTheme: const TextSelectionThemeData(
+        selectionColor: Color(0xFF9F9F9E), // Selection background color
+        selectionHandleColor: Color(0xFF9F9F9E), // Selection handle color
+        cursorColor: Color(0xFF9F9F9E), // Cursor color
+      ),
       colorScheme: lightColorScheme,
       fontFamily: 'SFProDisplay',
     );
@@ -126,6 +131,11 @@ class MyApp extends StatelessWidget {
         labelTextStyle: MaterialStateProperty.all(
           const TextStyle(),
         ),
+      ),
+      textSelectionTheme: const TextSelectionThemeData(
+        selectionColor: Color(0xFF1FD7DD), // Selection background color
+        selectionHandleColor: Color(0xFF1FD7DD), // Selection handle color
+        cursorColor: Color(0xFF1FD7DD), // Cursor color
       ),
       colorScheme: darkColorScheme,
       fontFamily: 'SFProDisplay',

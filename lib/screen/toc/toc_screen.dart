@@ -335,10 +335,13 @@ class _TocScreenState extends State<TocScreen> {
                     onPressed: () => Navigator.pop(context),
                   ),
                   Expanded(
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      item.title,
-                      style: Theme.of(context).textTheme.titleMedium,
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        item.title,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 48), // For balance
@@ -367,11 +370,14 @@ class _TocScreenState extends State<TocScreen> {
                         textDirection: TextDirection.rtl,
                         child: Text(
                           myItem.text ?? '',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                            fontFamily: 'Lotus Qazi Light',
+
                         ),
                       ),
                     ),
-                  );
+                  ));
                 },
               ),
             ),

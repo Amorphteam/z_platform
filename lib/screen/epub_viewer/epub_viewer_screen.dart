@@ -558,16 +558,16 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                 return Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: GestureDetector(
-                    onDoubleTap: () {
-                      setState(() {
-                        isSliderVisible = !isSliderVisible;
-                      });
-                    },
-                    onLongPress: () {
-                      setState(() {
-                        isSliderVisible = !isSliderVisible;
-                      });
-                    },
+                    // onDoubleTap: () {
+                    //   setState(() {
+                    //     isSliderVisible = !isSliderVisible;
+                    //   });
+                    // },
+                    // onLongPress: () {
+                    //   setState(() {
+                    //     isSliderVisible = !isSliderVisible;
+                    //   });
+                    // },
                     child: ConstrainedBox(
                       constraints: BoxConstraints(minHeight: screenHeight),
                       child: Container(
@@ -866,6 +866,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           fontFamily: fontFamily.name,
           padding: HtmlPaddings.zero,
         ),
+
+
         'a': Style(
           textDecoration: TextDecoration.none,
         ),
@@ -1009,6 +1011,24 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         ),
         'mark': Style(
           backgroundColor: Colors.yellow,
+        ),
+        'p.title3': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF2B5100),
+          textAlign: TextAlign.right,
+          margin: Margins.zero,
+          fontSize: FontSize(fontSize.size),
+          fontFamily: fontFamily.name,
+          fontWeight: FontWeight.bold,
+          padding: HtmlPaddings.zero,
+        ),
+        'p.title3_1': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF12116C),
+          textAlign: TextAlign.right,
+          fontWeight: FontWeight.bold,
+          margin: Margins.zero,
+          fontSize: FontSize(fontSize.size),
+          fontFamily: fontFamily.name,
+          padding: HtmlPaddings.zero,
         ),
       },
     );
@@ -1731,6 +1751,7 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
   }
 
   Card buildCard(BuildContext context, String content, String title) {
+    final bool isEnglish = selectedTranslation == 'en1';
     return Card(
       elevation: 0,
       color: Theme.of(context).colorScheme.primaryContainer,
@@ -1750,20 +1771,29 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Html(
-              data: content,
+            child: Directionality(
+              textDirection: isEnglish ? TextDirection.ltr : TextDirection.rtl,
+              child: Html(
+                data: content,
                 style: {
                   ...StyleHelper.getStyles(context),
                   'html': Style(
                     fontSize: FontSize(_fontSize),
                     textAlign: TextAlign.justify,
-                    fontFamily: 'font1',
                     color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  'h1': Style(
+                    fontSize: FontSize(_fontSize*1.2),
+                    color: const Color(0xFF00AA00),
+                    textAlign: isEnglish ? TextAlign.left: TextAlign.right,
+                    fontFamily: isEnglish ? 'arial': 'font1',
+
                   ),
                   'p': Style(
                     textAlign: TextAlign.justify,
                   ),
                 }
+              ),
             ),
           ),
         ],

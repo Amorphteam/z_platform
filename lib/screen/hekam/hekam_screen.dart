@@ -119,7 +119,7 @@ iOS: https://apps.apple.com/app/zahra-app''';
                         return Card(
                           elevation: 0,
                           color: Theme.of(context).colorScheme.primaryContainer,
-                          margin: const EdgeInsets.only(bottom: 16),
+                          margin: const EdgeInsets.only(bottom: 8),
                           child: Padding(
                             padding: const EdgeInsets.all(8),
                             child: Column(
@@ -136,6 +136,8 @@ iOS: https://apps.apple.com/app/zahra-app''';
                                     'p': Style(
                                       color: isDarkMode ? Colors.white : Colors.black,
                                       textAlign: TextAlign.justify,
+                                      fontFamily: 'Lotus Qazi Light',
+                                      fontSize: FontSize(17),
                                       margin: Margins.only(bottom: 10),
                                       padding: HtmlPaddings.only(right: 7),
                                     ),

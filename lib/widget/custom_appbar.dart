@@ -35,7 +35,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(showSearchBar ? 140 : kToolbarHeight);
+      Size.fromHeight(showSearchBar ? 140 : kToolbarHeight + 20); // Adjust height based on search bar visibility
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
