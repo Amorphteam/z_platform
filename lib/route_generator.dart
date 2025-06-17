@@ -17,6 +17,7 @@ import 'package:zahra/screen/toc/toc_screen.dart';
 import 'package:zahra/screen/toc_with_number/cubit/toc_with_number_cubit.dart';
 import 'package:zahra/screen/toc_with_number/toc_with_number_screen.dart';
 import 'model/book_model.dart';
+import 'model/history_model.dart';
 import 'model/reference_model.dart';
 import 'model/search_model.dart';
 import 'model/tree_toc_model.dart';
@@ -58,7 +59,7 @@ class RouteGenerator {
           final ReferenceModel? reference = args['reference'];
           final EpubChaptersWithBookPath? toc = args['toc'];
           final SearchModel? search = args['search'];
-
+          final HistoryModel? history = args['history'];
           return MaterialPageRoute(
             builder: (context) => BlocProvider(
               create: (context) => EpubViewerCubit(),
@@ -66,6 +67,7 @@ class RouteGenerator {
                 book: cat,
                 referenceModel: reference,
                 searchModel: search,
+                historyModel: history,
                 tocModel: toc,
               ),
             ),

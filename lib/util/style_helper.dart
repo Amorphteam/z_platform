@@ -31,6 +31,7 @@ class StyleHelper {
       "p.english": Style(
         color: const Color(0xFF800000),
         direction: TextDirection.ltr,
+        textAlign: TextAlign.left,
       ),
       "p.arabic": Style(
         color: const Color(0xFF000080),

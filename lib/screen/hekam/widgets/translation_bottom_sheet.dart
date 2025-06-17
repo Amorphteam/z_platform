@@ -112,9 +112,12 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                             ),
                           ],
                         ),
-                        Text(
-                          'الترجمة',
-                          style: Theme.of(context).textTheme.titleLarge,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
+                          child: Text(
+                            'الترجمة',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.close),
@@ -165,25 +168,18 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text(
-                                  'English',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.english1!,
                                   style: {
                                     ...StyleHelper.getStyles(context),
                                     'html': Style(
                                       fontSize: FontSize(_rejalFontSize),
-                                      textAlign: TextAlign.justify,
-                                      fontFamily: 'font1',
+                                      fontFamily: 'arial',
                                       color: Theme.of(context).colorScheme.onSurface,
                                     ),
                                     'p': Style(
-                                      textAlign: TextAlign.justify,
+                                      direction: TextDirection.ltr,
+                                      textAlign: TextAlign.left,
                                     ),
                                   },
                                 ),
@@ -202,12 +198,6 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text(
-                                  'فارسي ـ جعفري',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
                                 const SizedBox(height: 8),
                                 Html(
                                   data: widget.hekam.farsi1!,
@@ -239,13 +229,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text(
-                                  'فارسي ـ انصاريان',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                const SizedBox(height: 8),
+
                                 Html(
                                   data: widget.hekam.farsi2!,
                                   style: {
@@ -276,13 +260,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text(
-                                  'فارسي ـ فيض الإسلام',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                const SizedBox(height: 8),
+
                                 Html(
                                   data: widget.hekam.farsi3!,
                                   style: {
@@ -313,13 +291,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text(
-                                  'فارسي ـ شهيدي',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                const SizedBox(height: 8),
+
                                 Html(
                                   data: widget.hekam.farsi4!,
                                   style: {
