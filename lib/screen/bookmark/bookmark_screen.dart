@@ -33,61 +33,63 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       leftIcon: Icons.delete, // Example: Search icon
       onLeftTap: _clearAll,
     ),
-    body: Directionality(
-      textDirection: TextDirection.rtl,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 0.0),
-            child: SegmentedButton<String>(
-              segments: [
-                ButtonSegment(
-                  value: 'Bookmark',
-                  label: const Text('الإشارات'),
-                  icon: _selectedSegment == 'Bookmark' ? const Icon(Icons.bookmark) : const Icon(Icons.bookmark),
+    body: SafeArea(
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 0.0),
+              child: SegmentedButton<String>(
+                segments: [
+                  ButtonSegment(
+                    value: 'Bookmark',
+                    label: const Text('الإشارات'),
+                    icon: _selectedSegment == 'Bookmark' ? const Icon(Icons.bookmark) : const Icon(Icons.bookmark),
+                  ),
+                  ButtonSegment(
+                    value: 'History',
+                    label: const Text('السجل'),
+                    icon: _selectedSegment == 'History' ? const Icon(Icons.history) : const Icon(Icons.history),
+                  ),
+                ],
+                selected: {_selectedSegment},
+                showSelectedIcon: false,
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return Theme.of(context).colorScheme.primaryContainer;
+                    } else {
+                      return Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
+                    }
+                  }),
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return Theme.of(context).colorScheme.secondaryContainer;
+                    } else {
+                      return Colors.transparent;
+                    }
+                  }),
                 ),
-                ButtonSegment(
-                  value: 'History',
-                  label: const Text('السجل'),
-                  icon: _selectedSegment == 'History' ? const Icon(Icons.history) : const Icon(Icons.history),
-                ),
-              ],
-              selected: {_selectedSegment},
-              showSelectedIcon: false,
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.selected)) {
-                    return Theme.of(context).colorScheme.primaryContainer;
-                  } else {
-                    return Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
-                  }
-                }),
-                backgroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.selected)) {
-                    return Theme.of(context).colorScheme.secondaryContainer;
-                  } else {
-                    return Colors.transparent;
-                  }
-                }),
+                onSelectionChanged: (newSelection) {
+                  setState(() {
+                    _selectedSegment = newSelection.first;
+                    _loadBookmarksOrHistory();
+                  });
+                },
               ),
-              onSelectionChanged: (newSelection) {
-                setState(() {
-                  _selectedSegment = newSelection.first;
-                  _loadBookmarksOrHistory();
-                });
-              },
             ),
-          ),
-          Expanded(
-            child: BlocBuilder<BookmarkCubit, BookmarkState>(
-              builder: (context, state) {
-                return _selectedSegment == 'Bookmark'
-                    ? _buildBookmarkBody(state)
-                    : _buildHistoryBody(state);
-              },
+            Expanded(
+              child: BlocBuilder<BookmarkCubit, BookmarkState>(
+                builder: (context, state) {
+                  return _selectedSegment == 'Bookmark'
+                      ? _buildBookmarkBody(state)
+                      : _buildHistoryBody(state);
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );

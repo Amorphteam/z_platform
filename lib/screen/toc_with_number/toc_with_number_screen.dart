@@ -72,90 +72,92 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
         showSearchBar: true,
         onSearch: _filterItems,
       ),
-      body: isLandscape
-          ? Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 0),
-              child: BlocBuilder<TocWithNumberCubit, TocWithNumberState>(
-                builder: (context, state) => state.when(
-                  initial: () => const Center(
-                      child: Text('Tap to start fetching...')),
-                  loading: () => const Center(
-                      child: CircularProgressIndicator()),
-                  loaded: (items) {
-                    if (_allItems.isEmpty) {
-                      _allItems = List.from(items);
-                      _filteredItems = List.from(items);
-                    }
-                    return _buildTocTree(_filteredItems, context);
-                  },
-                  error: (message) =>
-                      Center(child: SelectionArea(child: Text(message))),
+      body: SafeArea(
+        child: isLandscape
+            ? Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 0),
+                child: BlocBuilder<TocWithNumberCubit, TocWithNumberState>(
+                  builder: (context, state) => state.when(
+                    initial: () => const Center(
+                        child: Text('Tap to start fetching...')),
+                    loading: () => const Center(
+                        child: CircularProgressIndicator()),
+                    loaded: (items) {
+                      if (_allItems.isEmpty) {
+                        _allItems = List.from(items);
+                        _filteredItems = List.from(items);
+                      }
+                      return _buildTocTree(_filteredItems, context);
+                    },
+                    error: (message) =>
+                        Center(child: SelectionArea(child: Text(message))),
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primary,
-              padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
+            Expanded(
               child: Container(
+                color: Theme.of(context).colorScheme.primary,
+                padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        Theme.of(context).brightness == Brightness.dark
+                            ? 'assets/image/landimage_dark.jpg'
+                            : 'assets/image/landimage_light.jpg',
+                      ),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        )
+            : Stack(
+          children: [
+            !isLandscape ? Container(
+            ):
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
                       Theme.of(context).brightness == Brightness.dark
-                          ? 'assets/image/landimage_dark.jpg'
-                          : 'assets/image/landimage_light.jpg',
+                          ? 'assets/image/main_dark.jpg'
+                          : 'assets/image/main_light.jpg',
                     ),
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.fitWidth,
+                    alignment: Alignment.topCenter,
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      )
-          : Stack(
-        children: [
-          !isLandscape ? Container(
-          ):
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    Theme.of(context).brightness == Brightness.dark
-                        ? 'assets/image/main_dark.jpg'
-                        : 'assets/image/main_light.jpg',
-                  ),
-                  fit: BoxFit.fitWidth,
-                  alignment: Alignment.topCenter,
-                ),
+            BlocBuilder<TocWithNumberCubit, TocWithNumberState>(
+              builder: (context, state) => state.when(
+                initial: () =>
+                const Center(child: Text('Tap to start fetching...')),
+                loading: () =>
+                const Center(child: CircularProgressIndicator()),
+                loaded: (items) {
+                  if (_allItems.isEmpty) {
+                    _allItems = List.from(items);
+                    _filteredItems = List.from(items);
+                  }
+                  return _buildTocTree(_filteredItems, context);
+                },
+                error: (message) =>
+                    Center(child: SelectionArea(child: Text(message))),
               ),
             ),
-          ),
-          BlocBuilder<TocWithNumberCubit, TocWithNumberState>(
-            builder: (context, state) => state.when(
-              initial: () =>
-              const Center(child: Text('Tap to start fetching...')),
-              loading: () =>
-              const Center(child: CircularProgressIndicator()),
-              loaded: (items) {
-                if (_allItems.isEmpty) {
-                  _allItems = List.from(items);
-                  _filteredItems = List.from(items);
-                }
-                return _buildTocTree(_filteredItems, context);
-              },
-              error: (message) =>
-                  Center(child: SelectionArea(child: Text(message))),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

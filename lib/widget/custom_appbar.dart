@@ -35,7 +35,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(showSearchBar ? 140 : kToolbarHeight + 20); // Adjust height based on search bar visibility
+      Size.fromHeight(showSearchBar ? 140 : kToolbarHeight); // Adjust height based on search bar visibility
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
@@ -53,18 +53,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
           backgroundColor: widget.backgroundImage != null ? Colors.transparent : null,
           flexibleSpace: widget.backgroundImage != null
               ? Container(
-                  height: kToolbarHeight + 20,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(widget.backgroundImage!),
-                      fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.3),
-                        BlendMode.darken,
-                      ),
-                    ),
-                  ),
-                )
+            height: kToolbarHeight + MediaQuery.of(context).padding.top,
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(widget.backgroundImage!),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3),
+                  BlendMode.darken,
+                ),
+              ),
+            ),
+          )
               : null,
           leading: widget.leftIcon != null
               ? IconButton(
