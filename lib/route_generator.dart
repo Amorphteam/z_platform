@@ -12,6 +12,8 @@ import 'package:zahra/screen/library/cubit/library_cubit.dart';
 import 'package:zahra/screen/library/library_screen.dart';
 import 'package:zahra/screen/search/cubit/search_cubit.dart';
 import 'package:zahra/screen/search/search_screen.dart';
+import 'package:zahra/screen/settings/cubit/setting_cubit.dart';
+import 'package:zahra/screen/settings/setting_screen.dart';
 import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
 import 'package:zahra/screen/toc/toc_screen.dart';
 import 'package:zahra/screen/toc_with_number/cubit/toc_with_number_cubit.dart';
@@ -42,8 +44,8 @@ class RouteGenerator {
       case '/searchScreen':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => HostCubit(),
-            child: const HostScreen(),
+            create: (context) => SettingCubit(),
+            child: const SettingScreen(),
           ),
         );
       case '/hekam':
