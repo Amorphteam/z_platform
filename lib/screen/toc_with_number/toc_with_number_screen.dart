@@ -216,7 +216,7 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
                     builder: (context, constraints) {
                       final textSpan = TextSpan(
                         text: item.title,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.bodyLarge,
                       );
                       final textPainter = TextPainter(
                         text: textSpan,
@@ -235,7 +235,7 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
                             overflow: TextOverflow.ellipsis,
                             item.title,
                             textAlign: TextAlign.start,
-                            style: Theme.of(context).textTheme.bodyMedium,
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),
                       );

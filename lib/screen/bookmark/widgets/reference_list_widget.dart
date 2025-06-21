@@ -89,7 +89,7 @@ class ReferenceListWidget extends StatelessWidget {
                                 reference.title,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .labelSmall
+                                    .bodyMedium
                                     ,
                                 textAlign: TextAlign.right,
                               ),

@@ -688,6 +688,28 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             fontFamily: fontFamily.name,
             padding: HtmlPaddings.zero,
           ),
+          'p.title3': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF2B5100),
+            textAlign: TextAlign.right,
+            margin: Margins.zero,
+            fontSize: FontSize(fontSize.size),
+            fontFamily: fontFamily.name,
+            fontWeight: FontWeight.bold,
+            padding: HtmlPaddings.zero,
+            lineHeight: LineHeight(1.2),
+            textDecoration: TextDecoration.none,
+          ),
+          'p.title3_1': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF12116C),
+            textAlign: TextAlign.right,
+            fontWeight: FontWeight.bold,
+            margin: Margins.zero,
+            fontSize: FontSize(fontSize.size),
+            fontFamily: fontFamily.name,
+            padding: HtmlPaddings.zero,
+            lineHeight: LineHeight(1.2),
+            textDecoration: TextDecoration.none,
+          ),
           'a': Style(
             textDecoration: TextDecoration.none,
           ),
@@ -866,8 +888,28 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           fontFamily: fontFamily.name,
           padding: HtmlPaddings.zero,
         ),
-
-
+        'p.title3': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF2B5100),
+          textAlign: TextAlign.right,
+          margin: Margins.zero,
+          fontSize: FontSize(fontSize.size),
+          fontFamily: fontFamily.name,
+          fontWeight: FontWeight.bold,
+          padding: HtmlPaddings.zero,
+          lineHeight: LineHeight(1.2),
+          textDecoration: TextDecoration.none,
+        ),
+        'p.title3_1': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF12116C),
+          textAlign: TextAlign.right,
+          fontWeight: FontWeight.bold,
+          margin: Margins.zero,
+          fontSize: FontSize(fontSize.size),
+          fontFamily: fontFamily.name,
+          padding: HtmlPaddings.zero,
+          lineHeight: LineHeight(1.2),
+          textDecoration: TextDecoration.none,
+        ),
         'a': Style(
           textDecoration: TextDecoration.none,
         ),
@@ -1011,24 +1053,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         ),
         'mark': Style(
           backgroundColor: Colors.yellow,
-        ),
-        'p.title3': Style(
-          color: isDarkMode ? Colors.white : const Color(0xFF2B5100),
-          textAlign: TextAlign.right,
-          margin: Margins.zero,
-          fontSize: FontSize(fontSize.size),
-          fontFamily: fontFamily.name,
-          fontWeight: FontWeight.bold,
-          padding: HtmlPaddings.zero,
-        ),
-        'p.title3_1': Style(
-          color: isDarkMode ? Colors.white : const Color(0xFF12116C),
-          textAlign: TextAlign.right,
-          fontWeight: FontWeight.bold,
-          margin: Margins.zero,
-          fontSize: FontSize(fontSize.size),
-          fontFamily: fontFamily.name,
-          padding: HtmlPaddings.zero,
         ),
       },
     );
@@ -1634,9 +1658,12 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
                       ),
                     ],
                   ),
-                  Text(
-                    'الترجمة',
-                    style: Theme.of(context).textTheme.titleLarge
+                  Padding(
+                    padding: const EdgeInsets.only(left: 18.0),
+                    child: Text(
+                      'الترجمة',
+                      style: Theme.of(context).textTheme.titleLarge
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close),
@@ -1654,28 +1681,28 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
                   if (widget.translation['jafari'] != null)
                     _buildTranslationChip(
                       context,
-                      'Jafari',
+                      'فارسي جعفري',
                       selectedTranslation == 'jafari',
                       () => setState(() => selectedTranslation = 'jafari'),
                     ),
                   if (widget.translation['ansarian'] != null)
                     _buildTranslationChip(
                       context,
-                      'Ansarian',
+                      'فارسي انصاريان',
                       selectedTranslation == 'ansarian',
                       () => setState(() => selectedTranslation = 'ansarian'),
                     ),
                   if (widget.translation['faidh'] != null)
                     _buildTranslationChip(
                       context,
-                      'Faidh',
+                      'فارسي فائض',
                       selectedTranslation == 'faidh',
                       () => setState(() => selectedTranslation = 'faidh'),
                     ),
                   if (widget.translation['shahidi'] != null)
                     _buildTranslationChip(
                       context,
-                      'Shahidi',
+                      'فارسي شهيدي',
                       selectedTranslation == 'shahidi',
                       () => setState(() => selectedTranslation = 'shahidi'),
                     ),
@@ -1759,16 +1786,6 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0, right: 16.0),
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontFamily: 'almarai',
-                color: Theme.of(context).colorScheme.secondaryContainer,
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Directionality(

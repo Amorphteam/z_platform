@@ -121,7 +121,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   decoration: InputDecoration(
                     hintText: "بحث...",
                     hintStyle: TextStyle(
-                      fontSize: 12,
                       color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                     ),
                     prefixIcon: Icon(Icons.search,

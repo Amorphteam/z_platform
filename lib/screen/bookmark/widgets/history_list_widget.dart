@@ -87,7 +87,7 @@ class HistoryListWidget extends StatelessWidget {
                                 history.title,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .labelSmall
+                                    .bodyMedium
                                 ,
                                 textAlign: TextAlign.right,
                               ),

@@ -112,7 +112,7 @@ iOS: https://apps.apple.com/app/zahra-app''';
                     }
 
                     return ListView.builder(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.only(left: 16, right: 16, top: 4),
                       itemCount: items.length,
                       itemBuilder: (context, index) {
                         final item = items[index];
@@ -137,7 +137,7 @@ iOS: https://apps.apple.com/app/zahra-app''';
                                       color: isDarkMode ? Colors.white : Colors.black,
                                       textAlign: TextAlign.justify,
                                       fontFamily: 'Lotus Qazi Light',
-                                      fontSize: FontSize(17),
+                                      fontSize: FontSize(19),
                                       margin: Margins.only(bottom: 10),
                                       padding: HtmlPaddings.only(right: 7),
                                     ),

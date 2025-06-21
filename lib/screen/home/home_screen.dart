@@ -191,6 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Padding(
             padding: (isPortrait) ? EdgeInsets.only(top: 40): const EdgeInsets.only(top: 40, right: 40, left: 40),
             child: CustomScrollView(
+              physics: const ClampingScrollPhysics(),
               slivers: <Widget>[
                 if (isPortrait && halfMediaHeight != null)
                   SliverAppBar(
