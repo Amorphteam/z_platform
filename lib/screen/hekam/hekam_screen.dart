@@ -5,6 +5,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:zahra/screen/hekam/cubit/hekam_cubit.dart';
 import 'package:zahra/screen/hekam/widgets/translation_bottom_sheet.dart';
 import 'package:html/parser.dart' as html_parser;
+import 'package:zahra/model/style_model.dart';
+import 'package:zahra/util/style_helper.dart';
 
 import '../../widget/custom_appbar.dart';
 
@@ -19,6 +21,24 @@ class _HekamScreenState extends State<HekamScreen> {
   bool isDarkMode = false;
   bool showFavorites = false;
   String _searchQuery = '';
+  late FontSizeCustom _fontSize;
+  late LineHeightCustom _lineHeight;
+  late FontFamily _fontFamily;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFontPreferences();
+  }
+
+  Future<void> _loadFontPreferences() async {
+    final styleHelper = await StyleHelper.loadFromPrefs();
+    setState(() {
+      _fontSize = styleHelper.fontSize;
+      _lineHeight = styleHelper.lineSpace;
+      _fontFamily = styleHelper.fontFamily;
+    });
+  }
 
   String _removeDiacritics(String text) {
     return text
@@ -131,13 +151,14 @@ iOS: https://apps.apple.com/app/zahra-app''';
                                     'body': Style(
                                       direction: TextDirection.rtl,
                                       textAlign: TextAlign.justify,
+                                      lineHeight: LineHeight(_lineHeight.size),
                                       textDecoration: TextDecoration.none,
                                     ),
                                     'p': Style(
                                       color: isDarkMode ? Colors.white : Colors.black,
                                       textAlign: TextAlign.justify,
-                                      fontFamily: 'Lotus Qazi Light',
-                                      fontSize: FontSize(19),
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size),
                                       margin: Margins.only(bottom: 10),
                                       padding: HtmlPaddings.only(right: 7),
                                     ),
@@ -145,6 +166,8 @@ iOS: https://apps.apple.com/app/zahra-app''';
                                       color: isDarkMode ? Colors.white : const Color(0xFF996633),
                                       textAlign: TextAlign.center,
                                       margin: Margins.zero,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size),
                                       padding: HtmlPaddings.zero,
                                     ),
                                     'a': Style(
@@ -161,63 +184,84 @@ iOS: https://apps.apple.com/app/zahra-app''';
                                       textAlign: TextAlign.center,
                                       margin: Margins.only(bottom: 10),
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size * 1.1),
                                     ),
                                     'h2': Style(
                                       color: isDarkMode ? Colors.white : const Color(0xFF000080),
                                       textAlign: TextAlign.center,
                                       margin: Margins.only(bottom: 10),
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size),
                                     ),
                                     'h3': Style(
                                       color: isDarkMode ? Colors.white : const Color(0xFF006400),
                                       textAlign: TextAlign.right,
                                       margin: Margins.only(bottom: 10),
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size),
                                     ),
                                     'h3.tit3_1': Style(
                                       color: isDarkMode ? Colors.white : const Color(0xFF800000),
                                       textAlign: TextAlign.right,
                                       margin: Margins.only(bottom: 10),
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size),
                                     ),
                                     'h4.tit4': Style(
                                       color: isDarkMode ? Colors.white : Colors.red,
                                       textAlign: TextAlign.center,
                                       margin: Margins.zero,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size),
                                     ),
                                     '.pagen': Style(
                                       textAlign: TextAlign.center,
                                       color: isDarkMode ? Color(0xfff9825e) : Colors.red,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size),
                                     ),
                                     '.shareef': Style(
                                       color: isDarkMode ? Colors.white : const Color(0xFF996633),
                                       textAlign: TextAlign.justify,
                                       margin: Margins.only(bottom: 5),
                                       padding: HtmlPaddings.only(right: 7),
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size * 0.9),
                                     ),
                                     '.shareef_sher': Style(
                                       textAlign: TextAlign.center,
                                       color: isDarkMode ? Colors.white : const Color(0xFF996633),
                                       margin: Margins.symmetric(vertical: 5),
                                       padding: HtmlPaddings.zero,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size * 0.9),
                                     ),
                                     '.fnote': Style(
                                       color: isDarkMode ? const Color(0xFF8a8afa) : const Color(0xFF000080),
                                       margin: Margins.zero,
                                       padding: HtmlPaddings.zero,
+                                      fontSize: FontSize(_fontSize.size * 0.75),
                                     ),
                                     '.sher': Style(
                                       textAlign: TextAlign.center,
                                       color: isDarkMode ? Colors.white : const Color(0xFF990000),
                                       margin: Margins.symmetric(vertical: 10),
                                       padding: HtmlPaddings.zero,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size),
                                     ),
                                     '.psm': Style(
                                       textAlign: TextAlign.center,
                                       color: isDarkMode ? Colors.white : const Color(0xFF990000),
                                       margin: Margins.symmetric(vertical: 10),
                                       padding: HtmlPaddings.zero,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size * 0.8),
                                     ),
                                     '.shareh': Style(
                                       color: isDarkMode ? Colors.white : const Color(0xFF996633),
@@ -225,36 +269,46 @@ iOS: https://apps.apple.com/app/zahra-app''';
                                     '.msaleh': Style(
                                       color: Colors.purple,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: _fontFamily.name,
                                     ),
                                     '.onwan': Style(
                                       color: isDarkMode ? Colors.white : const Color(0xFF088888),
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: _fontFamily.name,
                                     ),
                                     '.fn': Style(
                                       color: isDarkMode ? const Color(0xff8a8afa) : const Color(0xFF000080),
                                       fontWeight: FontWeight.normal,
+                                      fontSize: FontSize(_fontSize.size * 0.75),
                                       textDecoration: TextDecoration.none,
                                       verticalAlign: VerticalAlign.top,
                                     ),
                                     '.fm': Style(
                                       color: isDarkMode ? Color(0xffa2e1a2) : Colors.green,
                                       fontWeight: FontWeight.bold,
+                                      fontSize: FontSize(_fontSize.size * 0.75),
                                       textDecoration: TextDecoration.none,
                                     ),
                                     '.quran': Style(
                                       fontWeight: FontWeight.bold,
                                       color: isDarkMode ? Color(0xffa2e1a2) : const Color(0xFF509368),
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size),
                                     ),
                                     '.hadith': Style(
                                       color: isDarkMode ? Color(0xffC1C1C1) : Colors.black,
+                                      fontSize: FontSize(_fontSize.size),
                                     ),
                                     '.hadith-num': Style(
                                       fontWeight: FontWeight.bold,
                                       color: isDarkMode ? Color(0xfff9825e) : Colors.red,
+                                      fontFamily: _fontFamily.name,
+                                      fontSize: FontSize(_fontSize.size),
                                     ),
                                     '.shreah': Style(
                                       fontWeight: FontWeight.bold,
                                       color: isDarkMode ? Color(0xffC1C1C1) : Colors.black,
+                                      fontFamily: _fontFamily.name,
                                     ),
                                     '.kalema': Style(
                                       fontWeight: FontWeight.bold,

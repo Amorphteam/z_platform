@@ -21,28 +21,23 @@ class TranslationBottomSheet extends StatefulWidget {
 
 class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
   String selectedTranslation = 'الكل';
-  double _rejalFontSize = 18.0;
-  static const double _minFontSize = 14.0;
-  static const double _maxFontSize = 24.0;
-  static const double _fontSizeStep = 2.0;
-  static const String _rejalFontSizeKey = 'rejal_font_size';
+  late FontSizeCustom _fontSize;
+  late LineHeightCustom _lineHeight;
+  late FontFamily _fontFamily;
 
   @override
   void initState() {
     super.initState();
-    _loadRejalFontSize();
+    _loadFontPreferences();
   }
 
-  Future<void> _loadRejalFontSize() async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<void> _loadFontPreferences() async {
+    final styleHelper = await StyleHelper.loadFromPrefs();
     setState(() {
-      _rejalFontSize = prefs.getDouble(_rejalFontSizeKey) ?? 18.0;
+      _fontSize = styleHelper.fontSize;
+      _lineHeight = styleHelper.lineSpace;
+      _fontFamily = styleHelper.fontFamily;
     });
-  }
-
-  Future<void> _saveRejalFontSize(double fontSize) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble(_rejalFontSizeKey, fontSize);
   }
 
   List<String> get availableTranslations {
@@ -84,39 +79,16 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.text_decrease),
-                              onPressed: () {
-                                setState(() {
-                                  if (_rejalFontSize > _minFontSize) {
-                                    _rejalFontSize -= _fontSizeStep;
-                                    _saveRejalFontSize(_rejalFontSize);
-                                  }
-                                });
-                              },
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 48.0),
+                            child: Center(
+                              child: Text(
+                                'الترجمة',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
                             ),
-                            IconButton(
-                              icon: const Icon(Icons.text_increase),
-                              onPressed: () {
-                                setState(() {
-                                  if (_rejalFontSize < _maxFontSize) {
-                                    _rejalFontSize += _fontSizeStep;
-                                    _saveRejalFontSize(_rejalFontSize);
-                                  }
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
-                          child: Text(
-                            'الترجمة',
-                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ),
                         IconButton(
@@ -173,13 +145,15 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                   style: {
                                     ...StyleHelper.getStyles(context),
                                     'html': Style(
-                                      fontSize: FontSize(_rejalFontSize),
+                                      fontSize: FontSize(_fontSize.size),
+                                      lineHeight: LineHeight(_lineHeight.size),
                                       fontFamily: 'arial',
                                       color: Theme.of(context).colorScheme.onSurface,
                                     ),
                                     'p': Style(
                                       direction: TextDirection.ltr,
                                       textAlign: TextAlign.left,
+                                      fontFamily: 'arial',
                                     ),
                                   },
                                 ),
@@ -204,13 +178,15 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                   style: {
                                     ...StyleHelper.getStyles(context),
                                     'html': Style(
-                                      fontSize: FontSize(_rejalFontSize),
+                                      fontSize: FontSize(_fontSize.size),
+                                      lineHeight: LineHeight(_lineHeight.size),
                                       textAlign: TextAlign.justify,
-                                      fontFamily: 'font1',
+                                      fontFamily: _fontFamily.name,
                                       color: Theme.of(context).colorScheme.onSurface,
                                     ),
                                     'p': Style(
                                       textAlign: TextAlign.justify,
+                                      fontFamily: _fontFamily.name,
                                     ),
                                   },
                                 ),
@@ -235,13 +211,15 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                   style: {
                                     ...StyleHelper.getStyles(context),
                                     'html': Style(
-                                      fontSize: FontSize(_rejalFontSize),
+                                      fontSize: FontSize(_fontSize.size),
+                                      lineHeight: LineHeight(_lineHeight.size),
                                       textAlign: TextAlign.justify,
-                                      fontFamily: 'font1',
+                                      fontFamily: _fontFamily.name,
                                       color: Theme.of(context).colorScheme.onSurface,
                                     ),
                                     'p': Style(
                                       textAlign: TextAlign.justify,
+                                      fontFamily: _fontFamily.name,
                                     ),
                                   },
                                 ),
@@ -266,13 +244,15 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                   style: {
                                     ...StyleHelper.getStyles(context),
                                     'html': Style(
-                                      fontSize: FontSize(_rejalFontSize),
+                                      fontSize: FontSize(_fontSize.size),
+                                      lineHeight: LineHeight(_lineHeight.size),
                                       textAlign: TextAlign.justify,
-                                      fontFamily: 'font1',
+                                      fontFamily: _fontFamily.name,
                                       color: Theme.of(context).colorScheme.onSurface,
                                     ),
                                     'p': Style(
                                       textAlign: TextAlign.justify,
+                                      fontFamily: _fontFamily.name,
                                     ),
                                   },
                                 ),
@@ -297,13 +277,15 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                                   style: {
                                     ...StyleHelper.getStyles(context),
                                     'html': Style(
-                                      fontSize: FontSize(_rejalFontSize),
+                                      fontSize: FontSize(_fontSize.size),
+                                      lineHeight: LineHeight(_lineHeight.size),
                                       textAlign: TextAlign.justify,
-                                      fontFamily: 'font1',
+                                      fontFamily: _fontFamily.name,
                                       color: Theme.of(context).colorScheme.onSurface,
                                     ),
                                     'p': Style(
                                       textAlign: TextAlign.justify,
+                                      fontFamily: _fontFamily.name,
                                     ),
                                   },
                                 ),

@@ -1611,10 +1611,24 @@ class TranslationBottomSheetContent extends StatefulWidget {
 
 class _TranslationBottomSheetContentState extends State<TranslationBottomSheetContent> {
   String selectedTranslation = 'jafari'; // Default selection
-  double _fontSize = 18.0;
-  static const double _minFontSize = 14.0;
-  static const double _maxFontSize = 24.0;
-  static const double _fontSizeStep = 2.0;
+  late FontSizeCustom _fontSize;
+  late LineHeightCustom _lineHeight;
+  late FontFamily _fontFamily;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFontPreferences();
+  }
+
+  Future<void> _loadFontPreferences() async {
+    final styleHelper = await StyleHelper.loadFromPrefs();
+    setState(() {
+      _fontSize = styleHelper.fontSize;
+      _lineHeight = styleHelper.lineSpace;
+      _fontFamily = styleHelper.fontFamily;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1634,35 +1648,15 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.text_decrease),
-                        onPressed: () {
-                          setState(() {
-                            if (_fontSize > _minFontSize) {
-                              _fontSize -= _fontSizeStep;
-                            }
-                          });
-                        },
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 48.0),
+                      child: Center(
+                        child: Text(
+                          'الترجمة',
+                          style: Theme.of(context).textTheme.titleLarge
+                        ),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.text_increase),
-                        onPressed: () {
-                          setState(() {
-                            if (_fontSize < _maxFontSize) {
-                              _fontSize += _fontSizeStep;
-                            }
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 18.0),
-                    child: Text(
-                      'الترجمة',
-                      style: Theme.of(context).textTheme.titleLarge
                     ),
                   ),
                   IconButton(
@@ -1795,19 +1789,21 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
                 style: {
                   ...StyleHelper.getStyles(context),
                   'html': Style(
-                    fontSize: FontSize(_fontSize),
+                    fontSize: FontSize(_fontSize.size),
+                    lineHeight: LineHeight(_lineHeight.size),
                     textAlign: TextAlign.justify,
                     color: Theme.of(context).colorScheme.onSurface,
+                    fontFamily: isEnglish ? 'arial' : _fontFamily.name,
                   ),
                   'h1': Style(
-                    fontSize: FontSize(_fontSize*1.2),
+                    fontSize: FontSize(_fontSize.size * 1.2),
                     color: const Color(0xFF00AA00),
                     textAlign: isEnglish ? TextAlign.left: TextAlign.right,
-                    fontFamily: isEnglish ? 'arial': 'font1',
-
+                    fontFamily: isEnglish ? 'arial': _fontFamily.name,
                   ),
                   'p': Style(
                     textAlign: TextAlign.justify,
+                    fontFamily: isEnglish ? 'arial' : _fontFamily.name,
                   ),
                 }
               ),
