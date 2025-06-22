@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../widget/custom_appbar.dart';
+import '../../model/style_model.dart';
 import 'cubit/setting_cubit.dart';
 
 
@@ -29,6 +30,8 @@ class SettingScreen extends StatelessWidget {
                     children: [
                       _buildTextSection(context, loadedState),
                       const SizedBox(height: 24),
+                      // _buildFontFamilySection(context, loadedState),
+                      // const SizedBox(height: 24),
                       _buildTranslationSection(context, loadedState),
                       const SizedBox(height: 24),
                       _buildThemeSection(context, loadedState),
@@ -71,6 +74,26 @@ class SettingScreen extends StatelessWidget {
 
   Widget _buildTextSection(BuildContext context, Loaded loadedState) {
     final cubit = context.read<SettingCubit>();
+    
+    // Convert enum values to slider values
+    double fontSizeToSliderValue(FontSizeCustom fontSize) {
+      return fontSize.index / (FontSizeCustom.values.length - 1);
+    }
+
+    double lineHeightToSliderValue(LineHeightCustom lineHeight) {
+      return lineHeight.index / (LineHeightCustom.values.length - 1);
+    }
+
+    void handleFontSizeSliderChange(double newValue) {
+      final fontSize = FontSizeCustom.values[(newValue * (FontSizeCustom.values.length - 1)).round()];
+      cubit.updateFontSize(fontSize);
+    }
+
+    void handleLineHeightSliderChange(double newValue) {
+      final lineHeight = LineHeightCustom.values[(newValue * (LineHeightCustom.values.length - 1)).round()];
+      cubit.updateLineHeight(lineHeight);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -82,34 +105,38 @@ class SettingScreen extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Text('حجم الخط:'),
+                     SizedBox(
+                        width: 100,
+                         child: Text('حجم الخط:', style: Theme.of(context).textTheme.bodyLarge)),
                     Expanded(
                       child: Slider(
                         thumbColor: Theme.of(context).colorScheme.onSurface,
                         activeColor: Theme.of(context).colorScheme.onSurface,
-                        value: loadedState.fontSize,
-                        min: 10,
-                        max: 40,
-                        divisions: 30,
-                        label: loadedState.fontSize.round().toString(),
-                        onChanged: (value) => cubit.updateFontSize(value),
+                        value: fontSizeToSliderValue(loadedState.fontSize),
+                        min: 0.0,
+                        max: 1.0,
+                        divisions: FontSizeCustom.values.length - 1,
+                        label: loadedState.fontSize.size.round().toString(),
+                        onChanged: handleFontSizeSliderChange,
                       ),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    const Text('فاصلة الأسطر:'),
+                    SizedBox(
+                        width: 100,
+                        child: Text('فاصلة الأسطر:', style: Theme.of(context).textTheme.bodyLarge)),
                     Expanded(
                       child: Slider(
                         thumbColor: Theme.of(context).colorScheme.onSurface,
                         activeColor: Theme.of(context).colorScheme.onSurface,
-                        value: loadedState.lineHeight,
-                        min: 1.0,
-                        max: 3.0,
-                        divisions: 20,
-                        label: loadedState.lineHeight.toStringAsFixed(1),
-                        onChanged: (value) => cubit.updateLineHeight(value),
+                        value: lineHeightToSliderValue(loadedState.lineHeight),
+                        min: 0.0,
+                        max: 1.0,
+                        divisions: LineHeightCustom.values.length - 1,
+                        label: loadedState.lineHeight.size.toStringAsFixed(1),
+                        onChanged: handleLineHeightSliderChange,
                       ),
                     ),
                   ],
@@ -123,10 +150,10 @@ class SettingScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    'لَا قُرْبَةَ بِالنَّوَافِلِ إِذَا أَضَرَّتْ بِالْفَرَائِضِ.',
+                    'لَا قُرْبَةَ بِالنَّوَافِلِ إِذَا أَضَرَّتْ بِالْفَرَائِضِ.',
                     style: TextStyle(
-                      fontSize: loadedState.fontSize,
-                      height: loadedState.lineHeight,
+                      fontSize: loadedState.fontSize.size,
+                      height: loadedState.lineHeight.size,
                       fontFamily: 'Lotus Qazi Light',
                     ),
                     textAlign: TextAlign.center,
@@ -138,6 +165,50 @@ class SettingScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildFontFamilySection(BuildContext context, Loaded loadedState) {
+    final cubit = context.read<SettingCubit>();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle(context, 'مجموعة الخط'),
+        _buildCard(
+          context,
+          child: Column(
+            children: [
+              _buildFontFamilyTile(context, 'خط ١', FontFamily.font1, loadedState.fontFamily,
+                  () => cubit.updateFontFamily(FontFamily.font1)),
+              const Divider(height: 1),
+              _buildFontFamilyTile(context, 'خط ٢', FontFamily.font2, loadedState.fontFamily,
+                  () => cubit.updateFontFamily(FontFamily.font2)),
+              const Divider(height: 1),
+              _buildFontFamilyTile(context, 'خط ٣', FontFamily.font3, loadedState.fontFamily,
+                  () => cubit.updateFontFamily(FontFamily.font3)),
+              const Divider(height: 1),
+              _buildFontFamilyTile(context, 'خط ٤', FontFamily.font4, loadedState.fontFamily,
+                  () => cubit.updateFontFamily(FontFamily.font4)),
+              const Divider(height: 1),
+              _buildFontFamilyTile(context, 'خط ٥', FontFamily.font5, loadedState.fontFamily,
+                  () => cubit.updateFontFamily(FontFamily.font5)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFontFamilyTile(BuildContext context, String title, FontFamily value,
+      FontFamily groupValue, VoidCallback onTap) {
+    return ListTile(
+      title: Text(title, style: Theme.of(context).textTheme.bodyLarge,),
+      onTap: onTap,
+      trailing: groupValue == value
+          ? Icon(Icons.check, color: Theme.of(context).colorScheme.onSurface)
+          : null,
+      dense: true,
+      contentPadding: EdgeInsets.zero,
     );
   }
 
@@ -199,7 +270,7 @@ class SettingScreen extends StatelessWidget {
     return SwitchListTile(
       activeColor: Theme.of(context).colorScheme.onSurface,
       inactiveThumbColor: Colors.grey,
-      title: Text(title),
+      title: Text(title, style: Theme.of(context).textTheme.bodyLarge),
       value: value,
       onChanged: onChanged,
       dense: true,
@@ -218,13 +289,13 @@ class SettingScreen extends StatelessWidget {
           child: Column(
             children: [
               _buildThemeTile(context, 'افتراضي', 'system', loadedState.theme,
-                  () => cubit.setTheme('system')),
+                  () async => await cubit.setTheme('system', context)),
               const Divider(height: 1),
               _buildThemeTile(context, 'فاتح', 'light', loadedState.theme,
-                  () => cubit.setTheme('light')),
+                  () async => await cubit.setTheme('light', context)),
               const Divider(height: 1),
               _buildThemeTile(context, 'داكن', 'dark', loadedState.theme,
-                  () => cubit.setTheme('dark')),
+                  () async => await cubit.setTheme('dark', context)),
             ],
           ),
         ),
@@ -233,10 +304,10 @@ class SettingScreen extends StatelessWidget {
   }
 
   Widget _buildThemeTile(BuildContext context, String title, String value,
-      String groupValue, VoidCallback onTap) {
+      String groupValue, Future<void> Function() onTap) {
     return ListTile(
-      title: Text(title),
-      onTap: onTap,
+      title: Text(title, style: Theme.of(context).textTheme.bodyLarge,),
+      onTap: () => onTap(),
       trailing: groupValue == value
           ? Icon(Icons.check, color: Theme.of(context).colorScheme.onSurface)
           : null,

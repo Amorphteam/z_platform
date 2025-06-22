@@ -41,7 +41,63 @@ class _HomeScreenState extends State<HomeScreen> {
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
-      body: isLandscape ? _buildLandscapeLayout(context) : _buildPortraitLayout(context, halfMediaHeight),
+      body: Stack(
+        children: [
+          isLandscape ? _buildLandscapeLayout(context) : _buildPortraitLayout(context, halfMediaHeight),
+          // Top icons overlay - always on top and accessible
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Left icon (empty function)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.3),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          // Empty function - can be implemented later
+                        },
+                        icon: const Icon(
+                          Icons.more_vert,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                    // Right icon (settings)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.3),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                            '/settingScreen',
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.settings,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

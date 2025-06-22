@@ -15,7 +15,7 @@
     },
     {
       "name": "_macros",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.1/bin/cache/dart-sdk/pkg/_macros",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.5/bin/cache/dart-sdk/pkg/_macros",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -273,7 +273,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.1/packages/flutter",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.5/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -303,7 +303,7 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.1/packages/flutter_test",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.5/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -315,7 +315,7 @@
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.1/packages/flutter_web_plugins",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.5/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -675,7 +675,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.1/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.5/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -866,10 +866,10 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-06-17T07:01:19.381050Z",
+  "generated": "2025-06-22T07:02:26.351184Z",
   "generator": "pub",
-  "generatorVersion": "3.5.1",
-  "flutterRoot": "file:///Users/alibayati/fvm/versions/3.24.1",
-  "flutterVersion": "3.24.1",
+  "generatorVersion": "3.5.4",
+  "flutterRoot": "file:///Users/alibayati/fvm/versions/3.24.5",
+  "flutterVersion": "3.24.5",
   "pubCache": "file:///Users/alibayati/.pub-cache"
 }

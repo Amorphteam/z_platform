@@ -16,6 +16,7 @@ import '../../../repository/database_repository.dart';
 import '../../../util/epub_helper.dart';
 import '../../../util/search_helper.dart';
 import '../../../util/style_helper.dart';
+import '../../../util/translation_helper.dart';
 
 part 'epub_viewer_cubit.freezed.dart';
 part 'epub_viewer_state.dart';
@@ -315,34 +316,40 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       if (epubName.toLowerCase().contains('letter')) {
         final translation = await _databaseRepository.getLettersTranslation(pageNumber);
         if (translation != null) {
-          // List of translation EPUBs to load
-          final List<String> translationEpubs = [
-            'letters_en1.epub',
-            'letters_fa_ansarian.epub',
-            'letters_fa_faidh.epub',
-            'letters_fa_jafari.epub',
-            'letters_fa_shahidi.epub'
-          ];
+          // Get enabled translations from settings
+          final enabledTranslations = await TranslationHelper.getAvailableTranslations();
+          
+          // Map translation names to their corresponding EPUB files
+          final Map<String, String> translationEpubMap = {
+            'English': 'letters_en1.epub',
+            'فارسي ـ جعفري': 'letters_fa_jafari.epub',
+            'فارسي ـ انصاريان': 'letters_fa_ansarian.epub',
+            'فارسي ـ فيض الإسلام': 'letters_fa_faidh.epub',
+            'فارسي ـ شهيدي': 'letters_fa_shahidi.epub',
+          };
 
           final Map<String, String> translations = {};
 
-          // Load and process each translation EPUB
-          for (final epubPath in translationEpubs) {
-            try {
-              final translationEpub = await loadEpubFromAsset('assets/epub/$epubPath');
-              final List<HtmlFileInfo> translationContent = 
-                  await extractHtmlContentWithEmbeddedImages(translationEpub);
-              
-              if (translationContent.isNotEmpty && pageNumber > 0 && pageNumber <= translationContent.length) {
-                final htmlContent = translationContent[pageNumber - 1].modifiedHtmlContent;
-                // Extract the translator name from the epub path
-                final translatorName = epubPath.split('_').last.replaceAll('.epub', '');
-                translations[translatorName] = htmlContent;
+          // Only load EPUBs for enabled translations
+          for (final translationName in enabledTranslations) {
+            if (translationName == 'الكل') continue; // Skip "الكل" as it's not a specific translation
+            
+            final epubPath = translationEpubMap[translationName];
+            if (epubPath != null) {
+              try {
+                final translationEpub = await loadEpubFromAsset('assets/epub/$epubPath');
+                final List<HtmlFileInfo> translationContent = 
+                    await extractHtmlContentWithEmbeddedImages(translationEpub);
+                
+                if (translationContent.isNotEmpty && pageNumber > 0 && pageNumber <= translationContent.length) {
+                  final htmlContent = translationContent[pageNumber - 1].modifiedHtmlContent;
+                  translations[translationName] = htmlContent;
+                }
+              } catch (e) {
+                print('Error loading translation from $epubPath: $e');
+                // Continue with other translations even if one fails
+                continue;
               }
-            } catch (e) {
-              print('Error loading translation from $epubPath: $e');
-              // Continue with other translations even if one fails
-              continue;
             }
           }
 
@@ -355,34 +362,40 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       } else if (epubName.toLowerCase().contains('khotab')) {
         final translation = await _databaseRepository.getKhotabTranslation(pageNumber);
         if (translation != null) {
-          // List of translation EPUBs to load
-          final List<String> translationEpubs = [
-            'khotab_en1.epub',
-            'khotab_fa_ansarian.epub',
-            'khotab_fa_faidh.epub',
-            'khotab_fa_jafari.epub',
-            'khotab_fa_shahidi.epub'
-          ];
+          // Get enabled translations from settings
+          final enabledTranslations = await TranslationHelper.getAvailableTranslations();
+          
+          // Map translation names to their corresponding EPUB files
+          final Map<String, String> translationEpubMap = {
+            'English': 'khotab_en1.epub',
+            'فارسي ـ جعفري': 'khotab_fa_jafari.epub',
+            'فارسي ـ انصاريان': 'khotab_fa_ansarian.epub',
+            'فارسي ـ فيض الإسلام': 'khotab_fa_faidh.epub',
+            'فارسي ـ شهيدي': 'khotab_fa_shahidi.epub',
+          };
 
           final Map<String, String> translations = {};
 
-          // Load and process each translation EPUB
-          for (final epubPath in translationEpubs) {
-            try {
-              final translationEpub = await loadEpubFromAsset('assets/epub/$epubPath');
-              final List<HtmlFileInfo> translationContent = 
-                  await extractHtmlContentWithEmbeddedImages(translationEpub);
-              
-              if (translationContent.isNotEmpty && pageNumber > 0 && pageNumber <= translationContent.length) {
-                final htmlContent = translationContent[pageNumber - 1].modifiedHtmlContent;
-                // Extract the translator name from the epub path
-                final translatorName = epubPath.split('_').last.replaceAll('.epub', '');
-                translations[translatorName] = htmlContent;
+          // Only load EPUBs for enabled translations
+          for (final translationName in enabledTranslations) {
+            if (translationName == 'الكل') continue; // Skip "الكل" as it's not a specific translation
+            
+            final epubPath = translationEpubMap[translationName];
+            if (epubPath != null) {
+              try {
+                final translationEpub = await loadEpubFromAsset('assets/epub/$epubPath');
+                final List<HtmlFileInfo> translationContent = 
+                    await extractHtmlContentWithEmbeddedImages(translationEpub);
+                
+                if (translationContent.isNotEmpty && pageNumber > 0 && pageNumber <= translationContent.length) {
+                  final htmlContent = translationContent[pageNumber - 1].modifiedHtmlContent;
+                  translations[translationName] = htmlContent;
+                }
+              } catch (e) {
+                print('Error loading translation from $epubPath: $e');
+                // Continue with other translations even if one fails
+                continue;
               }
-            } catch (e) {
-              print('Error loading translation from $epubPath: $e');
-              // Continue with other translations even if one fails
-              continue;
             }
           }
 

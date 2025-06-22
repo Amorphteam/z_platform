@@ -7,7 +7,9 @@ import 'package:zahra/screen/hekam/widgets/translation_bottom_sheet.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:zahra/model/style_model.dart';
 import 'package:zahra/util/style_helper.dart';
+import 'package:zahra/util/translation_helper.dart';
 
+import '../../model/hekam.dart';
 import '../../widget/custom_appbar.dart';
 
 class HekamScreen extends StatefulWidget {
@@ -72,6 +74,43 @@ iOS: https://apps.apple.com/app/zahra-app''';
     setState(() {
       showFavorites = !showFavorites;
     });
+  }
+
+  Future<void> _showTranslationBottomSheet(Hekam hekam) async {
+    // Check for available translations before opening the sheet
+    final availableTranslations = await TranslationHelper.getAvailableTranslations();
+    
+    // If only "الكل" is available (no translations enabled), show snackbar and don't open sheet
+    if (availableTranslations.length == 1 && availableTranslations.first == 'الكل') {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('لا توجد ترجمات مفعلة. يرجى تفعيل ترجمة واحدة على الأقل من الإعدادات.'),
+            duration: const Duration(seconds: 6),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Theme.of(context).colorScheme.onSurface,
+            action: SnackBarAction(
+              label: 'الإعدادات',
+              textColor: Theme.of(context).colorScheme.primary,
+              onPressed: () {
+                Navigator.pushNamed(context, '/settingScreen');
+              },
+            ),
+          ),
+        );
+      }
+      return;
+    }
+    
+    // If translations are available, show the bottom sheet
+    if (mounted) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => TranslationBottomSheet(hekam: hekam),
+      );
+    }
   }
 
   @override
@@ -332,12 +371,7 @@ iOS: https://apps.apple.com/app/zahra-app''';
                                     IconButton(
                                       icon: const Icon(Icons.translate),
                                       onPressed: () {
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (context) => TranslationBottomSheet(hekam: item),
-                                        );
+                                        _showTranslationBottomSheet(item);
                                       },
                                     ),
                                     IconButton(

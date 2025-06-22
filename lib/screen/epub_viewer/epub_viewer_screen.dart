@@ -192,6 +192,27 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
           },
           translationLoaded: (translation) {
+            // Check if there are any translations available
+            if (translation.isEmpty) {
+              // Show snackbar with action button instead of opening bottom sheet
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('لا توجد ترجمات مفعلة. يرجى تفعيل ترجمة واحدة على الأقل من الإعدادات.'),
+                  duration: const Duration(seconds: 6),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Theme.of(context).colorScheme.onSurface,
+                  action: SnackBarAction(
+                    label: 'الإعدادات',
+                    textColor: Theme.of(context).colorScheme.primary,
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/settingScreen');
+                    },
+                  ),
+                ),
+              );
+              return;
+            }
+            
             // Show the translation in a full page bottom sheet
             showModalBottomSheet(
               context: context,
@@ -237,6 +258,27 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           },
           bookmarkPresent: () => setState(() => isBookmarked = true),
           bookmarkAbsent: () => setState(() => isBookmarked = false),
+          error: (error) {
+            // Check if this is a translation-related error
+            if (error.toLowerCase().contains('translation') || 
+                error.contains('No translation content found')) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('لا توجد ترجمات مفعلة. يرجى تفعيل ترجمة واحدة على الأقل من الإعدادات.'),
+                  duration: const Duration(seconds: 6),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Theme.of(context).colorScheme.onSurface,
+                  action: SnackBarAction(
+                    label: 'الإعدادات',
+                    textColor: Theme.of(context).colorScheme.primary,
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/settingScreen');
+                    },
+                  ),
+                ),
+              );
+            }
+          },
           orElse: () {},
         );
       },
@@ -1610,7 +1652,7 @@ class TranslationBottomSheetContent extends StatefulWidget {
 }
 
 class _TranslationBottomSheetContentState extends State<TranslationBottomSheetContent> {
-  String selectedTranslation = 'jafari'; // Default selection
+  String selectedTranslation = ''; // Will be set dynamically
   late FontSizeCustom _fontSize;
   late LineHeightCustom _lineHeight;
   late FontFamily _fontFamily;
@@ -1619,6 +1661,22 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
   void initState() {
     super.initState();
     _loadFontPreferences();
+    _setInitialTranslation();
+  }
+
+  void _setInitialTranslation() {
+    // Set the first available translation as selected
+    if (widget.translation['فارسي ـ جعفري'] != null) {
+      selectedTranslation = 'فارسي ـ جعفري';
+    } else if (widget.translation['فارسي ـ انصاريان'] != null) {
+      selectedTranslation = 'فارسي ـ انصاريان';
+    } else if (widget.translation['فارسي ـ فيض الإسلام'] != null) {
+      selectedTranslation = 'فارسي ـ فيض الإسلام';
+    } else if (widget.translation['فارسي ـ شهيدي'] != null) {
+      selectedTranslation = 'فارسي ـ شهيدي';
+    } else if (widget.translation['English'] != null) {
+      selectedTranslation = 'English';
+    }
   }
 
   Future<void> _loadFontPreferences() async {
@@ -1672,40 +1730,40 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
-                  if (widget.translation['jafari'] != null)
+                  if (widget.translation['فارسي ـ جعفري'] != null)
                     _buildTranslationChip(
                       context,
-                      'فارسي جعفري',
-                      selectedTranslation == 'jafari',
-                      () => setState(() => selectedTranslation = 'jafari'),
+                      'فارسي ـ جعفري',
+                      selectedTranslation == 'فارسي ـ جعفري',
+                      () => setState(() => selectedTranslation = 'فارسي ـ جعفري'),
                     ),
-                  if (widget.translation['ansarian'] != null)
+                  if (widget.translation['فارسي ـ انصاريان'] != null)
                     _buildTranslationChip(
                       context,
-                      'فارسي انصاريان',
-                      selectedTranslation == 'ansarian',
-                      () => setState(() => selectedTranslation = 'ansarian'),
+                      'فارسي ـ انصاريان',
+                      selectedTranslation == 'فارسي ـ انصاريان',
+                      () => setState(() => selectedTranslation = 'فارسي ـ انصاريان'),
                     ),
-                  if (widget.translation['faidh'] != null)
+                  if (widget.translation['فارسي ـ فيض الإسلام'] != null)
                     _buildTranslationChip(
                       context,
-                      'فارسي فائض',
-                      selectedTranslation == 'faidh',
-                      () => setState(() => selectedTranslation = 'faidh'),
+                      'فارسي ـ فيض الإسلام',
+                      selectedTranslation == 'فارسي ـ فيض الإسلام',
+                      () => setState(() => selectedTranslation = 'فارسي ـ فيض الإسلام'),
                     ),
-                  if (widget.translation['shahidi'] != null)
+                  if (widget.translation['فارسي ـ شهيدي'] != null)
                     _buildTranslationChip(
                       context,
-                      'فارسي شهيدي',
-                      selectedTranslation == 'shahidi',
-                      () => setState(() => selectedTranslation = 'shahidi'),
+                      'فارسي ـ شهيدي',
+                      selectedTranslation == 'فارسي ـ شهيدي',
+                      () => setState(() => selectedTranslation = 'فارسي ـ شهيدي'),
                     ),
-                  if (widget.translation['en1'] != null)
+                  if (widget.translation['English'] != null)
                     _buildTranslationChip(
                       context,
                       'English',
-                      selectedTranslation == 'en1',
-                      () => setState(() => selectedTranslation = 'en1'),
+                      selectedTranslation == 'English',
+                      () => setState(() => selectedTranslation = 'English'),
                     ),
                 ],
               ),
@@ -1720,7 +1778,7 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
                       buildCard(
                         context,
                         widget.translation[selectedTranslation].toString(),
-                        _getTranslationTitle(selectedTranslation),
+                        selectedTranslation,
                       ),
                   ],
                 ),
@@ -1732,22 +1790,7 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
     );
   }
 
-  String _getTranslationTitle(String key) {
-    switch (key) {
-      case 'jafari':
-        return 'فارسي جعفري:';
-      case 'ansarian':
-        return 'فارسي انصاريان:';
-      case 'faidh':
-        return 'فارسي فائض:';
-      case 'shahidi':
-        return 'فارسي شهيدي:';
-      case 'en1':
-        return 'English:';
-      default:
-        return '';
-    }
-  }
+
 
   Widget _buildTranslationChip(BuildContext context, String title, bool isSelected, VoidCallback onTap) {
     return Padding(
@@ -1772,7 +1815,9 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
   }
 
   Card buildCard(BuildContext context, String content, String title) {
-    final bool isEnglish = selectedTranslation == 'en1';
+    final bool isEnglish = selectedTranslation == 'English';
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Card(
       elevation: 0,
       color: Theme.of(context).colorScheme.primaryContainer,
@@ -1792,12 +1837,12 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
                     fontSize: FontSize(_fontSize.size),
                     lineHeight: LineHeight(_lineHeight.size),
                     textAlign: TextAlign.justify,
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: isDarkMode ? const Color(0xFFE0E0E0) : Theme.of(context).colorScheme.onSurface,
                     fontFamily: isEnglish ? 'arial' : _fontFamily.name,
                   ),
                   'h1': Style(
                     fontSize: FontSize(_fontSize.size * 1.2),
-                    color: const Color(0xFF00AA00),
+                    color: isDarkMode ? Colors.white : const Color(0xFF00AA00),
                     textAlign: isEnglish ? TextAlign.left: TextAlign.right,
                     fontFamily: isEnglish ? 'arial': _fontFamily.name,
                   ),

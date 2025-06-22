@@ -41,7 +41,14 @@ class RouteGenerator {
           );
         }
         return _errorRoute();
-      case '/searchScreen':
+      case '/':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => HostCubit(),
+            child: const HostScreen(),
+          ),
+        );
+      case '/settingScreen':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => SettingCubit(),
