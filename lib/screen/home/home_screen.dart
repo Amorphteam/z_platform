@@ -104,20 +104,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildLandscapeLayout(BuildContext context) => Row(
       children: [
         Expanded(
-          child: _buildScrollableContent(context, false),
-        ),
-        Expanded(
           child: Container(
-            color: Theme.of(context).colorScheme.primary,
-            padding: const EdgeInsets.only(top: 40.0, bottom: 40),
+            padding: const EdgeInsets.only(top: 100.0, bottom: 40, right: 40, left: 40),
             child: BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) => state.maybeWhen(
                   loaded: (_, __, occasions) {
                     if (occasions != null && occasions.isNotEmpty) {
                       final occasion = occasions.first;
                       return Container(
-                        height: MediaQuery.of(context).size.height / 2,
+                        height: MediaQuery.of(context).size.height,
                         decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(16)),
                           image: DecorationImage(
                             image: AssetImage(
                               Theme.of(context).brightness == Brightness.dark
@@ -130,8 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }
                     return Container(
-                      height: MediaQuery.of(context).size.height / 2,
+                      height: MediaQuery.of(context).size.height,
                       decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular(16)),
                         image: DecorationImage(
                           image: AssetImage(
                             Theme.of(context).brightness == Brightness.dark
@@ -144,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                   orElse: () => Container(
-                    height: MediaQuery.of(context).size.height / 2,
+                    height: MediaQuery.of(context).size.height,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(
@@ -159,6 +157,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
             ),
           ),
+        ),
+        Expanded(
+          child: _buildScrollableContent(context, false),
         ),
       ],
     );
@@ -232,8 +233,8 @@ class _HomeScreenState extends State<HomeScreen> {
           animation: _opacityNotifier,
           builder: (_, __) => Container(
             color: isPortrait
-                ? Theme.of(context).colorScheme.primary.withOpacity(_opacityNotifier.value)
-                : Theme.of(context).colorScheme.primary,
+                ? Theme.of(context).colorScheme.surface.withOpacity(_opacityNotifier.value)
+                : Theme.of(context).colorScheme.surface,
           ),
         ),
         NotificationListener<ScrollNotification>(
@@ -245,9 +246,9 @@ class _HomeScreenState extends State<HomeScreen> {
             return true;
           },
           child: Padding(
-            padding: (isPortrait) ? EdgeInsets.only(top: 40): const EdgeInsets.only(top: 40, right: 40, left: 40),
+            padding: (isPortrait) ? EdgeInsets.only(top: 40): const EdgeInsets.only(top: 100, right: 40, left: 40, bottom: 40),
             child: CustomScrollView(
-              physics: const ClampingScrollPhysics(),
+              physics: isPortrait ? const ClampingScrollPhysics(): const NeverScrollableScrollPhysics(),
               slivers: <Widget>[
                 if (isPortrait && halfMediaHeight != null)
                   SliverAppBar(
@@ -258,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: Colors.transparent,
                     flexibleSpace: const FlexibleSpaceBar(),
                   ),
-                _buildContentList(),
+                _buildContentList(isPortrait),
               ],
             ),
           ),
@@ -266,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
 
-  Widget _buildContentList() => BlocBuilder<HomeCubit, HomeState>(
+  Widget _buildContentList(bool isPortrait) => BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) => state.when(
         initial: () => const SliverFillRemaining(
           child: Center(child: Text('Tap to start fetching...')),
@@ -286,10 +287,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 fit: BoxFit.cover,
               ),
-              borderRadius: const BorderRadius.only(
+              borderRadius:  const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
-              ),
+              )
             ),
             child: Column(
               children: [
@@ -323,12 +324,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
+                  height: isPortrait ? null: MediaQuery.of(context).size.height,
+                  decoration: isPortrait ? BoxDecoration(
                     color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
                     ),
+                  ):BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
                   ),
                   child: Column(
                     children: List.generate(
@@ -355,6 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 openEpub(context: context, book: Book(epub: 'ghareeb.epub'));
                               }
                             },
+                            isPortrait: isPortrait,
                           );
                         } else {
                           return const Padding(
@@ -369,7 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),

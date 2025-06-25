@@ -7,12 +7,14 @@ class HomeItemWidget extends StatelessWidget {
   final bool isLast;
   final bool isFirst;
   final VoidCallback? onTap;
+  final bool isPortrait;
 
   const HomeItemWidget({
     super.key,
     required this.text,
     this.isLast = false,
     this.isFirst = false,
+    this.isPortrait = false,
     this.onTap,
   });
 
@@ -48,7 +50,7 @@ class HomeItemWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: List.generate(
-                        (MediaQuery.of(context).size.width / 24).ceil(),
+                        isPortrait ? (MediaQuery.of(context).size.width / 24).ceil() : (MediaQuery.of(context).size.width / 50).ceil(),
                         (index) => Image.asset(
                           'assets/image/bk_item.png',
                           width: 20,

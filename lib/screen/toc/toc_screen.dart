@@ -103,7 +103,7 @@ class _TocScreenState extends State<TocScreen> {
                       return true;
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 0),
+                      padding: const EdgeInsets.only(right: 0.0, left: 0, bottom: 0),
     
                       child: BlocBuilder<TocCubit, TocState>(
                         builder: (context, state) => state.when(
@@ -123,25 +123,6 @@ class _TocScreenState extends State<TocScreen> {
                     ),
                   ),
                 ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: Theme.of(context).colorScheme.surface,
-                padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
-    
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        Theme.of(context).brightness == Brightness.dark
-                            ? 'assets/image/landimage_dark.jpg'
-                            : 'assets/image/landimage_light.jpg',
-                      ),
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                ),
               ),
             ),
           ],
