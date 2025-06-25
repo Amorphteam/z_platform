@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zahra/model/item_model.dart';
 import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
 import 'package:zahra/util/navigation_helper.dart';
+import 'package:zahra/util/style_helper.dart';
+import 'package:zahra/model/style_model.dart';
 
 import '../../model/toc_item.dart';
 import '../../widget/custom_appbar.dart';
@@ -26,11 +28,22 @@ class _TocScreenState extends State<TocScreen> {
   List<TocItem> _allItems = [];
   List<TocItem> _filteredItems = [];
   String searchedWord = '';
+  late FontSizeCustom _fontSize;
+  late FontFamily _fontFamily;
 
   @override
   void initState() {
     super.initState();
     context.read<TocCubit>().fetchItems();
+    _loadFontPreferences();
+  }
+
+  Future<void> _loadFontPreferences() async {
+    final styleHelper = await StyleHelper.loadFromPrefs();
+    setState(() {
+      _fontSize = styleHelper.fontSize;
+      _fontFamily = styleHelper.fontFamily;
+    });
   }
 
   void _filterItems(String query) {
@@ -362,24 +375,25 @@ class _TocScreenState extends State<TocScreen> {
                     color: Theme.of(context).colorScheme.primaryContainer,
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
-                      onTap: () {
-                        if (myItem.addressNo != null) {
-                          final String sectionNumberString = (myItem.addressNo! - 1).toString();
-                          NavigationHelper.openBook(context, myItem.addressType ?? '', sectionNumberString);
-                        }
-                      },
+                      // onTap: () {
+                      //   if (myItem.addressNo != null) {
+                      //     final String sectionNumberString = (myItem.addressNo! - 1).toString();
+                      //     NavigationHelper.openBook(context, myItem.addressType ?? '', sectionNumberString);
+                      //   }
+                      // },
                       title: Directionality(
                         textDirection: TextDirection.rtl,
                         child: Text(
                           myItem.text ?? '',
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Lotus Qazi Light',
-
+                            fontSize: _fontSize.size,
+                          ),
                         ),
                       ),
                     ),
-                  ));
+                  );
                 },
               ),
             ),

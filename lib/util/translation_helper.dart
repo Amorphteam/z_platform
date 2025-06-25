@@ -14,22 +14,22 @@ class TranslationHelper {
 
   static Future<bool> isFarsiFaidhEnabled() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_farsiFaidhKey) ?? false;
+    return prefs.getBool(_farsiFaidhKey) ?? true;
   }
 
   static Future<bool> isFarsiAnsarianEnabled() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_farsiAnsarianKey) ?? false;
+    return prefs.getBool(_farsiAnsarianKey) ?? true;
   }
 
   static Future<bool> isFarsiJafariEnabled() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_farsiJafariKey) ?? false;
+    return prefs.getBool(_farsiJafariKey) ?? true;
   }
 
   static Future<bool> isFarsiShahidiEnabled() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_farsiShahidiKey) ?? false;
+    return prefs.getBool(_farsiShahidiKey) ?? true;
   }
 
   static Future<List<String>> getAvailableTranslations() async {

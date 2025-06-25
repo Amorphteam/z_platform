@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           // Empty function - can be implemented later
                         },
                         icon: const Icon(
-                          Icons.more_vert,
+                          Icons.info_rounded,
                           color: Colors.white,
                           size: 24,
                         ),

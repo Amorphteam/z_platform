@@ -26,10 +26,10 @@ class SettingCubit extends Cubit<SettingState> {
     
     // Load translation preferences with defaults
     final english = prefs.getBool('translation_english') ?? true;
-    final farsiFaidh = prefs.getBool('translation_farsi_faidh') ?? false;
-    final farsiAnsarian = prefs.getBool('translation_farsi_ansarian') ?? false;
-    final farsiJafari = prefs.getBool('translation_farsi_jafari') ?? false;
-    final farsiShahidi = prefs.getBool('translation_farsi_shahidi') ?? false;
+    final farsiFaidh = prefs.getBool('translation_farsi_faidh') ?? true;
+    final farsiAnsarian = prefs.getBool('translation_farsi_ansarian') ?? true;
+    final farsiJafari = prefs.getBool('translation_farsi_jafari') ?? true;
+    final farsiShahidi = prefs.getBool('translation_farsi_shahidi') ?? true;
     
     emit(SettingState.loaded(
       fontSize: styleHelper.fontSize,

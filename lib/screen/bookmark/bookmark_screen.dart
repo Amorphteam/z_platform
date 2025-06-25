@@ -110,7 +110,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           textDirection: TextDirection.rtl,
           child: AlertDialog(
             title: Text('تأكيد الحذف'),
-            content: Text('هل أنت متأكد أنك تريد حذف جميع البيانات؟'),
+            content: Text('هل أنت متأكد من حذف جميع البيانات؟'),
             actions: [
               TextButton(
                 onPressed: () {

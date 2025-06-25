@@ -7,20 +7,25 @@ import '../model/style_model.dart';
 
 
 class StyleHelper {
-  static Map<String, Style> getStyles(BuildContext context) {
+  static Map<String, Style> getStyles(BuildContext context, [FontFamily? fontFamily, FontSizeCustom? fontSize, LineHeightCustom? lineSpace, isEnglish = false]) {
     final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     
     return {
+      'html': Style(
+        lineHeight: LineHeight(lineSpace?.size ?? LineHeightCustom.medium.size),
+        textAlign: TextAlign.justify,
+        color: isDarkMode ? const Color(0xFFE0E0E0) : Theme.of(context).colorScheme.onSurface,
+      ),
       "body": Style(
         color: isDarkMode ? const Color(0xFFE0E0E0) : Theme.of(context).textTheme.bodyLarge?.color,
         textAlign: TextAlign.right,
-        direction: TextDirection.rtl,
         textDecoration: TextDecoration.none,
       ),
       "p": Style(
         textAlign: TextAlign.justify,
         margin: Margins.only(top: 0, bottom: 10),
-        fontFamily: 'Lotus Qazi Light',
+        fontSize: FontSize(fontSize?.size?? FontSizeCustom.medium.size),
+        fontFamily: isEnglish?'arial': fontFamily?.name ?? 'Lotus Qazi Light',
         color: isDarkMode ? const Color(0xFFE0E0E0) : null,
       ),
       "p.center": Style(
@@ -63,26 +68,33 @@ class StyleHelper {
       "h1": Style(
         color: isDarkMode ? Colors.white : const Color(0xFF00AA00),
         margin: Margins.only(top: 0, bottom: 10),
-        textAlign: TextAlign.center,
-        fontFamily: 'Lotus Qazi Bold',
+        fontSize: FontSize(fontSize?.size??FontSizeCustom.medium.size * 1.2),
+        textAlign: isEnglish ? TextAlign.left: TextAlign.right,
+        fontWeight: FontWeight.bold,
+        fontFamily: isEnglish? 'arial':'Lotus Qazi Bold',
       ),
       "h2": Style(
         color: isDarkMode ? Colors.white : const Color(0xFF000080),
         margin: Margins.only(top: 0, bottom: 10),
         textAlign: TextAlign.center,
-        fontFamily: 'Lotus Qazi Bold',
+        fontWeight: FontWeight.bold,
+        fontSize: FontSize(fontSize?.size?? FontSizeCustom.medium.size),
+        fontFamily: isEnglish? 'arial':'Lotus Qazi Bold',
       ),
       "h3": Style(
         color: isDarkMode ? Colors.white : const Color(0xFF800000),
         margin: Margins.only(top: 0, bottom: 10),
         textAlign: TextAlign.center,
-        fontFamily: 'Lotus Qazi Bold',
+        fontWeight: FontWeight.bold,
+        fontSize: FontSize(fontSize?.size??FontSizeCustom.medium.size),
+        fontFamily: isEnglish? 'arial':'Lotus Qazi Bold',
       ),
       "h4": Style(
         color: isDarkMode ? Colors.white : Colors.red,
         margin: Margins.only(top: 0, bottom: 0),
         textAlign: TextAlign.center,
-        fontFamily: 'Lotus Qazi Bold',
+        fontWeight: FontWeight.bold,
+        fontFamily: isEnglish? 'arial':'Lotus Qazi Bold',
       ),
       ".fn": Style(
         color: isDarkMode ? const Color(0xFFE0E0E0) : Colors.blue,
@@ -109,7 +121,7 @@ class StyleHelper {
   factory StyleHelper() => _instance;
 
   StyleHelper._();
-  FontSizeCustom fontSize = FontSizeCustom.medium;
+  FontSizeCustom fontSize = FontSizeCustom.large;
   FontFamily fontFamily = FontFamily.font1;
   LineHeightCustom lineSpace = LineHeightCustom.medium;
 
