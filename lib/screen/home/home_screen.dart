@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:zahra/screen/home/cubit/home_cubit.dart';
+import 'package:zahra/screen/home/widgets/about_sheet_widget.dart';
 import 'package:zahra/screen/home/widgets/home_item_widget.dart';
 import 'package:zahra/util/navigation_helper.dart';
 import 'package:zahra/util/date_helper.dart';
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: IconButton(
                         onPressed: () {
-                          // Empty function - can be implemented later
+                          _showAboutUsSheet(context);
                         },
                         icon: const Icon(
                           Icons.info_rounded,
@@ -385,9 +386,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
+  void _showAboutUsSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const AboutUsSheetWidget(),
+    );
+  }
+
   @override
   void dispose() {
     _opacityNotifier.dispose();
     super.dispose();
   }
 }
+

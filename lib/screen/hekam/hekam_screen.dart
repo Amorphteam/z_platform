@@ -66,7 +66,7 @@ class _HekamScreenState extends State<HekamScreen> {
     return '''$cleanText
 
 تحميل تطبيق نهج البلاغة:
-Android: https://play.google.com/store/apps/details?id=com.zahra.app
+Android: https://play.google.com/store/apps/details?id=org.masaha.nahj
 iOS: https://apps.apple.com/app/zahra-app''';
   }
 
