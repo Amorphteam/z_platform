@@ -35,10 +35,82 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final ValueNotifier<double> _opacityNotifier = ValueNotifier(0.0);
+  late AnimationController _imageAnimationController;
+  late Animation<double> _imageFadeAnimation;
 
   String _getDarkImagePath(String basePath) => basePath.replaceAll('.jpg', '_dark.jpg');
+
+  @override
+  void initState() {
+    super.initState();
+    _imageAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 2800),
+      vsync: this,
+    );
+    _imageFadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _imageAnimationController,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  Widget _buildBackgroundImage(BuildContext context, HomeState state, {bool isLandscape = false}) => BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        // Start animation when data is loaded
+        if (state.maybeWhen(loaded: (_, __, ___, ____) => true, orElse: () => false)) {
+          _imageAnimationController.forward();
+        }
+        
+        return state.maybeWhen(
+          loaded: (_, __, occasions, ___) {
+            final occasion = occasions?.first;
+            return AnimatedBuilder(
+              animation: _imageFadeAnimation,
+              builder: (context, child) {
+                return FadeTransition(
+                  opacity: _imageFadeAnimation,
+                  child: Container(
+                    height: isLandscape ? MediaQuery.of(context).size.height : null,
+                    decoration: BoxDecoration(
+                      borderRadius: isLandscape ? const BorderRadius.all(Radius.circular(16)) : null,
+                      image: DecorationImage(
+                        image: AssetImage(
+                          Theme.of(context).brightness == Brightness.dark
+                              ? (occasions != null && occasions.isNotEmpty) ? 'assets/image/${occasion?.occasion}_dark.jpg': _getDarkImagePath(HomeScreen.randomImagePath)
+                              : (occasions != null && occasions.isNotEmpty) ? 'assets/image/${occasion?.occasion}.jpg': HomeScreen.randomImagePath,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          orElse: () =>
+             Container(
+                height: isLandscape ? MediaQuery.of(context).size.height : null,
+                decoration: BoxDecoration(
+                  borderRadius: isLandscape ? const BorderRadius.all(Radius.circular(16)) : null,
+                  image: DecorationImage(
+                    image: AssetImage(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? _getDarkImagePath(HomeScreen.randomImagePath)
+                          : HomeScreen.randomImagePath,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+
+
+        );
+      },
+    );
 
   Future<void> _openAppStore(MobileApp app) async {
     try {
@@ -86,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          isLandscape ? _buildLandscapeLayout(context) : _buildPortraitLayout(context, halfMediaHeight),
+          _buildUnifiedLayout(context, isLandscape, halfMediaHeight),
           // Top icons overlay - always on top and accessible
           Positioned(
             top: 0,
@@ -144,131 +216,42 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildLandscapeLayout(BuildContext context) => Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.only(top: 100.0, bottom: 40, right: 40, left: 40),
-            child: BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) => state.maybeWhen(
-                  loaded: (_, __, occasions, ___) {
-                    if (occasions != null && occasions.isNotEmpty) {
-                      final occasion = occasions.first;
-                      return Container(
-                        height: MediaQuery.of(context).size.height,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(16)),
-                          image: DecorationImage(
-                            image: AssetImage(
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? 'assets/image/${occasion.occasion}_dark.jpg'
-                                  : 'assets/image/${occasion.occasion}.jpg',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    }
-                    return Container(
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(16)),
-                        image: DecorationImage(
-                          image: AssetImage(
-                            Theme.of(context).brightness == Brightness.dark
-                                ? _getDarkImagePath(HomeScreen.randomImagePath)
-                                : HomeScreen.randomImagePath,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                  orElse: () => Container(
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          Theme.of(context).brightness == Brightness.dark
-                              ? _getDarkImagePath(HomeScreen.randomImagePath)
-                              : HomeScreen.randomImagePath,
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
+  Widget _buildUnifiedLayout(BuildContext context, bool isLandscape, double halfMediaHeight) {
+    if (isLandscape) {
+      return Row(
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(top: 100.0, bottom: 40, right: 40, left: 40),
+              child: _buildBackgroundImage(context, context.read<HomeCubit>().state, isLandscape: true),
             ),
           ),
-        ),
-        Expanded(
-          child: _buildScrollableContent(context, false),
-        ),
-      ],
-    );
-
-  Widget _buildPortraitLayout(BuildContext context, double halfMediaHeight) => Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
+          Expanded(
+            child: _buildScrollableContent(context, false),
           ),
-        ),
-        Align(
-          alignment: Alignment.topCenter,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 2,
-            child: BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) => state.maybeWhen(
-                  loaded: (_, __, occasions, ___) {
-                    if (occasions != null && occasions.isNotEmpty) {
-                      final occasion = occasions.first;
-                      return Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? 'assets/image/${occasion.occasion}_dark.jpg'
-                                  : 'assets/image/${occasion.occasion}.jpg',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    }
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                            Theme.of(context).brightness == Brightness.dark
-                                ? _getDarkImagePath(HomeScreen.randomImagePath)
-                                : HomeScreen.randomImagePath,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                  orElse: () => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          Theme.of(context).brightness == Brightness.dark
-                              ? _getDarkImagePath(HomeScreen.randomImagePath)
-                              : HomeScreen.randomImagePath,
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
+        ],
+      );
+    } else {
+      return Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
-        ),
-        _buildScrollableContent(context, true, halfMediaHeight),
-      ],
-    );
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2,
+              child: _buildBackgroundImage(context, context.read<HomeCubit>().state, isLandscape: false),
+            ),
+          ),
+          _buildScrollableContent(context, true, halfMediaHeight),
+        ],
+      );
+    }
+  }
 
   Widget _buildScrollableContent(BuildContext context, bool isPortrait, [double? halfMediaHeight]) => Stack(
       children: [
@@ -559,6 +542,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _opacityNotifier.dispose();
+    _imageAnimationController.dispose();
     super.dispose();
   }
 }
