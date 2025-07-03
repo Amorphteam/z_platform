@@ -282,7 +282,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         NotificationListener<ScrollNotification>(
           onNotification: (scrollNotification) {
-            if (scrollNotification is ScrollUpdateNotification) {
+            // Only handle vertical scroll notifications from the main CustomScrollView
+            if (scrollNotification is ScrollUpdateNotification && 
+                scrollNotification.metrics.axis == Axis.vertical) {
               final pixels = scrollNotification.metrics.pixels;
               _opacityNotifier.value = (pixels / 560).clamp(0.0, 1.0);
             }
@@ -452,7 +454,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return true;
         }).toList();
-
+        filteredApps.shuffle();
         // Don't show section if no valid apps
         if (filteredApps.isEmpty) return const SizedBox.shrink();
 
@@ -466,7 +468,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   child: Text(
-                    'تطبيقاتنا الأخرى',
+                    'تطبيقات مختارة',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
