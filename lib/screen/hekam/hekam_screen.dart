@@ -67,7 +67,7 @@ class _HekamScreenState extends State<HekamScreen> {
 
 تحميل تطبيق نهج البلاغة:
 Android: https://play.google.com/store/apps/details?id=org.masaha.nahj
-iOS: https://apps.apple.com/app/zahra-app''';
+iOS: https://apps.apple.com/app/6746411657''';
   }
 
   void _toggleFavorites() {

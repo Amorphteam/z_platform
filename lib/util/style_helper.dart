@@ -121,7 +121,7 @@ class StyleHelper {
   factory StyleHelper() => _instance;
 
   StyleHelper._();
-  FontSizeCustom fontSize = FontSizeCustom.large;
+  FontSizeCustom fontSize = FontSizeCustom.medium;
   FontFamily fontFamily = FontFamily.font1;
   LineHeightCustom lineSpace = LineHeightCustom.medium;
 

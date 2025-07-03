@@ -1622,10 +1622,11 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: FilterChip(
+        backgroundColor: isDarkMode ? Theme.of(context).colorScheme.onSurface.withOpacity(0.4) : Colors.transparent,
+        side: BorderSide.none,
         label: Text(title),
         selected: isSelected,
         onSelected: (_) => onTap(),
-        backgroundColor: Theme.of(context).colorScheme.surface,
         selectedColor: Theme.of(context).colorScheme.secondaryContainer,
         checkmarkColor: Theme.of(context).colorScheme.onSecondaryContainer,
         labelStyle: TextStyle(

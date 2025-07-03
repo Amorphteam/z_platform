@@ -3,6 +3,7 @@ import 'package:zahra/model/hekam.dart';
 import 'package:zahra/model/occasion.dart';
 import 'package:zahra/model/onscreen.dart';
 import 'package:zahra/model/word.dart';
+import 'package:zahra/model/mobile_app_model.dart';
 
 import '../model/translate_khotab.dart';
 
@@ -121,6 +122,41 @@ class DatabaseRepository {
       final results = await _dbHelper.getLettersTranslation(mainId);
       if (results.isEmpty) return null;
       return Translate.fromJson(results.first);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Mobile Apps caching operations
+  Future<void> saveMobileApps(List<MobileApp> mobileApps) async {
+    try {
+      final appsData = mobileApps.map((app) => app.toJson()).toList();
+      await _dbHelper.saveMobileApps(appsData);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<MobileApp>> getCachedMobileApps() async {
+    try {
+      final results = await _dbHelper.getCachedMobileApps();
+      return results.map((map) => MobileApp.fromJson(map)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> hasCachedMobileApps() async {
+    try {
+      return await _dbHelper.hasCachedMobileApps();
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> clearMobileAppsCache() async {
+    try {
+      await _dbHelper.clearMobileAppsCache();
     } catch (e) {
       rethrow;
     }

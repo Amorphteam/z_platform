@@ -32,7 +32,27 @@ class DatabaseHelper {
       await File(path).writeAsBytes(bytes);
     }
 
-    return await openDatabase(path);
+    final database = await openDatabase(path);
+    
+    // Create mobile_apps table if it doesn't exist
+    await _createMobileAppsTable(database);
+    
+    return database;
+  }
+
+  Future<void> _createMobileAppsTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS mobile_apps (
+        id INTEGER PRIMARY KEY,
+        appName TEXT NOT NULL,
+        shortDescription TEXT NOT NULL,
+        fullDescription TEXT NOT NULL,
+        picPath TEXT NOT NULL,
+        iosID INTEGER NOT NULL,
+        androidLink TEXT NOT NULL,
+        showAds INTEGER NOT NULL
+      )
+    ''');
   }
 
   Future<List<Map<String, dynamic>>> getHekam() async {
@@ -135,5 +155,34 @@ class DatabaseHelper {
       where: 'main = ?',
       whereArgs: [mainId],
     );
+  }
+
+  // Mobile Apps caching methods
+  Future<void> saveMobileApps(List<Map<String, dynamic>> mobileApps) async {
+    final db = await database;
+    
+    // First, clear existing mobile apps data
+    await db.delete('mobile_apps');
+    
+    // Insert new mobile apps data
+    for (final app in mobileApps) {
+      await db.insert('mobile_apps', app);
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getCachedMobileApps() async {
+    final db = await database;
+    return await db.query('mobile_apps');
+  }
+
+  Future<bool> hasCachedMobileApps() async {
+    final db = await database;
+    final result = await db.query('mobile_apps', limit: 1);
+    return result.isNotEmpty;
+  }
+
+  Future<void> clearMobileAppsCache() async {
+    final db = await database;
+    await db.delete('mobile_apps');
   }
 } 
