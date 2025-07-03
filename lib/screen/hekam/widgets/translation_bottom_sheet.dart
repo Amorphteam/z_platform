@@ -59,6 +59,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: DraggableScrollableSheet(
@@ -109,7 +110,8 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: FilterChip(
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: isDarkMode ? Theme.of(context).colorScheme.onSurface.withOpacity(0.4) : Colors.transparent,
+                          side: BorderSide.none,
                           labelStyle: TextStyle(
                             color: selectedTranslation == translation
                                           ? Theme.of(context).colorScheme.surface
@@ -118,6 +120,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                           checkmarkColor: Theme.of(context).colorScheme.surface,
                           label: Text(translation),
                           selected: selectedTranslation == translation,
+                          selectedColor: Theme.of(context).colorScheme.onSurface,
                           onSelected: (selected) {
                             setState(() {
                               selectedTranslation = translation;

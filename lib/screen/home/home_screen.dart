@@ -7,6 +7,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:zahra/screen/home/cubit/home_cubit.dart';
 import 'package:zahra/screen/home/widgets/about_sheet_widget.dart';
 import 'package:zahra/screen/home/widgets/home_item_widget.dart';
+import 'package:zahra/screen/home/widgets/mobile_apps/mobile_apps_widget.dart';
+import 'package:zahra/screen/home/widgets/mobile_apps/cubit/mobile_apps_cubit.dart';
 import 'package:zahra/util/navigation_helper.dart';
 import 'package:zahra/util/date_helper.dart';
 import 'package:zahra/model/occasion.dart';
@@ -31,10 +33,10 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final ValueNotifier<double> _opacityNotifier = ValueNotifier(0.0);
+  final String defaultImagePath = 'assets/image/7.jpg';
 
-  String _getDarkImagePath(String basePath) => basePath.replaceAll('.jpg', '_dark.jpg');
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          isLandscape ? _buildLandscapeLayout(context) : _buildPortraitLayout(context, halfMediaHeight),
+          _buildUnifiedLayout(context, isLandscape, halfMediaHeight),
           // Top icons overlay - always on top and accessible
           Positioned(
             top: 0,
@@ -102,131 +104,42 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildLandscapeLayout(BuildContext context) => Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.only(top: 100.0, bottom: 40, right: 40, left: 40),
-            child: BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) => state.maybeWhen(
-                  loaded: (_, __, occasions) {
-                    if (occasions != null && occasions.isNotEmpty) {
-                      final occasion = occasions.first;
-                      return Container(
-                        height: MediaQuery.of(context).size.height,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(16)),
-                          image: DecorationImage(
-                            image: AssetImage(
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? 'assets/image/${occasion.occasion}_dark.jpg'
-                                  : 'assets/image/${occasion.occasion}.jpg',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    }
-                    return Container(
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(16)),
-                        image: DecorationImage(
-                          image: AssetImage(
-                            Theme.of(context).brightness == Brightness.dark
-                                ? _getDarkImagePath(HomeScreen.randomImagePath)
-                                : HomeScreen.randomImagePath,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                  orElse: () => Container(
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          Theme.of(context).brightness == Brightness.dark
-                              ? _getDarkImagePath(HomeScreen.randomImagePath)
-                              : HomeScreen.randomImagePath,
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
+  Widget _buildUnifiedLayout(BuildContext context, bool isLandscape, double halfMediaHeight) {
+    if (isLandscape) {
+      return Row(
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(top: 100.0, bottom: 40, right: 40, left: 40),
+              child: _buildBackgroundImage(context, context.read<HomeCubit>().state, isLandscape: true),
             ),
           ),
-        ),
-        Expanded(
-          child: _buildScrollableContent(context, false),
-        ),
-      ],
-    );
-
-  Widget _buildPortraitLayout(BuildContext context, double halfMediaHeight) => Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
+          Expanded(
+            child: _buildScrollableContent(context, false),
           ),
-        ),
-        Align(
-          alignment: Alignment.topCenter,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 2,
-            child: BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) => state.maybeWhen(
-                  loaded: (_, __, occasions) {
-                    if (occasions != null && occasions.isNotEmpty) {
-                      final occasion = occasions.first;
-                      return Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? 'assets/image/${occasion.occasion}_dark.jpg'
-                                  : 'assets/image/${occasion.occasion}.jpg',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    }
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                            Theme.of(context).brightness == Brightness.dark
-                                ? _getDarkImagePath(HomeScreen.randomImagePath)
-                                : HomeScreen.randomImagePath,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                  orElse: () => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          Theme.of(context).brightness == Brightness.dark
-                              ? _getDarkImagePath(HomeScreen.randomImagePath)
-                              : HomeScreen.randomImagePath,
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
+        ],
+      );
+    } else {
+      return Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
-        ),
-        _buildScrollableContent(context, true, halfMediaHeight),
-      ],
-    );
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2,
+              child: _buildBackgroundImage(context, context.read<HomeCubit>().state, isLandscape: false),
+            ),
+          ),
+          _buildScrollableContent(context, true, halfMediaHeight),
+        ],
+      );
+    }
+  }
 
   Widget _buildScrollableContent(BuildContext context, bool isPortrait, [double? halfMediaHeight]) => Stack(
       children: [
@@ -240,7 +153,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         NotificationListener<ScrollNotification>(
           onNotification: (scrollNotification) {
-            if (scrollNotification is ScrollUpdateNotification) {
+            // Only handle vertical scroll notifications from the main CustomScrollView
+            if (scrollNotification is ScrollUpdateNotification && 
+                scrollNotification.metrics.axis == Axis.vertical) {
               final pixels = scrollNotification.metrics.pixels;
               _opacityNotifier.value = (pixels / 560).clamp(0.0, 1.0);
             }
@@ -273,118 +188,188 @@ class _HomeScreenState extends State<HomeScreen> {
         initial: () => const SliverFillRemaining(
           child: Center(child: Text('Tap to start fetching...')),
         ),
-        loading: () => const SliverFillRemaining(
-          child: Center(child: CircularProgressIndicator()),
-        ),
-        loaded: (items, hekamText, _) => SliverToBoxAdapter(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  Theme.of(context).brightness == Brightness.dark
-                      ? 'assets/image/back_tazhib_dark.jpg'
-                      : 'assets/image/back_tazhib_light.jpg',
-                ),
-                fit: BoxFit.cover,
-              ),
-              borderRadius:  const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-              )
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                  child: state.maybeWhen(
-                    loaded: (_, onScreenText, __) => AutoSizeText(
-                      onScreenText ?? 'قيمة كل امرئ ما يحسنه',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontFamily: 'almarai',
-                      ),
-                      maxLines: 1,
-                      minFontSize: 12,
-                    ),
-                    orElse: () => const AutoSizeText(
-                      'قيمة كل امرئ ما يحسنه',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontFamily: 'almarai',
-                      ),
-                      maxLines: 1,
-                      minFontSize: 12,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: isPortrait ? null: MediaQuery.of(context).size.height,
-                  decoration: isPortrait ? BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
-                  ):BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                  ),
-                  child: Column(
-                    children: List.generate(
-                      items.length * 2 - 1,
-                      (index) {
-                        if (index.isEven) {
-                          final itemIndex = index ~/ 2;
-                          return HomeItemWidget(
-                            text: items[itemIndex],
-                            isLast: itemIndex == items.length - 1,
-                            isFirst: itemIndex == 0,
-                            onTap: () {
-                              if (itemIndex == 0){
-                                openEpub(context: context, book: Book(epub: 'moqadameh.epub'));
-                              } else if (itemIndex == 1){
-                                NavigationHelper.navigateToTocWithNumber(context, 'الخطب والأوامر', 'assets/json/khotab_index.json');
-                              } else if (itemIndex == 2) {
-                                NavigationHelper.navigateToTocWithNumber(context, 'الكتب والرسائل', 'assets/json/letters_index.json');
-                              } else if (itemIndex == 3) {
-                                Navigator.of(context).pushNamed(
-                                  '/hekam',
-                                );
-                              } else if (itemIndex == 4){
-                                openEpub(context: context, book: Book(epub: 'ghareeb.epub'));
-                              }
-                            },
-                            isPortrait: isPortrait,
-                          );
-                        } else {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24.0),
-                            child: Divider(
-                              height: 1,
-                              thickness: 1,
-                              color: Colors.black,
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
+        loading: () => _buildContentContainer(isPortrait, _getDefaultItems(), null),
+        loaded: (items, hekamText, occasions) => _buildContentContainer(isPortrait, items, hekamText),
         error: (message) => SliverFillRemaining(
           child: Center(child: Text(message)),
         ),
       ),
     );
+
+  List<String> _getDefaultItems() {
+    return [
+      'مقدمة الشريف الرضي',
+      'الخُـــطَــــب والأوامــر',
+      'الـكُــتُــب والـرَّســـائِل',
+      'الـحِــــكَم والـمــواعـظ',
+      'غَـــــريبُ الـكـــلـمـات',
+    ];
+  }
+
+  Widget _buildContentContainer(bool isPortrait, List<String> items, String? hekamText) {
+    return SliverToBoxAdapter(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              Theme.of(context).brightness == Brightness.dark
+                  ? 'assets/image/back_tazhib_dark.jpg'
+                  : 'assets/image/back_tazhib_light.jpg',
+            ),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          )
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 800),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+                child: AutoSizeText(
+                  key: ValueKey(hekamText ?? 'قيمة كل امرئ ما يحسنه'),
+                  hekamText ?? 'قيمة كل امرئ ما يحسنه',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'almarai',
+                  ),
+                  maxLines: 1,
+                  minFontSize: 12,
+                ),
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: isPortrait ? null: MediaQuery.of(context).size.height,
+              decoration: isPortrait ? BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+              ):BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              child: Column(
+                children: [
+                  ...List.generate(
+                    items.length * 2 - 1,
+                    (index) {
+                      if (index.isEven) {
+                        final itemIndex = index ~/ 2;
+                        return HomeItemWidget(
+                          text: items[itemIndex],
+                          isLast: itemIndex == items.length - 1,
+                          isFirst: itemIndex == 0,
+                          onTap: () {
+                            if (itemIndex == 0){
+                              openEpub(context: context, book: Book(epub: 'moqadameh.epub'));
+                            } else if (itemIndex == 1){
+                              NavigationHelper.navigateToTocWithNumber(context, 'الخطب والأوامر', 'assets/json/khotab_index.json');
+                            } else if (itemIndex == 2) {
+                              NavigationHelper.navigateToTocWithNumber(context, 'الكتب والرسائل', 'assets/json/letters_index.json');
+                            } else if (itemIndex == 3) {
+                              Navigator.of(context).pushNamed(
+                                '/hekam',
+                              );
+                            } else if (itemIndex == 4){
+                              openEpub(context: context, book: Book(epub: 'ghareeb.epub'));
+                            }
+                          },
+                          isPortrait: isPortrait,
+                        );
+                      } else {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24.0),
+                          child: Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: Colors.black,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  // Mobile Apps Section
+                  MobileAppsWidget(),
+                ],
+              )
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getDarkImagePath(String basePath) => basePath.replaceAll('.jpg', '_dark.jpg');
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Widget _buildBackgroundImage(BuildContext context, HomeState state, {bool isLandscape = false}) => BlocBuilder<HomeCubit, HomeState>(
+    builder: (context, state) => AnimatedSwitcher(
+      duration: const Duration(milliseconds: 800),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+      child: state.maybeWhen(
+        loaded: (_, __, occasions) {
+          final occasion = occasions != null && occasions.isNotEmpty ? occasions.first : null;
+          final imagePath = Theme.of(context).brightness == Brightness.dark
+              ? (occasion != null) ? 'assets/image/${occasion.occasion}_dark.jpg': _getDarkImagePath(HomeScreen.randomImagePath)
+              : (occasion != null) ? 'assets/image/${occasion.occasion}.jpg': HomeScreen.randomImagePath;
+          
+          return Container(
+            key: ValueKey(imagePath), // Important: This ensures the AnimatedSwitcher detects changes
+            height: isLandscape ? MediaQuery.of(context).size.height : null,
+            decoration: BoxDecoration(
+              borderRadius: isLandscape ? const BorderRadius.all(Radius.circular(16)) : null,
+              image: DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
+        orElse: () {
+          final imagePath = Theme.of(context).brightness == Brightness.dark
+              ? _getDarkImagePath(defaultImagePath)
+              : defaultImagePath;
+          
+          return Container(
+            key: ValueKey(imagePath), // Important: This ensures the AnimatedSwitcher detects changes
+            height: isLandscape ? MediaQuery.of(context).size.height : null,
+            decoration: BoxDecoration(
+              borderRadius: isLandscape ? const BorderRadius.all(Radius.circular(16)) : null,
+              image: DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
+      ),
+    ),
+  );
+
 
   void _showAboutUsSheet(BuildContext context) {
     showModalBottomSheet(

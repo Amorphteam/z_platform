@@ -365,10 +365,13 @@ class _TocScreenState extends State<TocScreen> {
                       title: Directionality(
                         textDirection: TextDirection.rtl,
                         child: Text(
+                          textAlign: TextAlign.justify,
                           myItem.text ?? '',
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Theme.of(context).colorScheme.onSurface,
+
                             fontFamily: 'Lotus Qazi Light',
+
                             fontSize: _fontSize.size,
                           ),
                         ),

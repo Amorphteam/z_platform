@@ -45,9 +45,8 @@ void configureOneSignal() {
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
   
   // Initialize with your OneSignal App ID
-  // Note: iOS initialization is handled in AppDelegate.swift
   OneSignal.initialize("dc7d3a2d-c66a-4344-a0fe-f47795bfd2c3");
-  
+
   // Configure notification appearance
   OneSignal.User.pushSubscription.optIn();
   

@@ -32,7 +32,9 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
 
   void _setInitialTranslation() {
     // Set the first available translation as selected
-    if (widget.translation['فارسي ـ جعفري'] != null) {
+    if (widget.translation['English'] != null) {
+      selectedTranslation = 'English';
+    }else if (widget.translation['فارسي ـ جعفري'] != null) {
       selectedTranslation = 'فارسي ـ جعفري';
     } else if (widget.translation['فارسي ـ انصاريان'] != null) {
       selectedTranslation = 'فارسي ـ انصاريان';
@@ -40,8 +42,6 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
       selectedTranslation = 'فارسي ـ فيض الإسلام';
     } else if (widget.translation['فارسي ـ شهيدي'] != null) {
       selectedTranslation = 'فارسي ـ شهيدي';
-    } else if (widget.translation['English'] != null) {
-      selectedTranslation = 'English';
     }
   }
 
@@ -96,6 +96,13 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
+                  if (widget.translation['English'] != null)
+                    _buildTranslationChip(
+                      context,
+                      'English',
+                      selectedTranslation == 'English',
+                          () => setState(() => selectedTranslation = 'English'),
+                    ),
                   if (widget.translation['فارسي ـ جعفري'] != null)
                     _buildTranslationChip(
                       context,
@@ -124,13 +131,7 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
                       selectedTranslation == 'فارسي ـ شهيدي',
                           () => setState(() => selectedTranslation = 'فارسي ـ شهيدي'),
                     ),
-                  if (widget.translation['English'] != null)
-                    _buildTranslationChip(
-                      context,
-                      'English',
-                      selectedTranslation == 'English',
-                          () => setState(() => selectedTranslation = 'English'),
-                    ),
+
                 ],
               ),
             ),
@@ -159,9 +160,13 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
 
 
   Widget _buildTranslationChip(BuildContext context, String title, bool isSelected, VoidCallback onTap) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: FilterChip(
+        backgroundColor: isDarkMode ? Theme.of(context).colorScheme.onSurface.withOpacity(0.4) : Colors.transparent,
+        side: BorderSide.none,
         label: Text(
           title,
           style: TextStyle(
@@ -174,7 +179,6 @@ class _TranslationBottomSheetContentState extends State<TranslationBottomSheetCo
         selected: isSelected,
         onSelected: (_) => onTap(),
         checkmarkColor: Theme.of(context).colorScheme.surface,
-        backgroundColor: Colors.transparent,
         selectedColor: Theme.of(context).colorScheme.onSurface,
       ),
     );

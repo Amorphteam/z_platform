@@ -35,13 +35,27 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "org.masaha.nahj"
     compileSdkVersion 34
-    ndkVersion flutter.ndkVersion
+    ndkVersion "25.1.8937393"
+
+    signingConfigs {
+        release {
+            keyAlias 'new-key-alias'
+            keyPassword 'Amorph!@#'
+            storeFile file('/Users/alibayati/Desktop/new_keystore.jks')
+            storePassword 'Amorph!@#'
+        }
+    }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+            minifyEnabled false // Change to true if using ProGuard
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

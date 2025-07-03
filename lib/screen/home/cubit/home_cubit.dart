@@ -25,10 +25,6 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> fetchItems() async {
     try {
       emit(const HomeState.loading());
-      
-
-      // Emit state with just items and occasions
-      emit(HomeState.loaded(items));
 
       // First, get occasions
       final occasions = await DateHelper.getOccasionsForCurrentDate();
@@ -39,6 +35,8 @@ class HomeCubit extends Cubit<HomeState> {
       // Update state with the text
       if (randomText != null) {
         emit(HomeState.loaded(items, hekamText: randomText.textAr, occasions: occasions));
+      } else {
+        emit(HomeState.loaded(items, occasions: occasions));
       }
     } catch (e) {
       emit(HomeState.error(e.toString()));

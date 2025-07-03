@@ -28,6 +28,9 @@ class StyleHelper {
         fontFamily: isEnglish?'arial': fontFamily?.name ?? 'Lotus Qazi Light',
         color: isDarkMode ? const Color(0xFFE0E0E0) : null,
       ),
+      ".footnote": Style(
+        textAlign: TextAlign.justify,
+      ),
       "p.center": Style(
         textAlign: TextAlign.center,
         color: isDarkMode ? const Color(0xFFE0E0E0) : null,
@@ -40,11 +43,13 @@ class StyleHelper {
       "p.english": Style(
         color: isDarkMode ? const Color(0xFFE0E0E0) : const Color(0xFF800000),
         direction: TextDirection.ltr,
-        textAlign: TextAlign.left,
+        textAlign: TextAlign.justify,
       ),
       "p.arabic": Style(
+        fontFamily: isEnglish?'arial': fontFamily?.name ?? 'Lotus Qazi Light',
         color: isDarkMode ? const Color(0xFFE0E0E0) : const Color(0xFF000080),
         direction: TextDirection.rtl,
+        textAlign: TextAlign.justify,
       ),
       "p.hekam_arabic": Style(
         color: isDarkMode ? const Color(0xFFE0E0E0) : const Color(0xFF000080),
@@ -121,7 +126,7 @@ class StyleHelper {
   factory StyleHelper() => _instance;
 
   StyleHelper._();
-  FontSizeCustom fontSize = FontSizeCustom.large;
+  FontSizeCustom fontSize = FontSizeCustom.medium;
   FontFamily fontFamily = FontFamily.font1;
   LineHeightCustom lineSpace = LineHeightCustom.medium;
 
