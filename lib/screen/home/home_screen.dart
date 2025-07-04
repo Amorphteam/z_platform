@@ -37,43 +37,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final ValueNotifier<double> _opacityNotifier = ValueNotifier(0.0);
-  late AnimationController _imageAnimationController;
-  late Animation<double> _imageFadeAnimation;
 
   String _getDarkImagePath(String basePath) => basePath.replaceAll('.jpg', '_dark.jpg');
 
   @override
   void initState() {
     super.initState();
-    _imageAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 2800),
-      vsync: this,
-    );
-    _imageFadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _imageAnimationController,
-      curve: Curves.easeInOut,
-    ));
   }
 
   Widget _buildBackgroundImage(BuildContext context, HomeState state, {bool isLandscape = false}) => BlocBuilder<HomeCubit, HomeState>(
-      builder: (context, state) {
-        // Start animation when data is loaded
-        if (state.maybeWhen(loaded: (_, __, ___, ____) => true, orElse: () => false)) {
-          _imageAnimationController.forward();
-        }
-        
-        return state.maybeWhen(
+      builder: (context, state) => state.maybeWhen(
           loaded: (_, __, occasions, ___) {
             final occasion = occasions?.first;
-            return AnimatedBuilder(
-              animation: _imageFadeAnimation,
-              builder: (context, child) {
-                return FadeTransition(
-                  opacity: _imageFadeAnimation,
-                  child: Container(
+            return Container(
                     height: isLandscape ? MediaQuery.of(context).size.height : null,
                     decoration: BoxDecoration(
                       borderRadius: isLandscape ? const BorderRadius.all(Radius.circular(16)) : null,
@@ -86,30 +62,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                );
-              },
-            );
+                  );
           },
           orElse: () =>
-             Container(
-                height: isLandscape ? MediaQuery.of(context).size.height : null,
-                decoration: BoxDecoration(
-                  borderRadius: isLandscape ? const BorderRadius.all(Radius.circular(16)) : null,
-                  image: DecorationImage(
-                    image: AssetImage(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? _getDarkImagePath(HomeScreen.randomImagePath)
-                          : HomeScreen.randomImagePath,
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-
-        );
-      },
+             Container(),
+        ),
     );
 
   Future<void> _openAppStore(MobileApp app) async {
@@ -338,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       minFontSize: 12,
                     ),
                     orElse: () => const AutoSizeText(
-                      'قيمة كل امرئ ما يحسنه',
+                      '',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
@@ -542,7 +499,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     _opacityNotifier.dispose();
-    _imageAnimationController.dispose();
     super.dispose();
   }
 }

@@ -30,10 +30,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> fetchItems() async {
     try {
       emit(const HomeState.loading());
-      
 
-      // Emit state with just items and occasions
-      emit(HomeState.loaded(items));
 
       // First, get occasions
       final occasions = await DateHelper.getOccasionsForCurrentDate();
