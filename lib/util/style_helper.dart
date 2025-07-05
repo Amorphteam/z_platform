@@ -45,6 +45,7 @@ class StyleHelper {
       "p.arabic": Style(
         color: isDarkMode ? const Color(0xFFE0E0E0) : const Color(0xFF000080),
         direction: TextDirection.rtl,
+        textAlign: TextAlign.right,
       ),
       "p.hekam_arabic": Style(
         color: isDarkMode ? const Color(0xFFE0E0E0) : const Color(0xFF000080),

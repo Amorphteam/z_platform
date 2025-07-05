@@ -120,6 +120,7 @@ class _TranslationBottomSheetState extends State<TranslationBottomSheet> {
                           checkmarkColor: Theme.of(context).colorScheme.surface,
                           label: Text(translation),
                           selected: selectedTranslation == translation,
+                          selectedColor: Theme.of(context).colorScheme.onSurface,
                           onSelected: (selected) {
                             setState(() {
                               selectedTranslation = translation;

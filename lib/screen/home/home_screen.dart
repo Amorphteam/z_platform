@@ -1,19 +1,17 @@
 import 'dart:math';
-import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:zahra/screen/home/cubit/home_cubit.dart';
 import 'package:zahra/screen/home/widgets/about_sheet_widget.dart';
 import 'package:zahra/screen/home/widgets/home_item_widget.dart';
+import 'package:zahra/screen/home/widgets/mobile_apps/mobile_apps_widget.dart';
+import 'package:zahra/screen/home/widgets/mobile_apps/cubit/mobile_apps_cubit.dart';
 import 'package:zahra/util/navigation_helper.dart';
 import 'package:zahra/util/date_helper.dart';
 import 'package:zahra/model/occasion.dart';
-import 'package:zahra/model/mobile_app_model.dart';
-import 'package:zahra/widget/cached_image_widget.dart';
 
 import '../../model/book_model.dart';
 import '../../repository/database_repository.dart';
@@ -47,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   Widget _buildBackgroundImage(BuildContext context, HomeState state, {bool isLandscape = false}) => BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) => state.maybeWhen(
-          loaded: (_, __, occasions, ___) {
+          loaded: (_, __, occasions) {
             final occasion = occasions?.first;
             return Container(
                     height: isLandscape ? MediaQuery.of(context).size.height : null,
@@ -69,43 +67,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
     );
 
-  Future<void> _openAppStore(MobileApp app) async {
-    try {
-      String url;
-      
-      if (Platform.isIOS) {
-        // For iOS, use the iOS App Store link
-        url = 'https://apps.apple.com/app/id${app.iosID}';
-      } else if (Platform.isAndroid) {
-        // For Android, construct Google Play Store URL from package name
-        url = 'https://play.google.com/store/apps/details?id=${app.androidLink}';
-      } else {
-        // For other platforms, default to Android link
-        url = 'https://play.google.com/store/apps/details?id=${app.androidLink}';
-      }
-      
-      print('Opening URL: $url'); // Debug print
-      
-      final uri = Uri.parse(url);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        // Fallback: try to open the URL anyway
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      }
-    } catch (e) {
-      print('Error opening app store: $e');
-      // Show a snackbar or dialog to inform the user
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('لا يمكن فتح متجر التطبيقات'),
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      }
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         loading: () => const SliverFillRemaining(
           child: Center(child: CircularProgressIndicator()),
         ),
-        loaded: (items, hekamText, _, __) => SliverToBoxAdapter(
+        loaded: (items, hekamText, occasions) => SliverToBoxAdapter(
           child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -283,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                   child: state.maybeWhen(
-                    loaded: (_, onScreenText, __, ___) => AutoSizeText(
+                    loaded: (_, onScreenText, __) => AutoSizeText(
                       onScreenText ?? 'قيمة كل امرئ ما يحسنه',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
@@ -360,11 +322,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         },
                       ),
                       // Mobile Apps Section
-                      if (state.maybeWhen(
-                        loaded: (_, __, ___, mobileApps) => mobileApps != null && mobileApps.isNotEmpty,
-                        orElse: () => false,
-                      ))
-                        _buildMobileAppsSection(context, state, isPortrait),
+                      MobileAppsWidget(),
                     ],
                   ),
                 )
@@ -378,114 +336,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     );
 
-  Widget _buildMobileAppsSection(BuildContext context, HomeState state, bool isPortrait) => state.maybeWhen(
-      loaded: (_, __, ___, mobileApps) {
-        if (mobileApps == null || mobileApps.isEmpty) return const SizedBox.shrink();
 
-        // Filter apps: remove current app and apps without images
-        final filteredApps = mobileApps.where((app) {
-          // Skip if no image
-          if (app.picPath.isEmpty) return false;
-
-          // Skip if it's the current app (check package name in android link)
-          if (app.androidLink.contains('org.masaha.nahj')) {
-            return false;
-          }
-
-          return true;
-        }).toList();
-        filteredApps.shuffle();
-        // Don't show section if no valid apps
-        if (filteredApps.isEmpty) return const SizedBox.shrink();
-
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: Container(
-            margin: const EdgeInsets.only(top: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  child: Text(
-                    'تطبيقات مختارة',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 180,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: filteredApps.length,
-                    itemBuilder: (context, index) {
-                      final app = filteredApps[index];
-                      return GestureDetector(
-                        onTap: () => _openAppStore(app),
-                        child: Container(
-                          width: 200,
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 200,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(16),
-                                    bottomLeft: Radius.circular(16),
-                                  ),
-                                  color: Theme.of(context).colorScheme.surfaceVariant,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: CachedImageWidget(
-                                  imageUrl: app.picPath,
-                                  width: 200,
-                                  height: 120,
-                                  fit: BoxFit.cover,
-                                  borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(16),
-                                    bottomLeft: Radius.circular(16),
-                                  ),
-                                  errorWidget: const SizedBox.shrink(), // Don't show anything if image fails
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Expanded(
-                                child: Text(
-                                  app.appName,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context).colorScheme.onSurface,
-                                    fontFamily: 'almarai',
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-      orElse: () => const SizedBox.shrink(),
-    );
 
   void _showAboutUsSheet(BuildContext context) {
     showModalBottomSheet(
