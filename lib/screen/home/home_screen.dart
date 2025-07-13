@@ -106,18 +106,32 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   Widget _buildUnifiedLayout(BuildContext context, bool isLandscape, double halfMediaHeight) {
     if (isLandscape) {
-      return Row(
-        children: [
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(top: 100.0, bottom: 40, right: 40, left: 40),
-              child: _buildBackgroundImage(context, context.read<HomeCubit>().state, isLandscape: true),
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height - 100, // Full height minus top padding
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 100.0, bottom: 40, right: 40, left: 40),
+                      child: _buildBackgroundImage(context, context.read<HomeCubit>().state, isLandscape: true),
+                    ),
+                  ),
+                  Expanded(
+                    child: _buildScrollableContent(context, false),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: _buildScrollableContent(context, false),
-          ),
-        ],
+            // Mobile Apps Section for landscape - placed underneath
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: MobileAppsWidget(),
+            ),
+          ],
+        ),
       );
     } else {
       return Stack(
@@ -188,8 +202,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         initial: () => const SliverFillRemaining(
           child: Center(child: Text('Tap to start fetching...')),
         ),
-        loading: () => _buildContentContainer(isPortrait, _getDefaultItems(), null),
-        loaded: (items, hekamText, occasions) => _buildContentContainer(isPortrait, items, hekamText),
+        loading: () => _buildContentContainer(isPortrait, _getDefaultItems(), null, !isPortrait),
+        loaded: (items, hekamText, occasions) => _buildContentContainer(isPortrait, items, hekamText, !isPortrait),
         error: (message) => SliverFillRemaining(
           child: Center(child: Text(message)),
         ),
@@ -206,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ];
   }
 
-  Widget _buildContentContainer(bool isPortrait, List<String> items, String? hekamText) {
+  Widget _buildContentContainer(bool isPortrait, List<String> items, String? hekamText, bool isLandscape) {
     return SliverToBoxAdapter(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -303,8 +317,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       }
                     },
                   ),
-                  // Mobile Apps Section
-                  MobileAppsWidget(),
+                  // Mobile Apps Section - only for portrait mode
+                  if (!isLandscape) MobileAppsWidget(),
                 ],
               )
             )
