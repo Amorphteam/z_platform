@@ -596,29 +596,31 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               itemBuilder: (BuildContext context, int index) {
                 final double screenHeight = MediaQuery.of(context).size.height;
 
-                return Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: GestureDetector(
-                    // onDoubleTap: () {
-                    //   setState(() {
-                    //     isSliderVisible = !isSliderVisible;
-                    //   });
-                    // },
-                    // onLongPress: () {
-                    //   setState(() {
-                    //     isSliderVisible = !isSliderVisible;
-                    //   });
-                    // },
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: screenHeight),
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 16, left: 16),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: SelectionArea(
-                          child: _buildHtmlContent(index, content[index]),
+                return Container(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: GestureDetector(
+                      // onDoubleTap: () {
+                      //   setState(() {
+                      //     isSliderVisible = !isSliderVisible;
+                      //   });
+                      // },
+                      // onLongPress: () {
+                      //   setState(() {
+                      //     isSliderVisible = !isSliderVisible;
+                      //   });
+                      // },
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: screenHeight),
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 16, left: 16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: SelectionArea(
+                            child: _buildHtmlContent(index, content[index]),
+                          ),
                         ),
                       ),
                     ),

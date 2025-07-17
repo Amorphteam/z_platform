@@ -41,10 +41,46 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
         _filteredItems = List.from(_allItems);
       } else {
         _filteredItems = _allItems
-            .where((item) => item.title.toLowerCase().contains(query.toLowerCase()))
+            .where((item) => _matchesSearch(item, query))
             .toList();
       }
     });
+  }
+
+  bool _matchesSearch(TocItem item, String query) {
+    final lowerQuery = query.toLowerCase();
+    
+    // Check title
+    if (item.title.toLowerCase().contains(lowerQuery)) {
+      return true;
+    }
+    
+    // Check key
+    if (item.key != null && item.key!.toLowerCase().contains(lowerQuery)) {
+      return true;
+    }
+    
+    // Check key number part (both Arabic and English numbers)
+    if (item.key != null) {
+      final keyNumber = item.key!.split('_').last;
+      if (_numberMatches(keyNumber, query)) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+  bool _numberMatches(String number, String query) {
+    // Convert query to both Arabic and English numbers for comparison
+    final arabicQuery = _toArabicNumber(query);
+    final englishQuery = _toEnglishNumber(query);
+    
+    // Check if the number matches either Arabic or English version of the query
+    return number.contains(arabicQuery) || 
+           number.contains(englishQuery) ||
+           _toArabicNumber(number).contains(arabicQuery) ||
+           _toEnglishNumber(number).contains(englishQuery);
   }
 
   String _toArabicNumber(String number) {
@@ -53,6 +89,16 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
     
     for (int i = 0; i < english.length; i++) {
       number = number.replaceAll(english[i], arabic[i]);
+    }
+    return number;
+  }
+
+  String _toEnglishNumber(String number) {
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    
+    for (int i = 0; i < arabic.length; i++) {
+      number = number.replaceAll(arabic[i], english[i]);
     }
     return number;
   }

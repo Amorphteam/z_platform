@@ -65,7 +65,7 @@ class _HostScreenState extends State<HostScreen> {
                 height: 24,
                 color: _currentIndex == 1 ? Theme.of(context).colorScheme.secondaryContainer: Theme.of(context).colorScheme.onSurface,
               ),
-              label: 'الفهرست',
+              label: 'الموضوعي',
             ),
             // BottomNavigationBarItem(
             //   icon: Icon(_currentIndex == 2 ? CupertinoIcons.book_solid : CupertinoIcons.book),

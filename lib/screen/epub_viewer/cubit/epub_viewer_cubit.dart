@@ -319,13 +319,28 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
           // Get enabled translations from settings
           final enabledTranslations = await TranslationHelper.getAvailableTranslations();
           
-          // Map translation names to their corresponding EPUB files
-          final Map<String, String> translationEpubMap = {
-            'English': 'letters_en1.epub',
-            'فارسي ـ جعفري': 'letters_fa_jafari.epub',
-            'فارسي ـ انصاريان': 'letters_fa_ansarian.epub',
-            'فارسي ـ فيض الإسلام': 'letters_fa_faidh.epub',
-            'فارسي ـ شهيدي': 'letters_fa_shahidi.epub',
+          // Map translation names to their corresponding EPUB files and database fields
+          final Map<String, Map<String, dynamic>> translationConfig = {
+            'English': {
+              'epub': 'letters_en1.epub',
+              'pageNumber': translation.en1,
+            },
+            'فارسي ـ جعفري': {
+              'epub': 'letters_fa_jafari.epub',
+              'pageNumber': translation.faJafari,
+            },
+            'فارسي ـ انصاريان': {
+              'epub': 'letters_fa_ansarian.epub',
+              'pageNumber': translation.faAnsarian,
+            },
+            'فارسي ـ فيض الإسلام': {
+              'epub': 'letters_fa_faidh.epub',
+              'pageNumber': translation.faFaidh,
+            },
+            'فارسي ـ شهيدي': {
+              'epub': 'letters_fa_shahidi.epub',
+              'pageNumber': translation.faShahidi,
+            },
           };
 
           final Map<String, String> translations = {};
@@ -333,20 +348,29 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
           // Only load EPUBs for enabled translations
           for (final translationName in enabledTranslations) {
             if (translationName == 'الكل') continue; // Skip "الكل" as it's not a specific translation
-            
-            final epubPath = translationEpubMap[translationName];
-            if (epubPath != null) {
+
+            final config = translationConfig[translationName];
+            if (config != null && config['pageNumber'] != null) {
               try {
-                final translationEpub = await loadEpubFromAsset('assets/epub/$epubPath');
-                final List<HtmlFileInfo> translationContent = 
-                    await extractHtmlContentWithEmbeddedImages(translationEpub);
-                
-                if (translationContent.isNotEmpty && pageNumber > 0 && pageNumber <= translationContent.length) {
-                  final htmlContent = translationContent[pageNumber - 1].modifiedHtmlContent;
+                final translationEpub = await loadEpubFromAsset('assets/epub/${config['epub']}');
+                final List<HtmlFileInfo> translationContent =
+                await extractHtmlContentWithEmbeddedImages(translationEpub);
+                final spineHtmlFileName = translationContent.map((info) => info.fileName).toList();
+                int spineNumber = 0;
+
+                final int translationPageNumber = config['pageNumber'] as int;
+                for (final String fileName in spineHtmlFileName){
+                  if (fileName.contains('Text/${translationPageNumber}.')) {
+                    spineNumber = await findPageIndexInEpub(translationEpub, fileName);
+                    break;
+                  }
+                }
+                if (translationContent.isNotEmpty && spineNumber > 0 && spineNumber <= translationContent.length) {
+                  final htmlContent = translationContent[spineNumber].modifiedHtmlContent;
                   translations[translationName] = htmlContent;
                 }
               } catch (e) {
-                print('Error loading translation from $epubPath: $e');
+                print('Error loading translation from ${config['epub']}: $e');
                 // Continue with other translations even if one fails
                 continue;
               }
@@ -365,13 +389,28 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
           // Get enabled translations from settings
           final enabledTranslations = await TranslationHelper.getAvailableTranslations();
           
-          // Map translation names to their corresponding EPUB files
-          final Map<String, String> translationEpubMap = {
-            'English': 'khotab_en1.epub',
-            'فارسي ـ جعفري': 'khotab_fa_jafari.epub',
-            'فارسي ـ انصاريان': 'khotab_fa_ansarian.epub',
-            'فارسي ـ فيض الإسلام': 'khotab_fa_faidh.epub',
-            'فارسي ـ شهيدي': 'khotab_fa_shahidi.epub',
+          // Map translation names to their corresponding EPUB files and database fields
+          final Map<String, Map<String, dynamic>> translationConfig = {
+            'English': {
+              'epub': 'khotab_en1.epub',
+              'pageNumber': translation.en1,
+            },
+            'فارسي ـ جعفري': {
+              'epub': 'khotab_fa_jafari.epub',
+              'pageNumber': translation.faJafari,
+            },
+            'فارسي ـ انصاريان': {
+              'epub': 'khotab_fa_ansarian.epub',
+              'pageNumber': translation.faAnsarian,
+            },
+            'فارسي ـ فيض الإسلام': {
+              'epub': 'khotab_fa_faidh.epub',
+              'pageNumber': translation.faFaidh,
+            },
+            'فارسي ـ شهيدي': {
+              'epub': 'khotab_fa_shahidi.epub',
+              'pageNumber': translation.faShahidi,
+            },
           };
 
           final Map<String, String> translations = {};
@@ -380,19 +419,28 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
           for (final translationName in enabledTranslations) {
             if (translationName == 'الكل') continue; // Skip "الكل" as it's not a specific translation
             
-            final epubPath = translationEpubMap[translationName];
-            if (epubPath != null) {
+            final config = translationConfig[translationName];
+            if (config != null && config['pageNumber'] != null) {
               try {
-                final translationEpub = await loadEpubFromAsset('assets/epub/$epubPath');
+                final translationEpub = await loadEpubFromAsset('assets/epub/${config['epub']}');
                 final List<HtmlFileInfo> translationContent = 
                     await extractHtmlContentWithEmbeddedImages(translationEpub);
+                final spineHtmlFileName = translationContent.map((info) => info.fileName).toList();
+                int spineNumber = 0;
                 
-                if (translationContent.isNotEmpty && pageNumber > 0 && pageNumber <= translationContent.length) {
-                  final htmlContent = translationContent[pageNumber - 1].modifiedHtmlContent;
+                final int translationPageNumber = config['pageNumber'] as int;
+                for (final String fileName in spineHtmlFileName){
+                  if (fileName.contains('Text/${translationPageNumber}.')) {
+                    spineNumber = await findPageIndexInEpub(translationEpub, fileName);
+                    break;
+                  }
+                }
+                if (translationContent.isNotEmpty && spineNumber > 0 && spineNumber <= translationContent.length) {
+                  final htmlContent = translationContent[spineNumber].modifiedHtmlContent;
                   translations[translationName] = htmlContent;
                 }
               } catch (e) {
-                print('Error loading translation from $epubPath: $e');
+                print('Error loading translation from ${config['epub']}: $e');
                 // Continue with other translations even if one fails
                 continue;
               }
