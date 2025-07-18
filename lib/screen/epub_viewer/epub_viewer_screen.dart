@@ -597,7 +597,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                 final double screenHeight = MediaQuery.of(context).size.height;
 
                 return Container(
-                  color: Theme.of(context).colorScheme.primaryContainer,
+                  color: isDarkMode ? Theme.of(context).colorScheme.primaryContainer: Theme.of(context).colorScheme.primary,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 20.0),
                     child: GestureDetector(
