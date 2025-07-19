@@ -116,6 +116,14 @@ class MyApp extends StatelessWidget {
           const TextStyle(),
         ),
       ),
+      sliderTheme: const SliderThemeData(
+        activeTrackColor: Color(0xFF1B1C17), // Active track color
+        inactiveTrackColor: Color(0xFFBDBDBD), // Inactive track color
+        thumbColor: Color(0xFF1B1C17), // Thumb color
+        overlayColor: Color(0x1A9F9F9E), // Overlay color when pressed
+        valueIndicatorColor: Color(0xFF1B1C17),
+
+      ),
       textSelectionTheme: const TextSelectionThemeData(
         selectionColor: Color(0xFF9F9F9E), // Selection background color
         selectionHandleColor: Color(0xFF9F9F9E), // Selection handle color
@@ -132,7 +140,15 @@ class MyApp extends StatelessWidget {
           const TextStyle(),
         ),
       ),
-      textSelectionTheme: const TextSelectionThemeData(
+        sliderTheme: const SliderThemeData(
+          activeTrackColor: Color(0xFFF8F8F8), // Active track color
+          inactiveTrackColor: Color(0xBDBDBDBD), // Inactive track color
+          thumbColor: Color(0xFFFFFFFF), // Thumb color
+          overlayColor: Color(0x1A9F9F9E), // Overlay color when pressed
+          valueIndicatorColor: Color(0xFFFFFFFF),
+
+        ),
+          textSelectionTheme: const TextSelectionThemeData(
         selectionColor: Color(0xFF1FD7DD), // Selection background color
         selectionHandleColor: Color(0xFF1FD7DD), // Selection handle color
         cursorColor: Color(0xFF1FD7DD), // Cursor color

@@ -635,14 +635,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               child: Column(
                 children: [
                   Slider(
-                    thumbColor: Theme
-                        .of(context)
-                        .colorScheme
-                        .onSurface,
-                    activeColor:Theme
-                        .of(context)
-                        .colorScheme
-                        .onSurface,
                     value: _currentPage,
                     min: 0,
                     max: allPagesCount ?? -1,

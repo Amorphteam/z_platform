@@ -110,8 +110,6 @@ class SettingScreen extends StatelessWidget {
                          child: Text('حجم الخط:', style: Theme.of(context).textTheme.bodyLarge)),
                     Expanded(
                       child: Slider(
-                        thumbColor: Theme.of(context).colorScheme.onSurface,
-                        activeColor: Theme.of(context).colorScheme.onSurface,
                         value: fontSizeToSliderValue(loadedState.fontSize),
                         min: 0.0,
                         max: 1.0,
@@ -129,8 +127,6 @@ class SettingScreen extends StatelessWidget {
                         child: Text('فاصلة الأسطر:', style: Theme.of(context).textTheme.bodyLarge)),
                     Expanded(
                       child: Slider(
-                        thumbColor: Theme.of(context).colorScheme.onSurface,
-                        activeColor: Theme.of(context).colorScheme.onSurface,
                         value: lineHeightToSliderValue(loadedState.lineHeight),
                         min: 0.0,
                         max: 1.0,
