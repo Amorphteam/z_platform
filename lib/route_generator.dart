@@ -22,8 +22,8 @@ class RouteGenerator {
       case '/searchScreen':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-              create: (context) => LibraryCubit(),
-              child: LibraryScreen(),
+              create: (context) => SearchCubit(),
+              child: SearchScreen(),
             ),
         );
       case '/epubViewer':
