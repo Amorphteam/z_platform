@@ -213,6 +213,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               );
             }
           },
+          contentHighlighted: (content, page) {
+            setState(() {
+              _orginalContent = _content;
+              _content = content;
+            });
+            _jumpTo(pageNumber: page);
+          },
           styleChanged: (fontSize, lineSpace, fontFamily){
             print('loadUserPreferences $lineSpace add $fontFamily');
 
