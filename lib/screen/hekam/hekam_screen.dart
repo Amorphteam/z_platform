@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:zahra/screen/hekam/cubit/hekam_cubit.dart';
 import 'package:zahra/screen/hekam/widgets/translation_bottom_sheet.dart';
@@ -13,7 +14,8 @@ import '../../model/hekam.dart';
 import '../../widget/custom_appbar.dart';
 
 class HekamScreen extends StatefulWidget {
-  const HekamScreen({super.key});
+  const HekamScreen({super.key, this.scrollToIndex});
+  final int? scrollToIndex;
 
   @override
   State<HekamScreen> createState() => _HekamScreenState();
@@ -26,11 +28,27 @@ class _HekamScreenState extends State<HekamScreen> {
   late FontSizeCustom _fontSize;
   late LineHeightCustom _lineHeight;
   late FontFamily _fontFamily;
+  late final ItemScrollController itemScrollController;
+  late final ScrollOffsetController scrollOffsetController;
+  late final ItemPositionsListener itemPositionsListener;
+  late final ScrollOffsetListener scrollOffsetListener;
+  bool _isControllerInitialized = false;
+  bool _hasScrolledToIndex = false;
 
   @override
   void initState() {
     super.initState();
+    _initializeControllers();
     _loadFontPreferences();
+
+  }
+
+  void _initializeControllers() {
+    itemScrollController = ItemScrollController();
+    scrollOffsetController = ScrollOffsetController();
+    itemPositionsListener = ItemPositionsListener.create();
+    scrollOffsetListener = ScrollOffsetListener.create();
+    _isControllerInitialized = true;
   }
 
   Future<void> _loadFontPreferences() async {
@@ -112,6 +130,41 @@ iOS: https://apps.apple.com/app/6746411657''';
       );
     }
   }
+  _jumpTo({int? pageNumber}) {
+    if (!_isControllerInitialized || pageNumber == null) return;
+    
+    // Ensure the index is within valid bounds
+    if (pageNumber < 0) return;
+    
+    try {
+      // Check if the widget is still mounted
+      if (mounted) {
+        itemScrollController.jumpTo(index: pageNumber);
+        _hasScrolledToIndex = true;
+      }
+    } catch (e) {
+      debugPrint('Error jumping to page: $e');
+    }
+  }
+
+  void _attemptScrollWithRetry(int targetIndex) {
+    if (_hasScrolledToIndex) return;
+    
+
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted && !_hasScrolledToIndex) {
+          try {
+            itemScrollController.jumpTo(index: targetIndex);
+            _hasScrolledToIndex = true;
+          } catch (e) {
+            // If this is the last attempt, mark as failed
+              _hasScrolledToIndex = true; // Prevent further attempts
+
+          }
+        }
+      });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -169,10 +222,21 @@ iOS: https://apps.apple.com/app/6746411657''';
                         ),
                       );
                     }
+                    
+                    // Scroll to the specified index if provided (only once)
+                    if (widget.scrollToIndex != null && 
+                        items.isNotEmpty && 
+                        !_hasScrolledToIndex &&
+                        _isControllerInitialized) {
+                      // Use multiple attempts with increasing delays to ensure the list is ready
+                      _attemptScrollWithRetry(widget.scrollToIndex!);
+                    }
 
-                    return ListView.builder(
+                    return ScrollablePositionedList.builder(
                       padding: const EdgeInsets.only(left: 16, right: 16, top: 4),
                       itemCount: items.length,
+                      itemScrollController: itemScrollController,
+                      itemPositionsListener: itemPositionsListener,
                       itemBuilder: (context, index) {
                         final item = items[index];
                         return Card(
@@ -391,6 +455,7 @@ iOS: https://apps.apple.com/app/6746411657''';
                         );
                       },
                     );
+
                   },
                   error: (message) => Center(child: Text(message)),
                 ),

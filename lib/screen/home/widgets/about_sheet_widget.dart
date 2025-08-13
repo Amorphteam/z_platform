@@ -160,7 +160,7 @@ class AboutUsSheetWidget extends StatelessWidget {
                             final Uri websiteUri = Uri.parse('https://masaha.org');
                             if (await canLaunchUrl(websiteUri)) {
                               await launchUrl(
-                                websiteUri, 
+                                websiteUri,
                                 mode: LaunchMode.externalApplication,
                               );
                             } else {

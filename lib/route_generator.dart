@@ -56,10 +56,11 @@ class RouteGenerator {
           ),
         );
       case '/hekam':
+        final int? scrollToIndex = args?['scrollToIndex'];
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => HekamCubit(),
-            child: HekamScreen(),
+            child: HekamScreen(scrollToIndex: scrollToIndex),
           ),
         );
       case '/epubViewer':

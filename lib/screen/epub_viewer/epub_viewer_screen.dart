@@ -52,6 +52,7 @@ class EpubViewerScreen extends StatefulWidget {
 
 class _EpubViewerScreenState extends State<EpubViewerScreen> {
   int _currentIndex = -1;
+  int _highlightIndex = 0;
   bool _hasHandledInitialPageJump = false;
   int _initialPageIndex = 0;
   late final ItemScrollController itemScrollController;
@@ -85,6 +86,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   final Map<int, dom.Document> _htmlCache = {};
   final Map<int, String> _processedContentCache = {};
   bool _isControllerInitialized = false;
+  
+  // Add GlobalKey for current page highlighting
+  GlobalKey? _currentPageKey;
 
   @override
   void didChangeDependencies() {
@@ -382,10 +386,16 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     
                     return _buildCurrentUi(context, _content);
                   },
-                      contentHighlighted: (content, page) {
+                      contentHighlighted: (content, page, highlightList) {
                         _orginalContent = _content;
                         _content = content;
+                        if (tempPageNumber != page){
+                          _highlightIndex = 0;
+                        }
                         _jumpTo(pageNumber: page);
+                        var highlighId = highlightList[page]?[_highlightIndex];
+                        _scrollToId(highlighId?.toString() ?? '');
+
                         return _buildCurrentUi(context, content);
                       },
                       bookmarkAbsent: () => _buildCurrentUi(context, _content),
@@ -697,7 +707,12 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   Widget _buildHtmlContent(int index, String content) {
     // Check cache first
     if (_processedContentCache.containsKey(index)) {
+      final isCurrentPage = index == _currentPage.toInt();
+      if (isCurrentPage && _currentPageKey != null) {
+        debugPrint('🎯 Applying GlobalKey: ${_currentPageKey.hashCode} to cached HTML page: $index');
+      }
       return Html(
+        anchorKey: isCurrentPage ? _currentPageKey : null,
         data: _processedContentCache[index]!,
         onAnchorTap: _handleAnchorTap,
         style: {
@@ -706,6 +721,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             textAlign: TextAlign.justify,
             lineHeight: LineHeight(lineHeight.size),
             textDecoration: TextDecoration.none,
+          ),
+          '.inline': Style(
+            // display: Display.listItem,
           ),
           'p': Style(
             color: isDarkMode ? Colors.white : Colors.black,
@@ -897,7 +915,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     final processedContent = _processHtmlContent(content);
     _processedContentCache[index] = processedContent;
 
+    final isCurrentPage = index == _currentPage.toInt();
+    if (isCurrentPage && _currentPageKey != null) {
+      debugPrint('🎯 Applying GlobalKey: ${_currentPageKey.hashCode} to new HTML page: $index');
+    }
+
     return Html(
+      anchorKey: isCurrentPage ? _currentPageKey : null,
       onAnchorTap: _handleAnchorTap,
       data: processedContent,
       style: {
@@ -906,6 +930,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           textAlign: TextAlign.justify,
           lineHeight: LineHeight(lineHeight.size),
           textDecoration: TextDecoration.none,
+        ),
+        '.inline': Style(
+          // display: Display.listItem,
         ),
         'p': Style(
           color: isDarkMode ? Colors.white : Colors.black,
@@ -1212,6 +1239,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       setState(() {
         _currentSearchIndex++;
       });
+      _highlightIndex++;
       context.read<EpubViewerCubit>().highlightContent(
         _currentSearchResults[_currentSearchIndex].pageIndex,
         searchedWord
@@ -1224,6 +1252,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       setState(() {
         _currentSearchIndex--;
       });
+      _highlightIndex++;
+
       context.read<EpubViewerCubit>().highlightContent(
         _currentSearchResults[_currentSearchIndex].pageIndex,
         searchedWord
@@ -1478,13 +1508,22 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     this.lineHeight = lineHeight ?? LineHeightCustom.medium;
     this.fontSize = fontSize ?? FontSizeCustom.medium;
   }
-
+  int tempPageNumber = -1;
   _jumpTo({int? pageNumber}) {
     if (!_isControllerInitialized || pageNumber == null) return;
     
     try {
+      // Only create new GlobalKey if jumping to a different page
+      if (tempPageNumber.toInt() != pageNumber) {
+        debugPrint('🔑 Created new GlobalKey: ${_currentPageKey.hashCode} for NEW page: $pageNumber (was on page: ${_currentPage.toInt()})');
+      } else {
+        debugPrint('🔄 Staying on same page: $pageNumber, keeping existing GlobalKey: ${_currentPageKey?.hashCode}');
+      }
+      _currentPageKey = GlobalKey();
       itemScrollController.jumpTo(index: pageNumber);
       _currentPage = pageNumber.toDouble();
+      tempPageNumber = pageNumber;
+
       if (_bookPath != null) {
         context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
       }
@@ -1630,6 +1669,20 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         ),
       ),
     );
+  }
+
+  void _scrollToId(String highlightId) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final anchorContext = AnchorKey.forId(_currentPageKey, highlightId)?.currentContext;
+      debugPrint('🎯 Testing scroll to $highlightId on page 2: ${anchorContext != null ? "FOUND" : "NULL"}');
+      if (anchorContext != null) {
+        Scrollable.ensureVisible(anchorContext);
+        debugPrint('✅ Successfully scrolled to $highlightId');
+      } else {
+        debugPrint('❌ Failed to find $highlightId with key: ${_currentPageKey?.hashCode}');
+      }
+    });
+
   }
 }
 

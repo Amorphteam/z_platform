@@ -242,9 +242,17 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
     // Create a new list to store updated content
     final List<String> updatedContent = [];
+    
+    // Map to track page highlights: key = page index, value = list of highlight IDs
+    final Map<int, List<String>> pageHighlights = {};
+    
+    // Global counter for unique IDs across all pages
+    int globalCounter = 0;
 
     // Apply highlighting to each page content
-    for (final content in _spineHtmlContent!) {
+    for (int pageIdx = 0; pageIdx < _spineHtmlContent!.length; pageIdx++) {
+      final content = _spineHtmlContent![pageIdx];
+      
       // Convert Latin numbers to Arabic in the content before highlighting
       final convertedContent = convertLatinNumbersToArabic(content);
 
@@ -252,16 +260,29 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       final normalizedContent = searchHelper.removeArabicDiacritics(convertedContent);
 
       // Get the positions of matches in the normalized content
-      final highlightedContent = _applyHighlightingUsingMapping(convertedContent, normalizedContent, normalizedSearchTerm);
+      final highlightedContent = _applyHighlightingUsingMapping(convertedContent, normalizedContent, normalizedSearchTerm, globalCounter);
 
       updatedContent.add(highlightedContent);
+      
+      // Extract highlight IDs for this page
+      final List<String> pageHighlightIds = _extractHighlightIdsFromContent(highlightedContent);
+      if (pageHighlightIds.isNotEmpty) {
+        pageHighlights[pageIdx] = pageHighlightIds;
+      }
+      
+      // Update global counter by counting the actual matches found in this page
+      globalCounter += _countMatchesInContent(normalizedContent, normalizedSearchTerm);
     }
 
-    // Emit the new state with updated content
-    emit(EpubViewerState.contentHighlighted(content: updatedContent, highlightedIndex: pageIndex - 1));
+    // Emit the new state with updated content and page highlights map
+    emit(EpubViewerState.contentHighlighted(
+      content: updatedContent, 
+      highlightedIndex: pageIndex - 1,
+      pageHighlights: pageHighlights
+    ));
   }
 
-  String _applyHighlightingUsingMapping(String originalContent, String normalizedContent, String normalizedSearchTerm) {
+  String _applyHighlightingUsingMapping(String originalContent, String normalizedContent, String normalizedSearchTerm, int globalCounter) {
     final RegExp searchRegex = RegExp(RegExp.escape(normalizedSearchTerm), caseSensitive: false);
 
     final List<Match> matches = searchRegex.allMatches(normalizedContent).toList();
@@ -282,6 +303,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
     String highlightedContent = originalContent;
     int offset = 0;
+    int counter = globalCounter; // Use the global counter passed from parent method
 
     for (final match in matches) {
       if (!indexMapping.containsKey(match.start) || !indexMapping.containsKey(match.end - 1)) {
@@ -296,17 +318,57 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       // Extract the actual matched word from the original content
       final originalMatch = highlightedContent.substring(matchStart, matchEnd);
 
-      // Wrap it in a <mark> tag
-      final String replacement = '<mark>$originalMatch</mark>';
+      // Wrap it in a <block> tag with unique ID
+      final String replacement = '<p id="highlight_$counter" class="inline"><mark>$originalMatch</mark>';
+      counter++; // Increment counter for next unique ID
 
       // Replace in the content
       highlightedContent = highlightedContent.replaceRange(matchStart, matchEnd, replacement);
 
-      // Adjust offset to account for length increase due to <mark> tags
+      // Adjust offset to account for length increase due to <block> tags
       offset += replacement.length - originalMatch.length;
     }
 
     return highlightedContent;
+  }
+
+  /// Helper method to count matches in content for updating global counter
+  int _countMatchesInContent(String normalizedContent, String normalizedSearchTerm) {
+    final RegExp searchRegex = RegExp(RegExp.escape(normalizedSearchTerm), caseSensitive: false);
+    final matches = searchRegex.allMatches(normalizedContent);
+    return matches.length;
+  }
+
+  /// Helper method to extract highlight IDs from content
+  List<String> _extractHighlightIdsFromContent(String highlightedContent) {
+    final RegExp highlightRegex = RegExp(r'id="highlight_(\d+)"');
+    final matches = highlightRegex.allMatches(highlightedContent);
+    
+    final List<String> highlightIds = [];
+    for (final match in matches) {
+      final highlightId = 'highlight_${match.group(1)}';
+      highlightIds.add(highlightId);
+    }
+    
+    return highlightIds;
+  }
+
+  /// Helper method to get the next counter value based on the highlighted content
+  int _getNextCounterValue(String highlightedContent) {
+    // Find all highlight IDs in the content and get the highest number
+    final RegExp highlightRegex = RegExp(r'id="highlight_(\d+)"');
+    final matches = highlightRegex.allMatches(highlightedContent);
+    
+    int maxCounter = 0;
+    for (final match in matches) {
+      final counterValue = int.tryParse(match.group(1) ?? '0') ?? 0;
+      if (counterValue > maxCounter) {
+        maxCounter = counterValue;
+      }
+    }
+    
+    // Return the next available counter value
+    return maxCounter + 1;
   }
 
   Future<void> getTranslation(String epubName, int pageNumber) async {

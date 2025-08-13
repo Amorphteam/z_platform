@@ -34,7 +34,8 @@ mixin _$EpubViewerState {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -57,7 +58,8 @@ mixin _$EpubViewerState {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) =>
@@ -79,7 +81,8 @@ mixin _$EpubViewerState {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -217,7 +220,8 @@ class _$InitialImpl implements _Initial {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -243,7 +247,8 @@ class _$InitialImpl implements _Initial {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -268,7 +273,8 @@ class _$InitialImpl implements _Initial {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -405,7 +411,8 @@ class _$LoadingImpl implements _Loading {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -431,7 +438,8 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -456,7 +464,8 @@ class _$LoadingImpl implements _Loading {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -661,7 +670,8 @@ class _$LoadedImpl implements _Loaded {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -687,7 +697,8 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -712,7 +723,8 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -889,7 +901,8 @@ class _$errorImpl implements _error {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -915,7 +928,8 @@ class _$errorImpl implements _error {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -940,7 +954,8 @@ class _$errorImpl implements _error {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -1113,7 +1128,8 @@ class _$PageChangedImpl implements _PageChanged {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -1139,7 +1155,8 @@ class _$PageChangedImpl implements _PageChanged {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -1164,7 +1181,8 @@ class _$PageChangedImpl implements _PageChanged {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -1359,7 +1377,8 @@ class _$StyleChangedImpl implements _StyleChanged {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -1385,7 +1404,8 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -1410,7 +1430,8 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -1587,7 +1608,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -1613,7 +1635,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -1638,7 +1661,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -1810,7 +1834,8 @@ class _$HistoryAddedImpl implements _HistoryAdded {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -1836,7 +1861,8 @@ class _$HistoryAddedImpl implements _HistoryAdded {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -1861,7 +1887,8 @@ class _$HistoryAddedImpl implements _HistoryAdded {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -2043,7 +2070,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -2069,7 +2097,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -2094,7 +2123,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -2241,7 +2271,8 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -2267,7 +2298,8 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -2292,7 +2324,8 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -2429,7 +2462,8 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -2455,7 +2489,8 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -2480,7 +2515,8 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
@@ -2566,7 +2602,10 @@ abstract class _$$ContentHighlightedImplCopyWith<$Res> {
           $Res Function(_$ContentHighlightedImpl) then) =
       __$$ContentHighlightedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<String> content, int highlightedIndex});
+  $Res call(
+      {List<String> content,
+      int highlightedIndex,
+      Map<int, List<String>> pageHighlights});
 }
 
 /// @nodoc
@@ -2584,6 +2623,7 @@ class __$$ContentHighlightedImplCopyWithImpl<$Res>
   $Res call({
     Object? content = null,
     Object? highlightedIndex = null,
+    Object? pageHighlights = null,
   }) {
     return _then(_$ContentHighlightedImpl(
       content: null == content
@@ -2594,6 +2634,10 @@ class __$$ContentHighlightedImplCopyWithImpl<$Res>
           ? _value.highlightedIndex
           : highlightedIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      pageHighlights: null == pageHighlights
+          ? _value._pageHighlights
+          : pageHighlights // ignore: cast_nullable_to_non_nullable
+              as Map<int, List<String>>,
     ));
   }
 }
@@ -2602,8 +2646,11 @@ class __$$ContentHighlightedImplCopyWithImpl<$Res>
 
 class _$ContentHighlightedImpl implements _ContentHighlighted {
   const _$ContentHighlightedImpl(
-      {required final List<String> content, required this.highlightedIndex})
-      : _content = content;
+      {required final List<String> content,
+      required this.highlightedIndex,
+      required final Map<int, List<String>> pageHighlights})
+      : _content = content,
+        _pageHighlights = pageHighlights;
 
   final List<String> _content;
   @override
@@ -2615,10 +2662,17 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
 
   @override
   final int highlightedIndex;
+  final Map<int, List<String>> _pageHighlights;
+  @override
+  Map<int, List<String>> get pageHighlights {
+    if (_pageHighlights is EqualUnmodifiableMapView) return _pageHighlights;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_pageHighlights);
+  }
 
   @override
   String toString() {
-    return 'EpubViewerState.contentHighlighted(content: $content, highlightedIndex: $highlightedIndex)';
+    return 'EpubViewerState.contentHighlighted(content: $content, highlightedIndex: $highlightedIndex, pageHighlights: $pageHighlights)';
   }
 
   @override
@@ -2628,12 +2682,17 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
             other is _$ContentHighlightedImpl &&
             const DeepCollectionEquality().equals(other._content, _content) &&
             (identical(other.highlightedIndex, highlightedIndex) ||
-                other.highlightedIndex == highlightedIndex));
+                other.highlightedIndex == highlightedIndex) &&
+            const DeepCollectionEquality()
+                .equals(other._pageHighlights, _pageHighlights));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_content), highlightedIndex);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_content),
+      highlightedIndex,
+      const DeepCollectionEquality().hash(_pageHighlights));
 
   /// Create a copy of EpubViewerState
   /// with the given fields replaced by the non-null parameter values.
@@ -2663,12 +2722,13 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
   }) {
-    return contentHighlighted(content, highlightedIndex);
+    return contentHighlighted(content, highlightedIndex, pageHighlights);
   }
 
   @override
@@ -2689,11 +2749,12 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
-    return contentHighlighted?.call(content, highlightedIndex);
+    return contentHighlighted?.call(content, highlightedIndex, pageHighlights);
   }
 
   @override
@@ -2714,13 +2775,14 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (contentHighlighted != null) {
-      return contentHighlighted(content, highlightedIndex);
+      return contentHighlighted(content, highlightedIndex, pageHighlights);
     }
     return orElse();
   }
@@ -2792,11 +2854,14 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
 
 abstract class _ContentHighlighted implements EpubViewerState {
   const factory _ContentHighlighted(
-      {required final List<String> content,
-      required final int highlightedIndex}) = _$ContentHighlightedImpl;
+          {required final List<String> content,
+          required final int highlightedIndex,
+          required final Map<int, List<String>> pageHighlights}) =
+      _$ContentHighlightedImpl;
 
   List<String> get content;
   int get highlightedIndex;
+  Map<int, List<String>> get pageHighlights;
 
   /// Create a copy of EpubViewerState
   /// with the given fields replaced by the non-null parameter values.
@@ -2899,7 +2964,8 @@ class _$TranslationLoadedImpl implements _TranslationLoaded {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
     required TResult Function(Map<String, String> translation)
         translationLoaded,
@@ -2925,7 +2991,8 @@ class _$TranslationLoadedImpl implements _TranslationLoaded {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
@@ -2950,7 +3017,8 @@ class _$TranslationLoadedImpl implements _TranslationLoaded {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
     TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
