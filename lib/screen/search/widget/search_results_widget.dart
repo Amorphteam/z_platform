@@ -392,6 +392,8 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
       ListTile(
         title: GestureDetector(
           onTap: () {
+            (result.bookAddress == 'hekam.epub') ?
+            openHekam(context: context, scrollToIndex: result.pageIndex-1):
             openEpub(context: context, search: result);
           },
           child: Row(

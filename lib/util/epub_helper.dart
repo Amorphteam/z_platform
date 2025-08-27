@@ -40,6 +40,18 @@ String convertLatinNumbersToArabic(String input) {
   return document.outerHtml;
 }
 
+Future<void> openHekam({
+  required BuildContext context,
+  int? scrollToIndex,
+}) async {
+  await Navigator.pushNamed(
+    context,
+    '/hekam',
+    arguments: {
+      'scrollToIndex': scrollToIndex,
+    },
+  );
+}
 
 Future<void> openEpub({
   required BuildContext context,

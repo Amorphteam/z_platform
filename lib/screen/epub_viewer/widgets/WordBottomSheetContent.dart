@@ -106,7 +106,7 @@ class WordBottomSheetContentState extends State<WordBottomSheetContent> {
                         if (abdah != null && abdah.isNotEmpty)
                           buildCard(context, abdah, 'محمد عبده:'),
                         if (saleh != null && saleh.isNotEmpty)
-                          buildCard(context, saleh, 'صبحي صالح:'),
+                          buildCard(context, saleh, 'صبحي الصالح:'),
                       ],
                     ),
                   ),

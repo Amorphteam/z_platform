@@ -19,5 +19,13 @@
         "epub": "letters.epub"
       }
     ]
+  },
+  {
+    "title": "الحکم والمواعظ",
+    "author": "",
+    "description": "",
+    "image": "hekam.jpg",
+    "epub": "hekam.epub",
+    "series": []
   }
 ]
