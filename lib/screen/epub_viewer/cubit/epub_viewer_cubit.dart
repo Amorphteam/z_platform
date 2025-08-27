@@ -497,7 +497,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
                     break;
                   }
                 }
-                if (translationContent.isNotEmpty && spineNumber > 0 && spineNumber <= translationContent.length) {
+                if (translationContent.isNotEmpty && spineNumber >= 0 && spineNumber <= translationContent.length) {
                   final htmlContent = translationContent[spineNumber].modifiedHtmlContent;
                   translations[translationName] = htmlContent;
                 }
