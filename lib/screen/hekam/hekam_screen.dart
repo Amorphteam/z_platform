@@ -429,14 +429,19 @@ iOS: https://apps.apple.com/app/6746411657''';
                                     IconButton(
                                       icon: const Icon(Icons.share),
                                       onPressed: () async {
-                                        // _onShare method:
-                                        final box = context.findRenderObject() as RenderBox?;
-
+                                        // Get the current screen size to provide a valid sharePositionOrigin
+                                        final size = MediaQuery.of(context).size;
                                         await SharePlus.instance.share(
                                             ShareParams(
                                               text: _getShareText(item.asl),
-                                              sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-                                            ));},
+                                              sharePositionOrigin: Rect.fromLTWH(
+                                                size.width / 2 - 100,
+                                                size.height / 2 - 100,
+                                                200,
+                                                200,
+                                              ),
+                                            ));
+                                      },
                                     ),
                                     IconButton(
                                       icon: const Icon(Icons.translate),
