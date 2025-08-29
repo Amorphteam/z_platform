@@ -428,9 +428,15 @@ iOS: https://apps.apple.com/app/6746411657''';
                                   children: [
                                     IconButton(
                                       icon: const Icon(Icons.share),
-                                      onPressed: () {
-                                        Share.share(_getShareText(item.asl));
-                                      },
+                                      onPressed: () async {
+                                        // _onShare method:
+                                        final box = context.findRenderObject() as RenderBox?;
+
+                                        await SharePlus.instance.share(
+                                            ShareParams(
+                                              text: _getShareText(item.asl),
+                                              sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+                                            ));},
                                     ),
                                     IconButton(
                                       icon: const Icon(Icons.translate),

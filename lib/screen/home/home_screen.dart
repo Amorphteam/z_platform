@@ -298,7 +298,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             } else if (itemIndex == 3) {
                               Navigator.of(context).pushNamed(
                                 '/hekam',
-                                arguments: {'scrollToIndex': 12-1},
                               );
                             } else if (itemIndex == 4){
                               openEpub(context: context, book: Book(epub: 'ghareeb.epub'));

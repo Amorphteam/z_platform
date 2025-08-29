@@ -609,13 +609,13 @@
     },
     {
       "name": "share_plus",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/share_plus-11.0.0",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/share_plus-11.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "share_plus_platform_interface",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/share_plus_platform_interface-6.0.0",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/share_plus_platform_interface-6.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -914,7 +914,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-08-27T05:41:58.172303Z",
+  "generated": "2025-08-29T05:58:05.926379Z",
   "generator": "pub",
   "generatorVersion": "3.5.1",
   "flutterRoot": "file:///Users/alibayati/fvm/versions/3.24.1",
