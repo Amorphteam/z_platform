@@ -254,6 +254,18 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               );
             }
           },
+          contentHighlighted: (content, page, highlightList) {
+            _orginalContent = _content;
+            _content = content;
+            if (tempPageNumber != page){
+              _highlightIndex = 0;
+            }
+            _jumpTo(pageNumber: page);
+            var highlighId = highlightList[page]?[_highlightIndex];
+            _scrollToId(highlighId?.toString() ?? '');
+
+            return _buildCurrentUi(context, content);
+          },
           styleChanged: (fontSize, lineSpace, fontFamily){
             print('loadUserPreferences $lineSpace add $fontFamily');
 
