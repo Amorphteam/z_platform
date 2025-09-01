@@ -1264,7 +1264,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       setState(() {
         _currentSearchIndex--;
       });
-      _highlightIndex++;
+      if (_highlightIndex > 0) {
+        _highlightIndex--;
+      }
 
       context.read<EpubViewerCubit>().highlightContent(
         _currentSearchResults[_currentSearchIndex].pageIndex,
