@@ -380,7 +380,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           fontFamily,) => _buildCurrentUi(context, _content),
                       bookmarkAdded: (int? status) => _buildCurrentUi(context, _content),
                       historyAdded: (int? status) => _buildCurrentUi(context, _content),
-                      searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content), translationLoaded: (Map<String, dynamic> translation) => _buildCurrentUi(context, _content),),
+                      searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content)),
                 ),
               ),
               // Add floating navigation buttons when search results exist

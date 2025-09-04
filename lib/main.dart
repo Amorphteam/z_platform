@@ -126,7 +126,7 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: themeHelper.themeMode,
-        initialRoute: '/searchScreen',
+        initialRoute: '/',
         onGenerateRoute: RouteGenerator.generateRoute,
         navigatorObservers: [
           FirebaseAnalyticsObserver(analytics: analytics),
