@@ -25,8 +25,9 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: Theme.of(context).colorScheme.surface,
+    backgroundColor: Theme.of(context).colorScheme.primary,
     appBar:  CustomAppBar(
+      backgroundImage: 'assets/image/back_tazhib_light.jpg',
       showSearchBar: false,
       title: "الحديث الشريف",
       leftIcon: Icons.delete, // Example: Search icon
