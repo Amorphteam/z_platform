@@ -10,7 +10,7 @@ import '../../../util/search_helper.dart';
 // Assuming you have a StatefulWidget for managing expand/collapse state
 class SearchResultsWidget extends StatefulWidget {
   const SearchResultsWidget({
-    super.key, 
+    super.key,
     required this.searchResults,
     required this.searchQuery,
   });
@@ -27,6 +27,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
   final Map<String, int> _totalResultsCount = {};
   final Map<String, int> _lastResultIndex = {}; // Track the last result index for each book
   final Map<String, bool> _isExpanded = {}; // Track which books are expanded
+  final Map<String, bool> _hasMoreResults = {}; // Track which books have more results to load
 
   Future<void> loadMoreResults(String bookTitle) async {
     if (bookTitle == null) return;
@@ -38,24 +39,23 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
     try {
       // Check if this is the first time loading more results for this book
       final isFirstLoad = _lastResultIndex[bookTitle] == null;
-      
+
       // If it's the first load, reset everything
       if (isFirstLoad) {
         setState(() {
           _expandedResults[bookTitle] = [];
           _lastResultIndex[bookTitle] = 0;
           _totalResultsCount[bookTitle] = 0;
+          _hasMoreResults[bookTitle] = true; // Assume there are more results initially
         });
-
       }
-
 
       // Get the last result index for this book
       final lastIndex = _lastResultIndex[bookTitle] ?? 0;
-      
+
       // Fetch next batch of results
       final newResults = await _fetchAllResultsForBook(bookTitle, lastIndex);
-      
+
       if (newResults.isNotEmpty) {
         setState(() {
           if (_expandedResults[bookTitle] == null) {
@@ -64,33 +64,34 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
 
           // Combine all results: initial + expanded + new
           final allResults = [ ..._expandedResults[bookTitle]!, ...newResults];
-          
+
           // Remove duplicates based on pageIndex
           final uniqueResults = <SearchModel>[];
           final seenPageNumbers = <int>{};
-          
+
           for (final result in allResults) {
             if (!seenPageNumbers.contains(result.pageIndex)) {
               seenPageNumbers.add(result.pageIndex);
               uniqueResults.add(result);
             }
           }
-          
+
           // Sort all results numerically
           uniqueResults.sort((a, b) => a.pageIndex.compareTo(b.pageIndex));
-          
+
           // Update expanded results with the complete sorted list
           _expandedResults[bookTitle] = uniqueResults;
-          
+
           _loadingStates[bookTitle] = false;
           _lastResultIndex[bookTitle] = lastIndex + newResults.length;
-          
+
           // Update total results count
           _totalResultsCount[bookTitle] = uniqueResults.length;
         });
       } else {
         setState(() {
           _loadingStates[bookTitle] = false;
+          _hasMoreResults[bookTitle] = false; // No more results for this book
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -117,7 +118,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
     try {
       // Find the book path from the existing results
       final bookResult = widget.searchResults.firstWhere(
-        (result) => result.bookTitle == bookTitle,
+            (result) => result.bookTitle == bookTitle,
         orElse: () => throw Exception('Book not found'),
       );
 
@@ -127,7 +128,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
 
       // Extract HTML content
       final List<HtmlFileInfo> spine = await extractHtmlContentWithEmbeddedImages(epubBook);
-      
+
       // Extract spine items from EPUB
       final spineItems = epubBook.Schema?.Package?.Spine?.Items;
       final List<String> idRefs = [];
@@ -168,7 +169,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
       // Filter out duplicates based on page number only
       final uniqueResults = <SearchModel>[];
       final seenPageNumbers = <int>{};
-      
+
       for (final result in allResults) {
         // Skip if we've seen this page number before
         if (!existingPageNumbers.contains(result.pageIndex) && !seenPageNumbers.contains(result.pageIndex)) {
@@ -180,9 +181,14 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
       // Sort results by page index
       uniqueResults.sort((a, b) => a.pageIndex.compareTo(b.pageIndex));
 
-      // Get the next 10 results starting from startIndex
-      final nextResults = uniqueResults.skip(startIndex).take(10).toList();
-      
+      // Get the next 1000 results starting from startIndex
+      final nextResults = uniqueResults.skip(startIndex).take(1000).toList();
+
+      // If we got less than 1000 results, it means we've reached the end
+      if (nextResults.length < 1000) {
+        _hasMoreResults[bookTitle] = false;
+      }
+
       return nextResults;
     } catch (e) {
       print('Error searching book: $e');
@@ -195,190 +201,190 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
-    children: [
-      // Padding(
-      //   padding: const EdgeInsets.only(right: 16.0, left: 16, top: 8, bottom: 8),
-      //   child: Align(
-      //     alignment: Alignment.centerLeft,
-      //     child: Text('كل النتائج: ${widget.searchResults.length}',
-      //       style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),),
-      //   ),
-      // ),
-      Expanded(
-        child: ListView.builder(
-          itemCount: widget.searchResults.length,
-          itemBuilder: (context, index) {
-            final currentBookTitle = widget.searchResults[index].bookTitle;
-            final isFirstResultOfBook = index == 0 || widget.searchResults[index].bookTitle != widget.searchResults[index - 1].bookTitle;
-            final isLastResultOfBook = index == widget.searchResults.length - 1 || widget.searchResults[index].bookTitle != widget.searchResults[index + 1].bookTitle;
-            final expandedResults = _expandedResults[currentBookTitle] ?? [];
-            final isLoading = _loadingStates[currentBookTitle] ?? false;
-            final initialResultsCount = widget.searchResults.where((result) => result.bookTitle == currentBookTitle).length;
-            final totalResultsCount = _totalResultsCount[currentBookTitle] ?? initialResultsCount;
-            final isExpanded = _isExpanded[currentBookTitle] ?? false;
-            final shouldShowLoadMore = initialResultsCount >= MAX_RESULTS_PER_BOOK;
+      children: [
+        // Padding(
+        //   padding: const EdgeInsets.only(right: 16.0, left: 16, top: 8, bottom: 8),
+        //   child: Align(
+        //     alignment: Alignment.centerLeft,
+        //     child: Text('كل النتائج: ${widget.searchResults.length}',
+        //       style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),),
+        //   ),
+        // ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: widget.searchResults.length,
+            itemBuilder: (context, index) {
+              final currentBookTitle = widget.searchResults[index].bookTitle;
+              final isFirstResultOfBook = index == 0 || widget.searchResults[index].bookTitle != widget.searchResults[index - 1].bookTitle;
+              final isLastResultOfBook = index == widget.searchResults.length - 1 || widget.searchResults[index].bookTitle != widget.searchResults[index + 1].bookTitle;
+              final expandedResults = _expandedResults[currentBookTitle] ?? [];
+              final isLoading = _loadingStates[currentBookTitle] ?? false;
+              final initialResultsCount = widget.searchResults.where((result) => result.bookTitle == currentBookTitle).length;
+              final totalResultsCount = _totalResultsCount[currentBookTitle] ?? initialResultsCount;
+              final isExpanded = _isExpanded[currentBookTitle] ?? false;
+              final shouldShowLoadMore = initialResultsCount >= MAX_RESULTS_PER_BOOK;
 
-            if (isFirstResultOfBook) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Card(
-                      color: isDarkMode ? Colors.grey[900] : Colors.grey[200],
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isExpanded[currentBookTitle] = !isExpanded;
-                            });
-                          },
+              if (isFirstResultOfBook) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Card(
+                        color: isDarkMode ? Colors.grey[900] : Colors.grey[200],
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isExpanded[currentBookTitle] = !isExpanded;
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        isExpanded ? Icons.expand_less : Icons.expand_more,
+                                        color: Theme.of(context).colorScheme.secondary,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _isExpanded[currentBookTitle!] = !isExpanded;
+                                        });
+                                      },
+                                    ),
+                                    // Text(
+                                    //   '$totalResultsCount',
+                                    //   style: Theme.of(context).textTheme.titleSmall,
+                                    // ),
+                                  ],
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    textAlign: TextAlign.right,
+                                    currentBookTitle!,
+                                    style: Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (isExpanded) ...[
+                      ...widget.searchResults
+                          .where((result) => result.bookTitle == currentBookTitle)
+                          .map((result) => _buildResultList(result))
+                          .expand((x) => x),
+                      if (expandedResults.isNotEmpty) ...[
+                        ...expandedResults.map((result) => _buildResultList(result)).expand((x) => x),
+                      ],
+                      if (isLastResultOfBook) ...[
+                        if (shouldShowLoadMore && (_hasMoreResults[currentBookTitle] ?? true)) ...[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Card(
+                              color: Theme.of(context).colorScheme.surface,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        isLoading
+                                            ? const SizedBox(
+                                          width: 24,
+                                          height: 24,
+                                          child: CircularProgressIndicator(strokeWidth: 2),
+                                        )
+                                            : Tooltip(
+                                          message: 'تحميل المزيد',
+                                          child: IconButton(
+                                            icon: const Icon(Icons.sync),
+                                            onPressed: () => loadMoreResults(currentBookTitle!),
+                                          ),
+                                        ),
+                                        Text(
+                                          '($totalResultsCount)',
+                                          style: Theme.of(context).textTheme.titleSmall,
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      'المزيد من النتائج',
+                                      style: Theme.of(context).textTheme.titleSmall,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ],
+                  ],
+                );
+              } else if (isExpanded) {
+                // Show all results for the current book only if expanded
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (isLastResultOfBook && shouldShowLoadMore && (_hasMoreResults[currentBookTitle] ?? true)) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
                                 children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      isExpanded ? Icons.expand_less : Icons.expand_more,
-                                      color: Theme.of(context).colorScheme.secondary,
+                                  isLoading
+                                      ? const SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  )
+                                      : Tooltip(
+                                    message: 'تحميل المزيد',
+                                    child: GestureDetector(
+                                      onTap: () => loadMoreResults(currentBookTitle!),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(Icons.sync, color: Theme.of(context).colorScheme.secondary),
+                                          ),
+                                          Text(
+                                            'المزيد من النتائج',
+                                            style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isExpanded[currentBookTitle!] = !isExpanded;
-                                      });
-                                    },
                                   ),
-                                  // Text(
-                                  //   '$totalResultsCount',
-                                  //   style: Theme.of(context).textTheme.titleSmall,
-                                  // ),
                                 ],
-                              ),
-                              Expanded(
-                                child: Text(
-                                  textAlign: TextAlign.right,
-                                  currentBookTitle!,
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  if (isExpanded) ...[
-                    ...widget.searchResults
-                        .where((result) => result.bookTitle == currentBookTitle)
-                        .map((result) => _buildResultList(result))
-                        .expand((x) => x),
-                    if (expandedResults.isNotEmpty) ...[
-                      ...expandedResults.map((result) => _buildResultList(result)).expand((x) => x),
-                    ],
-                    if (isLastResultOfBook) ...[
-                      if (shouldShowLoadMore) ...[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Card(
-                            color: Theme.of(context).colorScheme.surface,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      isLoading
-                                          ? const SizedBox(
-                                              width: 24,
-                                              height: 24,
-                                              child: CircularProgressIndicator(strokeWidth: 2),
-                                            )
-                                          : Tooltip(
-                                              message: 'تحميل المزيد',
-                                              child: IconButton(
-                                                icon: const Icon(Icons.sync),
-                                                onPressed: () => loadMoreResults(currentBookTitle!),
-                                              ),
-                                            ),
-                                      Text(
-                                        '($totalResultsCount)',
-                                        style: Theme.of(context).textTheme.titleSmall,
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    'المزيد من النتائج',
-                                    style: Theme.of(context).textTheme.titleSmall,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
                     ],
                   ],
-                ],
-              );
-            } else if (isExpanded) {
-              // Show all results for the current book only if expanded
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  if (isLastResultOfBook && shouldShowLoadMore) ...[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                isLoading
-                                    ? const SizedBox(
-                                        width: 24,
-                                        height: 24,
-                                        child: CircularProgressIndicator(strokeWidth: 2),
-                                      )
-                                    : Tooltip(
-                                        message: 'تحميل المزيد',
-                                        child: GestureDetector(
-                                          onTap: () => loadMoreResults(currentBookTitle!),
-                                          child: Row(
-                                            children: [
-                                             Padding(
-                                               padding: const EdgeInsets.all(8.0),
-                                               child: Icon(Icons.sync, color: Theme.of(context).colorScheme.secondary),
-                                             ),
-                                              Text(
-                                                'المزيد من النتائج',
-                                                style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              );
-            } else {
-              return const SizedBox.shrink(); // Hide results when collapsed
-            }
-          },
+                );
+              } else {
+                return const SizedBox.shrink(); // Hide results when collapsed
+              }
+            },
+          ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
   }
 
   List<Widget> _buildResultList(SearchModel result) {
