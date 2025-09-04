@@ -34,8 +34,11 @@ mixin _$EpubViewerState {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -55,8 +58,10 @@ mixin _$EpubViewerState {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -76,8 +81,10 @@ mixin _$EpubViewerState {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -95,6 +102,7 @@ mixin _$EpubViewerState {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -111,6 +119,7 @@ mixin _$EpubViewerState {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -127,6 +136,7 @@ mixin _$EpubViewerState {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -148,6 +158,9 @@ class _$EpubViewerStateCopyWithImpl<$Res, $Val extends EpubViewerState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -164,6 +177,9 @@ class __$$InitialImplCopyWithImpl<$Res>
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -204,8 +220,11 @@ class _$InitialImpl implements _Initial {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return initial();
   }
@@ -228,8 +247,10 @@ class _$InitialImpl implements _Initial {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return initial?.call();
   }
@@ -252,8 +273,10 @@ class _$InitialImpl implements _Initial {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -277,6 +300,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return initial(this);
   }
@@ -296,6 +320,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return initial?.call(this);
   }
@@ -315,6 +340,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -342,6 +368,9 @@ class __$$LoadingImplCopyWithImpl<$Res>
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -382,8 +411,11 @@ class _$LoadingImpl implements _Loading {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return loading();
   }
@@ -406,8 +438,10 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return loading?.call();
   }
@@ -430,8 +464,10 @@ class _$LoadingImpl implements _Loading {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -455,6 +491,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return loading(this);
   }
@@ -474,6 +511,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return loading?.call(this);
   }
@@ -493,6 +531,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -524,6 +563,8 @@ class __$$LoadedImplCopyWithImpl<$Res>
       _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -602,7 +643,9 @@ class _$LoadedImpl implements _Loaded {
       epubTitle,
       const DeepCollectionEquality().hash(_tocTreeList));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
@@ -627,8 +670,11 @@ class _$LoadedImpl implements _Loaded {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return loaded(content, epubTitle, tocTreeList);
   }
@@ -651,8 +697,10 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return loaded?.call(content, epubTitle, tocTreeList);
   }
@@ -675,8 +723,10 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -700,6 +750,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return loaded(this);
   }
@@ -719,6 +770,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return loaded?.call(this);
   }
@@ -738,6 +790,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -756,7 +809,10 @@ abstract class _Loaded implements EpubViewerState {
   List<String> get content;
   String get epubTitle;
   List<EpubChapter>? get tocTreeList;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -778,6 +834,8 @@ class __$$errorImplCopyWithImpl<$Res>
       _$errorImpl _value, $Res Function(_$errorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -816,7 +874,9 @@ class _$errorImpl implements _error {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$errorImplCopyWith<_$errorImpl> get copyWith =>
@@ -841,8 +901,11 @@ class _$errorImpl implements _error {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return error(this.error);
   }
@@ -865,8 +928,10 @@ class _$errorImpl implements _error {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return error?.call(this.error);
   }
@@ -889,8 +954,10 @@ class _$errorImpl implements _error {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -914,6 +981,7 @@ class _$errorImpl implements _error {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return error(this);
   }
@@ -933,6 +1001,7 @@ class _$errorImpl implements _error {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return error?.call(this);
   }
@@ -952,6 +1021,7 @@ class _$errorImpl implements _error {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -965,7 +1035,10 @@ abstract class _error implements EpubViewerState {
   const factory _error({required final String error}) = _$errorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$errorImplCopyWith<_$errorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -987,6 +1060,8 @@ class __$$PageChangedImplCopyWithImpl<$Res>
       _$PageChangedImpl _value, $Res Function(_$PageChangedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1026,7 +1101,9 @@ class _$PageChangedImpl implements _PageChanged {
   @override
   int get hashCode => Object.hash(runtimeType, pageNumber);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PageChangedImplCopyWith<_$PageChangedImpl> get copyWith =>
@@ -1051,8 +1128,11 @@ class _$PageChangedImpl implements _PageChanged {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return pageChanged(pageNumber);
   }
@@ -1075,8 +1155,10 @@ class _$PageChangedImpl implements _PageChanged {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return pageChanged?.call(pageNumber);
   }
@@ -1099,8 +1181,10 @@ class _$PageChangedImpl implements _PageChanged {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (pageChanged != null) {
@@ -1124,6 +1208,7 @@ class _$PageChangedImpl implements _PageChanged {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return pageChanged(this);
   }
@@ -1143,6 +1228,7 @@ class _$PageChangedImpl implements _PageChanged {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return pageChanged?.call(this);
   }
@@ -1162,6 +1248,7 @@ class _$PageChangedImpl implements _PageChanged {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (pageChanged != null) {
@@ -1175,7 +1262,10 @@ abstract class _PageChanged implements EpubViewerState {
   const factory _PageChanged({final int? pageNumber}) = _$PageChangedImpl;
 
   int? get pageNumber;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PageChangedImplCopyWith<_$PageChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1200,6 +1290,8 @@ class __$$StyleChangedImplCopyWithImpl<$Res>
       _$StyleChangedImpl _value, $Res Function(_$StyleChangedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1258,7 +1350,9 @@ class _$StyleChangedImpl implements _StyleChanged {
   int get hashCode =>
       Object.hash(runtimeType, fontSize, lineHeight, fontFamily);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$StyleChangedImplCopyWith<_$StyleChangedImpl> get copyWith =>
@@ -1283,8 +1377,11 @@ class _$StyleChangedImpl implements _StyleChanged {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return styleChanged(fontSize, lineHeight, fontFamily);
   }
@@ -1307,8 +1404,10 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return styleChanged?.call(fontSize, lineHeight, fontFamily);
   }
@@ -1331,8 +1430,10 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (styleChanged != null) {
@@ -1356,6 +1457,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return styleChanged(this);
   }
@@ -1375,6 +1477,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return styleChanged?.call(this);
   }
@@ -1394,6 +1497,7 @@ class _$StyleChangedImpl implements _StyleChanged {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (styleChanged != null) {
@@ -1412,7 +1516,10 @@ abstract class _StyleChanged implements EpubViewerState {
   FontSizeCustom? get fontSize;
   LineHeightCustom? get lineHeight;
   FontFamily? get fontFamily;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$StyleChangedImplCopyWith<_$StyleChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1434,6 +1541,8 @@ class __$$BookmarkAddedImplCopyWithImpl<$Res>
       _$BookmarkAddedImpl _value, $Res Function(_$BookmarkAddedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1472,7 +1581,9 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
   @override
   int get hashCode => Object.hash(runtimeType, status);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BookmarkAddedImplCopyWith<_$BookmarkAddedImpl> get copyWith =>
@@ -1497,8 +1608,11 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return bookmarkAdded(status);
   }
@@ -1521,8 +1635,10 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return bookmarkAdded?.call(status);
   }
@@ -1545,8 +1661,10 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (bookmarkAdded != null) {
@@ -1570,6 +1688,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return bookmarkAdded(this);
   }
@@ -1589,6 +1708,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return bookmarkAdded?.call(this);
   }
@@ -1608,6 +1728,7 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (bookmarkAdded != null) {
@@ -1621,7 +1742,10 @@ abstract class _BookmarkAdded implements EpubViewerState {
   const factory _BookmarkAdded({final int? status}) = _$BookmarkAddedImpl;
 
   int? get status;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BookmarkAddedImplCopyWith<_$BookmarkAddedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1643,6 +1767,8 @@ class __$$HistoryAddedImplCopyWithImpl<$Res>
       _$HistoryAddedImpl _value, $Res Function(_$HistoryAddedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1681,7 +1807,9 @@ class _$HistoryAddedImpl implements _HistoryAdded {
   @override
   int get hashCode => Object.hash(runtimeType, status);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HistoryAddedImplCopyWith<_$HistoryAddedImpl> get copyWith =>
@@ -1706,8 +1834,11 @@ class _$HistoryAddedImpl implements _HistoryAdded {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return historyAdded(status);
   }
@@ -1730,8 +1861,10 @@ class _$HistoryAddedImpl implements _HistoryAdded {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return historyAdded?.call(status);
   }
@@ -1754,8 +1887,10 @@ class _$HistoryAddedImpl implements _HistoryAdded {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (historyAdded != null) {
@@ -1779,6 +1914,7 @@ class _$HistoryAddedImpl implements _HistoryAdded {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return historyAdded(this);
   }
@@ -1798,6 +1934,7 @@ class _$HistoryAddedImpl implements _HistoryAdded {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return historyAdded?.call(this);
   }
@@ -1817,6 +1954,7 @@ class _$HistoryAddedImpl implements _HistoryAdded {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (historyAdded != null) {
@@ -1830,7 +1968,10 @@ abstract class _HistoryAdded implements EpubViewerState {
   const factory _HistoryAdded({final int? status}) = _$HistoryAddedImpl;
 
   int? get status;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HistoryAddedImplCopyWith<_$HistoryAddedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1852,6 +1993,8 @@ class __$$SearchResultsFoundImplCopyWithImpl<$Res>
       $Res Function(_$SearchResultsFoundImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1899,7 +2042,9 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_searchResults));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SearchResultsFoundImplCopyWith<_$SearchResultsFoundImpl> get copyWith =>
@@ -1925,8 +2070,11 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return searchResultsFound(searchResults);
   }
@@ -1949,8 +2097,10 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return searchResultsFound?.call(searchResults);
   }
@@ -1973,8 +2123,10 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (searchResultsFound != null) {
@@ -1998,6 +2150,7 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return searchResultsFound(this);
   }
@@ -2017,6 +2170,7 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return searchResultsFound?.call(this);
   }
@@ -2036,6 +2190,7 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (searchResultsFound != null) {
@@ -2051,7 +2206,10 @@ abstract class _SearchResultsFound implements EpubViewerState {
       _$SearchResultsFoundImpl;
 
   List<SearchModel> get searchResults;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SearchResultsFoundImplCopyWith<_$SearchResultsFoundImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2070,6 +2228,9 @@ class __$$BookmarkPresentImplCopyWithImpl<$Res>
   __$$BookmarkPresentImplCopyWithImpl(
       _$BookmarkPresentImpl _value, $Res Function(_$BookmarkPresentImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2110,8 +2271,11 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return bookmarkPresent();
   }
@@ -2134,8 +2298,10 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return bookmarkPresent?.call();
   }
@@ -2158,8 +2324,10 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (bookmarkPresent != null) {
@@ -2183,6 +2351,7 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return bookmarkPresent(this);
   }
@@ -2202,6 +2371,7 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return bookmarkPresent?.call(this);
   }
@@ -2221,6 +2391,7 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (bookmarkPresent != null) {
@@ -2248,6 +2419,9 @@ class __$$BookmarkAbsentImplCopyWithImpl<$Res>
   __$$BookmarkAbsentImplCopyWithImpl(
       _$BookmarkAbsentImpl _value, $Res Function(_$BookmarkAbsentImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2288,8 +2462,11 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
     return bookmarkAbsent();
   }
@@ -2312,8 +2489,10 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
     return bookmarkAbsent?.call();
   }
@@ -2336,8 +2515,10 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (bookmarkAbsent != null) {
@@ -2361,6 +2542,7 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return bookmarkAbsent(this);
   }
@@ -2380,6 +2562,7 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return bookmarkAbsent?.call(this);
   }
@@ -2399,6 +2582,7 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (bookmarkAbsent != null) {
@@ -2418,7 +2602,10 @@ abstract class _$$ContentHighlightedImplCopyWith<$Res> {
           $Res Function(_$ContentHighlightedImpl) then) =
       __$$ContentHighlightedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<String> content, int highlightedIndex});
+  $Res call(
+      {List<String> content,
+      int highlightedIndex,
+      Map<int, List<String>> pageHighlights});
 }
 
 /// @nodoc
@@ -2429,11 +2616,14 @@ class __$$ContentHighlightedImplCopyWithImpl<$Res>
       $Res Function(_$ContentHighlightedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? content = null,
     Object? highlightedIndex = null,
+    Object? pageHighlights = null,
   }) {
     return _then(_$ContentHighlightedImpl(
       content: null == content
@@ -2444,6 +2634,10 @@ class __$$ContentHighlightedImplCopyWithImpl<$Res>
           ? _value.highlightedIndex
           : highlightedIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      pageHighlights: null == pageHighlights
+          ? _value._pageHighlights
+          : pageHighlights // ignore: cast_nullable_to_non_nullable
+              as Map<int, List<String>>,
     ));
   }
 }
@@ -2452,8 +2646,11 @@ class __$$ContentHighlightedImplCopyWithImpl<$Res>
 
 class _$ContentHighlightedImpl implements _ContentHighlighted {
   const _$ContentHighlightedImpl(
-      {required final List<String> content, required this.highlightedIndex})
-      : _content = content;
+      {required final List<String> content,
+      required this.highlightedIndex,
+      required final Map<int, List<String>> pageHighlights})
+      : _content = content,
+        _pageHighlights = pageHighlights;
 
   final List<String> _content;
   @override
@@ -2465,10 +2662,17 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
 
   @override
   final int highlightedIndex;
+  final Map<int, List<String>> _pageHighlights;
+  @override
+  Map<int, List<String>> get pageHighlights {
+    if (_pageHighlights is EqualUnmodifiableMapView) return _pageHighlights;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_pageHighlights);
+  }
 
   @override
   String toString() {
-    return 'EpubViewerState.contentHighlighted(content: $content, highlightedIndex: $highlightedIndex)';
+    return 'EpubViewerState.contentHighlighted(content: $content, highlightedIndex: $highlightedIndex, pageHighlights: $pageHighlights)';
   }
 
   @override
@@ -2478,14 +2682,21 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
             other is _$ContentHighlightedImpl &&
             const DeepCollectionEquality().equals(other._content, _content) &&
             (identical(other.highlightedIndex, highlightedIndex) ||
-                other.highlightedIndex == highlightedIndex));
+                other.highlightedIndex == highlightedIndex) &&
+            const DeepCollectionEquality()
+                .equals(other._pageHighlights, _pageHighlights));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_content), highlightedIndex);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_content),
+      highlightedIndex,
+      const DeepCollectionEquality().hash(_pageHighlights));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ContentHighlightedImplCopyWith<_$ContentHighlightedImpl> get copyWith =>
@@ -2511,10 +2722,13 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
         searchResultsFound,
     required TResult Function() bookmarkPresent,
     required TResult Function() bookmarkAbsent,
-    required TResult Function(List<String> content, int highlightedIndex)
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
         contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
   }) {
-    return contentHighlighted(content, highlightedIndex);
+    return contentHighlighted(content, highlightedIndex, pageHighlights);
   }
 
   @override
@@ -2535,10 +2749,12 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
     TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult? Function()? bookmarkPresent,
     TResult? Function()? bookmarkAbsent,
-    TResult? Function(List<String> content, int highlightedIndex)?
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
   }) {
-    return contentHighlighted?.call(content, highlightedIndex);
+    return contentHighlighted?.call(content, highlightedIndex, pageHighlights);
   }
 
   @override
@@ -2559,12 +2775,14 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
     TResult Function(List<SearchModel> searchResults)? searchResultsFound,
     TResult Function()? bookmarkPresent,
     TResult Function()? bookmarkAbsent,
-    TResult Function(List<String> content, int highlightedIndex)?
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
         contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
     required TResult orElse(),
   }) {
     if (contentHighlighted != null) {
-      return contentHighlighted(content, highlightedIndex);
+      return contentHighlighted(content, highlightedIndex, pageHighlights);
     }
     return orElse();
   }
@@ -2584,6 +2802,7 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
     required TResult Function(_BookmarkPresent value) bookmarkPresent,
     required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
     required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
   }) {
     return contentHighlighted(this);
   }
@@ -2603,6 +2822,7 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
     TResult? Function(_BookmarkPresent value)? bookmarkPresent,
     TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
   }) {
     return contentHighlighted?.call(this);
   }
@@ -2622,6 +2842,7 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
     TResult Function(_BookmarkPresent value)? bookmarkPresent,
     TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
     TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
     required TResult orElse(),
   }) {
     if (contentHighlighted != null) {
@@ -2633,12 +2854,256 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
 
 abstract class _ContentHighlighted implements EpubViewerState {
   const factory _ContentHighlighted(
-      {required final List<String> content,
-      required final int highlightedIndex}) = _$ContentHighlightedImpl;
+          {required final List<String> content,
+          required final int highlightedIndex,
+          required final Map<int, List<String>> pageHighlights}) =
+      _$ContentHighlightedImpl;
 
   List<String> get content;
   int get highlightedIndex;
-  @JsonKey(ignore: true)
+  Map<int, List<String>> get pageHighlights;
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ContentHighlightedImplCopyWith<_$ContentHighlightedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$TranslationLoadedImplCopyWith<$Res> {
+  factory _$$TranslationLoadedImplCopyWith(_$TranslationLoadedImpl value,
+          $Res Function(_$TranslationLoadedImpl) then) =
+      __$$TranslationLoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Map<String, String> translation});
+}
+
+/// @nodoc
+class __$$TranslationLoadedImplCopyWithImpl<$Res>
+    extends _$EpubViewerStateCopyWithImpl<$Res, _$TranslationLoadedImpl>
+    implements _$$TranslationLoadedImplCopyWith<$Res> {
+  __$$TranslationLoadedImplCopyWithImpl(_$TranslationLoadedImpl _value,
+      $Res Function(_$TranslationLoadedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? translation = null,
+  }) {
+    return _then(_$TranslationLoadedImpl(
+      translation: null == translation
+          ? _value._translation
+          : translation // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$TranslationLoadedImpl implements _TranslationLoaded {
+  const _$TranslationLoadedImpl(
+      {required final Map<String, String> translation})
+      : _translation = translation;
+
+  final Map<String, String> _translation;
+  @override
+  Map<String, String> get translation {
+    if (_translation is EqualUnmodifiableMapView) return _translation;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_translation);
+  }
+
+  @override
+  String toString() {
+    return 'EpubViewerState.translationLoaded(translation: $translation)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TranslationLoadedImpl &&
+            const DeepCollectionEquality()
+                .equals(other._translation, _translation));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_translation));
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TranslationLoadedImplCopyWith<_$TranslationLoadedImpl> get copyWith =>
+      __$$TranslationLoadedImplCopyWithImpl<_$TranslationLoadedImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)
+        loaded,
+    required TResult Function(String error) error,
+    required TResult Function(int? pageNumber) pageChanged,
+    required TResult Function(FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+        styleChanged,
+    required TResult Function(int? status) bookmarkAdded,
+    required TResult Function(int? status) historyAdded,
+    required TResult Function(List<SearchModel> searchResults)
+        searchResultsFound,
+    required TResult Function() bookmarkPresent,
+    required TResult Function() bookmarkAbsent,
+    required TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)
+        contentHighlighted,
+    required TResult Function(Map<String, String> translation)
+        translationLoaded,
+  }) {
+    return translationLoaded(translation);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
+    TResult? Function(String error)? error,
+    TResult? Function(int? pageNumber)? pageChanged,
+    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
+            FontFamily? fontFamily)?
+        styleChanged,
+    TResult? Function(int? status)? bookmarkAdded,
+    TResult? Function(int? status)? historyAdded,
+    TResult? Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult? Function()? bookmarkPresent,
+    TResult? Function()? bookmarkAbsent,
+    TResult? Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
+        contentHighlighted,
+    TResult? Function(Map<String, String> translation)? translationLoaded,
+  }) {
+    return translationLoaded?.call(translation);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<String> content, String epubTitle,
+            List<EpubChapter>? tocTreeList)?
+        loaded,
+    TResult Function(String error)? error,
+    TResult Function(int? pageNumber)? pageChanged,
+    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
+            FontFamily? fontFamily)?
+        styleChanged,
+    TResult Function(int? status)? bookmarkAdded,
+    TResult Function(int? status)? historyAdded,
+    TResult Function(List<SearchModel> searchResults)? searchResultsFound,
+    TResult Function()? bookmarkPresent,
+    TResult Function()? bookmarkAbsent,
+    TResult Function(List<String> content, int highlightedIndex,
+            Map<int, List<String>> pageHighlights)?
+        contentHighlighted,
+    TResult Function(Map<String, String> translation)? translationLoaded,
+    required TResult orElse(),
+  }) {
+    if (translationLoaded != null) {
+      return translationLoaded(translation);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_error value) error,
+    required TResult Function(_PageChanged value) pageChanged,
+    required TResult Function(_StyleChanged value) styleChanged,
+    required TResult Function(_BookmarkAdded value) bookmarkAdded,
+    required TResult Function(_HistoryAdded value) historyAdded,
+    required TResult Function(_SearchResultsFound value) searchResultsFound,
+    required TResult Function(_BookmarkPresent value) bookmarkPresent,
+    required TResult Function(_BookmarkAbsent value) bookmarkAbsent,
+    required TResult Function(_ContentHighlighted value) contentHighlighted,
+    required TResult Function(_TranslationLoaded value) translationLoaded,
+  }) {
+    return translationLoaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_error value)? error,
+    TResult? Function(_PageChanged value)? pageChanged,
+    TResult? Function(_StyleChanged value)? styleChanged,
+    TResult? Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult? Function(_HistoryAdded value)? historyAdded,
+    TResult? Function(_SearchResultsFound value)? searchResultsFound,
+    TResult? Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult? Function(_BookmarkAbsent value)? bookmarkAbsent,
+    TResult? Function(_ContentHighlighted value)? contentHighlighted,
+    TResult? Function(_TranslationLoaded value)? translationLoaded,
+  }) {
+    return translationLoaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_error value)? error,
+    TResult Function(_PageChanged value)? pageChanged,
+    TResult Function(_StyleChanged value)? styleChanged,
+    TResult Function(_BookmarkAdded value)? bookmarkAdded,
+    TResult Function(_HistoryAdded value)? historyAdded,
+    TResult Function(_SearchResultsFound value)? searchResultsFound,
+    TResult Function(_BookmarkPresent value)? bookmarkPresent,
+    TResult Function(_BookmarkAbsent value)? bookmarkAbsent,
+    TResult Function(_ContentHighlighted value)? contentHighlighted,
+    TResult Function(_TranslationLoaded value)? translationLoaded,
+    required TResult orElse(),
+  }) {
+    if (translationLoaded != null) {
+      return translationLoaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _TranslationLoaded implements EpubViewerState {
+  const factory _TranslationLoaded(
+          {required final Map<String, String> translation}) =
+      _$TranslationLoadedImpl;
+
+  Map<String, String> get translation;
+
+  /// Create a copy of EpubViewerState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TranslationLoadedImplCopyWith<_$TranslationLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

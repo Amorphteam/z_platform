@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+
 import 'package:zahra/screen/epub_viewer/widgets/toc_tree_list_widget.dart';
 import '../../model/book_model.dart';
 import '../../model/history_model.dart';
@@ -16,6 +17,7 @@ import '../../model/style_model.dart';
 import '../../model/tree_toc_model.dart';
 import '../../util/epub_helper.dart';
 import '../../util/page_helper.dart';
+import '../../util/style_helper.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
 import 'cubit/epub_viewer_cubit.dart';
 import 'internal_search/internal_search_screen.dart';
@@ -47,6 +49,7 @@ class EpubViewerScreen extends StatefulWidget {
 
 class _EpubViewerScreenState extends State<EpubViewerScreen> {
   int _currentIndex = -1;
+  int _highlightIndex = 0;
   bool _hasHandledInitialPageJump = false;
   int _initialPageIndex = 0;
   late final ItemScrollController itemScrollController;
@@ -75,16 +78,14 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   bool isDarkMode = false;
   final focusNode = FocusNode();
   final textEditingController = TextEditingController();
-  double _rejalFontSize = 18.0; // Default font size for rejal content
-  static const double _minFontSize = 14.0;
-  static const double _maxFontSize = 24.0;
-  static const double _fontSizeStep = 2.0;
-  static const String _rejalFontSizeKey = 'rejal_font_size';
   List<SearchModel> _currentSearchResults = [];
   int _currentSearchIndex = 0;
   final Map<int, dom.Document> _htmlCache = {};
   final Map<int, String> _processedContentCache = {};
   bool _isControllerInitialized = false;
+  
+  // Add GlobalKey for current page highlighting
+  GlobalKey? _currentPageKey;
 
   @override
   void didChangeDependencies() {
@@ -213,12 +214,17 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               );
             }
           },
-          contentHighlighted: (content, page) {
-            setState(() {
-              _orginalContent = _content;
-              _content = content;
-            });
+          contentHighlighted: (content, page, highlightList) {
+            _orginalContent = _content;
+            _content = content;
+            if (tempPageNumber != page){
+              _highlightIndex = 0;
+            }
             _jumpTo(pageNumber: page);
+            var highlighId = highlightList[page]?[_highlightIndex];
+            _scrollToId(highlighId?.toString() ?? '');
+
+            return _buildCurrentUi(context, content);
           },
           styleChanged: (fontSize, lineSpace, fontFamily){
             print('loadUserPreferences $lineSpace add $fontFamily');
@@ -227,6 +233,27 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           },
           bookmarkPresent: () => setState(() => isBookmarked = true),
           bookmarkAbsent: () => setState(() => isBookmarked = false),
+          error: (error) {
+            // Check if this is a translation-related error
+            if (error.toLowerCase().contains('translation') || 
+                error.contains('No translation content found')) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('لا توجد ترجمات مفعلة. يرجى تفعيل ترجمة واحدة على الأقل من الإعدادات.'),
+                  duration: const Duration(seconds: 6),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Theme.of(context).colorScheme.onSurface,
+                  action: SnackBarAction(
+                    label: 'الإعدادات',
+                    textColor: Theme.of(context).colorScheme.primary,
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/settingScreen');
+                    },
+                  ),
+                ),
+              );
+            }
+          },
           orElse: () {},
         );
       },
@@ -235,7 +262,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           children: [
             if (isSliderVisible)
               AppBar(
-                backgroundColor: Theme.of(context).colorScheme.surface,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 leading: IconButton(
                   icon: isSearchOpen
                       ? Icon(Icons.close, color: Theme.of(context).colorScheme.onSurfaceVariant)
@@ -306,6 +333,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       _openInternalToc(context);
                     },
                   ),
+
                 ],
               ),
             Align(
@@ -322,10 +350,16 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     
                     return _buildCurrentUi(context, _content);
                   },
-                      contentHighlighted: (content, page) {
+                      contentHighlighted: (content, page, highlightList) {
                         _orginalContent = _content;
                         _content = content;
+                        if (tempPageNumber != page){
+                          _highlightIndex = 0;
+                        }
                         _jumpTo(pageNumber: page);
+                        var highlighId = highlightList[page]?[_highlightIndex];
+                        _scrollToId(highlighId?.toString() ?? '');
+
                         return _buildCurrentUi(context, content);
                       },
                       bookmarkAbsent: () => _buildCurrentUi(context, _content),
@@ -346,7 +380,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                           fontFamily,) => _buildCurrentUi(context, _content),
                       bookmarkAdded: (int? status) => _buildCurrentUi(context, _content),
                       historyAdded: (int? status) => _buildCurrentUi(context, _content),
-                      searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content),),
+                      searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content), translationLoaded: (Map<String, dynamic> translation) => _buildCurrentUi(context, _content),),
                 ),
               ),
               // Add floating navigation buttons when search results exist
@@ -467,7 +501,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         title: GestureDetector(
                           onTap: () {
                             Navigator.of(context).pop();
-                            setState(() {
+                            setDialogState(() {
                               _currentSearchIndex = _currentSearchResults.indexOf(result);
                             });
                             _jumpTo(pageNumber: result.pageIndex - 1);
@@ -536,29 +570,31 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               itemBuilder: (BuildContext context, int index) {
                 final double screenHeight = MediaQuery.of(context).size.height;
 
-                return Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: GestureDetector(
-                    onDoubleTap: () {
-                      setState(() {
-                        isSliderVisible = !isSliderVisible;
-                      });
-                    },
-                    onLongPress: () {
-                      setState(() {
-                        isSliderVisible = !isSliderVisible;
-                      });
-                    },
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: screenHeight),
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 16, left: 16),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: SelectionArea(
-                          child: _buildHtmlContent(index, content[index]),
+                return Container(
+                  color: isDarkMode ? Theme.of(context).colorScheme.primaryContainer: Theme.of(context).colorScheme.primary,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: GestureDetector(
+                      // onDoubleTap: () {
+                      //   setState(() {
+                      //     isSliderVisible = !isSliderVisible;
+                      //   });
+                      // },
+                      // onLongPress: () {
+                      //   setState(() {
+                      //     isSliderVisible = !isSliderVisible;
+                      //   });
+                      // },
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: screenHeight),
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 16, left: 16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: SelectionArea(
+                            child: _buildHtmlContent(index, content[index]),
+                          ),
                         ),
                       ),
                     ),
@@ -567,20 +603,12 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               },
             ),
           ),
-          if (isSliderVisible && !isAboutUsBook)
+          if (isSliderVisible && !isAboutUsBook && allPagesCount>1.0)
             Directionality(
               textDirection: TextDirection.rtl,
               child: Column(
                 children: [
                   Slider(
-                    thumbColor: Theme
-                        .of(context)
-                        .colorScheme
-                        .onSurface,
-                    activeColor:Theme
-                        .of(context)
-                        .colorScheme
-                        .onSurface,
                     value: _currentPage,
                     min: 0,
                     max: allPagesCount ?? -1,
@@ -643,8 +671,14 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   Widget _buildHtmlContent(int index, String content) {
     // Check cache first
     if (_processedContentCache.containsKey(index)) {
+      final isCurrentPage = index == _currentPage.toInt();
+      if (isCurrentPage && _currentPageKey != null) {
+        debugPrint('🎯 Applying GlobalKey: ${_currentPageKey.hashCode} to cached HTML page: $index');
+      }
       return Html(
+        anchorKey: isCurrentPage ? _currentPageKey : null,
         data: _processedContentCache[index]!,
+        onAnchorTap: _handleAnchorTap,
         style: {
           'body': Style(
             direction: TextDirection.rtl,
@@ -652,12 +686,16 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             lineHeight: LineHeight(lineHeight.size),
             textDecoration: TextDecoration.none,
           ),
+          '.inline': Style(
+            // display: Display.listItem,
+          ),
           'p': Style(
-            color: isDarkMode ? Colors.white : const Color(0xFF996633),
+            color: isDarkMode ? Colors.white : Colors.black,
             textAlign: TextAlign.justify,
-            margin: Margins.zero,
+            margin: Margins.only(bottom: 10),
             fontSize: FontSize(fontSize.size),
             fontFamily: fontFamily.name,
+            padding: HtmlPaddings.only(right: 7),
           ),
           'p.center': Style(
             color: isDarkMode ? Colors.white : const Color(0xFF996633),
@@ -665,6 +703,29 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             margin: Margins.zero,
             fontSize: FontSize(fontSize.size),
             fontFamily: fontFamily.name,
+            padding: HtmlPaddings.zero,
+          ),
+          'p.title3': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF2B5100),
+            textAlign: TextAlign.right,
+            margin: Margins.zero,
+            fontSize: FontSize(fontSize.size),
+            fontFamily: fontFamily.name,
+            fontWeight: FontWeight.bold,
+            padding: HtmlPaddings.zero,
+            lineHeight: LineHeight(1.2),
+            textDecoration: TextDecoration.none,
+          ),
+          'p.title3_1': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF12116C),
+            textAlign: TextAlign.right,
+            fontWeight: FontWeight.bold,
+            margin: Margins.zero,
+            fontSize: FontSize(fontSize.size),
+            fontFamily: fontFamily.name,
+            padding: HtmlPaddings.zero,
+            lineHeight: LineHeight(1.2),
+            textDecoration: TextDecoration.none,
           ),
           'a': Style(
             textDecoration: TextDecoration.none,
@@ -675,74 +736,109 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           'a:visited': Style(
             color: Colors.red,
           ),
-          'h1.tit1': Style(
-            color: isDarkMode ? Colors.white: Colors.green[700],
+          'h1': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF00AA00),
             fontSize: FontSize(fontSize.size * 1.1),
             textAlign: TextAlign.center,
+            margin: Margins.only(bottom: 10),
+            fontWeight: FontWeight.bold,
             fontFamily: fontFamily.name,
           ),
-          'h2.tit2': Style(
-            color: isDarkMode ? Colors.white: Colors.green[900],
+          'h2': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF000080),
             fontSize: FontSize(fontSize.size),
             textAlign: TextAlign.center,
-            fontFamily: fontFamily.name,
-          ),
-          'h3.tit3': Style(
-            color: isDarkMode ? Colors.white: Colors.brown,
-            fontSize: FontSize(fontSize.size),
-            textAlign: TextAlign.center,
+            margin: Margins.only(bottom: 10),
+            fontWeight: FontWeight.bold,
             fontFamily: fontFamily.name,
           ),
           'h3': Style(
-            color: isDarkMode ? Colors.white: Colors.brown,
+            color: isDarkMode ? Colors.white : const Color(0xFF006400),
             fontSize: FontSize(fontSize.size),
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.right,
+            margin: Margins.only(bottom: 10),
+            fontWeight: FontWeight.bold,
+            fontFamily: fontFamily.name,
+          ),
+          'h3.tit3_1': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF800000),
+            fontSize: FontSize(fontSize.size),
+            textAlign: TextAlign.right,
+            margin: Margins.only(bottom: 10),
+            fontWeight: FontWeight.bold,
             fontFamily: fontFamily.name,
           ),
           'h4.tit4': Style(
-            color: isDarkMode ?  Colors.white: Colors.red,
+            color: isDarkMode ? Colors.white : Colors.red,
             fontSize: FontSize(fontSize.size),
             textAlign: TextAlign.center,
+            margin: Margins.zero,
+            fontWeight: FontWeight.bold,
             fontFamily: fontFamily.name,
           ),
           '.pagen': Style(
             textAlign: TextAlign.center,
-            color: isDarkMode ? Color(0xfff9825e): Colors.red,
+            color: isDarkMode ? Color(0xfff9825e) : Colors.red,
             fontSize: FontSize(fontSize.size),
             fontFamily: fontFamily.name,
           ),
-          '.fnote': Style(
-            color: isDarkMode ? Color(0xFF8a8afa): Colors.blue[900],
-            fontSize: FontSize(fontSize.size * 0.75),
+          '.shareef': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF996633),
+            fontSize: FontSize(fontSize.size * 0.9),
             textAlign: TextAlign.justify,
+            margin: Margins.only(bottom: 5),
+            padding: HtmlPaddings.only(right: 7),
+            fontFamily: fontFamily.name,
+          ),
+          '.shareef_sher': Style(
+            textAlign: TextAlign.center,
+            color: isDarkMode ? Colors.white : const Color(0xFF996633),
+            fontSize: FontSize(fontSize.size * 0.9),
+            margin: Margins.symmetric(vertical: 5),
+            padding: HtmlPaddings.zero,
+          ),
+          '.fnote': Style(
+            color: isDarkMode ? const Color(0xFF8a8afa) : const Color(0xFF000080),
+            fontSize: FontSize(fontSize.size * 0.75),
+            margin: Margins.zero,
+            padding: HtmlPaddings.zero,
           ),
           '.sher': Style(
             textAlign: TextAlign.center,
-            color: isDarkMode ? Colors.white:Colors.red[800],
-            fontSize: FontSize(fontSize.size * 0.8),
+            color: isDarkMode ? Colors.white : const Color(0xFF990000),
+            fontSize: FontSize(fontSize.size),
+            margin: Margins.symmetric(vertical: 10),
+            padding: HtmlPaddings.zero,
           ),
           '.psm': Style(
             textAlign: TextAlign.center,
-            color: Colors.red[800],
+            color: isDarkMode ? Colors.white : const Color(0xFF990000),
             fontSize: FontSize(fontSize.size * 0.8),
+            margin: Margins.symmetric(vertical: 10),
+            padding: HtmlPaddings.zero,
+          ),
+          '.shareh': Style(
+            color: isDarkMode ? Colors.white : const Color(0xFF996633),
           ),
           '.msaleh': Style(
             color: Colors.purple,
             fontWeight: FontWeight.bold,
+            fontFamily: fontFamily.name,
           ),
           '.onwan': Style(
-            color: Colors.teal[700],
+            color: isDarkMode ? Colors.white : const Color(0xFF088888),
             fontWeight: FontWeight.bold,
+            fontFamily: fontFamily.name,
           ),
           '.fn': Style(
-            color: isDarkMode?  Color(0xff8a8afa): Color(0xFF000080),
+            color: isDarkMode ? const Color(0xff8a8afa) : const Color(0xFF000080),
             fontWeight: FontWeight.normal,
             fontSize: FontSize(fontSize.size * 0.75),
             textDecoration: TextDecoration.none,
             verticalAlign: VerticalAlign.top,
           ),
           '.fm': Style(
-            color: isDarkMode ? Color(0xffa2e1a2): Colors.green,
+            color: isDarkMode ? Color(0xffa2e1a2) : Colors.green,
             fontWeight: FontWeight.bold,
             fontSize: FontSize(fontSize.size * 0.75),
             textDecoration: TextDecoration.none,
@@ -750,24 +846,27 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           '.quran': Style(
             fontWeight: FontWeight.bold,
             fontSize: FontSize(fontSize.size),
-            color: isDarkMode ? Color(0xffa2e1a2):Colors.green,
+            color: isDarkMode ? Color(0xffa2e1a2) : const Color(0xFF509368),
+            fontFamily: fontFamily.name,
           ),
           '.hadith': Style(
             fontSize: FontSize(fontSize.size),
-            color: isDarkMode ? Color(0xffC1C1C1):Colors.black,
+            color: isDarkMode ? Color(0xffC1C1C1) : Colors.black,
           ),
           '.hadith-num': Style(
             fontWeight: FontWeight.bold,
             fontSize: FontSize(fontSize.size),
-            color: isDarkMode ? Color(0xfff9825e):Colors.red,
+            color: isDarkMode ? Color(0xfff9825e) : Colors.red,
+            fontFamily: fontFamily.name,
           ),
           '.shreah': Style(
             fontWeight: FontWeight.bold,
-            color: Colors.purple[900],
+            color: isDarkMode ? Color(0xffC1C1C1) : Colors.black,
+            fontFamily: fontFamily.name,
           ),
           '.kalema': Style(
             fontWeight: FontWeight.bold,
-            color: Colors.pink[700],
+            color: isDarkMode ? Colors.white : const Color(0xFFCC0066),
           ),
           'mark': Style(
             backgroundColor: Colors.yellow,
@@ -780,7 +879,14 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     final processedContent = _processHtmlContent(content);
     _processedContentCache[index] = processedContent;
 
+    final isCurrentPage = index == _currentPage.toInt();
+    if (isCurrentPage && _currentPageKey != null) {
+      debugPrint('🎯 Applying GlobalKey: ${_currentPageKey.hashCode} to new HTML page: $index');
+    }
+
     return Html(
+      anchorKey: isCurrentPage ? _currentPageKey : null,
+      onAnchorTap: _handleAnchorTap,
       data: processedContent,
       style: {
         'body': Style(
@@ -789,12 +895,16 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           lineHeight: LineHeight(lineHeight.size),
           textDecoration: TextDecoration.none,
         ),
+        '.inline': Style(
+          // display: Display.listItem,
+        ),
         'p': Style(
-          color: isDarkMode ? Colors.white : const Color(0xFF996633),
+          color: isDarkMode ? Colors.white : Colors.black,
           textAlign: TextAlign.justify,
-          margin: Margins.zero,
+          margin: Margins.only(bottom: 10),
           fontSize: FontSize(fontSize.size),
           fontFamily: fontFamily.name,
+          padding: HtmlPaddings.only(right: 7),
         ),
         'p.center': Style(
           color: isDarkMode ? Colors.white : const Color(0xFF996633),
@@ -802,6 +912,29 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           margin: Margins.zero,
           fontSize: FontSize(fontSize.size),
           fontFamily: fontFamily.name,
+          padding: HtmlPaddings.zero,
+        ),
+        'p.title3': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF2B5100),
+          textAlign: TextAlign.right,
+          margin: Margins.zero,
+          fontSize: FontSize(fontSize.size),
+          fontFamily: fontFamily.name,
+          fontWeight: FontWeight.bold,
+          padding: HtmlPaddings.zero,
+          lineHeight: LineHeight(1.2),
+          textDecoration: TextDecoration.none,
+        ),
+        'p.title3_1': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF12116C),
+          textAlign: TextAlign.right,
+          fontWeight: FontWeight.bold,
+          margin: Margins.zero,
+          fontSize: FontSize(fontSize.size),
+          fontFamily: fontFamily.name,
+          padding: HtmlPaddings.zero,
+          lineHeight: LineHeight(1.2),
+          textDecoration: TextDecoration.none,
         ),
         'a': Style(
           textDecoration: TextDecoration.none,
@@ -812,68 +945,109 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         'a:visited': Style(
           color: Colors.red,
         ),
-        'h1.tit1': Style(
-          color: isDarkMode ? Colors.white: Colors.green[700],
+        'h1': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF00AA00),
           fontSize: FontSize(fontSize.size * 1.1),
           textAlign: TextAlign.center,
+          margin: Margins.only(bottom: 10),
+          fontWeight: FontWeight.bold,
           fontFamily: fontFamily.name,
         ),
-        'h2.tit2': Style(
-          color: isDarkMode ? Colors.white: Colors.green[900],
+        'h2': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF000080),
           fontSize: FontSize(fontSize.size),
           textAlign: TextAlign.center,
+          margin: Margins.only(bottom: 10),
+          fontWeight: FontWeight.bold,
           fontFamily: fontFamily.name,
         ),
-        'h3.tit3': Style(
-          color: isDarkMode ? Colors.white: Colors.brown,
+        'h3': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF006400),
           fontSize: FontSize(fontSize.size),
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.right,
+          margin: Margins.only(bottom: 10),
+          fontWeight: FontWeight.bold,
+          fontFamily: fontFamily.name,
+        ),
+        'h3.tit3_1': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF800000),
+          fontSize: FontSize(fontSize.size),
+          textAlign: TextAlign.right,
+          margin: Margins.only(bottom: 10),
+          fontWeight: FontWeight.bold,
           fontFamily: fontFamily.name,
         ),
         'h4.tit4': Style(
-          color: isDarkMode ?  Colors.white: Colors.red,
+          color: isDarkMode ? Colors.white : Colors.red,
           fontSize: FontSize(fontSize.size),
           textAlign: TextAlign.center,
+          margin: Margins.zero,
+          fontWeight: FontWeight.bold,
           fontFamily: fontFamily.name,
         ),
         '.pagen': Style(
           textAlign: TextAlign.center,
-          color: isDarkMode ? Color(0xfff9825e): Colors.red,
+          color: isDarkMode ? Color(0xfff9825e) : Colors.red,
           fontSize: FontSize(fontSize.size),
           fontFamily: fontFamily.name,
         ),
-        '.fnote': Style(
-          color: isDarkMode ? Color(0xFF8a8afa): Colors.blue[900],
-          fontSize: FontSize(fontSize.size * 0.75),
+        '.shareef': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF996633),
+          fontSize: FontSize(fontSize.size * 0.9),
           textAlign: TextAlign.justify,
+          margin: Margins.only(bottom: 5),
+          padding: HtmlPaddings.only(right: 7),
+          fontFamily: fontFamily.name,
+        ),
+        '.shareef_sher': Style(
+          textAlign: TextAlign.center,
+          color: isDarkMode ? Colors.white : const Color(0xFF996633),
+          fontSize: FontSize(fontSize.size * 0.9),
+          margin: Margins.symmetric(vertical: 5),
+          padding: HtmlPaddings.zero,
+        ),
+        '.fnote': Style(
+          color: isDarkMode ? const Color(0xFF8a8afa) : const Color(0xFF000080),
+          fontSize: FontSize(fontSize.size * 0.75),
+          margin: Margins.zero,
+          padding: HtmlPaddings.zero,
         ),
         '.sher': Style(
           textAlign: TextAlign.center,
-          color: isDarkMode ? Colors.white:Colors.red[800],
-          fontSize: FontSize(fontSize.size * 0.8),
+          color: isDarkMode ? Colors.white : const Color(0xFF990000),
+          fontSize: FontSize(fontSize.size),
+          margin: Margins.symmetric(vertical: 10),
+          padding: HtmlPaddings.zero,
         ),
         '.psm': Style(
           textAlign: TextAlign.center,
-          color: Colors.red[800],
+          color: isDarkMode ? Colors.white : const Color(0xFF990000),
           fontSize: FontSize(fontSize.size * 0.8),
+          margin: Margins.symmetric(vertical: 10),
+          padding: HtmlPaddings.zero,
+        ),
+        '.shareh': Style(
+          color: isDarkMode ? Colors.white : const Color(0xFF996633),
         ),
         '.msaleh': Style(
           color: Colors.purple,
           fontWeight: FontWeight.bold,
+          fontFamily: fontFamily.name,
         ),
         '.onwan': Style(
-          color: Colors.teal[700],
+          color: isDarkMode ? Colors.white : const Color(0xFF088888),
           fontWeight: FontWeight.bold,
+          fontFamily: fontFamily.name,
         ),
         '.fn': Style(
-          color: isDarkMode?  Color(0xff8a8afa): Color(0xFF000080),
+          color: isDarkMode ? const Color(0xff8a8afa) : const Color(0xFF000080),
           fontWeight: FontWeight.normal,
           fontSize: FontSize(fontSize.size * 0.75),
           textDecoration: TextDecoration.none,
           verticalAlign: VerticalAlign.top,
         ),
         '.fm': Style(
-          color: isDarkMode ? Color(0xffa2e1a2): Colors.green,
+          color: isDarkMode ? Color(0xffa2e1a2) : Colors.green,
           fontWeight: FontWeight.bold,
           fontSize: FontSize(fontSize.size * 0.75),
           textDecoration: TextDecoration.none,
@@ -881,24 +1055,27 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         '.quran': Style(
           fontWeight: FontWeight.bold,
           fontSize: FontSize(fontSize.size),
-          color: isDarkMode ? Color(0xffa2e1a2):Colors.green,
+          color: isDarkMode ? Color(0xffa2e1a2) : const Color(0xFF509368),
+          fontFamily: fontFamily.name,
         ),
         '.hadith': Style(
           fontSize: FontSize(fontSize.size),
-          color: isDarkMode ? Color(0xffC1C1C1):Colors.black,
+          color: isDarkMode ? Color(0xffC1C1C1) : Colors.black,
         ),
         '.hadith-num': Style(
           fontWeight: FontWeight.bold,
           fontSize: FontSize(fontSize.size),
-          color: isDarkMode ? Color(0xfff9825e):Colors.red,
+          color: isDarkMode ? Color(0xfff9825e) : Colors.red,
+          fontFamily: fontFamily.name,
         ),
         '.shreah': Style(
           fontWeight: FontWeight.bold,
-          color: Colors.purple[900],
+          color: isDarkMode ? Color(0xffC1C1C1) : Colors.black,
+          fontFamily: fontFamily.name,
         ),
         '.kalema': Style(
           fontWeight: FontWeight.bold,
-          color: Colors.pink[700],
+          color: isDarkMode ? Colors.white : const Color(0xFFCC0066),
         ),
         'mark': Style(
           backgroundColor: Colors.yellow,
@@ -1026,6 +1203,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       setState(() {
         _currentSearchIndex++;
       });
+      _highlightIndex++;
       context.read<EpubViewerCubit>().highlightContent(
         _currentSearchResults[_currentSearchIndex].pageIndex,
         searchedWord
@@ -1038,6 +1216,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       setState(() {
         _currentSearchIndex--;
       });
+      if (_highlightIndex > 0) {
+        _highlightIndex--;
+      }
+
       context.read<EpubViewerCubit>().highlightContent(
         _currentSearchResults[_currentSearchIndex].pageIndex,
         searchedWord
@@ -1082,6 +1264,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     final ValueNotifier<bool> showAppBar = ValueNotifier(false);
 
     showModalBottomSheet(
+      backgroundColor: isDarkMode ? Colors.black : Colors.white,
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) => NotificationListener<DraggableScrollableNotification>(
@@ -1153,22 +1336,23 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   _showBottomSheet(BuildContext context, EpubViewerCubit cubit) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Set this property to true
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        // Calculate the maximum height based on content
-        final double maxContentHeight = MediaQuery.of(context).size.height * 0.8;
-
-        return ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight: maxContentHeight,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                StyleSheet(epubViewerCubit: cubit, lineSpace: lineHeight, fontFamily: fontFamily, fontSize: fontSize),
-              ],
-            ),
-          ),
+        return DraggableScrollableSheet(
+          initialChildSize: 0.5,
+          minChildSize: 0.25,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: Column(
+                children: [
+                  StyleSheet(epubViewerCubit: cubit, lineSpace: lineHeight, fontFamily: fontFamily, fontSize: fontSize),
+                ],
+              ),
+            );
+          },
         );
       },
     );
@@ -1290,13 +1474,22 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     this.lineHeight = lineHeight ?? LineHeightCustom.medium;
     this.fontSize = fontSize ?? FontSizeCustom.medium;
   }
-
+  int tempPageNumber = -1;
   _jumpTo({int? pageNumber}) {
     if (!_isControllerInitialized || pageNumber == null) return;
     
     try {
+      // Only create new GlobalKey if jumping to a different page
+      if (tempPageNumber.toInt() != pageNumber) {
+        debugPrint('🔑 Created new GlobalKey: ${_currentPageKey.hashCode} for NEW page: $pageNumber (was on page: ${_currentPage.toInt()})');
+      } else {
+        debugPrint('🔄 Staying on same page: $pageNumber, keeping existing GlobalKey: ${_currentPageKey?.hashCode}');
+      }
+      _currentPageKey = GlobalKey();
       itemScrollController.jumpTo(index: pageNumber);
       _currentPage = pageNumber.toDouble();
+      tempPageNumber = pageNumber;
+
       if (_bookPath != null) {
         context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
       }
@@ -1370,7 +1563,54 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     }
   }
 
+  void _handleAnchorTap(String? href, Map<String, String> attributes, dom.Element? element) {
+    if (href != null) {
+      final Uri uri = Uri.parse(href);
+      if (uri.fragment.isNotEmpty) {
+      } else {
+        debugPrint('Anchor href: $href'); // For cases without `#`
+      }
+    }
+  }
+
+
+
+  Widget _buildTranslationChip(BuildContext context, String title, bool isSelected, VoidCallback onTap) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: FilterChip(
+        backgroundColor: isDarkMode ? Theme.of(context).colorScheme.onSurface.withOpacity(0.4) : Colors.transparent,
+        side: BorderSide.none,
+        label: Text(title),
+        selected: isSelected,
+        onSelected: (_) => onTap(),
+        selectedColor: Theme.of(context).colorScheme.secondaryContainer,
+        checkmarkColor: Theme.of(context).colorScheme.onSecondaryContainer,
+        labelStyle: TextStyle(
+          color: isSelected 
+            ? Theme.of(context).colorScheme.onSecondaryContainer
+            : Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+    );
+  }
+
+  void _scrollToId(String highlightId) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final anchorContext = AnchorKey.forId(_currentPageKey, highlightId)?.currentContext;
+      debugPrint('🎯 Testing scroll to $highlightId on page 2: ${anchorContext != null ? "FOUND" : "NULL"}');
+      if (anchorContext != null) {
+        Scrollable.ensureVisible(anchorContext);
+        debugPrint('✅ Successfully scrolled to $highlightId');
+      } else {
+        debugPrint('❌ Failed to find $highlightId with key: ${_currentPageKey?.hashCode}');
+      }
+    });
+
+  }
 }
+
+
 
 
 

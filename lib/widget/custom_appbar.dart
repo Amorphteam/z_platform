@@ -13,6 +13,8 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Function(String)? onSearch; // Optional
   final Function(String)? onSubmitted; // Optional
   final bool showSearchBar; // Toggle for search bar
+  final String? backgroundImage; // New parameter for background image
+
 
   const CustomAppBar({
     Key? key,
@@ -25,6 +27,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.showSearchBar = true,
     this.leftWidget,
     this.onSubmitted, // Default: show search bar
+    this.backgroundImage, // Add to constructor
   }) : super(key: key);
 
   @override
@@ -32,7 +35,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(showSearchBar ? 140 : kToolbarHeight);
+      Size.fromHeight(showSearchBar ? 140 : kToolbarHeight); // Adjust height based on search bar visibility
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
@@ -46,22 +49,44 @@ class _CustomAppBarState extends State<CustomAppBar> {
       mainAxisSize: MainAxisSize.min,
       children: [
         AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
+          backgroundColor: widget.backgroundImage != null ? Colors.transparent : null,
+          flexibleSpace: widget.backgroundImage != null
+              ? Container(
+            height: kToolbarHeight + MediaQuery.of(context).padding.top,
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(widget.backgroundImage!),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3),
+                  BlendMode.darken,
+                ),
+              ),
+            ),
+          )
+              : null,
           leading: widget.leftIcon != null
               ? IconButton(
             icon: Icon(widget.leftIcon,
-                color: isDarkMode ? Colors.white : Colors.black),
+                color: Colors.white),
             onPressed: widget.onLeftTap ?? _showAboutUs,
           )
-              : widget.leftWidget,
-          title: Text(
-            widget.title,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-              fontFamily: 'kuffi',
-              fontSize: 18,
-              fontWeight: FontWeight.normal,
+              : widget.leftWidget ?? IconButton(
+            icon: const Icon(Icons.arrow_back,
+                color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              widget.title,
+              style: TextStyle(
+                color: widget.backgroundImage != null ? Colors.white : Theme.of(context).colorScheme.secondary,
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ),
           centerTitle: true,
@@ -69,38 +94,34 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ? [
             IconButton(
               icon: Icon(widget.rightIcon,
-                  color: isDarkMode ? Colors.white : Colors.black),
+                  color: widget.backgroundImage != null ? Colors.white : (isDarkMode ? Colors.white : Colors.black)),
               onPressed: widget.onRightTap ?? () => _showThemeDialog(context),
             ),
           ]
-              : [], // Hide if rightIcon is null
+              : [],
         ),
-        if (widget.showSearchBar) // Conditionally show search bar
+        if (widget.showSearchBar)
           Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
             child: Directionality(
               textDirection: TextDirection.rtl,
               child: Theme(
                 data: ThemeData(
                   textSelectionTheme: TextSelectionThemeData(
-                    cursorColor: isDarkMode
-                        ? Colors.white
-                        : Colors.black, // Cursor color
+                    cursorColor: isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
                 child: TextField(
                   controller: _searchController,
                   onChanged: (value) {
-                    setState(() {}); // Refresh UI when text changes
+                    setState(() {});
                     if (widget.onSearch != null) widget.onSearch!(value);
                   },
                   onSubmitted: widget.onSubmitted,
                   decoration: InputDecoration(
-                    hintText: "اكتب شيئاً...",
+                    hintText: "بحث...",
                     hintStyle: TextStyle(
-                      fontSize: 12,
-                      color: isDarkMode ? Colors.grey[400] : Colors.grey[600], // Hint color
+                      color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                     ),
                     prefixIcon: Icon(Icons.search,
                         color: isDarkMode ? Colors.white : Colors.black54),
@@ -109,20 +130,20 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       icon: Icon(Icons.clear, color: isDarkMode ? Colors.white : Colors.black54),
                       onPressed: () {
                         _searchController.clear();
-                        setState(() {}); // Refresh UI to hide the clear button
-                        if (widget.onSearch != null) widget.onSearch!(''); // Clear search callback
+                        setState(() {});
+                        if (widget.onSearch != null) widget.onSearch!('');
                       },
                     )
-                        : null, // Hide clear button if no text
+                        : null,
                     filled: true,
-                    fillColor: isDarkMode ? Colors.grey[900] : Colors.grey[200], // Background color
+                    fillColor: isDarkMode ? Colors.grey[900] : Colors.grey[200],
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(14),
                       borderSide: BorderSide.none,
                     ),
                     contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   ),
-                  style: TextStyle(color: isDarkMode ? Colors.white : Colors.black), // Text color
+                  style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                 ),
               ),
             ),

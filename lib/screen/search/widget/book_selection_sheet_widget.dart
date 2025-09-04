@@ -32,6 +32,10 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
@@ -56,7 +60,7 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
                   selectedBooks.values.every((value) => value)
                       ? "إلغاء الكل"
                       : "تحديد الكل",
-                  style: const TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.secondaryContainer),
                 ),
               ),
             ],
@@ -77,8 +81,8 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
               Navigator.pop(context, selectedBooks);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary, // Change this to your desired color
-              foregroundColor: Colors.white, // Text color
+              elevation: 0,
+              backgroundColor: Theme.of(context).colorScheme.secondaryContainer, // Change this to your desired color
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             ),
             child: const Text("موافق"),
@@ -92,6 +96,8 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
     if (book.series == null || book.series!.isEmpty) {
       return ListTile(
         leading: Checkbox(
+          checkColor: Theme.of(context).colorScheme.primary,
+          activeColor: Theme.of(context).colorScheme.secondaryContainer,
           value: selectedBooks[book.epub],
           onChanged: (value) {
             setState(() {
@@ -106,6 +112,8 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
         title: Row(
           children: [
             Checkbox(
+              checkColor: Theme.of(context).colorScheme.primary,
+              activeColor: Theme.of(context).colorScheme.secondaryContainer,
               value: selectedBooks[book.epub],
               onChanged: (value) {
                 setState(() {
@@ -129,6 +137,8 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
             child: Row(
               children: [
                 Checkbox(
+                  checkColor: Theme.of(context).colorScheme.primary,
+                  activeColor: Theme.of(context).colorScheme.secondaryContainer,
                   value: selectedBooks[series.epub],
                   onChanged: (value) {
                     setState(() {

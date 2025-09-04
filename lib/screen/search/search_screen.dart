@@ -32,7 +32,8 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: CustomAppBar(
           showSearchBar: true,
-          title: "الحديث الشريف",
+          title: "البحث العام",
+          backgroundImage: 'assets/image/back_tazhib_light.jpg',
           leftWidget: buildLeftWidget(context),
           onLeftTap: () {
             openBookSelectionSheet(allBooks);
@@ -43,55 +44,57 @@ class _SearchScreenState extends State<SearchScreen> {
             await context.read<SearchCubit>().search(query, maxResultsPerBook: MAX_RESULTS_PER_BOOK);
           },
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: BlocBuilder<SearchCubit, SearchState>(
-            builder: (context, state) => state.when(
-              initial: () => Center(
-                  child: Text('ابدأ البحث',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onSecondary))),
-              loading: () => Center(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // CircularProgressIndicator(
-                  //   color: Theme.of(context).colorScheme.secondary,
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Text('جاری البحث'),
-                  // ),
-                ],
-              )),
-              loaded: (searchResults, isRunningSearch) =>
-                  SearchResultsWidget(
-                    searchResults: searchResults,
-                    searchQuery: _currentSearchQuery,
-                  ),
-              loadedList: (books) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (_globalSelectedBooks.isEmpty) {
-                    for (var book in books) {
-                      _globalSelectedBooks[book.epub] = true;
-                      for (var series in book.series ?? []) {
-                        _globalSelectedBooks[series.epub] = true;
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: BlocBuilder<SearchCubit, SearchState>(
+              builder: (context, state) => state.when(
+                initial: () => Center(
+                    child: Text('ابدأ البحث',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.onSecondary))),
+                loading: () => Center(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // CircularProgressIndicator(
+                    //   color: Theme.of(context).colorScheme.secondary,
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Text('جاری البحث'),
+                    // ),
+                  ],
+                )),
+                loaded: (searchResults, isRunningSearch) =>
+                    SearchResultsWidget(
+                      searchResults: searchResults,
+                      searchQuery: _currentSearchQuery,
+                    ),
+                loadedList: (books) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (_globalSelectedBooks.isEmpty) {
+                      for (var book in books) {
+                        _globalSelectedBooks[book.epub] = true;
+                        for (var series in book.series ?? []) {
+                          _globalSelectedBooks[series.epub] = true;
+                        }
                       }
+                      allBooks = books;
+                      setState(() {
+                        _selectedBooksCount = _globalSelectedBooks.entries
+                            .where((entry) => entry.value && entry.key.length > 1)
+                            .length;
+                      });
+                      // Store EPUB files when books are first loaded
+                      context.read<SearchCubit>().storeEpubBooks(_globalSelectedBooks);
                     }
-                    allBooks = books;
-                    setState(() {
-                      _selectedBooksCount = _globalSelectedBooks.entries
-                          .where((entry) => entry.value && entry.key.length > 1)
-                          .length;
-                    });
-                    // Store EPUB files when books are first loaded
-                    context.read<SearchCubit>().storeEpubBooks(_globalSelectedBooks);
-                  }
-                });
-                return const SizedBox.shrink();
-              },
-              error: (error) => Center(child: Text('Error: $error')),
+                  });
+                  return const SizedBox.shrink();
+                },
+                error: (error) => Center(child: Text('Error: $error')),
+              ),
             ),
           ),
         ),
@@ -103,7 +106,7 @@ class _SearchScreenState extends State<SearchScreen> {
         openBookSelectionSheet(allBooks);
         context.read<SearchCubit>().resetState();
       },
-      icon: const Icon(Icons.tune_rounded),
+      icon: const Icon(Icons.tune_rounded, color: Colors.white),
     );
   }
 

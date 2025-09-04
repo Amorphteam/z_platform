@@ -15,12 +15,21 @@ import '../../../repository/reference_database.dart';
 import '../../../util/epub_helper.dart';
 import '../../../util/search_helper.dart';
 import '../../../util/style_helper.dart';
-
 part 'epub_viewer_cubit.freezed.dart';
 part 'epub_viewer_state.dart';
 
+/// Helper class to store information about a block tag
+class _BlockTagInfo {
+  final String blockTag;
+  final int startIndex;
+  final int endIndex;
+  
+  const _BlockTagInfo(this.blockTag, this.startIndex, this.endIndex);
+}
+
 class EpubViewerCubit extends Cubit<EpubViewerState> {
   EpubViewerCubit() : super(const EpubViewerState.initial());
+  
   EpubBook? _epubBook;
   List<String>? _spineHtmlContent;
   List<String>? _spineHtmlFileName;
@@ -239,9 +248,17 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
     // Create a new list to store updated content
     final List<String> updatedContent = [];
+    
+    // Map to track page highlights: key = page index, value = list of highlight IDs
+    final Map<int, List<String>> pageHighlights = {};
+    
+    // Global counter for unique IDs across all pages
+    int globalCounter = 0;
 
     // Apply highlighting to each page content
-    for (final content in _spineHtmlContent!) {
+    for (int pageIdx = 0; pageIdx < _spineHtmlContent!.length; pageIdx++) {
+      final content = _spineHtmlContent![pageIdx];
+      
       // Convert Latin numbers to Arabic in the content before highlighting
       final convertedContent = convertLatinNumbersToArabic(content);
 
@@ -249,16 +266,29 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       final normalizedContent = searchHelper.removeArabicDiacritics(convertedContent);
 
       // Get the positions of matches in the normalized content
-      final highlightedContent = _applyHighlightingUsingMapping(convertedContent, normalizedContent, normalizedSearchTerm);
+      final highlightedContent = _applyHighlightingUsingMapping(convertedContent, normalizedContent, normalizedSearchTerm, globalCounter);
 
       updatedContent.add(highlightedContent);
+      
+      // Extract highlight IDs for this page
+      final List<String> pageHighlightIds = _extractHighlightIdsFromContent(highlightedContent);
+      if (pageHighlightIds.isNotEmpty) {
+        pageHighlights[pageIdx] = pageHighlightIds;
+      }
+      
+      // Update global counter by counting the actual matches found in this page
+      globalCounter += _countMatchesInContent(normalizedContent, normalizedSearchTerm);
     }
 
-    // Emit the new state with updated content
-    emit(EpubViewerState.contentHighlighted(content: updatedContent, highlightedIndex: pageIndex - 1));
+    // Emit the new state with updated content and page highlights map
+    emit(EpubViewerState.contentHighlighted(
+      content: updatedContent, 
+      highlightedIndex: pageIndex - 1,
+      pageHighlights: pageHighlights
+    ));
   }
 
-  String _applyHighlightingUsingMapping(String originalContent, String normalizedContent, String normalizedSearchTerm) {
+  String _applyHighlightingUsingMapping(String originalContent, String normalizedContent, String normalizedSearchTerm, int globalCounter) {
     final RegExp searchRegex = RegExp(RegExp.escape(normalizedSearchTerm), caseSensitive: false);
 
     final List<Match> matches = searchRegex.allMatches(normalizedContent).toList();
@@ -279,6 +309,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
     String highlightedContent = originalContent;
     int offset = 0;
+    int counter = globalCounter; // Use the global counter passed from parent method
 
     for (final match in matches) {
       if (!indexMapping.containsKey(match.start) || !indexMapping.containsKey(match.end - 1)) {
@@ -293,19 +324,158 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       // Extract the actual matched word from the original content
       final originalMatch = highlightedContent.substring(matchStart, matchEnd);
 
-      // Wrap it in a <mark> tag
-      final String replacement = '<mark>$originalMatch</mark>';
+      // Find the parent block tag that contains this match
+      final parentBlockTagInfo = _findParentBlockTag(highlightedContent, matchStart);
+      
+      if (parentBlockTagInfo != null) {
+        // Add id attribute to the existing block tag
+        final String blockTagWithId = _addIdToBlockTag(parentBlockTagInfo.blockTag, counter);
+        
+        // Replace the block tag with the one that has id
+        highlightedContent = highlightedContent.replaceRange(
+          parentBlockTagInfo.startIndex, 
+          parentBlockTagInfo.endIndex, 
+          blockTagWithId
+        );
+        
+        // Adjust offset for the block tag change
+        final int blockTagLengthDiff = blockTagWithId.length - (parentBlockTagInfo.endIndex - parentBlockTagInfo.startIndex);
+        offset += blockTagLengthDiff;
+        
+        // Now wrap the matched text with <mark> tags
+        final String markedText = '<mark>$originalMatch</mark>';
+        
+        // Calculate new positions after block tag modification
+        final int newMatchStart = matchStart + blockTagLengthDiff;
+        final int newMatchEnd = newMatchStart + originalMatch.length;
+        
+        // Replace the matched text with marked version
+        highlightedContent = highlightedContent.replaceRange(newMatchStart, newMatchEnd, markedText);
+        
+        // Adjust offset for the mark tags
+        final int markLengthDiff = markedText.length - originalMatch.length;
+        offset += markLengthDiff;
+        
+        counter++; // Increment counter for next unique ID
+      } else {
+        // Fallback: if no parent p tag found, use the original approach
+        final String replacement = '<p id="highlight_$counter" class="inline"><mark>$originalMatch</mark>';
+        counter++; // Increment counter for next unique ID
 
-      // Replace in the content
-      highlightedContent = highlightedContent.replaceRange(matchStart, matchEnd, replacement);
+        // Replace in the content
+        highlightedContent = highlightedContent.replaceRange(matchStart, matchEnd, replacement);
 
-      // Adjust offset to account for length increase due to <mark> tags
-      offset += replacement.length - originalMatch.length;
+        // Adjust offset to account for length increase due to <block> tags
+        offset += replacement.length - originalMatch.length;
+      }
     }
 
     return highlightedContent;
   }
 
+  /// Find the parent block tag that contains the given position
+  _BlockTagInfo? _findParentBlockTag(String content, int position) {
+    // List of common block-level HTML tags
+    final List<String> blockTags = [
+      'p', 'div', 'section', 'article', 'header', 'footer', 'main', 'aside',
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre', 'form',
+      'table', 'ul', 'ol', 'li', 'fieldset', 'legend', 'figure', 'figcaption'
+    ];
+    
+    int tagStart = -1;
+    int tagEnd = -1;
+    String? foundTagName;
+    
+    // Look backwards from the position to find the opening block tag
+    for (int i = position; i >= 0; i--) {
+      for (final tagName in blockTags) {
+        if (i >= tagName.length + 1 && 
+            content.substring(i - tagName.length, i + 1) == '<$tagName') {
+          tagStart = i - tagName.length;
+          foundTagName = tagName;
+          break;
+        }
+      }
+      if (tagStart != -1) break;
+    }
+    
+    if (tagStart == -1 || foundTagName == null) return null;
+    
+    // Find the closing tag
+    final String closingTag = '</$foundTagName>';
+    for (int i = position; i < content.length; i++) {
+      if (i + closingTag.length <= content.length && 
+          content.substring(i, i + closingTag.length) == closingTag) {
+        tagEnd = i + closingTag.length;
+        break;
+      }
+    }
+    
+    if (tagEnd == -1) return null;
+    
+    final String blockTag = content.substring(tagStart, tagEnd);
+    return _BlockTagInfo(blockTag, tagStart, tagEnd);
+  }
+
+  /// Add id attribute to a block tag
+  String _addIdToBlockTag(String blockTag, int counter) {
+    // Check if the block tag already has an id attribute
+    if (blockTag.contains('id=')) {
+      // If it already has an id, replace it
+      return blockTag.replaceFirst(RegExp(r'id="[^"]*"'), 'id="highlight_$counter"');
+    } else {
+      // Find the opening tag and add id after it
+      final int insertIndex = blockTag.indexOf('<') + 1;
+      // Find the end of the tag name (space, >, or /)
+      int tagEndIndex = insertIndex;
+      while (tagEndIndex < blockTag.length && 
+             blockTag[tagEndIndex] != ' ' && 
+             blockTag[tagEndIndex] != '>' && 
+             blockTag[tagEndIndex] != '/') {
+        tagEndIndex++;
+      }
+      return blockTag.substring(0, tagEndIndex) + ' id="highlight_$counter"' + blockTag.substring(tagEndIndex);
+    }
+  }
+
+  /// Helper method to count matches in content for updating global counter
+  int _countMatchesInContent(String normalizedContent, String normalizedSearchTerm) {
+    final RegExp searchRegex = RegExp(RegExp.escape(normalizedSearchTerm), caseSensitive: false);
+    final matches = searchRegex.allMatches(normalizedContent);
+    return matches.length;
+  }
+
+  /// Helper method to extract highlight IDs from content
+  List<String> _extractHighlightIdsFromContent(String highlightedContent) {
+    final RegExp highlightRegex = RegExp(r'id="highlight_(\d+)"');
+    final matches = highlightRegex.allMatches(highlightedContent);
+    
+    final List<String> highlightIds = [];
+    for (final match in matches) {
+      final highlightId = 'highlight_${match.group(1)}';
+      highlightIds.add(highlightId);
+    }
+    
+    return highlightIds;
+  }
+
+  /// Helper method to get the next counter value based on the highlighted content
+  int _getNextCounterValue(String highlightedContent) {
+    // Find all highlight IDs in the content and get the highest number
+    final RegExp highlightRegex = RegExp(r'id="highlight_(\d+)"');
+    final matches = highlightRegex.allMatches(highlightedContent);
+    
+    int maxCounter = 0;
+    for (final match in matches) {
+      final counterValue = int.tryParse(match.group(1) ?? '0') ?? 0;
+      if (counterValue > maxCounter) {
+        maxCounter = counterValue;
+      }
+    }
+    
+    // Return the next available counter value
+    return maxCounter + 1;
+  }
 
 
 }
