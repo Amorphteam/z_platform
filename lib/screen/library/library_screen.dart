@@ -57,14 +57,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
           loading: () => const Center(child: CircularProgressIndicator()),
           loaded: (books) => Padding(
             padding: const EdgeInsets.all(16.0),
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-                childAspectRatio: 0.7,
-              ),
+            child: ListView.separated(
               itemCount: books.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 12.0),
               itemBuilder: (context, index) {
                 final book = books[index];
                 return GestureDetector(
@@ -81,53 +76,79 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: book.image != null
-                              ? ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(8.0),
-                            ),
-                            child: Image.network(
-                              book.image!,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
-                          )
-                              : Container(
-                            color: Colors.grey,
-                            alignment: Alignment.center,
-                            child: const Icon(
-                              Icons.book,
-                              size: 50,
-                              color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        children: [
+                          // Text and description on the left
+                          Expanded(
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 18.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      book.title ?? 'Unknown Title',
+                                      style: Theme.of(context).textTheme.titleLarge,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      book.author ?? 'Unknown Author',
+                                      style: Theme.of(context).textTheme.bodyMedium,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    if (book.description != null && book.description!.isNotEmpty) ...[
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        book.description!,
+                                        style: Theme.of(context).textTheme.bodySmall,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                book.title ?? 'Unknown Title',
-                                style: Theme.of(context).textTheme.titleLarge,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                book.author ?? 'Unknown Author',
-                                style: Theme.of(context).textTheme.bodyMedium,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+                          const SizedBox(width: 12),
+                          // Image on the right
+                          Container(
+                            width: 140,
+                            height: 180,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: book.image != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      book.image!,
+                                      fit: BoxFit.cover,
+                                      width: 140,
+                                      height: 180,
+                                    ),
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: const Icon(
+                                      Icons.book,
+                                      size: 40,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
