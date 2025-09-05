@@ -57,18 +57,9 @@ class _HostScreenState extends State<HostScreen> {
               label: 'الرئيسية',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                _currentIndex == 1 ? 'assets/icon/filled_toc.svg' : 'assets/icon/outline_toc.svg',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 1 ? Theme.of(context).colorScheme.secondaryContainer: Theme.of(context).colorScheme.onSurface,
-              ),
+              icon: Icon(_currentIndex == 1 ? Icons.library_books : Icons.library_books_outlined),
               label: 'الموضوعي',
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(_currentIndex == 2 ? CupertinoIcons.book_solid : CupertinoIcons.book),
-            //   label: 'الكتب',
-            // ),
             BottomNavigationBarItem(
               icon: Icon(_currentIndex == 2 ? CupertinoIcons.search_circle_fill : CupertinoIcons.search),
               label: 'البحث',
