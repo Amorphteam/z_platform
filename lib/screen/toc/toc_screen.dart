@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zahra/model/item_model.dart';
 import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
 import 'package:zahra/util/navigation_helper.dart';
 
 import '../../model/toc_item.dart';
+import '../../widget/custom_appbar.dart';
 
 class TocScreen extends StatefulWidget {
-  TocScreen({
+  const TocScreen({
     super.key,
     this.id,
     this.title,
   });
 
-  int? id;
-  String? title;
+  final int? id;
+  final String? title;
 
   @override
   State<TocScreen> createState() => _TocScreenState();
@@ -29,20 +29,20 @@ class _TocScreenState extends State<TocScreen> {
         MediaQuery.of(context).orientation == Orientation.landscape;
 
     context.read<TocCubit>().fetchItems(id: widget.id);
-    if (widget.title != null && widget.title!.contains('\n')) {
-      widget.title = widget.title!.replaceAll('\n', ' ');
+    String? displayTitle = widget.title;
+    if (displayTitle != null && displayTitle.contains('\n')) {
+      displayTitle = displayTitle.replaceAll('\n', ' ');
     }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white, // Maintain consistent icon color
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(
-          widget.title ?? '',
-          style: const TextStyle(color: Colors.white),
-        ),
+      appBar: CustomAppBar(
+        showSearchBar: true,
+        title: 'فهرس المحتويات',
+        backgroundImage: 'assets/image/back_tazhib_light.jpg',
+        leftWidget: const SizedBox(),
+        onSearch: (query) {
+          context.read<TocCubit>().filterTocItems(query);
+        },
       ),
       body: isLandscape
           ? Row(
@@ -74,11 +74,13 @@ class _TocScreenState extends State<TocScreen> {
                     child: BlocBuilder<TocCubit, TocState>(
                       builder: (context, state) => state.when(
                         initial: () => const Center(
-                            child: Text('Tap to start fetching...')),
+                            child: Text('Tap to start fetching...'),),
                         loading: () => const Center(
-                            child: CircularProgressIndicator()),
-                        loaded: (items) {
-                          return _buildTocTree(items, context);
+                            child: CircularProgressIndicator(),),
+                        loaded: (items, filteredItems) {
+                          final itemsToShow = filteredItems ?? items;
+                          final isFiltered = filteredItems != null;
+                          return _buildTocTree(itemsToShow, context, isFiltered: isFiltered);
                         },
                         error: (message) =>
                             Center(child: SelectionArea(child: Text(message))),
@@ -156,7 +158,11 @@ class _TocScreenState extends State<TocScreen> {
                 const Center(child: Text('Tap to start fetching...')),
                 loading: () =>
                 const Center(child: CircularProgressIndicator()),
-                loaded: (items) => _buildTocTree(items, context),
+                loaded: (items, filteredItems) {
+                  final itemsToShow = filteredItems ?? items;
+                  final isFiltered = filteredItems != null;
+                  return _buildTocTree(itemsToShow, context, isFiltered: isFiltered);
+                },
                 error: (message) =>
                     Center(child: SelectionArea(child: Text(message))),
               ),
@@ -167,12 +173,19 @@ class _TocScreenState extends State<TocScreen> {
     );
   }
 
-  Widget _buildTocTree(List<TocItem> items, BuildContext context) {
-    final rootItems = items.where((item) => item.parentId == 0).toList();
-
-    return ListView(
-      children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
-    );
+  Widget _buildTocTree(List<TocItem> items, BuildContext context, {bool isFiltered = false}) {
+    if (isFiltered) {
+      // For filtered results, show all items in a flat list
+      return ListView(
+        children: items.map((item) => _buildCardView(item, context)).toList(),
+      );
+    } else {
+      // For normal view, show hierarchical structure
+      final rootItems = items.where((item) => item.parentId == 0).toList();
+      return ListView(
+        children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
+      );
+    }
   }
 
 
@@ -233,7 +246,7 @@ class _TocScreenState extends State<TocScreen> {
                     ),
                     Container(
                       margin: const EdgeInsets.only(
-                          right: 16, left: 16, top: 8),
+                          right: 16, left: 16, top: 8,),
                       width: 10,
                       height: 10,
                       color: const Color(0xFFCFA355),

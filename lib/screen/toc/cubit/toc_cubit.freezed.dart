@@ -20,7 +20,8 @@ mixin _$TocState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<TocItem> items) loaded,
+    required TResult Function(List<TocItem> items, List<TocItem>? filteredItems)
+        loaded,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +29,8 @@ mixin _$TocState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<TocItem> items)? loaded,
+    TResult? Function(List<TocItem> items, List<TocItem>? filteredItems)?
+        loaded,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +38,7 @@ mixin _$TocState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<TocItem> items)? loaded,
+    TResult Function(List<TocItem> items, List<TocItem>? filteredItems)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -125,7 +127,8 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<TocItem> items) loaded,
+    required TResult Function(List<TocItem> items, List<TocItem>? filteredItems)
+        loaded,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -136,7 +139,8 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<TocItem> items)? loaded,
+    TResult? Function(List<TocItem> items, List<TocItem>? filteredItems)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -147,7 +151,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<TocItem> items)? loaded,
+    TResult Function(List<TocItem> items, List<TocItem>? filteredItems)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -239,7 +243,8 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<TocItem> items) loaded,
+    required TResult Function(List<TocItem> items, List<TocItem>? filteredItems)
+        loaded,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -250,7 +255,8 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<TocItem> items)? loaded,
+    TResult? Function(List<TocItem> items, List<TocItem>? filteredItems)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -261,7 +267,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<TocItem> items)? loaded,
+    TResult Function(List<TocItem> items, List<TocItem>? filteredItems)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -319,7 +325,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<TocItem> items});
+  $Res call({List<TocItem> items, List<TocItem>? filteredItems});
 }
 
 /// @nodoc
@@ -334,12 +340,17 @@ class __$$LoadedImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? items = null,
+    Object? filteredItems = freezed,
   }) {
     return _then(_$LoadedImpl(
       null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
               as List<TocItem>,
+      filteredItems: freezed == filteredItems
+          ? _value._filteredItems
+          : filteredItems // ignore: cast_nullable_to_non_nullable
+              as List<TocItem>?,
     ));
   }
 }
@@ -347,7 +358,10 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl(final List<TocItem> items) : _items = items;
+  const _$LoadedImpl(final List<TocItem> items,
+      {final List<TocItem>? filteredItems})
+      : _items = items,
+        _filteredItems = filteredItems;
 
   final List<TocItem> _items;
   @override
@@ -357,9 +371,19 @@ class _$LoadedImpl implements _Loaded {
     return EqualUnmodifiableListView(_items);
   }
 
+  final List<TocItem>? _filteredItems;
+  @override
+  List<TocItem>? get filteredItems {
+    final value = _filteredItems;
+    if (value == null) return null;
+    if (_filteredItems is EqualUnmodifiableListView) return _filteredItems;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   String toString() {
-    return 'TocState.loaded(items: $items)';
+    return 'TocState.loaded(items: $items, filteredItems: $filteredItems)';
   }
 
   @override
@@ -367,12 +391,16 @@ class _$LoadedImpl implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
-            const DeepCollectionEquality().equals(other._items, _items));
+            const DeepCollectionEquality().equals(other._items, _items) &&
+            const DeepCollectionEquality()
+                .equals(other._filteredItems, _filteredItems));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_items),
+      const DeepCollectionEquality().hash(_filteredItems));
 
   @JsonKey(ignore: true)
   @override
@@ -385,10 +413,11 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<TocItem> items) loaded,
+    required TResult Function(List<TocItem> items, List<TocItem>? filteredItems)
+        loaded,
     required TResult Function(String message) error,
   }) {
-    return loaded(items);
+    return loaded(items, filteredItems);
   }
 
   @override
@@ -396,10 +425,11 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<TocItem> items)? loaded,
+    TResult? Function(List<TocItem> items, List<TocItem>? filteredItems)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
-    return loaded?.call(items);
+    return loaded?.call(items, filteredItems);
   }
 
   @override
@@ -407,12 +437,12 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<TocItem> items)? loaded,
+    TResult Function(List<TocItem> items, List<TocItem>? filteredItems)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(items);
+      return loaded(items, filteredItems);
     }
     return orElse();
   }
@@ -456,9 +486,11 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements TocState {
-  const factory _Loaded(final List<TocItem> items) = _$LoadedImpl;
+  const factory _Loaded(final List<TocItem> items,
+      {final List<TocItem>? filteredItems}) = _$LoadedImpl;
 
   List<TocItem> get items;
+  List<TocItem>? get filteredItems;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -530,7 +562,8 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<TocItem> items) loaded,
+    required TResult Function(List<TocItem> items, List<TocItem>? filteredItems)
+        loaded,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -541,7 +574,8 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<TocItem> items)? loaded,
+    TResult? Function(List<TocItem> items, List<TocItem>? filteredItems)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -552,7 +586,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<TocItem> items)? loaded,
+    TResult Function(List<TocItem> items, List<TocItem>? filteredItems)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
