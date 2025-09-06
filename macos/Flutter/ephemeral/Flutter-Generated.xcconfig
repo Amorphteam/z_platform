@@ -2,10 +2,12 @@
 FLUTTER_ROOT=/Users/alibayati/fvm/versions/3.24.1
 FLUTTER_APPLICATION_PATH=/Users/alibayati/Works/Programming/MultiPlatform/z_platform
 COCOAPODS_PARALLEL_CODE_SIGN=true
+FLUTTER_TARGET=/Users/alibayati/Works/Programming/MultiPlatform/z_platform/lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.3
 FLUTTER_BUILD_NUMBER=3
+DART_DEFINES=Zmx1dHRlci5pbnNwZWN0b3Iuc3RydWN0dXJlZEVycm9ycz10cnVl
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=.dart_tool/package_config.json
+PACKAGE_CONFIG=/Users/alibayati/Works/Programming/MultiPlatform/z_platform/.dart_tool/package_config.json

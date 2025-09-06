@@ -49,8 +49,6 @@ class _HostScreenState extends State<HostScreen> {
             });
           },
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: Theme.of(context).colorScheme.secondaryContainer,
-          unselectedItemColor: Theme.of(context).colorScheme.onSurface,
           items: [
             BottomNavigationBarItem(
               icon: Icon(_currentIndex == 0 ? Icons.home : Icons.home_outlined),

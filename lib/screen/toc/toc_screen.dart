@@ -34,7 +34,6 @@ class _TocScreenState extends State<TocScreen> {
       displayTitle = displayTitle.replaceAll('\n', ' ');
     }
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: CustomAppBar(
         showSearchBar: true,
         title: 'فهرس المحتويات',
@@ -55,7 +54,7 @@ class _TocScreenState extends State<TocScreen> {
                   builder: (_, __) => Container(
                     color: Theme.of(context)
                         .colorScheme
-                        .primary
+                        .surface
                         .withOpacity(_opacityNotifier.value),
                   ),
                 ),
@@ -93,7 +92,6 @@ class _TocScreenState extends State<TocScreen> {
           ),
           Expanded(
             child: Container(
-              color: Theme.of(context).colorScheme.primary,
               padding: const EdgeInsets.only(right: 48.0, left: 48, bottom: 40),
 
               child: Container(
@@ -115,7 +113,7 @@ class _TocScreenState extends State<TocScreen> {
           : Stack(
         children: [
           !isLandscape ? Container(
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.surface,
           ):
           Align(
             alignment: Alignment.topCenter,
@@ -139,7 +137,7 @@ class _TocScreenState extends State<TocScreen> {
             builder: (_, __) => Container(
               color: Theme.of(context)
                   .colorScheme
-                  .primary
+                  .surface
                   .withOpacity(_opacityNotifier.value),
             ),
           ),
@@ -200,7 +198,6 @@ class _TocScreenState extends State<TocScreen> {
           bottom: 6,
         ),
         child: Card(
-          color: Theme.of(context).colorScheme.onPrimary,
           elevation: 0,
           child: ExpansionTile(
             title: _buildCardTitle(item, context),
@@ -221,7 +218,6 @@ class _TocScreenState extends State<TocScreen> {
     alignment: Alignment.center,
     margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
     child: Card(
-      color: Theme.of(context).colorScheme.onPrimary,
       elevation: 0,
       child: Container(
         margin: const EdgeInsets.all(8.0),

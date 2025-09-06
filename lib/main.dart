@@ -60,42 +60,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeHelper = Provider.of<ThemeHelper>(context);
 
-    const ColorScheme lightColorScheme = ColorScheme(
-      brightness: Brightness.light,
-      primary: Color(0xFF3f426d),
-      onPrimary: Color(0xFFD3C8C8),
-      secondary: Color(0xFF5A6147),
-      onSecondary: Color(0xFFFFFFFF),
-      error: Color(0xFFBA1A1A),
-      onError: Color(0xFFFFFFFF),
-      surface: Color(0xFFFBF9F1),
-      onSurface: Color(0xFF1B1C17),
-      primaryContainer: Color(0xFFCDEF84),
-      onPrimaryContainer: Color(0xFF141F00),
-      secondaryContainer: Color(0xFFCFA355),
-      onSecondaryContainer: Color(0xFF171E09),
-      tertiaryContainer: Color(0xFFBCECE4),
-      onTertiaryContainer: Color(0xFF00201D),
-      errorContainer: Color(0xFFFFDAD6),
-      onErrorContainer: Color(0xFF410002),
-      surfaceContainerHighest: Color(0xFFE2E4D4),
-      onSurfaceVariant: Color(0xFF45483C),
-      outline: Color(0xFF76786B),
-      outlineVariant: Color(0xFFC6C8B9),
-    );
-
-    const ColorScheme darkColorScheme = ColorScheme(
-      brightness: Brightness.dark,
-      primary: Color(0xFF19192d),
-      onPrimary: Color(0xFF111111),
-      secondary: Color(0xFF5A6147),
-      onSecondary: Color(0xFFFFFFFF),
-      error: Color(0xFFBA1A1A),
-      onError: Color(0xFFFFFFFF),
-      surface: Color(0xFF111111),
-      onSurface: Color(0xFFa0a0af),
-    );
-
     final ThemeData lightTheme = ThemeData(
       useMaterial3: true,
       navigationBarTheme: NavigationBarThemeData(
@@ -103,8 +67,8 @@ class MyApp extends StatelessWidget {
           const TextStyle(),
         ),
       ),
-      colorScheme: lightColorScheme,
-      fontFamily: 'almarai',
+      // colorScheme: lightColorScheme,
+      fontFamily: 'SFProDisplay',
     );
 
     final ThemeData darkTheme = ThemeData(
@@ -114,8 +78,8 @@ class MyApp extends StatelessWidget {
           const TextStyle(),
         ),
       ),
-      colorScheme: darkColorScheme,
-      fontFamily: 'almarai',
+      // colorScheme: darkColorScheme,
+      fontFamily: 'SFProDisplay',
     );
 
     return BlocProvider(
@@ -134,15 +98,6 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           // Detect current brightness (light or dark mode)
           final brightness = MediaQuery.of(context).platformBrightness;
-
-          // Set the navigation bar color dynamically
-          // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-          //   systemNavigationBarColor:
-          //   brightness == Brightness.dark ? Color(0xFF111111) : Color(0xFFD3C8C8),
-          //   systemNavigationBarIconBrightness:
-          //   brightness == Brightness.dark ? Brightness.light : Brightness.dark,
-          // ));
-
           return child!;
         },
       ),
@@ -171,10 +126,6 @@ void lockOrientation() {
 bool isMobileDevice() {
   // Get device information
   final window = WidgetsBinding.instance.window;
-  final width = window.physicalSize.width / window.devicePixelRatio;
-  final height = window.physicalSize.height / window.devicePixelRatio;
-
-  // Calculate diagonal screen size in inches
   final diagonalInPixels = sqrt(pow(window.physicalSize.width, 2) +
       pow(window.physicalSize.height, 2));
   final diagonalInInches = diagonalInPixels / (window.devicePixelRatio * 160);

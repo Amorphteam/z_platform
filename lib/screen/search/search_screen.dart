@@ -29,7 +29,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: CustomAppBar(
           showSearchBar: true,
           title: "البحث العام",
@@ -52,20 +51,11 @@ class _SearchScreenState extends State<SearchScreen> {
                 initial: () => Center(
                     child: Text('ابدأ البحث',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onSecondary))),
+                            color: Theme.of(context).colorScheme.onSurface))),
                 loading: () => Center(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // CircularProgressIndicator(
-                    //   color: Theme.of(context).colorScheme.secondary,
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Text('جاری البحث'),
-                    // ),
-                  ],
                 )),
                 loaded: (searchResults, isRunningSearch) =>
                     SearchResultsWidget(
@@ -106,7 +96,7 @@ class _SearchScreenState extends State<SearchScreen> {
         openBookSelectionSheet(allBooks);
         context.read<SearchCubit>().resetState();
       },
-      icon: const Icon(Icons.tune_rounded, color: Colors.white),
+      icon: const Icon(Icons.tune_rounded),
     );
   }
 

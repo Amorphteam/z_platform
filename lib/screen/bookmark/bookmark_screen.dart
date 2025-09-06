@@ -25,7 +25,6 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: Theme.of(context).colorScheme.primary,
     appBar:  CustomAppBar(
       backgroundImage: 'assets/image/back_tazhib_light.jpg',
       showSearchBar: false,
@@ -54,22 +53,6 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               ],
               selected: {_selectedSegment},
               showSelectedIcon: false,
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.selected)) {
-                    return Theme.of(context).colorScheme.secondary;
-                  } else {
-                    return Theme.of(context).colorScheme.outlineVariant;
-                  }
-                }),
-                backgroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.selected)) {
-                    return Theme.of(context).colorScheme.onSecondary;
-                  } else {
-                    return Theme.of(context).colorScheme.surface;
-                  }
-                }),
-              ),
               onSelectionChanged: (newSelection) {
                 setState(() {
                   _selectedSegment = newSelection.first;
@@ -114,7 +97,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 onPressed: () {
                   Navigator.of(context).pop(); // Close dialog
                 },
-                child: Text('إلغاء', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                child: Text('إلغاء'),
               ),
               TextButton(
                 onPressed: () async {
@@ -127,8 +110,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                   // Force reload the current view
                   _loadBookmarksOrHistory();
                 },
-                child: Text('حذف', style: TextStyle(color: Colors.red)),
-              ),
+                child: Text('حذف')),
             ],
           ),
         );
