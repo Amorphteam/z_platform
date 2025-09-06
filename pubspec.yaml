@@ -103,3 +103,6 @@ flutter:
     - family: almarai
       fonts:
         - asset: assets/font/almarai.ttf
+    - family: SFProDisplay
+      fonts:
+        - asset: assets/font/SFArabic.ttf

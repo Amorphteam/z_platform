@@ -69,32 +69,24 @@ class _CustomAppBarState extends State<CustomAppBar> {
               : null,
           leading: widget.leftIcon != null
               ? IconButton(
-            icon: Icon(widget.leftIcon,
-                color: Colors.white),
+            icon: Icon(widget.leftIcon),
             onPressed: widget.onLeftTap ?? _showAboutUs,
           )
               : widget.leftWidget ?? IconButton(
-            icon: const Icon(Icons.arrow_back,
-                color: Colors.white),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               widget.title,
-              style: TextStyle(
-                color: widget.backgroundImage != null ? Colors.white : Theme.of(context).colorScheme.secondary,
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
+              style: Theme.of(context).textTheme.titleMedium,),
           ),
           centerTitle: true,
           actions: widget.rightIcon != null
               ? [
             IconButton(
-              icon: Icon(widget.rightIcon,
-                  color: widget.backgroundImage != null ? Colors.white : (isDarkMode ? Colors.white : Colors.black)),
+              icon: Icon(widget.rightIcon),
               onPressed: widget.onRightTap ?? () => _showThemeDialog(context),
             ),
           ]
@@ -105,45 +97,32 @@ class _CustomAppBarState extends State<CustomAppBar> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
             child: Directionality(
               textDirection: TextDirection.rtl,
-              child: Theme(
-                data: ThemeData(
-                  textSelectionTheme: TextSelectionThemeData(
-                    cursorColor: isDarkMode ? Colors.white : Colors.black,
+              child: TextField(
+                controller: _searchController,
+                onChanged: (value) {
+                  setState(() {});
+                  if (widget.onSearch != null) widget.onSearch!(value);
+                },
+                onSubmitted: widget.onSubmitted,
+                decoration: InputDecoration(
+                  hintText: "بحث...",
+                  prefixIcon: Icon(Icons.search),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() {});
+                      if (widget.onSearch != null) widget.onSearch!('');
+                    },
+                  )
+                      : null,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide.none,
                   ),
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: (value) {
-                    setState(() {});
-                    if (widget.onSearch != null) widget.onSearch!(value);
-                  },
-                  onSubmitted: widget.onSubmitted,
-                  decoration: InputDecoration(
-                    hintText: "بحث...",
-                    hintStyle: TextStyle(
-                      color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                    ),
-                    prefixIcon: Icon(Icons.search,
-                        color: isDarkMode ? Colors.white : Colors.black54),
-                    suffixIcon: _searchController.text.isNotEmpty
-                        ? IconButton(
-                      icon: Icon(Icons.clear, color: isDarkMode ? Colors.white : Colors.black54),
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() {});
-                        if (widget.onSearch != null) widget.onSearch!('');
-                      },
-                    )
-                        : null,
-                    filled: true,
-                    fillColor: isDarkMode ? Colors.grey[900] : Colors.grey[200],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                  ),
-                  style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 ),
               ),
             ),

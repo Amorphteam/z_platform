@@ -255,7 +255,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.1/packages/flutter",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.0/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -285,7 +285,7 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.1/packages/flutter_test",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.0/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -297,7 +297,7 @@
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.1/packages/flutter_web_plugins",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.0/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -615,7 +615,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.1/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.0/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -717,7 +717,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/vm_service-14.2.5",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/vm_service-14.2.4",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -770,10 +770,10 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-09-05T16:06:11.551227Z",
+  "generated": "2025-09-06T11:20:04.712521Z",
   "generator": "pub",
-  "generatorVersion": "3.5.1",
-  "flutterRoot": "file:///Users/alibayati/fvm/versions/3.24.1",
-  "flutterVersion": "3.24.1",
+  "generatorVersion": "3.5.0",
+  "flutterRoot": "file:///Users/alibayati/fvm/versions/3.24.0",
+  "flutterVersion": "3.24.0",
   "pubCache": "file:///Users/alibayati/.pub-cache"
 }

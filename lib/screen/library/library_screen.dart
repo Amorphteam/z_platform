@@ -50,7 +50,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
       body: BlocBuilder<LibraryCubit, LibraryState>(
         builder: (context, state) => state.when(
           initial: () => const Center(child: CircularProgressIndicator()),
@@ -72,7 +71,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     }
                   },
                   child: Card(
-                    color: Theme.of(context).colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
