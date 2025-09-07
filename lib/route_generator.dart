@@ -12,6 +12,7 @@ import 'package:zahra/screen/search/cubit/search_cubit.dart';
 import 'package:zahra/screen/search/search_screen.dart';
 import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
 import 'package:zahra/screen/toc/toc_screen.dart';
+import 'package:zahra/screen/color_palette/color_palette_screen.dart';
 import 'model/book_model.dart';
 import 'model/reference_model.dart';
 import 'model/search_model.dart';
@@ -55,6 +56,10 @@ class RouteGenerator {
           );
         }
         return _errorRoute();
+      case '/colorPalette':
+        return MaterialPageRoute(
+          builder: (context) => const ColorPaletteScreen(),
+        );
       default:
         return _errorRoute();
     }

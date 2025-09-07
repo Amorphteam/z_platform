@@ -180,8 +180,10 @@ class _TocScreenState extends State<TocScreen> {
     } else {
       // For normal view, show hierarchical structure
       final rootItems = items.where((item) => item.parentId == 0).toList();
-      return ListView(
-        children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
+      return Scaffold(
+        body: ListView(
+          children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
+        ),
       );
     }
   }
