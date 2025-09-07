@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:zahra/route_generator.dart';
 import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:zahra/util/date_helper.dart';
@@ -57,52 +58,50 @@ class MyApp extends StatelessWidget {
   FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
-  Widget build(BuildContext context) {
-    final themeHelper = Provider.of<ThemeHelper>(context);
-
-    final ThemeData lightTheme = ThemeData(
-      useMaterial3: true,
-      navigationBarTheme: NavigationBarThemeData(
-        labelTextStyle: MaterialStateProperty.all(
-          const TextStyle(),
-        ),
-      ),
-      // colorScheme: lightColorScheme,
-      fontFamily: 'SFProDisplay',
-    );
-
-    final ThemeData darkTheme = ThemeData(
-      useMaterial3: true,
-      navigationBarTheme: NavigationBarThemeData(
-        labelTextStyle: MaterialStateProperty.all(
-          const TextStyle(),
-        ),
-      ),
-      // colorScheme: darkColorScheme,
-      fontFamily: 'SFProDisplay',
-    );
-
-    return BlocProvider(
+  Widget build(BuildContext context) => BlocProvider(
       create: (_) => BookmarkCubit(),
-      child: MaterialApp(
-        title: 'المعارف الفاطمية',
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: themeHelper.themeMode,
-        initialRoute: '/',
-        onGenerateRoute: RouteGenerator.generateRoute,
-        navigatorObservers: [
-          FirebaseAnalyticsObserver(analytics: analytics),
-        ],
-        builder: (context, child) {
-          // Detect current brightness (light or dark mode)
-          final brightness = MediaQuery.of(context).platformBrightness;
-          return child!;
-        },
+      child: DynamicColorBuilder(
+        builder: (lightDynamic, darkDynamic) => MaterialApp(
+            title: 'المعارف الفاطمية',
+            theme: ThemeData(
+              colorScheme: lightDynamic,
+              useMaterial3: true,
+              fontFamily: 'SFProDisplay',
+              brightness: Brightness.light,
+              scaffoldBackgroundColor: lightDynamic?.surfaceVariant,
+              cardTheme: CardTheme(
+                color: lightDynamic?.surface, // or surfaceVariant
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+
+            darkTheme: ThemeData(
+              colorScheme: darkDynamic,
+              brightness: Brightness.dark,
+              fontFamily: 'SFProDisplay',
+              useMaterial3: true,
+
+              scaffoldBackgroundColor: darkDynamic?.surfaceVariant,
+              cardTheme: CardTheme(
+                color: darkDynamic?.surface, // or surfaceVariant
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            debugShowCheckedModeBanner: false,
+            initialRoute: '/',
+            onGenerateRoute: RouteGenerator.generateRoute,
+            navigatorObservers: [
+              FirebaseAnalyticsObserver(analytics: analytics),
+            ],
+          ),
       ),
     );
-  }
 }
 
 void lockOrientation() {

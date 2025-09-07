@@ -39,6 +39,13 @@ class _HostScreenState extends State<HostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _getScreen(_currentIndex),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/colorPalette');
+        },
+        child: const Icon(Icons.palette),
+        tooltip: 'View Color Palette',
+      ),
       bottomNavigationBar: Directionality(
         textDirection: TextDirection.rtl,
         child: BottomNavigationBar(

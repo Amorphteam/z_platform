@@ -125,7 +125,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                             child: book.image != null
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.network(
+                                    child: Image.asset(
                                       book.image!,
                                       fit: BoxFit.cover,
                                       width: 140,
@@ -134,14 +134,12 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                   )
                                 : Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.grey,
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     alignment: Alignment.center,
                                     child: const Icon(
                                       Icons.book,
                                       size: 40,
-                                      color: Colors.white,
                                     ),
                                   ),
                           ),
