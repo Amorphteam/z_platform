@@ -9,6 +9,7 @@ import 'package:html/parser.dart' as html_parser;
 import 'package:zahra/model/style_model.dart';
 import 'package:zahra/util/style_helper.dart';
 import 'package:zahra/util/translation_helper.dart';
+import 'package:zahra/util/arabic_text_helper.dart';
 
 import '../../model/hekam.dart';
 import '../../widget/custom_appbar.dart';
@@ -194,10 +195,12 @@ iOS: https://apps.apple.com/app/6746411657''';
 
                     // Apply search filter if there's a search query
                     if (_searchQuery.isNotEmpty) {
-                      final cleanQuery = _removeDiacritics(_searchQuery.toLowerCase());
-                      items = items.where((item) => _removeDiacritics(_cleanHtmlText(item.asl)
-                          .toLowerCase())
-                          .contains(cleanQuery)).toList();
+                      // Use enhanced Arabic text normalization for better search
+                      items = items.where((item) => 
+                          ArabicTextHelper.containsNormalized(
+                            _cleanHtmlText(item.asl), 
+                            _searchQuery
+                          )).toList();
                     }
 
                     if (showFavorites && items.isEmpty) {

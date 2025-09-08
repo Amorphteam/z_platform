@@ -30,8 +30,7 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
@@ -90,7 +89,6 @@ class _BookSelectionSheetWidgetState extends State<BookSelectionSheetWidget> {
         ],
       ),
     );
-  }
 
   Widget _buildBookTile(Book book) {
     if (book.series == null || book.series!.isEmpty) {

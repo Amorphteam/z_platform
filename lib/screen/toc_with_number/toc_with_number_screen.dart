@@ -4,6 +4,7 @@ import 'package:zahra/model/item_model.dart';
 import 'package:zahra/screen/toc_with_number/cubit/toc_with_number_cubit.dart';
 import 'package:zahra/util/navigation_helper.dart';
 import 'package:zahra/widget/custom_appbar.dart';
+import 'package:zahra/util/arabic_text_helper.dart';
 
 import '../../model/toc_item.dart';
 import 'cubit/toc_with_number_state.dart';
@@ -49,15 +50,13 @@ class _TocWithNumberScreenState extends State<TocWithNumberScreen> {
   }
 
   bool _matchesSearch(TocItem item, String query) {
-    final lowerQuery = query.toLowerCase();
-    
-    // Check title
-    if (item.title.toLowerCase().contains(lowerQuery)) {
+    // Use enhanced Arabic text normalization for title search
+    if (ArabicTextHelper.containsNormalized(item.title, query)) {
       return true;
     }
     
-    // Check key
-    if (item.key != null && item.key!.toLowerCase().contains(lowerQuery)) {
+    // Check key with normalization
+    if (item.key != null && ArabicTextHelper.containsNormalized(item.key!, query)) {
       return true;
     }
     

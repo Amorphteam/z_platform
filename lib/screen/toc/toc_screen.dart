@@ -5,6 +5,7 @@ import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
 import 'package:zahra/util/navigation_helper.dart';
 import 'package:zahra/util/style_helper.dart';
 import 'package:zahra/model/style_model.dart';
+import 'package:zahra/util/arabic_text_helper.dart';
 
 import '../../model/toc_item.dart';
 import '../../widget/custom_appbar.dart';
@@ -52,9 +53,10 @@ class _TocScreenState extends State<TocScreen> {
       if (query.isEmpty) {
         _filteredItems = _allItems;
       } else {
+        // Use enhanced Arabic text normalization for filtering
         _filteredItems = _allItems
             .where((item) =>
-                item.title.toLowerCase().contains(query.toLowerCase()))
+                ArabicTextHelper.containsNormalized(item.title, query))
             .toList();
       }
     });
