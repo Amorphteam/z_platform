@@ -7,7 +7,6 @@ import 'package:html/parser.dart' show parse;
 import '../model/epubBookLocal.dart';
 import '../model/search_model.dart';
 import 'epub_helper.dart';
-import 'arabic_text_helper.dart';
 
 class SearchHelper {
 
@@ -24,11 +23,11 @@ class SearchHelper {
 
 
   Future<void> searchAllBooks(
-    List<EpubBookLocal> allBooks, 
-    String word, 
-    Function(List<SearchModel>) onPartialResults,
-    [int? maxResultsPerBook]
-  ) async {
+      List<EpubBookLocal> allBooks,
+      String word,
+      Function(List<SearchModel>) onPartialResults,
+      [int? maxResultsPerBook]
+      ) async {
     final receivePort = ReceivePort();
     await Isolate.spawn(_searchAllBooks, SearchTask(allBooks, word, receivePort.sendPort, maxResultsPerBook));
 
@@ -44,8 +43,30 @@ class SearchHelper {
   }
 
   String removeArabicDiacritics(String text) {
-    // Use the enhanced Arabic text normalization
-    return ArabicTextHelper.normalizeArabicText(text);
+    // Remove Arabic diacritics and normalize hamza and teh marbuta
+    // Convert hamza forms to their base characters:
+    // - ؤ (waw with hamza) -> و (waw)
+    // - ئ (yeh with hamza) -> ي (yeh) 
+    // - آ أ إ (alef variants) -> ا (alef)
+    // - ء (standalone hamza) -> ا (alef)
+    // - ة (teh marbuta) -> ه (heh)
+    
+    // First, normalize hamza characters to their base forms
+    String normalizedText = text
+        .replaceAll('ء', 'ا')  // hamza -> alef
+        .replaceAll('ؤ', 'و')  // waw with hamza -> waw  
+        .replaceAll('ئ', 'ي')  // yeh with hamza -> yeh
+        .replaceAll('آ', 'ا')  // alef with madda -> alef
+        .replaceAll('أ', 'ا')  // alef with hamza above -> alef
+        .replaceAll('إ', 'ا')  // alef with hamza below -> alef
+        .replaceAll('ة', 'ه'); // teh marbuta -> heh
+    
+    // Then remove diacritics
+    final RegExp diacriticsRegex = RegExp(
+      r'[\u064B-\u065F\u0610-\u061A\u06D6-\u06DC\u06DF-\u06E8\u06EA-\u06ED]',
+      unicode: true,
+    );
+    return normalizedText.replaceAll(diacriticsRegex, '');
   }
 
   Future<void> _searchAllBooks(SearchTask task) async {
@@ -76,11 +97,11 @@ class SearchHelper {
       final spineHtmlContent = epubNewContent.map((info) => info.modifiedHtmlContent).toList();
 
       final result = await searchHtmlContents(
-        spineHtmlContent, 
-        task.word, 
-        bookName, 
-        bookAddress,
-        task.maxResultsPerBook
+          spineHtmlContent,
+          task.word,
+          bookName,
+          bookAddress,
+          task.maxResultsPerBook
       );
 
       allResults.addAll(result);
@@ -134,14 +155,14 @@ class SearchHelper {
   }
 
   Future<List<SearchModel>> searchHtmlContents(
-    List<String> htmlContents, 
-    String searchWord, 
-    String? bookName, 
-    String? bookAddress,
-    [int? maxResultsPerBook]
-  ) async {
+      List<String> htmlContents,
+      String searchWord,
+      String? bookName,
+      String? bookAddress,
+      [int? maxResultsPerBook]
+      ) async {
     final List<SearchModel> results = [];
-    final normalizedSearchWord = ArabicTextHelper.normalizeArabicText(searchWord);
+    final normalizedSearchWord = removeArabicDiacritics(searchWord);
     int bookResultCount = 0;
 
     for (int i = 0; i < htmlContents.length && (maxResultsPerBook == null || bookResultCount < maxResultsPerBook); i++) {
@@ -181,9 +202,8 @@ class SearchHelper {
   }
 
   SearchIndex _searchInString(String pageString, String sw, int start) {
-    // Use enhanced Arabic text normalization for both text and search query
-    final normalizedPage = ArabicTextHelper.normalizeArabicText(pageString);
-    final normalizedSearchWord = ArabicTextHelper.normalizeArabicText(sw);
+    final normalizedPage = removeArabicDiacritics(pageString); // Remove diacritics from text
+    final normalizedSearchWord = removeArabicDiacritics(sw); // Remove diacritics from search query
 
     final startIndex = normalizedPage.indexOf(normalizedSearchWord, start);
     return startIndex >= 0 ? SearchIndex(startIndex, startIndex + normalizedSearchWord.length) : SearchIndex(-1, -1);
@@ -195,17 +215,17 @@ class SearchHelper {
 
   String _removeHtmlTags(String htmlString) {
     final text = parse(htmlString).documentElement!.text;
-    return ArabicTextHelper.normalizeArabicText(text); // Enhanced Arabic text normalization
+    return removeArabicDiacritics(text); // Normalize Arabic text
   }
 
   Future<List<SearchModel>> searchSingleBook(
-    String bookPath, 
-    String searchWord, 
-    EpubBook? epubBook,
-    [int? maxResultsPerBook]
-  ) async {
+      String bookPath,
+      String searchWord,
+      EpubBook? epubBook,
+      [int? maxResultsPerBook]
+      ) async {
     final List<SearchModel> results = [];
-    final normalizedSearchWord = ArabicTextHelper.normalizeArabicText(searchWord);
+    final normalizedSearchWord = removeArabicDiacritics(searchWord);
     int bookResultCount = 0;
 
     try {
