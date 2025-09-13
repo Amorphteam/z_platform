@@ -300,9 +300,25 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     int normalizedIndex = 0;
 
     while (originalIndex < originalContent.length && normalizedIndex < normalizedContent.length) {
-      if (originalContent[originalIndex] == normalizedContent[normalizedIndex]) {
+      final originalChar = originalContent[originalIndex];
+      final normalizedChar = normalizedContent[normalizedIndex];
+
+      if (originalChar == normalizedChar) {
+        // Characters match exactly - advance both indices
         indexMapping[normalizedIndex] = originalIndex;
         normalizedIndex++;
+        originalIndex++;
+      } else if (_isArabicDiacritic(originalChar)) {
+        // Original character is a diacritic (removed in normalization) - skip it
+        originalIndex++;
+      } else if (_isHamzaNormalization(originalChar, normalizedChar)) {
+        // Original character is a hamza form that got normalized to alef - map and advance both
+        indexMapping[normalizedIndex] = originalIndex;
+        normalizedIndex++;
+        originalIndex++;
+      } else {
+        // Characters don't match and it's not a known normalization - advance original only
+        originalIndex++;
       }
       originalIndex++;
     }
@@ -476,6 +492,44 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     // Return the next available counter value
     return maxCounter + 1;
   }
+  /// Helper method to check if a character is an Arabic diacritic
+  bool _isArabicDiacritic(String char) {
+    final int codeUnit = char.codeUnitAt(0);
+    return (codeUnit >= 0x064B && codeUnit <= 0x065F) || // Main diacritics range
+        (codeUnit >= 0x0610 && codeUnit <= 0x061A) || // Extended diacritics
+        (codeUnit >= 0x06D6 && codeUnit <= 0x06DC) || // Additional diacritics
+        (codeUnit >= 0x06DF && codeUnit <= 0x06E8) || // More diacritics
+        (codeUnit >= 0x06EA && codeUnit <= 0x06ED);   // Final diacritics range
+  }
+
+  /// Helper method to check if original character is a hamza form that got normalized to the normalized character
+  bool _isHamzaNormalization(String originalChar, String normalizedChar) {
+    // Check if normalized char is alef (ا) and original is an alef-based hamza form
+    if (normalizedChar == 'ا') {
+      return originalChar == 'ء' ||  // hamza -> alef
+          originalChar == 'آ' ||  // alef with madda -> alef
+          originalChar == 'أ' ||  // alef with hamza above -> alef
+          originalChar == 'إ';    // alef with hamza below -> alef
+    }
+
+    // Check if normalized char is waw (و) and original is waw with hamza (ؤ)
+    if (normalizedChar == 'و' && originalChar == 'ؤ') {
+      return true;  // waw with hamza -> waw
+    }
+
+    // Check if normalized char is yeh (ي) and original is yeh with hamza (ئ)
+    if (normalizedChar == 'ي' && originalChar == 'ئ') {
+      return true;  // yeh with hamza -> yeh
+    }
+
+    // Check if normalized char is heh (ه) and original is teh marbuta (ة)
+    if (normalizedChar == 'ه' && originalChar == 'ة') {
+      return true;  // teh marbuta -> heh
+    }
+
+    return false;
+  }
+
 
 
 }
