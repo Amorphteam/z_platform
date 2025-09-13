@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:zahra/model/toc_item.dart';
 
 import '../../../repository/json_repository.dart';
+import '../../../util/arabic_text_helper.dart';
 
 part 'toc_state.dart';
 part 'toc_cubit.freezed.dart';
@@ -47,8 +48,7 @@ class TocCubit extends Cubit<TocState> {
     
     for (final item in items) {
       // Check if current item matches (normalize both texts for comparison)
-      final normalizedTitle = normalizeArabicText(item.title.toLowerCase());
-      if (normalizedTitle.contains(query)) {
+      if (ArabicTextHelper.containsNormalized(item.title, query)) {
         // Add the item without its children to create a flat structure
         matchingItems.add(TocItem(
           id: item.id,
