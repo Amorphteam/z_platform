@@ -248,17 +248,17 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
     // Create a new list to store updated content
     final List<String> updatedContent = [];
-    
+
     // Map to track page highlights: key = page index, value = list of highlight IDs
     final Map<int, List<String>> pageHighlights = {};
-    
+
     // Global counter for unique IDs across all pages
     int globalCounter = 0;
 
     // Apply highlighting to each page content
     for (int pageIdx = 0; pageIdx < _spineHtmlContent!.length; pageIdx++) {
       final content = _spineHtmlContent![pageIdx];
-      
+
       // Convert Latin numbers to Arabic in the content before highlighting
       final convertedContent = convertLatinNumbersToArabic(content);
 
@@ -269,22 +269,22 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       final highlightedContent = _applyHighlightingUsingMapping(convertedContent, normalizedContent, normalizedSearchTerm, globalCounter);
 
       updatedContent.add(highlightedContent);
-      
+
       // Extract highlight IDs for this page
       final List<String> pageHighlightIds = _extractHighlightIdsFromContent(highlightedContent);
       if (pageHighlightIds.isNotEmpty) {
         pageHighlights[pageIdx] = pageHighlightIds;
       }
-      
+
       // Update global counter by counting the actual matches found in this page
       globalCounter += _countMatchesInContent(normalizedContent, normalizedSearchTerm);
     }
 
     // Emit the new state with updated content and page highlights map
     emit(EpubViewerState.contentHighlighted(
-      content: updatedContent, 
-      highlightedIndex: pageIndex - 1,
-      pageHighlights: pageHighlights
+        content: updatedContent,
+        highlightedIndex: pageIndex - 1,
+        pageHighlights: pageHighlights
     ));
   }
 
@@ -295,6 +295,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     if (matches.isEmpty) return originalContent;
 
     // Create a mapping between originalContent and normalizedContent indices
+    // This enhanced mapping handles both character removals (diacritics) and replacements (hamza normalization)
     Map<int, int> indexMapping = {};
     int originalIndex = 0;
     int normalizedIndex = 0;
@@ -320,7 +321,6 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
         // Characters don't match and it's not a known normalization - advance original only
         originalIndex++;
       }
-      originalIndex++;
     }
 
     String highlightedContent = originalContent;
@@ -342,36 +342,36 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
       // Find the parent block tag that contains this match
       final parentBlockTagInfo = _findParentBlockTag(highlightedContent, matchStart);
-      
+
       if (parentBlockTagInfo != null) {
         // Add id attribute to the existing block tag
         final String blockTagWithId = _addIdToBlockTag(parentBlockTagInfo.blockTag, counter);
-        
+
         // Replace the block tag with the one that has id
         highlightedContent = highlightedContent.replaceRange(
-          parentBlockTagInfo.startIndex, 
-          parentBlockTagInfo.endIndex, 
-          blockTagWithId
+            parentBlockTagInfo.startIndex,
+            parentBlockTagInfo.endIndex,
+            blockTagWithId
         );
-        
+
         // Adjust offset for the block tag change
         final int blockTagLengthDiff = blockTagWithId.length - (parentBlockTagInfo.endIndex - parentBlockTagInfo.startIndex);
         offset += blockTagLengthDiff;
-        
+
         // Now wrap the matched text with <mark> tags
         final String markedText = '<mark>$originalMatch</mark>';
-        
+
         // Calculate new positions after block tag modification
         final int newMatchStart = matchStart + blockTagLengthDiff;
         final int newMatchEnd = newMatchStart + originalMatch.length;
-        
+
         // Replace the matched text with marked version
         highlightedContent = highlightedContent.replaceRange(newMatchStart, newMatchEnd, markedText);
-        
+
         // Adjust offset for the mark tags
         final int markLengthDiff = markedText.length - originalMatch.length;
         offset += markLengthDiff;
-        
+
         counter++; // Increment counter for next unique ID
       } else {
         // Fallback: if no parent p tag found, use the original approach
