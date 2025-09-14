@@ -203,8 +203,7 @@ class _TocScreenState extends State<TocScreen> {
           elevation: 0,
           child: ExpansionTile(
             title: _buildCardTitle(item, context),
-            iconColor: const Color(0xFFCFA355),
-            collapsedIconColor: const Color(0xFFCFA355),
+
             children: item.childs!
                 .where((child) => child.parentId == item.id) // Ensure only direct children are added
                 .map((child) => _buildTocItem(child, context, isNestedParent: true))
@@ -247,7 +246,6 @@ class _TocScreenState extends State<TocScreen> {
                           right: 16, left: 16, top: 8,),
                       width: 10,
                       height: 10,
-                      color: const Color(0xFFCFA355),
                     ),
                   ],
                 ),

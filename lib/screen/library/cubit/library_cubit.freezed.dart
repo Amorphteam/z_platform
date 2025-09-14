@@ -20,7 +20,7 @@ mixin _$LibraryState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Book> books) loaded,
+    required TResult Function(List<Book> books, String hijriDate) loaded,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$LibraryState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<Book> books)? loaded,
+    TResult? Function(List<Book> books, String hijriDate)? loaded,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$LibraryState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Book> books)? loaded,
+    TResult Function(List<Book> books, String hijriDate)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -126,7 +126,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Book> books) loaded,
+    required TResult Function(List<Book> books, String hijriDate) loaded,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -137,7 +137,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<Book> books)? loaded,
+    TResult? Function(List<Book> books, String hijriDate)? loaded,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -148,7 +148,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Book> books)? loaded,
+    TResult Function(List<Book> books, String hijriDate)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -240,7 +240,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Book> books) loaded,
+    required TResult Function(List<Book> books, String hijriDate) loaded,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -251,7 +251,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<Book> books)? loaded,
+    TResult? Function(List<Book> books, String hijriDate)? loaded,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -262,7 +262,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Book> books)? loaded,
+    TResult Function(List<Book> books, String hijriDate)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -320,7 +320,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<Book> books});
+  $Res call({List<Book> books, String hijriDate});
 }
 
 /// @nodoc
@@ -335,12 +335,17 @@ class __$$LoadedImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? books = null,
+    Object? hijriDate = null,
   }) {
     return _then(_$LoadedImpl(
       null == books
           ? _value._books
           : books // ignore: cast_nullable_to_non_nullable
               as List<Book>,
+      null == hijriDate
+          ? _value.hijriDate
+          : hijriDate // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -348,7 +353,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl(final List<Book> books) : _books = books;
+  const _$LoadedImpl(final List<Book> books, this.hijriDate) : _books = books;
 
   final List<Book> _books;
   @override
@@ -359,8 +364,11 @@ class _$LoadedImpl implements _Loaded {
   }
 
   @override
+  final String hijriDate;
+
+  @override
   String toString() {
-    return 'LibraryState.loaded(books: $books)';
+    return 'LibraryState.loaded(books: $books, hijriDate: $hijriDate)';
   }
 
   @override
@@ -368,12 +376,14 @@ class _$LoadedImpl implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
-            const DeepCollectionEquality().equals(other._books, _books));
+            const DeepCollectionEquality().equals(other._books, _books) &&
+            (identical(other.hijriDate, hijriDate) ||
+                other.hijriDate == hijriDate));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_books));
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_books), hijriDate);
 
   @JsonKey(ignore: true)
   @override
@@ -386,10 +396,10 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Book> books) loaded,
+    required TResult Function(List<Book> books, String hijriDate) loaded,
     required TResult Function(String message) error,
   }) {
-    return loaded(books);
+    return loaded(books, hijriDate);
   }
 
   @override
@@ -397,10 +407,10 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<Book> books)? loaded,
+    TResult? Function(List<Book> books, String hijriDate)? loaded,
     TResult? Function(String message)? error,
   }) {
-    return loaded?.call(books);
+    return loaded?.call(books, hijriDate);
   }
 
   @override
@@ -408,12 +418,12 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Book> books)? loaded,
+    TResult Function(List<Book> books, String hijriDate)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(books);
+      return loaded(books, hijriDate);
     }
     return orElse();
   }
@@ -457,9 +467,11 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements LibraryState {
-  const factory _Loaded(final List<Book> books) = _$LoadedImpl;
+  const factory _Loaded(final List<Book> books, final String hijriDate) =
+      _$LoadedImpl;
 
   List<Book> get books;
+  String get hijriDate;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -531,7 +543,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Book> books) loaded,
+    required TResult Function(List<Book> books, String hijriDate) loaded,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -542,7 +554,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<Book> books)? loaded,
+    TResult? Function(List<Book> books, String hijriDate)? loaded,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -553,7 +565,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Book> books)? loaded,
+    TResult Function(List<Book> books, String hijriDate)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {

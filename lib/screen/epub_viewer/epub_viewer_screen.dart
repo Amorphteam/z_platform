@@ -242,10 +242,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                   content: const Text('لا توجد ترجمات مفعلة. يرجى تفعيل ترجمة واحدة على الأقل من الإعدادات.'),
                   duration: const Duration(seconds: 6),
                   behavior: SnackBarBehavior.floating,
-                  backgroundColor: Theme.of(context).colorScheme.onSurface,
                   action: SnackBarAction(
                     label: 'الإعدادات',
-                    textColor: Theme.of(context).colorScheme.primary,
                     onPressed: () {
                       Navigator.pushNamed(context, '/settingScreen');
                     },
@@ -262,11 +260,10 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           children: [
             if (isSliderVisible)
               AppBar(
-                backgroundColor: Theme.of(context).colorScheme.primary,
                 leading: IconButton(
                   icon: isSearchOpen
-                      ? Icon(Icons.close, color: Theme.of(context).colorScheme.onSurfaceVariant)
-                      : Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      ? Icon(Icons.close)
+                      : Icon(Icons.arrow_back),
                   onPressed: () {
                     if (isSearchOpen) {
                       _toggleSearch(false);
@@ -284,7 +281,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     hintText: 'أدخل كلمة لبدء البحث ...',
                     border: InputBorder.none,
                     suffixIcon: IconButton(
-                      icon: SvgPicture.asset('assets/icon/search.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      icon: SvgPicture.asset('assets/icon/search.svg'),
                       onPressed: () {
                         if (textEditingController.text.isNotEmpty) {
                           final String searchQuery = textEditingController.text;
@@ -300,24 +297,19 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     ? null // No actions when search is open or when it's About Us page
                     : [
                   IconButton(
-                    icon: SvgPicture.asset('assets/icon/search.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    icon: Icon(Icons.search_rounded),
                     onPressed: () => _toggleSearch(true),
                   ),
                   IconButton(
-                    icon: SvgPicture.asset('assets/icon/font.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    icon: Icon(Icons.format_color_text_rounded),
                     onPressed: () {
                       _showBottomSheet(
                         context, context.read<EpubViewerCubit>(),
                       );
                     },
                   ),
-                  IconButton(
-                    icon: SvgPicture.asset(
-                      isBookmarked
-                          ? 'assets/icon/bookmarked.svg'
-                          : 'assets/icon/bookmark.svg',
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                  IconButton(icon:
+                    isBookmarked ? Icon(Icons.bookmark): Icon(Icons.bookmark_border),
                     onPressed: () {
                       _toggleBookmark();
                       if (isBookmarked) {
@@ -328,7 +320,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     },
                   ),
                   IconButton(
-                    icon: SvgPicture.asset('assets/icon/list.svg', color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    icon: Icon(Icons.toc_rounded),
                     onPressed: () {
                       _openInternalToc(context);
                     },
@@ -467,7 +459,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -571,7 +562,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                 final double screenHeight = MediaQuery.of(context).size.height;
 
                 return Container(
-                  color: isDarkMode ? Theme.of(context).colorScheme.primaryContainer: Theme.of(context).colorScheme.primary,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 20.0),
                     child: GestureDetector(

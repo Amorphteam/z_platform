@@ -28,7 +28,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     appBar:  CustomAppBar(
       backgroundImage: 'assets/image/back_tazhib_light.jpg',
       showSearchBar: false,
-      title: "الحديث الشريف",
+      title: "منصة مساحة",
       leftIcon: Icons.delete, // Example: Search icon
       onLeftTap: _clearAll,
     ),
