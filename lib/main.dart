@@ -23,14 +23,6 @@ void main() async {
     await Firebase.initializeApp();
     await initializeDateFormatting('ar'); // Initialize Arabic locale
 
-    // Run date operations in background
-    // await Future.microtask(() async {
-    //   await TimeZoneHelper.initialize(); // Initialize TimeZoneHelper
-    //   final hijriDates = await DateHelper().getHijriDates();
-    //   final todayHijri = await DateHelper().getTodayCalendarHijri(qamariDate: hijriDates);
-    //   final AMPM = await DateHelper.handleAMPM();
-    //   print('Now in hijri: $todayHijri / ${AMPM?.ampm}');
-    // });
 
   } catch (e) {
     print('Error during initialization: $e');
@@ -62,7 +54,7 @@ class MyApp extends StatelessWidget {
       create: (_) => BookmarkCubit(),
       child: DynamicColorBuilder(
         builder: (lightDynamic, darkDynamic) => MaterialApp(
-            title: 'المعارف الفاطمية',
+            title: 'منصة مساحة',
             theme: ThemeData(
               colorScheme: lightDynamic,
               useMaterial3: true,

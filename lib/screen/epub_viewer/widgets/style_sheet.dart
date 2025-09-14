@@ -221,14 +221,12 @@ class _StyleSheetState extends State<StyleSheet> {
               children: [
                 Expanded(
                   child: Slider(
-                    thumbColor: Theme.of(context).colorScheme.onSurface,
-                    activeColor: Theme.of(context).colorScheme.onSurface,
                     divisions: FontSizeCustom.values.length - 1,
                     value: _fontSizeSliderValue,
                     onChanged: _handleFontSizeSliderChange,
                   ),
                 ),
-                const Icon(Icons.text_increase, size: 18, color: Colors.grey,),
+                const Icon(Icons.text_increase),
               ],
             ),
             Row(
@@ -236,14 +234,12 @@ class _StyleSheetState extends State<StyleSheet> {
               children: [
                 Expanded(
                   child: Slider(
-                    thumbColor: Theme.of(context).colorScheme.onSurface,
-                    activeColor: Theme.of(context).colorScheme.onSurface,
                     divisions: LineHeightCustom.values.length - 1,
                     value: _lineHeightSliderValue,
                     onChanged: _handleLineHeightSliderChange,
                   ),
                 ),
-                const Icon(Icons.format_line_spacing, size: 18, color: Colors.grey,),
+                const Icon(Icons.format_line_spacing),
               ],
             ),
             // IconButton(
