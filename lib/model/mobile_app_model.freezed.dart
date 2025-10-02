@@ -24,12 +24,8 @@ mixin _$MobileAppsResponse {
   int get statusCode => throw _privateConstructorUsedError;
   List<MobileApp> get data => throw _privateConstructorUsedError;
 
-  /// Serializes this MobileAppsResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of MobileAppsResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $MobileAppsResponseCopyWith<MobileAppsResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -53,8 +49,6 @@ class _$MobileAppsResponseCopyWithImpl<$Res, $Val extends MobileAppsResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of MobileAppsResponse
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -98,8 +92,6 @@ class __$$MobileAppsResponseImplCopyWithImpl<$Res>
       $Res Function(_$MobileAppsResponseImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of MobileAppsResponse
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -164,14 +156,12 @@ class _$MobileAppsResponseImpl implements _MobileAppsResponse {
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, success, statusCode,
       const DeepCollectionEquality().hash(_data));
 
-  /// Create a copy of MobileAppsResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$MobileAppsResponseImplCopyWith<_$MobileAppsResponseImpl> get copyWith =>
@@ -201,11 +191,8 @@ abstract class _MobileAppsResponse implements MobileAppsResponse {
   int get statusCode;
   @override
   List<MobileApp> get data;
-
-  /// Create a copy of MobileAppsResponse
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$MobileAppsResponseImplCopyWith<_$MobileAppsResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -225,12 +212,8 @@ mixin _$MobileApp {
   String get androidLink => throw _privateConstructorUsedError;
   int get showAds => throw _privateConstructorUsedError;
 
-  /// Serializes this MobileApp to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of MobileApp
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $MobileAppCopyWith<MobileApp> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -261,8 +244,6 @@ class _$MobileAppCopyWithImpl<$Res, $Val extends MobileApp>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of MobileApp
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -339,8 +320,6 @@ class __$$MobileAppImplCopyWithImpl<$Res>
       _$MobileAppImpl _value, $Res Function(_$MobileAppImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of MobileApp
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -446,14 +425,12 @@ class _$MobileAppImpl implements _MobileApp {
             (identical(other.showAds, showAds) || other.showAds == showAds));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, appName, shortDescription,
       fullDescription, picPath, iosID, androidLink, showAds);
 
-  /// Create a copy of MobileApp
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$MobileAppImplCopyWith<_$MobileAppImpl> get copyWith =>
@@ -497,11 +474,8 @@ abstract class _MobileApp implements MobileApp {
   String get androidLink;
   @override
   int get showAds;
-
-  /// Create a copy of MobileApp
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$MobileAppImplCopyWith<_$MobileAppImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
