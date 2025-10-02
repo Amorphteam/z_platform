@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masaha/screen/mobile_apps/mobile_apps_widget.dart';
 import '../../model/book_model.dart';
 import '../../util/epub_helper.dart';
 import 'cubit/library_cubit.dart';
@@ -155,6 +156,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     },
                   ),
                 ),
+                Container(
+
+                  child: MobileAppsWidget(),
+                )
               ],
             ),
           ),
