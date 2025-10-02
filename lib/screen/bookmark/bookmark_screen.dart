@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zahra/screen/bookmark/widgets/history_list_widget.dart';
+import 'package:masaha/screen/bookmark/widgets/history_list_widget.dart';
 import '../../widget/custom_appbar.dart';
 import 'cubit/bookmark_cubit.dart';
 import 'cubit/bookmark_state.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zahra/model/history_model.dart';
+import 'package:masaha/model/history_model.dart';
 import '../../../util/epub_helper.dart';
 import '../cubit/bookmark_cubit.dart';
 

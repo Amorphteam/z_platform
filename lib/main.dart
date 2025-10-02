@@ -7,11 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:zahra/route_generator.dart';
-import 'package:zahra/screen/bookmark/cubit/bookmark_cubit.dart';
-import 'package:zahra/util/date_helper.dart';
-import 'package:zahra/util/theme_helper.dart';
-import 'package:zahra/util/time_zone_helper.dart';
+import 'package:masaha/route_generator.dart';
+import 'package:masaha/screen/bookmark/cubit/bookmark_cubit.dart';
+import 'package:masaha/util/date_helper.dart';
+import 'package:masaha/util/theme_helper.dart';
+import 'package:masaha/util/time_zone_helper.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'api/api_client.dart';

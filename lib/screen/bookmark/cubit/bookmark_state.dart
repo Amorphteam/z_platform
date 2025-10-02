@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:zahra/model/history_model.dart';
-import 'package:zahra/repository/hostory_database.dart';
+import 'package:masaha/model/history_model.dart';
+import 'package:masaha/repository/hostory_database.dart';
 import '../../../model/reference_model.dart';
 
 part 'bookmark_state.freezed.dart';
