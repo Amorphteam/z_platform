@@ -8,7 +8,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import 'package:zahra/screen/epub_viewer/widgets/toc_tree_list_widget.dart';
+import 'package:masaha/screen/epub_viewer/widgets/toc_tree_list_widget.dart';
 import '../../model/book_model.dart';
 import '../../model/history_model.dart';
 import '../../model/reference_model.dart';

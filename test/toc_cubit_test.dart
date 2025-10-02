@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zahra/screen/toc/cubit/toc_cubit.dart';
+import 'package:masaha/screen/toc/cubit/toc_cubit.dart';
 
 void main() {
   group('TocCubit Arabic Normalization', () {

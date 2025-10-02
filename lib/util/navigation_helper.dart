@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zahra/model/item_model.dart';
-import 'package:zahra/util/epub_helper.dart';
+import 'package:masaha/model/item_model.dart';
+import 'package:masaha/util/epub_helper.dart';
 import '../model/reference_model.dart';
 
 class NavigationHelper {
