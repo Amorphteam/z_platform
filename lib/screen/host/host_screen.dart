@@ -41,9 +41,9 @@ class _HostScreenState extends State<HostScreen> {
       body: _getScreen(_currentIndex),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/colorPalette');
+          Navigator.pushNamed(context, '/chat');
         },
-        child: const Icon(Icons.palette),
+        child: const Icon(Icons.chat_rounded),
         tooltip: 'View Color Palette',
       ),
       bottomNavigationBar: Directionality(

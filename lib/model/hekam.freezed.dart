@@ -30,12 +30,8 @@ mixin _$Hekam {
   @JsonKey(fromJson: _isFavoriteFromJson, toJson: _isFavoriteToJson)
   bool get isFavorite => throw _privateConstructorUsedError;
 
-  /// Serializes this Hekam to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of Hekam
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $HekamCopyWith<Hekam> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -66,8 +62,6 @@ class _$HekamCopyWithImpl<$Res, $Val extends Hekam>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of Hekam
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -144,8 +138,6 @@ class __$$HekamImplCopyWithImpl<$Res>
       _$HekamImpl _value, $Res Function(_$HekamImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of Hekam
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -252,14 +244,12 @@ class _$HekamImpl implements _Hekam {
                 other.isFavorite == isFavorite));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, asl, english1, farsi1,
       farsi2, farsi3, farsi4, isFavorite);
 
-  /// Create a copy of Hekam
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$HekamImplCopyWith<_$HekamImpl> get copyWith =>
@@ -304,11 +294,8 @@ abstract class _Hekam implements Hekam {
   @override
   @JsonKey(fromJson: _isFavoriteFromJson, toJson: _isFavoriteToJson)
   bool get isFavorite;
-
-  /// Create a copy of Hekam
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$HekamImplCopyWith<_$HekamImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

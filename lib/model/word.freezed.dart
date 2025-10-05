@@ -25,12 +25,8 @@ mixin _$Word {
   String? get saleh => throw _privateConstructorUsedError;
   String? get abdah => throw _privateConstructorUsedError;
 
-  /// Serializes this Word to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of Word
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $WordCopyWith<Word> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -52,8 +48,6 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of Word
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -100,8 +94,6 @@ class __$$WordImplCopyWithImpl<$Res>
   __$$WordImplCopyWithImpl(_$WordImpl _value, $Res Function(_$WordImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of Word
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -164,13 +156,11 @@ class _$WordImpl implements _Word {
             (identical(other.abdah, abdah) || other.abdah == abdah));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, word, saleh, abdah);
 
-  /// Create a copy of Word
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$WordImplCopyWith<_$WordImpl> get copyWith =>
@@ -201,11 +191,8 @@ abstract class _Word implements Word {
   String? get saleh;
   @override
   String? get abdah;
-
-  /// Create a copy of Word
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$WordImplCopyWith<_$WordImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

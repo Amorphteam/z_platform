@@ -194,6 +194,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "fetch_api",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/fetch_api-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "fetch_client",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/fetch_client-1.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "ffi",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/ffi-2.1.2",
       "packageUri": "lib/",
@@ -345,9 +357,9 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/http-0.13.6",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/http-1.5.0",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.4"
     },
     {
       "name": "http_multi_server",
@@ -462,6 +474,12 @@
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/nested-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "openai_dart",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/openai_dart-0.3.3+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "package_config",
@@ -662,6 +680,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "sprintf",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/sprintf-7.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sqflite",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/sqflite-2.3.3+1",
       "packageUri": "lib/",
@@ -782,6 +806,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "uuid",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/uuid-4.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
@@ -842,7 +872,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-10-02T06:18:40.522267Z",
+  "generated": "2025-10-07T07:12:23.691659Z",
   "generator": "pub",
   "generatorVersion": "3.5.0",
   "flutterRoot": "file:///Users/alibayati/fvm/versions/3.24.0",
