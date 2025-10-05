@@ -24,12 +24,8 @@ mixin _$Occasion {
   int get month => throw _privateConstructorUsedError;
   String get occasion => throw _privateConstructorUsedError;
 
-  /// Serializes this Occasion to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of Occasion
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $OccasionCopyWith<Occasion> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,8 +48,6 @@ class _$OccasionCopyWithImpl<$Res, $Val extends Occasion>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of Occasion
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -97,8 +91,6 @@ class __$$OccasionImplCopyWithImpl<$Res>
       _$OccasionImpl _value, $Res Function(_$OccasionImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of Occasion
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -155,13 +147,11 @@ class _$OccasionImpl implements _Occasion {
                 other.occasion == occasion));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, day, month, occasion);
 
-  /// Create a copy of Occasion
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$OccasionImplCopyWith<_$OccasionImpl> get copyWith =>
@@ -190,11 +180,8 @@ abstract class _Occasion implements Occasion {
   int get month;
   @override
   String get occasion;
-
-  /// Create a copy of Occasion
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$OccasionImplCopyWith<_$OccasionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

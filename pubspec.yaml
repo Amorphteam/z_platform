@@ -58,6 +58,7 @@ dependencies:
   firebase_analytics: ^10.10.7
   firebase_crashlytics: ^3.5.7
   dynamic_color: 1.6.9 # Use stable version compatible with Flutter 3.24
+  uuid: ^4.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

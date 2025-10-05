@@ -33,12 +33,8 @@ mixin _$Translate {
   @JsonKey(name: 'en1')
   int? get en1 => throw _privateConstructorUsedError;
 
-  /// Serializes this Translate to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of Translate
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $TranslateCopyWith<Translate> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -67,8 +63,6 @@ class _$TranslateCopyWithImpl<$Res, $Val extends Translate>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of Translate
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -133,8 +127,6 @@ class __$$TranslateImplCopyWithImpl<$Res>
       _$TranslateImpl _value, $Res Function(_$TranslateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of Translate
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -228,14 +220,12 @@ class _$TranslateImpl implements _Translate {
             (identical(other.en1, en1) || other.en1 == en1));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, main, faJafari, faAnsarian, faFaidh, faShahidi, en1);
 
-  /// Create a copy of Translate
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$TranslateImplCopyWith<_$TranslateImpl> get copyWith =>
@@ -279,11 +269,8 @@ abstract class _Translate implements Translate {
   @override
   @JsonKey(name: 'en1')
   int? get en1;
-
-  /// Create a copy of Translate
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$TranslateImplCopyWith<_$TranslateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

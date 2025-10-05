@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masaha/screen/bookmark/bookmark_screen.dart';
 import 'package:masaha/screen/bookmark/cubit/bookmark_cubit.dart';
+import 'package:masaha/screen/chat/chat_screen.dart';
+import 'package:masaha/screen/chat/cubit/chat_cubit.dart';
 import 'package:masaha/screen/epub_viewer/cubit/epub_viewer_cubit.dart';
 import 'package:masaha/screen/epub_viewer/epub_viewer_screen.dart';
 import 'package:masaha/screen/host/cubit/host_cubit.dart';
@@ -59,6 +61,13 @@ class RouteGenerator {
       case '/colorPalette':
         return MaterialPageRoute(
           builder: (context) => const ColorPaletteScreen(),
+        );
+      case '/chat':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => ChatCubit(),
+            child: const ChatScreen(),
+          ),
         );
       default:
         return _errorRoute();
