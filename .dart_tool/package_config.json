@@ -123,9 +123,9 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/collection-1.19.0",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/collection-1.18.0",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "2.18"
     },
     {
       "name": "convert",
@@ -273,7 +273,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.27.0/packages/flutter",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.0/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -309,7 +309,7 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.27.0/packages/flutter_test",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.0/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -321,7 +321,7 @@
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.27.0/packages/flutter_web_plugins",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.0/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -417,13 +417,13 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/leak_tracker-10.0.7",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/leak_tracker-10.0.5",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.8",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.5",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -663,7 +663,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.27.0/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.24.0/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -705,9 +705,9 @@
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/stack_trace-1.12.0",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/stack_trace-1.11.1",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "2.18"
     },
     {
       "name": "stream_channel",
@@ -723,9 +723,9 @@
     },
     {
       "name": "string_scanner",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/string_scanner-1.3.0",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/string_scanner-1.2.0",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "2.18"
     },
     {
       "name": "synchronized",
@@ -741,9 +741,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/test_api-0.7.3",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/test_api-0.7.2",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.2"
     },
     {
       "name": "timezone",
@@ -825,7 +825,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/vm_service-14.3.0",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/vm_service-14.2.4",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -878,10 +878,10 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-10-23T03:27:48.193524Z",
+  "generated": "2025-10-23T03:33:32.217809Z",
   "generator": "pub",
-  "generatorVersion": "3.6.0",
-  "flutterRoot": "file:///Users/alibayati/fvm/versions/3.27.0",
-  "flutterVersion": "3.27.0",
+  "generatorVersion": "3.5.0",
+  "flutterRoot": "file:///Users/alibayati/fvm/versions/3.24.0",
+  "flutterVersion": "3.24.0",
   "pubCache": "file:///Users/alibayati/.pub-cache"
 }
