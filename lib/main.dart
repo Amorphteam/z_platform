@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:masaha/route_generator.dart';
 import 'package:masaha/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:masaha/util/date_helper.dart';
@@ -20,6 +21,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   try {
+    // Load environment variables
+    await dotenv.load(fileName: ".env");
+    
     await Firebase.initializeApp();
     await initializeDateFormatting('ar'); // Initialize Arabic locale
 
