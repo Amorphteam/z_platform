@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cupertino_native/cupertino_native.dart';
 import 'package:masaha/screen/bookmark/widgets/history_list_widget.dart';
 import '../../widget/custom_appbar.dart';
 import 'cubit/bookmark_cubit.dart';
@@ -15,6 +17,7 @@ class BookmarkScreen extends StatefulWidget {
 
 class _BookmarkScreenState extends State<BookmarkScreen> {
   String _selectedSegment = 'Bookmark';
+  int _selectedIndex = 0; // For CNSegmentedControl
 
 
   @override
@@ -37,29 +40,42 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 0.0),
-            child: SegmentedButton<String>(
-              segments: [
-                ButtonSegment(
-                  value: 'Bookmark',
-                  label: const Text('الإشارات'),
-                  icon: _selectedSegment == 'Bookmark' ? const Icon(Icons.bookmark) : const Icon(Icons.bookmark),
-                ),
-                ButtonSegment(
-                  value: 'History',
-                  label: const Text('السجل'),
-                  icon: _selectedSegment == 'History' ? const Icon(Icons.history) : const Icon(Icons.history),
-                ),
-              ],
-              selected: {_selectedSegment},
-              showSelectedIcon: false,
-              onSelectionChanged: (newSelection) {
-                setState(() {
-                  _selectedSegment = newSelection.first;
-                  _loadBookmarksOrHistory();
-                });
-              },
-            ),
+            padding: const EdgeInsets.all(16.0),
+            child: Platform.isIOS
+                ? CNSegmentedControl(
+                    labels: const ['الإشارات', 'السجل'],
+                    selectedIndex: _selectedIndex,
+                    onValueChanged: (index) {
+                      setState(() {
+                        _selectedIndex = index;
+                        _selectedSegment = index == 0 ? 'Bookmark' : 'History';
+                        _loadBookmarksOrHistory();
+                      });
+                    },
+                  )
+                : SegmentedButton<String>(
+                    segments: [
+                      ButtonSegment(
+                        value: 'Bookmark',
+                        label: const Text('الإشارات'),
+                        icon: const Icon(Icons.bookmark),
+                      ),
+                      ButtonSegment(
+                        value: 'History',
+                        label: const Text('السجل'),
+                        icon: const Icon(Icons.history),
+                      ),
+                    ],
+                    selected: {_selectedSegment},
+                    showSelectedIcon: false,
+                    onSelectionChanged: (newSelection) {
+                      setState(() {
+                        _selectedSegment = newSelection.first;
+                        _selectedIndex = _selectedSegment == 'Bookmark' ? 0 : 1;
+                        _loadBookmarksOrHistory();
+                      });
+                    },
+                  ),
           ),
           Expanded(
             child: BlocBuilder<BookmarkCubit, BookmarkState>(

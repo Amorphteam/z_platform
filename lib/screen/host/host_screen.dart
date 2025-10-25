@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cupertino_native/cupertino_native.dart';
 
 import '../bookmark/bookmark_screen.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
@@ -39,43 +41,87 @@ class _HostScreenState extends State<HostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _getScreen(_currentIndex),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/chat');
-        },
-        child: const Icon(Icons.chat_rounded),
-        tooltip: 'View Color Palette',
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/liquidGlassTest');
+            },
+            heroTag: "liquid_glass",
+            child: const Icon(Icons.phone_iphone),
+            tooltip: 'Liquid Glass Test',
+          ),
+          const SizedBox(height: 10),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/chat');
+            },
+            heroTag: "chat",
+            child: const Icon(Icons.chat_rounded),
+            tooltip: 'Chat',
+          ),
+        ],
       ),
-      bottomNavigationBar: Directionality(
-        textDirection: TextDirection.rtl,
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 0 ? Icons.home : Icons.home_outlined),
-              label: 'الرئيسية',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 1 ? Icons.library_books : Icons.library_books_outlined),
-              label: 'الموضوعي',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 2 ? CupertinoIcons.search_circle_fill : CupertinoIcons.search),
-              label: 'البحث',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 3 ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark),
-              label: 'الإشارات',
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: Platform.isIOS
+          ? // Liquid Glass Tab Bar for iOS
+            CNTabBar(
+                items: const [
+                  CNTabBarItem(
+                    label: 'الإشارات',
+                    icon: CNSymbol('bookmark.fill'),
+                  ),
+                  CNTabBarItem(
+                    label: 'البحث',
+                    icon: CNSymbol('magnifyingglass'),
+                  ),
+                  CNTabBarItem(
+                    label: 'الموضوعي',
+                    icon: CNSymbol('book.fill'),
+                  ),
+                  CNTabBarItem(
+                    label: 'الرئيسية',
+                    icon: CNSymbol('house.fill'),
+                  ),
+                ],
+                currentIndex: 3 - _currentIndex, // Reverse index for RTL
+                onTap: (index) {
+                  setState(() {
+                    _currentIndex = 3 - index; // Reverse index back
+                  });
+                },
+              )
+          : // Material Bottom Navigation Bar for Android
+            Directionality(
+                textDirection: TextDirection.rtl,
+                child: BottomNavigationBar(
+                  currentIndex: _currentIndex,
+                  onTap: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  },
+                  type: BottomNavigationBarType.fixed,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(_currentIndex == 0 ? Icons.home : Icons.home_outlined),
+                      label: 'الرئيسية',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(_currentIndex == 1 ? Icons.library_books : Icons.library_books_outlined),
+                      label: 'الموضوعي',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(_currentIndex == 2 ? CupertinoIcons.search_circle_fill : CupertinoIcons.search),
+                      label: 'البحث',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(_currentIndex == 3 ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark),
+                      label: 'الإشارات',
+                    ),
+                  ],
+                ),
+              ),
     );
   }
 

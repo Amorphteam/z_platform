@@ -61,9 +61,9 @@ class TimeZoneHelper {
 
   static Future<TimeZoneModel?> getTimeZone() async {
     try {
-      final String timeZone = await FlutterTimezone.getLocalTimezone();
+      final timezoneInfo = await FlutterTimezone.getLocalTimezone();
       final timeZoneModel = TimeZoneModel(
-        zone: timeZone
+        zone: timezoneInfo.toString()
       );
       return timeZoneModel;
     } catch (e) {

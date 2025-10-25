@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'SFProDisplay',
               brightness: Brightness.light,
               scaffoldBackgroundColor: lightDynamic?.surfaceVariant,
-              cardTheme: CardTheme(
+              cardTheme: CardThemeData(
                 color: lightDynamic?.surface, // or surfaceVariant
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
 
               scaffoldBackgroundColor: darkDynamic?.surfaceVariant,
-              cardTheme: CardTheme(
+              cardTheme: CardThemeData(
                 color: darkDynamic?.surface, // or surfaceVariant
                 elevation: 0,
                 shape: RoundedRectangleBorder(
