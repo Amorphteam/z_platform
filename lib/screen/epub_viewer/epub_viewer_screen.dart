@@ -1,5 +1,7 @@
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:cupertino_native/cupertino_native.dart';
 
 import 'package:masaha/screen/epub_viewer/widgets/toc_tree_list_widget.dart';
 import '../../model/book_model.dart';
@@ -598,21 +601,48 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               textDirection: TextDirection.rtl,
               child: Column(
                 children: [
-                  Slider(
-                    value: _currentPage,
-                    min: 0,
-                    max: allPagesCount ?? -1,
-                    onChanged: (newValue) {
-                      _isSliderChange = true;
-                      setState(() {
-                        _currentPage = newValue;
-                      });
-                    },
-                    onChangeEnd: (newValue) {
-                      _jumpTo(pageNumber: newValue.toInt());
-                      _isSliderChange = false;
-                    },
-                  ),
+                  // Platform-specific slider
+                  if (defaultTargetPlatform == TargetPlatform.iOS)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Transform.flip(
+                        flipX: true,
+                        child: CNSlider(
+                          value: _currentPage,
+                          min: 0,
+                          max: allPagesCount,
+                          onChanged: (newValue) {
+                            _isSliderChange = true;
+                            setState(() {
+                              _currentPage = newValue;
+                            });
+                            // CNSlider doesn't have onChangeEnd, so we debounce
+                            Future.delayed(Duration.zero, () {
+                              if (mounted) {
+                                _jumpTo(pageNumber: newValue.toInt());
+                                _isSliderChange = false;
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    )
+                  else
+                    Slider(
+                      value: _currentPage,
+                      min: 0,
+                      max: allPagesCount,
+                      onChanged: (newValue) {
+                        _isSliderChange = true;
+                        setState(() {
+                          _currentPage = newValue;
+                        });
+                      },
+                      onChangeEnd: (newValue) {
+                        _jumpTo(pageNumber: newValue.toInt());
+                        _isSliderChange = false;
+                      },
+                    ),
                   Padding(
                     padding:
                     const EdgeInsets.only(
