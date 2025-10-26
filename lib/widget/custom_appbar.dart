@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:masaha/widget/theme_mode_toggle.dart';
 import 'package:provider/provider.dart';
 
 import '../util/theme_helper.dart';
+import '../util/color_helper.dart';
+import '../screen/color_picker/color_picker_screen.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
+  // Helper function to get platform-specific dynamic color description
+  static String getDynamicColorDescription() {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return "ألوان النظام الافتراضية";
+    } else {
+      return "ألوان من النظام (Android)";
+    }
+  }
   final String title;
   final IconData? leftIcon;
   final Widget? leftWidget;
@@ -138,35 +150,112 @@ class _CustomAppBarState extends State<CustomAppBar> {
         return Directionality(
           textDirection: TextDirection.rtl,
           child: AlertDialog(
-            title: const Text("اختر سمة التطبيق"),
+            title: const Text("إعدادات التطبيق"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ListTile(
-                  title: const Text("الوضع الفاتح"),
-                  leading: const Icon(Icons.light_mode),
-                  onTap: () {
-                    Provider.of<ThemeHelper>(context, listen: false)
-                        .setTheme(AppTheme.light);
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: const Text("الوضع الداكن"),
-                  leading: const Icon(Icons.dark_mode),
-                  onTap: () {
-                    Provider.of<ThemeHelper>(context, listen: false)
-                        .setTheme(AppTheme.dark);
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: const Text("النظام الافتراضي"),
-                  leading: const Icon(Icons.settings),
-                  onTap: () {
-                    Provider.of<ThemeHelper>(context, listen: false)
-                        .setTheme(AppTheme.system);
-                    Navigator.pop(context);
+                // Theme Mode Section
+                const ThemeModeToggle(),
+                
+                const Divider(),
+                
+                // Color Mode Section
+                Consumer<ColorHelper>(
+                  builder: (context, colorHelper, child) {
+                    // If color picker is completely hidden, show locked UI
+                    if (colorHelper.shouldHideColorPicker) {
+                      return Column(
+                        children: [
+                          const Text(
+                            "الألوان",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 8),
+                          ListTile(
+                            title: const Text("ألوان المطور"),
+                            subtitle: const Text("ألوان محددة مسبقاً"),
+                            leading: const Icon(Icons.business),
+                            trailing: const Icon(Icons.lock),
+                          ),
+                        ],
+                      );
+                    }
+
+                    // Normal color mode selection with owner colors option
+                    return Column(
+                      children: [
+                        const Text(
+                          "الألوان",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        ListTile(
+                          title: const Text("ألوان المطور"),
+                          subtitle: const Text("الألوان الافتراضية للتطبيق"),
+                          leading: const Icon(Icons.business),
+                          trailing: Radio<ColorMode>(
+                            value: ColorMode.owner,
+                            groupValue: colorHelper.colorMode,
+                            onChanged: (value) {
+                              if (value != null) {
+                                colorHelper.setColorMode(value);
+                              }
+                            },
+                          ),
+                          onTap: () {
+                            colorHelper.setColorMode(ColorMode.owner);
+                          },
+                        ),
+                        ListTile(
+                          title: const Text("ألوان ديناميكية"),
+                          subtitle: Text(CustomAppBar.getDynamicColorDescription()),
+                          leading: const Icon(Icons.palette),
+                          trailing: Radio<ColorMode>(
+                            value: ColorMode.dynamic,
+                            groupValue: colorHelper.colorMode,
+                            onChanged: (value) {
+                              if (value != null) {
+                                colorHelper.setColorMode(value);
+                              }
+                            },
+                          ),
+                          onTap: () {
+                            colorHelper.setColorMode(ColorMode.dynamic);
+                          },
+                        ),
+                        ListTile(
+                          title: const Text("ألوان مخصصة"),
+                          subtitle: const Text("اختر ألوانك الخاصة"),
+                          leading: const Icon(Icons.color_lens),
+                          trailing: Radio<ColorMode>(
+                            value: ColorMode.custom,
+                            groupValue: colorHelper.colorMode,
+                            onChanged: (value) {
+                              if (value != null) {
+                                colorHelper.setColorMode(value);
+                              }
+                            },
+                          ),
+                          onTap: () {
+                            colorHelper.setColorMode(ColorMode.custom);
+                          },
+                        ),
+                        if (colorHelper.colorMode == ColorMode.custom)
+                          ListTile(
+                            title: const Text("تخصيص الألوان"),
+                            leading: const Icon(Icons.edit),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ColorPickerScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                      ],
+                    );
                   },
                 ),
               ],

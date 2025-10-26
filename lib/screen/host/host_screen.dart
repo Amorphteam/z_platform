@@ -46,6 +46,14 @@ class _HostScreenState extends State<HostScreen> {
         children: [
           FloatingActionButton(
             onPressed: () {
+              Navigator.pushNamed(context, '/colorPicker');
+            },
+            heroTag: "liquid_glass",
+            child: const Icon(Icons.color_lens),
+            tooltip: 'Liquid Glass Test',
+          ),
+          const SizedBox(height: 10),          FloatingActionButton(
+            onPressed: () {
               Navigator.pushNamed(context, '/liquidGlassTest');
             },
             heroTag: "liquid_glass",

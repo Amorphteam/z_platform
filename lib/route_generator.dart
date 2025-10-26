@@ -15,6 +15,7 @@ import 'package:masaha/screen/search/search_screen.dart';
 import 'package:masaha/screen/toc/cubit/toc_cubit.dart';
 import 'package:masaha/screen/toc/toc_screen.dart';
 import 'package:masaha/screen/color_palette/color_palette_screen.dart';
+import 'package:masaha/screen/color_picker/color_picker_screen.dart';
 import 'package:masaha/screen/liquid_glass_test/liquid_glass_test_screen.dart';
 import 'model/book_model.dart';
 import 'model/reference_model.dart';
@@ -63,6 +64,10 @@ class RouteGenerator {
       case '/colorPalette':
         return MaterialPageRoute(
           builder: (context) => const ColorPaletteScreen(),
+        );
+      case '/colorPicker':
+        return MaterialPageRoute(
+          builder: (context) => const ColorPickerScreen(),
         );
       case '/chat':
         return MaterialPageRoute(

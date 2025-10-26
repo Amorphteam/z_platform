@@ -12,6 +12,7 @@ import 'package:masaha/route_generator.dart';
 import 'package:masaha/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:masaha/util/date_helper.dart';
 import 'package:masaha/util/theme_helper.dart';
+import 'package:masaha/util/color_helper.dart';
 import 'package:masaha/util/time_zone_helper.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -36,8 +37,11 @@ void main() async {
   lockOrientation(); // Lock orientation based on device type
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeHelper(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeHelper()),
+        ChangeNotifierProvider(create: (context) => ColorHelper()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -56,46 +60,50 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider(
       create: (_) => BookmarkCubit(),
-      child: DynamicColorBuilder(
-        builder: (lightDynamic, darkDynamic) => MaterialApp(
-            title: 'منصة مساحة',
-            theme: ThemeData(
-              colorScheme: lightDynamic,
-              useMaterial3: true,
-              fontFamily: 'SFProDisplay',
-              brightness: Brightness.light,
-              scaffoldBackgroundColor: lightDynamic?.surfaceVariant,
-              cardTheme: CardThemeData(
-                color: lightDynamic?.surface, // or surfaceVariant
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
+      child: Consumer2<ThemeHelper, ColorHelper>(
+        builder: (context, themeHelper, colorHelper, child) {
+          return DynamicColorBuilder(
+            builder: (lightDynamic, darkDynamic) {
+              // Get the appropriate color scheme based on color mode
+              final lightScheme = colorHelper.getColorScheme(
+                isDark: false,
+                dynamicLight: lightDynamic,
+                dynamicDark: darkDynamic,
+              );
+              
+              final darkScheme = colorHelper.getColorScheme(
+                isDark: true,
+                dynamicLight: lightDynamic,
+                dynamicDark: darkDynamic,
+              );
 
-            darkTheme: ThemeData(
-              colorScheme: darkDynamic,
-              brightness: Brightness.dark,
-              fontFamily: 'SFProDisplay',
-              useMaterial3: true,
-
-              scaffoldBackgroundColor: darkDynamic?.surfaceVariant,
-              cardTheme: CardThemeData(
-                color: darkDynamic?.surface, // or surfaceVariant
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+              return MaterialApp(
+                title: 'منصة مساحة',
+                themeMode: themeHelper.themeMode,
+                theme: ThemeData(
+                  colorScheme: lightScheme,
+                  useMaterial3: true,
+                  fontFamily: 'SFProDisplay',
+                  brightness: Brightness.light,
+                  scaffoldBackgroundColor: lightScheme?.surfaceVariant,
                 ),
-              ),
-            ),
-            debugShowCheckedModeBanner: false,
-            initialRoute: '/',
-            onGenerateRoute: RouteGenerator.generateRoute,
-            navigatorObservers: [
-              FirebaseAnalyticsObserver(analytics: analytics),
-            ],
-          ),
+                darkTheme: ThemeData(
+                  colorScheme: darkScheme,
+                  brightness: Brightness.dark,
+                  fontFamily: 'SFProDisplay',
+                  useMaterial3: true,
+                  scaffoldBackgroundColor: darkScheme?.surfaceVariant,
+                ),
+                debugShowCheckedModeBanner: false,
+                initialRoute: '/',
+                onGenerateRoute: RouteGenerator.generateRoute,
+                navigatorObservers: [
+                  FirebaseAnalyticsObserver(analytics: analytics),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
 }
