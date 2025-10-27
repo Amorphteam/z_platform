@@ -46,7 +46,7 @@ class LibraryCubit extends Cubit<LibraryState> {
       todayHijri = await DateHelper().getTodayCalendarHijri(qamariDate: hijriDates);
     }
     
-    return 'Now in hijri: ${todayHijri ?? 'Unknown'}   |   ${AMPM?.ampm ?? 'Unknown'}';
+    return '${todayHijri ?? 'Unknown'}   |   ${AMPM?.ampm ?? 'Unknown'}';
   }
 
   // Helper method to get hijri date for tomorrow (Gregorian date + 1 day)

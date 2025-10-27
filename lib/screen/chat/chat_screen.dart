@@ -42,64 +42,62 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('AI Chat'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.clear_all),
-              onPressed: () {
-                context.read<ChatCubit>().clearChat();
-              },
-              tooltip: 'Clear Chat',
-            ),
-          ],
-        ),
-        body: BlocBuilder<ChatCubit, ChatState>(
-          builder: (context, state) {
-            return Column(
-              children: [
-                Expanded(
-                  child: state.when(
-                    initial: () => const Center(
-                      child: Text(
-                        'Start a conversation with AI',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                    loading: () => const Center(child: CircularProgressIndicator()),
-                    loaded: (messages) => _buildMessagesList(messages),
-                    sendingMessage: () => _buildMessagesList(context.read<ChatCubit>().messages),
-                    messageSent: (message) => _buildMessagesList(context.read<ChatCubit>().messages),
-                    error: (message) => Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.error_outline,
-                            size: 64,
-                            color: Colors.red,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            message,
-                            style: const TextStyle(color: Colors.red),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('AI Chat'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.clear_all),
+            onPressed: () {
+              context.read<ChatCubit>().clearChat();
+            },
+            tooltip: 'Clear Chat',
+          ),
+        ],
+      ),
+      body: BlocBuilder<ChatCubit, ChatState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              Expanded(
+                child: state.when(
+                  initial: () => const Center(
+                    child: Text(
+                      'Start a conversation with AI',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
                       ),
                     ),
                   ),
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loaded: (messages) => _buildMessagesList(messages),
+                  sendingMessage: () => _buildMessagesList(context.read<ChatCubit>().messages),
+                  messageSent: (message) => _buildMessagesList(context.read<ChatCubit>().messages),
+                  error: (message) => Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: Colors.red,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          message,
+                          style: const TextStyle(color: Colors.red),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                _buildMessageInput(),
-              ],
-            );
-          },
-        ),
+              ),
+              _buildMessageInput(),
+            ],
+          );
+        },
       ),
     );
   }

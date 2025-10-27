@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,22 @@ class HostScreen extends StatefulWidget {
 
 class _HostScreenState extends State<HostScreen> {
   int _currentIndex = 0;
+  
+  // Helper function to check iOS version support for liquid glass
+  bool _shouldUseLiquidGlass() {
+    if (!Platform.isIOS) return false;
+    try {
+      // iOS 16+ supports liquid glass
+      final String version = Platform.operatingSystemVersion;
+      if (version.contains('26')) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      // If we can't detect version, use Material design for compatibility
+      return false;
+    }
+  }
   late final LibraryCubit _libraryCubit;
 
   @override
@@ -41,38 +58,8 @@ class _HostScreenState extends State<HostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _getScreen(_currentIndex),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/colorPicker');
-            },
-            heroTag: "liquid_glass",
-            child: const Icon(Icons.color_lens),
-            tooltip: 'Liquid Glass Test',
-          ),
-          const SizedBox(height: 10),          FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/liquidGlassTest');
-            },
-            heroTag: "liquid_glass",
-            child: const Icon(Icons.phone_iphone),
-            tooltip: 'Liquid Glass Test',
-          ),
-          const SizedBox(height: 10),
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/chat');
-            },
-            heroTag: "chat",
-            child: const Icon(Icons.chat_rounded),
-            tooltip: 'Chat',
-          ),
-        ],
-      ),
-      bottomNavigationBar: Platform.isIOS
-          ? // Liquid Glass Tab Bar for iOS
+      bottomNavigationBar: _shouldUseLiquidGlass()
+          ? // Liquid Glass Tab Bar for iOS 16+
             CNTabBar(
                 items: const [
                   CNTabBarItem(
@@ -130,7 +117,7 @@ class _HostScreenState extends State<HostScreen> {
                   ],
                 ),
               ),
-    );
+                  );
   }
 
   /// Returns the title for the app bar dynamically.

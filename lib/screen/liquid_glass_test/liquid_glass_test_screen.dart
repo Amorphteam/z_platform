@@ -20,8 +20,7 @@ class _LiquidGlassTestScreenState extends State<LiquidGlassTestScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Liquid Glass Widgets Test'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

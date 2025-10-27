@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:cupertino_native/cupertino_native.dart';
 
 import '../../../model/style_model.dart';
 import '../cubit/epub_viewer_cubit.dart';
@@ -28,6 +30,8 @@ class _StyleSheetState extends State<StyleSheet> {
   late LineHeightCustom lineSpace;
   late double _fontSizeSliderValue;
   late double _lineHeightSliderValue;
+  bool _isFontSizeSliderChange = false;
+  bool _isLineHeightSliderChange = false;
 
   @override
   void initState() {
@@ -66,6 +70,8 @@ class _StyleSheetState extends State<StyleSheet> {
     setState(() {
       _fontSizeSliderValue = newValue;
     });
+    _isFontSizeSliderChange = true;
+    
     fontSizeCustom = FontSizeCustom.values[(newValue * (FontSizeCustom.values.length - 1)).round()];
     widget.epubViewerCubit.changeStyle(
       fontSize: fontSizeCustom,
@@ -74,16 +80,26 @@ class _StyleSheetState extends State<StyleSheet> {
     );
   }
 
+  void _handleFontSizeSliderChangeEnd(double newValue) {
+    _isFontSizeSliderChange = false;
+  }
+
   void _handleLineHeightSliderChange(double newValue) {
     setState(() {
       _lineHeightSliderValue = newValue;
     });
+    _isLineHeightSliderChange = true;
+    
     lineSpace = LineHeightCustom.values[(newValue * (LineHeightCustom.values.length - 1)).round()];
     widget.epubViewerCubit.changeStyle(
       fontSize: fontSizeCustom,
       lineSpace: lineSpace,
       fontFamily: fontFamily,
     );
+  }
+
+  void _handleLineHeightSliderChangeEnd(double newValue) {
+    _isLineHeightSliderChange = false;
   }
 
   final Color _selectedColor = Colors.black; // Default color
@@ -220,11 +236,36 @@ class _StyleSheetState extends State<StyleSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Slider(
-                    divisions: FontSizeCustom.values.length - 1,
-                    value: _fontSizeSliderValue,
-                    onChanged: _handleFontSizeSliderChange,
-                  ),
+                  child: defaultTargetPlatform == TargetPlatform.iOS
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Transform.flip(
+                            flipX: true,
+                            child: CNSlider(
+                              value: _fontSizeSliderValue,
+                              min: 0.0,
+                              max: 1.0,
+                              onChanged: (newValue) {
+                                _handleFontSizeSliderChange(newValue);
+                                Future.delayed(Duration.zero, () {
+                                  if (mounted) {
+                                    _handleFontSizeSliderChangeEnd(newValue);
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                        )
+                      : Slider(
+                          divisions: FontSizeCustom.values.length - 1,
+                          value: _fontSizeSliderValue,
+                          onChanged: (newValue) {
+                            _handleFontSizeSliderChange(newValue);
+                          },
+                          onChangeEnd: (newValue) {
+                            _handleFontSizeSliderChangeEnd(newValue);
+                          },
+                        ),
                 ),
                 const Icon(Icons.text_increase),
               ],
@@ -233,11 +274,36 @@ class _StyleSheetState extends State<StyleSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Slider(
-                    divisions: LineHeightCustom.values.length - 1,
-                    value: _lineHeightSliderValue,
-                    onChanged: _handleLineHeightSliderChange,
-                  ),
+                  child: defaultTargetPlatform == TargetPlatform.iOS
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Transform.flip(
+                            flipX: true,
+                            child: CNSlider(
+                              value: _lineHeightSliderValue,
+                              min: 0.0,
+                              max: 1.0,
+                              onChanged: (newValue) {
+                                _handleLineHeightSliderChange(newValue);
+                                Future.delayed(Duration.zero, () {
+                                  if (mounted) {
+                                    _handleLineHeightSliderChangeEnd(newValue);
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                        )
+                      : Slider(
+                          divisions: LineHeightCustom.values.length - 1,
+                          value: _lineHeightSliderValue,
+                          onChanged: (newValue) {
+                            _handleLineHeightSliderChange(newValue);
+                          },
+                          onChangeEnd: (newValue) {
+                            _handleLineHeightSliderChangeEnd(newValue);
+                          },
+                        ),
                 ),
                 const Icon(Icons.format_line_spacing),
               ],

@@ -50,24 +50,24 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
     final colorHelper = Provider.of<ColorHelper>(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
-     return Directionality(
-       textDirection: TextDirection.rtl,
-       child: Scaffold(
-         appBar: AppBar(
-           title: const Text('اختيار الألوان'),
-           actions: [
-             IconButton(
-               icon: const Icon(Icons.refresh),
-               onPressed: () {
-                 colorHelper.resetToDefaults();
-                 ScaffoldMessenger.of(context).showSnackBar(
-                   const SnackBar(content: Text('تم إعادة تعيين الألوان')),
-                 );
-               },
-             ),
-           ],
-         ),
-        body: SingleChildScrollView(
+     return Scaffold(
+       appBar: AppBar(
+         title: const Text('اختيار الألوان'),
+         actions: [
+           IconButton(
+             icon: const Icon(Icons.refresh),
+             onPressed: () {
+               colorHelper.resetToDefaults();
+               ScaffoldMessenger.of(context).showSnackBar(
+                 const SnackBar(content: Text('تم إعادة تعيين الألوان')),
+               );
+             },
+           ),
+         ],
+       ),
+      body: Directionality(
+        textDirection: TextDirection.rtl,
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +302,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
           ),
         ),
       ),
-    );
+           );
   }
 
   Widget _buildColorPreview(ColorHelper colorHelper) {

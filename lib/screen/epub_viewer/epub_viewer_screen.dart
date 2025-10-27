@@ -89,6 +89,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   
   // Add GlobalKey for current page highlighting
   GlobalKey? _currentPageKey;
+  
+  // Platform check for iOS icons
+  final bool _isIOS = defaultTargetPlatform == TargetPlatform.iOS;
 
   @override
   void didChangeDependencies() {
@@ -120,7 +123,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     _initializeControllers();
     _buildCurrentUi(context, null);
     _determineEpubSourceAndLoad();
-    
+
     // Set initial page based on the source
     if (widget.referenceModel?.navIndex != null) {
       final double doubleValue = double.parse(widget.referenceModel!.navIndex);
@@ -265,8 +268,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               AppBar(
                 leading: IconButton(
                   icon: isSearchOpen
-                      ? Icon(Icons.close)
-                      : Icon(Icons.arrow_back),
+                      ? Icon(_isIOS ? CupertinoIcons.xmark : Icons.close)
+                      : Icon(_isIOS ? CupertinoIcons.chevron_back : Icons.arrow_back),
                   onPressed: () {
                     if (isSearchOpen) {
                       _toggleSearch(false);
@@ -300,11 +303,11 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     ? null // No actions when search is open or when it's About Us page
                     : [
                   IconButton(
-                    icon: Icon(Icons.search_rounded),
+                    icon: Icon(_isIOS ? CupertinoIcons.search : Icons.search_rounded),
                     onPressed: () => _toggleSearch(true),
                   ),
                   IconButton(
-                    icon: Icon(Icons.format_color_text_rounded),
+                    icon: Icon(_isIOS ? CupertinoIcons.textformat : Icons.format_color_text_rounded),
                     onPressed: () {
                       _showBottomSheet(
                         context, context.read<EpubViewerCubit>(),
@@ -312,7 +315,9 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     },
                   ),
                   IconButton(icon:
-                    isBookmarked ? Icon(Icons.bookmark): Icon(Icons.bookmark_border),
+                    isBookmarked 
+                      ? Icon(_isIOS ? CupertinoIcons.bookmark_fill : Icons.bookmark)
+                      : Icon(_isIOS ? CupertinoIcons.bookmark : Icons.bookmark_border),
                     onPressed: () {
                       _toggleBookmark();
                       if (isBookmarked) {
@@ -323,7 +328,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.toc_rounded),
+                    icon: Icon(_isIOS ? CupertinoIcons.list_bullet : Icons.toc_rounded),
                     onPressed: () {
                       _openInternalToc(context);
                     },
@@ -389,7 +394,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         heroTag: "prevSearch",
                         mini: true,
                         backgroundColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
-                        child: Icon(Icons.arrow_upward, color: Theme.of(context).colorScheme.surface,),
+                        child: Icon(_isIOS ? CupertinoIcons.arrow_up : Icons.arrow_upward, color: Theme.of(context).colorScheme.surface,),
                         onPressed: _navigateToPreviousResult,
                       ),
                       const SizedBox(height: 8),
@@ -417,7 +422,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                         heroTag: "nextSearch",
                         mini: true,
                         backgroundColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
-                        child: Icon(Icons.arrow_downward, color: Theme.of(context).colorScheme.surface),
+                        child: Icon(_isIOS ? CupertinoIcons.arrow_down : Icons.arrow_downward, color: Theme.of(context).colorScheme.surface),
                         onPressed: _navigateToNextResult,
                       ),
                     ],
@@ -466,7 +471,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              icon: const Icon(Icons.close),
+              icon: Icon(_isIOS ? CupertinoIcons.xmark : Icons.close),
               onPressed: () => Navigator.of(context).pop(),
             ),
             Padding(
@@ -1334,7 +1339,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                             color: Colors.transparent,
                             // Adjust the color as needed
                             child: IconButton(
-                              icon: const Icon(Icons.arrow_back),
+                              icon: Icon(_isIOS ? CupertinoIcons.chevron_back : Icons.arrow_back),
                               onPressed: () => Navigator.pop(context),
                             ),
                           ),

@@ -19,6 +19,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final IconData? leftIcon;
   final Widget? leftWidget;
+  final Widget? rightWidget;
   final IconData? rightIcon;
   final VoidCallback? onLeftTap;
   final VoidCallback? onRightTap; // New callback for right icon
@@ -38,6 +39,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.onSearch, // Optional
     this.showSearchBar = true,
     this.leftWidget,
+    this.rightWidget,
     this.onSubmitted, // Default: show search bar
     this.backgroundImage, // Add to constructor
   }) : super(key: key);
@@ -102,7 +104,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
               onPressed: widget.onRightTap ?? () => _showThemeDialog(context),
             ),
           ]
-              : [],
+              : widget.rightWidget != null
+                  ? [
+                      widget.rightWidget!,
+                    ]
+                  : [],
         ),
         if (widget.showSearchBar)
           Padding(
