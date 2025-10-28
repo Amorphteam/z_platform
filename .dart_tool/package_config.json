@@ -488,6 +488,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "modal_bottom_sheet",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/modal_bottom_sheet-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "nested",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/nested-1.0.0",
       "packageUri": "lib/",

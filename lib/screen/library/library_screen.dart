@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:masaha/screen/mobile_apps/mobile_apps_widget.dart';
 import '../../model/book_model.dart';
 import '../../util/epub_helper.dart';
@@ -25,13 +26,69 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 
   void _showSeriesBottomSheet(BuildContext context, List<Series> series) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-      ),
-      builder: (context) {
-        return ListView.builder(
+    if (Platform.isIOS) {
+      // Use showCupertinoModalBottomSheet for iOS with full screen and blurred background
+      showCupertinoModalBottomSheet(
+        context: context,
+        expand: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => CupertinoPageScaffold(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  children: [
+                    // Title
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'الأجزاء',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
+                    // List
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: series.length,
+                        itemBuilder: (context, index) {
+                          final item = series[index];
+                          return CupertinoListTile(
+                            title: Text(item.title ?? 'Unknown Title',
+                                style: Theme.of(context).textTheme.titleMedium),
+                            subtitle: Text(item.description ?? '',
+                                style: Theme.of(context).textTheme.bodySmall),
+                            onTap: () {
+                              Navigator.pop(context);
+                              openEpub(context: context, book: Book(epub: item.epub));
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      showMaterialModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+        ),
+        builder: (context) => ListView.builder(
           itemCount: series.length,
           itemBuilder: (context, index) {
             final item = series[index];
@@ -46,9 +103,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
               },
             );
           },
-        );
-      },
-    );
+        ),
+      );
+    }
   }
 
   @override

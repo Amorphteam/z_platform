@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masaha/screen/bookmark/bookmark_screen.dart';
 import 'package:masaha/screen/bookmark/cubit/bookmark_cubit.dart';
@@ -26,16 +29,20 @@ import 'util/constants.dart';
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments as Map<String, dynamic>?;
+    final isIOS = Platform.isIOS;
+    
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(
+        return _buildRoute(
+          isIOS: isIOS,
           builder: (context) => BlocProvider(
             create: (context) => HostCubit(),
             child: HostScreen(),
           ),
         );
       case '/searchScreen':
-        return MaterialPageRoute(
+        return _buildRoute(
+          isIOS: isIOS,
           builder: (context) => BlocProvider(
               create: (context) => SearchCubit(),
               child: SearchScreen(),
@@ -48,7 +55,8 @@ class RouteGenerator {
           final EpubChaptersWithBookPath? toc = args['toc'];
           final SearchModel? search = args['search'];
 
-          return MaterialPageRoute(
+          return _buildRoute(
+            isIOS: isIOS,
             builder: (context) => BlocProvider(
               create: (context) => EpubViewerCubit(),
               child: EpubViewerScreen(
@@ -62,15 +70,18 @@ class RouteGenerator {
         }
         return _errorRoute();
       case '/colorPalette':
-        return MaterialPageRoute(
+        return _buildRoute(
+          isIOS: isIOS,
           builder: (context) => const ColorPaletteScreen(),
         );
       case '/colorPicker':
-        return MaterialPageRoute(
+        return _buildRoute(
+          isIOS: isIOS,
           builder: (context) => const ColorPickerScreen(),
         );
       case '/chat':
-        return MaterialPageRoute(
+        return _buildRoute(
+          isIOS: isIOS,
           builder: (context) {
             final chatCubit = ChatCubit();
             // Initialize AI service with API key
@@ -82,12 +93,23 @@ class RouteGenerator {
           },
         );
       case '/liquidGlassTest':
-        return MaterialPageRoute(
+        return _buildRoute(
+          isIOS: isIOS,
           builder: (context) => const LiquidGlassTestScreen(),
         );
       default:
         return _errorRoute();
     }
+  }
+
+  static Route<dynamic> _buildRoute({
+    required bool isIOS,
+    required WidgetBuilder builder,
+  }) {
+    // Use MaterialWithModalsPageRoute to support iOS-style modal bottom sheets
+    return MaterialWithModalsPageRoute(
+      builder: builder,
+    );
   }
 
   static Route _errorRoute() => MaterialPageRoute(

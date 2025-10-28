@@ -1,14 +1,14 @@
 import 'dart:math';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:masaha/route_generator.dart';
+import 'package:provider/provider.dart';
 import 'package:masaha/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:masaha/util/date_helper.dart';
 import 'package:masaha/util/theme_helper.dart';
