@@ -63,6 +63,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   cupertino_native: ^0.1.1
   modal_bottom_sheet: ^3.0.0
+  app_links: ^6.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

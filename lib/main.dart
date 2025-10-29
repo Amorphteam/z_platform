@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:masaha/route_generator.dart';
+import 'package:masaha/service/deep_link_service.dart';
+import 'package:masaha/widget/deep_link_listener.dart';
 import 'package:provider/provider.dart';
 import 'package:masaha/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:masaha/util/date_helper.dart';
@@ -56,6 +58,8 @@ class MyApp extends StatelessWidget {
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   static FirebaseAnalyticsObserver observer =
   FirebaseAnalyticsObserver(analytics: analytics);
+  
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) => BlocProvider(
@@ -77,29 +81,33 @@ class MyApp extends StatelessWidget {
                 dynamicDark: darkDynamic,
               );
 
-              return MaterialApp(
-                title: 'منصة مساحة',
-                themeMode: themeHelper.themeMode,
-                theme: ThemeData(
-                  colorScheme: lightScheme,
-                  useMaterial3: true,
-                  fontFamily: 'SFProDisplay',
-                  brightness: Brightness.light,
-                  scaffoldBackgroundColor: lightScheme?.surfaceVariant,
+              return DeepLinkListener(
+                navigatorKey: MyApp.navigatorKey,
+                child: MaterialApp(
+                  navigatorKey: MyApp.navigatorKey,
+                  title: 'منصة مساحة',
+                  themeMode: themeHelper.themeMode,
+                  theme: ThemeData(
+                    colorScheme: lightScheme,
+                    useMaterial3: true,
+                    fontFamily: 'SFProDisplay',
+                    brightness: Brightness.light,
+                    scaffoldBackgroundColor: lightScheme?.surfaceVariant,
+                  ),
+                  darkTheme: ThemeData(
+                    colorScheme: darkScheme,
+                    brightness: Brightness.dark,
+                    fontFamily: 'SFProDisplay',
+                    useMaterial3: true,
+                    scaffoldBackgroundColor: darkScheme?.surfaceVariant,
+                  ),
+                  debugShowCheckedModeBanner: false,
+                  initialRoute: '/',
+                  onGenerateRoute: RouteGenerator.generateRoute,
+                  navigatorObservers: [
+                    FirebaseAnalyticsObserver(analytics: analytics),
+                  ],
                 ),
-                darkTheme: ThemeData(
-                  colorScheme: darkScheme,
-                  brightness: Brightness.dark,
-                  fontFamily: 'SFProDisplay',
-                  useMaterial3: true,
-                  scaffoldBackgroundColor: darkScheme?.surfaceVariant,
-                ),
-                debugShowCheckedModeBanner: false,
-                initialRoute: '/',
-                onGenerateRoute: RouteGenerator.generateRoute,
-                navigatorObservers: [
-                  FirebaseAnalyticsObserver(analytics: analytics),
-                ],
               );
             },
           );

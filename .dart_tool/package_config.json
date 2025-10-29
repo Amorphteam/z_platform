@@ -20,6 +20,30 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "app_links",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/app_links-6.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "app_links_linux",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/app_links_linux-1.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "app_links_platform_interface",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/app_links_platform_interface-2.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "app_links_web",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/app_links_web-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "archive",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/archive-3.5.1",
       "packageUri": "lib/",
@@ -366,6 +390,12 @@
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/graphs-2.3.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
+    },
+    {
+      "name": "gtk",
+      "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/gtk-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "html",
