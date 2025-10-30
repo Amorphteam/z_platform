@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../model/chat_message_model.dart';
 import 'cubit/chat_cubit.dart';
@@ -190,13 +191,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                       ],
                     )
-                  : Text(
-                      message.content,
-                      style: TextStyle(
-                        color: isUser ? Colors.white : Colors.black87,
-                        fontSize: 16,
-                      ),
-                    ),
+                  : _buildMessageContent(context, message, isUser),
             ),
           ),
           if (isUser) ...[
@@ -214,6 +209,110 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildMessageContent(BuildContext context, ChatMessage message, bool isUser) {
+    final text = message.content;
+    final chunkRegex = RegExp(r'(?:chunk|Chunk)[ _-]?(\d+)(?:\.txt)?');
+    // Matches bracketed references that include a chunk mention, e.g. [4:0 chunk_0076.txt] or 【4:0 chunk_0076.txt】
+    final bracketedAsciiRefRegex = RegExp(r'\[[^\]]*?(?:chunk|Chunk)[^\]]*?\]', caseSensitive: false);
+    final bracketedUnicodeRefRegex = RegExp('【[^】]*?(?:chunk|Chunk)[^】]*?】', caseSensitive: false);
+
+    final matches = chunkRegex.allMatches(text).toList();
+    if (message.type == MessageType.ai && matches.isNotEmpty) {
+      // Build unique list of file tokens preserving order
+      final List<String> uniqueTokens = [];
+      for (final m in matches) {
+        final token = m.group(0)!; // e.g., chunk_0076.txt
+        if (!uniqueTokens.contains(token)) uniqueTokens.add(token);
+      }
+
+      // Clean the visible text by removing inline bracketed chunk references (ASCII and Unicode forms)
+      String cleanedText = text
+          .replaceAll(bracketedAsciiRefRegex, '')
+          .replaceAll(bracketedUnicodeRefRegex, '');
+      // Collapse excessive whitespace created by removals
+      cleanedText = cleanedText.replaceAll(RegExp(r'\s+'), ' ').trim();
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (cleanedText.isNotEmpty)
+            Text(
+              cleanedText,
+              style: TextStyle(
+                color: isUser ? Colors.white : Colors.black87,
+                fontSize: 16,
+              ),
+            ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (int i = 0; i < uniqueTokens.length; i++)
+                _buildSourceCard(
+                  context,
+                  fileToken: uniqueTokens[i],
+                  label: 'المصدر ${_toPersianDigits(i + 1)}',
+                ),
+            ],
+          ),
+        ],
+      );
+    }
+
+    return Text(
+      text,
+      style: TextStyle(
+        color: isUser ? Colors.white : Colors.black87,
+        fontSize: 16,
+      ),
+    );
+  }
+
+  Widget _buildSourceCard(BuildContext context, {required String fileToken, required String label}) {
+    return Card(
+      elevation: 0,
+      color: Theme.of(context).colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: Colors.grey.withOpacity(0.2)),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Open link for $fileToken')),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.description, size: 18),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _toPersianDigits(int number) {
+    const persianDigits = ['\u06F0','\u06F1','\u06F2','\u06F3','\u06F4','\u06F5','\u06F6','\u06F7','\u06F8','\u06F9'];
+    final chars = number.toString().split('').map((c) {
+      final d = int.tryParse(c);
+      if (d == null) return c;
+      return persianDigits[d];
+    }).join();
+    return chars;
   }
 
   Widget _buildMessageInput() {
