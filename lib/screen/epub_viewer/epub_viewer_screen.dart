@@ -39,12 +39,14 @@ class EpubViewerScreen extends StatefulWidget {
     this.tocModel,
     this.searchModel,
     this.historyModel,
+    this.deepLinkFileName,
   });
   final ReferenceModel? referenceModel;
   final HistoryModel? historyModel;
   final Book? book;
   final EpubChaptersWithBookPath? tocModel;
   final SearchModel? searchModel;
+  final String? deepLinkFileName;
 
   @override
   _EpubViewerScreenState createState() => _EpubViewerScreenState();
@@ -86,6 +88,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   final Map<int, dom.Document> _htmlCache = {};
   final Map<int, String> _processedContentCache = {};
   bool _isControllerInitialized = false;
+  int? _pendingJumpIndex;
   
   // Add GlobalKey for current page highlighting
   GlobalKey? _currentPageKey;
@@ -189,15 +192,29 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           loaded: (content, _, tocList) {
             _storeContentLoaded(content, context, state, tocList);
             
-            if (!_hasHandledInitialPageJump) {
+        if (!_hasHandledInitialPageJump) {
               _hasHandledInitialPageJump = true;
               if (widget.searchModel?.searchedWord != null) {
                 _search(widget.searchModel!.searchedWord!);
               }
+          // Handle deep link file name jump after content loads
+          if (widget.deepLinkFileName != null && widget.deepLinkFileName!.isNotEmpty) {
+            final String fileName = widget.deepLinkFileName!;
+            // Try as-is, then try with common 'Text/' prefix
+            context.read<EpubViewerCubit>().jumpToPage(chapterFileName: fileName);
+            if (!fileName.contains('/')) {
+              // Fallback attempt with Text/ prefix
+              context.read<EpubViewerCubit>().jumpToPage(chapterFileName: 'Text/$fileName');
+            }
+          }
             }
             
             context.read<EpubViewerCubit>().loadUserPreferences();
             context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
+          },
+          pageChanged: (pageNumber) {
+            // Ensure jumps are executed even if subsequent states are emitted quickly
+            _jumpTo(pageNumber: pageNumber);
           },
           searchResultsFound: (searchResults) {
             setState(() {
@@ -1504,6 +1521,18 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     if (!_isControllerInitialized || pageNumber == null) return;
     
     try {
+      // If the list is not attached yet, defer the jump
+      if (!(itemScrollController.isAttached)) {
+        _pendingJumpIndex = pageNumber;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && itemScrollController.isAttached && _pendingJumpIndex != null) {
+            final int target = _pendingJumpIndex!;
+            _pendingJumpIndex = null;
+            _jumpTo(pageNumber: target);
+          }
+        });
+        return;
+      }
       // Only create new GlobalKey if jumping to a different page
       if (tempPageNumber.toInt() != pageNumber) {
         debugPrint('🔑 Created new GlobalKey: ${_currentPageKey.hashCode} for NEW page: $pageNumber (was on page: ${_currentPage.toInt()})');

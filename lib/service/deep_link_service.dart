@@ -59,10 +59,22 @@ class DeepLinkService {
 
     switch (path) {
       case '/epub':
+        final String? bookParam = queryParams['book'];
+        final String? pageParam = queryParams['page'];
+        final bool isFileName = pageParam != null && (pageParam.endsWith('.xml') || pageParam.endsWith('.xhtml') || pageParam.endsWith('.html'));
+
         return DeepLinkData(
           route: '/epubViewer',
           arguments: {
-            'reference': ReferenceModel(bookPath: queryParams['book'] ?? '', title: '', bookName: '', navIndex: queryParams['page']?? ''),
+            // Keep navIndex numeric if supplied, otherwise empty when using file name
+            'reference': ReferenceModel(
+              bookPath: bookParam ?? '',
+              title: '',
+              bookName: '',
+              navIndex: isFileName ? '0' : (pageParam ?? ''),
+            ),
+            // Pass through the internal file name (e.g., 1.xml) when provided
+            if (isFileName) 'fileName': pageParam,
           },
         );
 

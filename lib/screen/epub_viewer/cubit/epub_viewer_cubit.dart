@@ -140,7 +140,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     if (chapterFileName != null) {
       try {
         final int spineNumber =
-        await findPageIndexInEpub(_epubBook!, chapterFileName);
+        await findPageIndexInEpub(_epubBook!, chapterFileName, useSpineOrder: true);
         emit(EpubViewerState.pageChanged(pageNumber: spineNumber));
       } catch (error) {
         emit(EpubViewerState.error(error: error.toString()));

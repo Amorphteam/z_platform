@@ -54,6 +54,7 @@ class RouteGenerator {
           final ReferenceModel? reference = args['reference'];
           final EpubChaptersWithBookPath? toc = args['toc'];
           final SearchModel? search = args['search'];
+          final String? fileName = args['fileName'];
 
           return _buildRoute(
             isIOS: isIOS,
@@ -64,6 +65,7 @@ class RouteGenerator {
                 referenceModel: reference,
                 searchModel: search,
                 tocModel: toc,
+                deepLinkFileName: fileName,
               ),
             ),
           );
