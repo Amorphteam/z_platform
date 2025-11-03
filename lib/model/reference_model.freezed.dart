@@ -27,12 +27,8 @@ mixin _$ReferenceModel {
   String get bookPath => throw _privateConstructorUsedError;
   String get navIndex => throw _privateConstructorUsedError;
 
-  /// Serializes this ReferenceModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ReferenceModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ReferenceModelCopyWith<ReferenceModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -61,8 +57,6 @@ class _$ReferenceModelCopyWithImpl<$Res, $Val extends ReferenceModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ReferenceModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -121,8 +115,6 @@ class __$$ReferenceModelImplCopyWithImpl<$Res>
       _$ReferenceModelImpl _value, $Res Function(_$ReferenceModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ReferenceModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -202,14 +194,12 @@ class _$ReferenceModelImpl implements _ReferenceModel {
                 other.navIndex == navIndex));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, title, bookName, bookPath, navIndex);
 
-  /// Create a copy of ReferenceModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ReferenceModelImplCopyWith<_$ReferenceModelImpl> get copyWith =>
@@ -236,8 +226,8 @@ abstract class _ReferenceModel implements ReferenceModel {
       _$ReferenceModelImpl.fromJson;
 
   @override
-  int? get id; // Nullable for auto-generated IDs
-  @override
+  int? get id;
+  @override // Nullable for auto-generated IDs
   String get title;
   @override
   String get bookName;
@@ -245,11 +235,8 @@ abstract class _ReferenceModel implements ReferenceModel {
   String get bookPath;
   @override
   String get navIndex;
-
-  /// Create a copy of ReferenceModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ReferenceModelImplCopyWith<_$ReferenceModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

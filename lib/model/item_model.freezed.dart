@@ -26,12 +26,8 @@ mixin _$ItemModel {
   List<SubItems>? get items => throw _privateConstructorUsedError;
   LinkTo? get linkTo => throw _privateConstructorUsedError;
 
-  /// Serializes this ItemModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ItemModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ItemModelCopyWith<ItemModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -61,8 +57,6 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ItemModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -96,8 +90,6 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
     ) as $Val);
   }
 
-  /// Create a copy of ItemModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $LinkToCopyWith<$Res>? get linkTo {
@@ -138,8 +130,6 @@ class __$$ItemModelImplCopyWithImpl<$Res>
       _$ItemModelImpl _value, $Res Function(_$ItemModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ItemModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -224,14 +214,12 @@ class _$ItemModelImpl implements _ItemModel {
             (identical(other.linkTo, linkTo) || other.linkTo == linkTo));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, title, type, picName,
       const DeepCollectionEquality().hash(_items), linkTo);
 
-  /// Create a copy of ItemModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ItemModelImplCopyWith<_$ItemModelImpl> get copyWith =>
@@ -266,11 +254,8 @@ abstract class _ItemModel implements ItemModel {
   List<SubItems>? get items;
   @override
   LinkTo? get linkTo;
-
-  /// Create a copy of ItemModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ItemModelImplCopyWith<_$ItemModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -286,12 +271,8 @@ mixin _$SubItems {
   String? get key => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
 
-  /// Serializes this SubItems to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of SubItems
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $SubItemsCopyWith<SubItems> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -314,8 +295,6 @@ class _$SubItemsCopyWithImpl<$Res, $Val extends SubItems>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of SubItems
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -364,8 +343,6 @@ class __$$SubItemsImplCopyWithImpl<$Res>
       _$SubItemsImpl _value, $Res Function(_$SubItemsImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of SubItems
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -428,13 +405,11 @@ class _$SubItemsImpl implements _SubItems {
             (identical(other.id, id) || other.id == id));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, title, goto, key, id);
 
-  /// Create a copy of SubItems
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$SubItemsImplCopyWith<_$SubItemsImpl> get copyWith =>
@@ -466,11 +441,8 @@ abstract class _SubItems implements SubItems {
   String? get key;
   @override
   int? get id;
-
-  /// Create a copy of SubItems
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$SubItemsImplCopyWith<_$SubItemsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -485,12 +457,8 @@ mixin _$LinkTo {
   String? get key => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
 
-  /// Serializes this LinkTo to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of LinkTo
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $LinkToCopyWith<LinkTo> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -512,8 +480,6 @@ class _$LinkToCopyWithImpl<$Res, $Val extends LinkTo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of LinkTo
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -556,8 +522,6 @@ class __$$LinkToImplCopyWithImpl<$Res>
       _$LinkToImpl _value, $Res Function(_$LinkToImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LinkTo
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -612,13 +576,11 @@ class _$LinkToImpl implements _LinkTo {
             (identical(other.id, id) || other.id == id));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, goto, key, id);
 
-  /// Create a copy of LinkTo
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LinkToImplCopyWith<_$LinkToImpl> get copyWith =>
@@ -644,11 +606,8 @@ abstract class _LinkTo implements LinkTo {
   String? get key;
   @override
   int? get id;
-
-  /// Create a copy of LinkTo
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LinkToImplCopyWith<_$LinkToImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -663,12 +622,8 @@ mixin _$DetailItem {
   String get title => throw _privateConstructorUsedError;
   List<ItemModel> get items => throw _privateConstructorUsedError;
 
-  /// Serializes this DetailItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of DetailItem
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $DetailItemCopyWith<DetailItem> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -692,8 +647,6 @@ class _$DetailItemCopyWithImpl<$Res, $Val extends DetailItem>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of DetailItem
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -737,8 +690,6 @@ class __$$DetailItemImplCopyWithImpl<$Res>
       _$DetailItemImpl _value, $Res Function(_$DetailItemImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of DetailItem
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -802,14 +753,12 @@ class _$DetailItemImpl implements _DetailItem {
             const DeepCollectionEquality().equals(other._items, _items));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, id, title, const DeepCollectionEquality().hash(_items));
 
-  /// Create a copy of DetailItem
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$DetailItemImplCopyWith<_$DetailItemImpl> get copyWith =>
@@ -838,11 +787,8 @@ abstract class _DetailItem implements DetailItem {
   String get title;
   @override
   List<ItemModel> get items;
-
-  /// Create a copy of DetailItem
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$DetailItemImplCopyWith<_$DetailItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

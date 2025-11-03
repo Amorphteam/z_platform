@@ -1,5 +1,6 @@
 import 'package:zahra/database/database_helper.dart';
 import 'package:zahra/model/hekam.dart';
+import 'package:zahra/model/ibn_hadid.dart';
 import 'package:zahra/model/occasion.dart';
 import 'package:zahra/model/onscreen.dart';
 import 'package:zahra/model/word.dart';
@@ -38,6 +39,17 @@ class DatabaseRepository {
       if (hekam != null) {
         await _dbHelper.updateHekamFavorite(id, !hekam.isFavorite);
       }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Ibn Hadid operations
+  Future<IbnHadid?> getIbnHadidById(int id) async {
+    try {
+      final results = await _dbHelper.getIbnHadidById(id);
+      if (results.isEmpty) return null;
+      return IbnHadid.fromJson(results.first);
     } catch (e) {
       rethrow;
     }

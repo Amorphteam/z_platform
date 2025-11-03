@@ -79,6 +79,15 @@ class DatabaseHelper {
     );
   }
 
+  Future<List<Map<String, dynamic>>> getIbnHadidById(int id) async {
+    final db = await database;
+    // Use rawQuery with quoted table name to handle hyphen in table name
+    return await db.rawQuery(
+      'SELECT * FROM "ibn-hadid" WHERE id = ?',
+      [id],
+    );
+  }
+
   Future<List<Map<String, dynamic>>> getOccasionsByDate(int day, int month) async {
     final db = await database;
     return await db.query(

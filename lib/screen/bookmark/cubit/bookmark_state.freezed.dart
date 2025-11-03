@@ -102,9 +102,6 @@ class _$BookmarkStateCopyWithImpl<$Res, $Val extends BookmarkState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -121,9 +118,6 @@ class __$$InitialImplCopyWithImpl<$Res>
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -256,9 +250,6 @@ class __$$LoadingImplCopyWithImpl<$Res>
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -394,8 +385,6 @@ class __$$BookmarksLoadedImplCopyWithImpl<$Res>
       _$BookmarksLoadedImpl _value, $Res Function(_$BookmarksLoadedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -442,9 +431,7 @@ class _$BookmarksLoadedImpl implements _BookmarksLoaded {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_bookmarks));
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$BookmarksLoadedImplCopyWith<_$BookmarksLoadedImpl> get copyWith =>
@@ -549,10 +536,7 @@ abstract class _BookmarksLoaded implements BookmarkState {
       _$BookmarksLoadedImpl;
 
   List<ReferenceModel> get bookmarks;
-
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$BookmarksLoadedImplCopyWith<_$BookmarksLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -574,8 +558,6 @@ class __$$HistoryLoadedImplCopyWithImpl<$Res>
       _$HistoryLoadedImpl _value, $Res Function(_$HistoryLoadedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -621,9 +603,7 @@ class _$HistoryLoadedImpl implements _HistoryLoaded {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_history));
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$HistoryLoadedImplCopyWith<_$HistoryLoadedImpl> get copyWith =>
@@ -727,10 +707,7 @@ abstract class _HistoryLoaded implements BookmarkState {
       _$HistoryLoadedImpl;
 
   List<HistoryModel> get history;
-
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$HistoryLoadedImplCopyWith<_$HistoryLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -754,8 +731,6 @@ class __$$BookmarkTappedImplCopyWithImpl<$Res>
       _$BookmarkTappedImpl _value, $Res Function(_$BookmarkTappedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -769,8 +744,6 @@ class __$$BookmarkTappedImplCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ReferenceModelCopyWith<$Res> get bookmark {
@@ -805,9 +778,7 @@ class _$BookmarkTappedImpl implements _BookmarkTapped {
   @override
   int get hashCode => Object.hash(runtimeType, bookmark);
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$BookmarkTappedImplCopyWith<_$BookmarkTappedImpl> get copyWith =>
@@ -912,10 +883,7 @@ abstract class _BookmarkTapped implements BookmarkState {
       _$BookmarkTappedImpl;
 
   ReferenceModel get bookmark;
-
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$BookmarkTappedImplCopyWith<_$BookmarkTappedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -937,8 +905,6 @@ class __$$HistoryTappedImplCopyWithImpl<$Res>
       _$HistoryTappedImpl _value, $Res Function(_$HistoryTappedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -977,9 +943,7 @@ class _$HistoryTappedImpl implements _HistoryTapped {
   @override
   int get hashCode => Object.hash(runtimeType, history);
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$HistoryTappedImplCopyWith<_$HistoryTappedImpl> get copyWith =>
@@ -1083,10 +1047,7 @@ abstract class _HistoryTapped implements BookmarkState {
       _$HistoryTappedImpl;
 
   HistoryDatabase get history;
-
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$HistoryTappedImplCopyWith<_$HistoryTappedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1108,8 +1069,6 @@ class __$$ErrorImplCopyWithImpl<$Res>
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1148,9 +1107,7 @@ class _$ErrorImpl implements _Error {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
@@ -1253,10 +1210,7 @@ abstract class _Error implements BookmarkState {
   const factory _Error(final String message) = _$ErrorImpl;
 
   String get message;
-
-  /// Create a copy of BookmarkState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

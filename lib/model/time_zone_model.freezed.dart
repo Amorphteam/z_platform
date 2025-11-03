@@ -27,12 +27,8 @@ mixin _$TimeZoneModel {
   String? get comments => throw _privateConstructorUsedError;
   String get zone => throw _privateConstructorUsedError;
 
-  /// Serializes this TimeZoneModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of TimeZoneModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $TimeZoneModelCopyWith<TimeZoneModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -61,8 +57,6 @@ class _$TimeZoneModelCopyWithImpl<$Res, $Val extends TimeZoneModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of TimeZoneModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -121,8 +115,6 @@ class __$$TimeZoneModelImplCopyWithImpl<$Res>
       _$TimeZoneModelImpl _value, $Res Function(_$TimeZoneModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TimeZoneModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -203,14 +195,12 @@ class _$TimeZoneModelImpl implements _TimeZoneModel {
             (identical(other.zone, zone) || other.zone == zone));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, countryCode, latitude, longitude, comments, zone);
 
-  /// Create a copy of TimeZoneModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$TimeZoneModelImplCopyWith<_$TimeZoneModelImpl> get copyWith =>
@@ -246,11 +236,8 @@ abstract class _TimeZoneModel implements TimeZoneModel {
   String? get comments;
   @override
   String get zone;
-
-  /// Create a copy of TimeZoneModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$TimeZoneModelImplCopyWith<_$TimeZoneModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

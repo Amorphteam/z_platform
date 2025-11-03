@@ -28,12 +28,8 @@ mixin _$TocItem {
   List<TocItem>? get childs => throw _privateConstructorUsedError;
   List<Items>? get items => throw _privateConstructorUsedError;
 
-  /// Serializes this TocItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of TocItem
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $TocItemCopyWith<TocItem> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -62,8 +58,6 @@ class _$TocItemCopyWithImpl<$Res, $Val extends TocItem>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of TocItem
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -133,8 +127,6 @@ class __$$TocItemImplCopyWithImpl<$Res>
       _$TocItemImpl _value, $Res Function(_$TocItemImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TocItem
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -248,7 +240,7 @@ class _$TocItemImpl implements _TocItem {
             const DeepCollectionEquality().equals(other._items, _items));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -260,9 +252,7 @@ class _$TocItemImpl implements _TocItem {
       const DeepCollectionEquality().hash(_childs),
       const DeepCollectionEquality().hash(_items));
 
-  /// Create a copy of TocItem
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$TocItemImplCopyWith<_$TocItemImpl> get copyWith =>
@@ -302,11 +292,8 @@ abstract class _TocItem implements TocItem {
   List<TocItem>? get childs;
   @override
   List<Items>? get items;
-
-  /// Create a copy of TocItem
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$TocItemImplCopyWith<_$TocItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -321,12 +308,8 @@ mixin _$Items {
   int? get addressNo => throw _privateConstructorUsedError;
   String? get text => throw _privateConstructorUsedError;
 
-  /// Serializes this Items to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of Items
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ItemsCopyWith<Items> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -348,8 +331,6 @@ class _$ItemsCopyWithImpl<$Res, $Val extends Items>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of Items
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -392,8 +373,6 @@ class __$$ItemsImplCopyWithImpl<$Res>
       _$ItemsImpl _value, $Res Function(_$ItemsImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of Items
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -450,13 +429,11 @@ class _$ItemsImpl implements _Items {
             (identical(other.text, text) || other.text == text));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, addressType, addressNo, text);
 
-  /// Create a copy of Items
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ItemsImplCopyWith<_$ItemsImpl> get copyWith =>
@@ -484,11 +461,8 @@ abstract class _Items implements Items {
   int? get addressNo;
   @override
   String? get text;
-
-  /// Create a copy of Items
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ItemsImplCopyWith<_$ItemsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

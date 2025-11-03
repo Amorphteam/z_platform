@@ -5,6 +5,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:zahra/screen/hekam/cubit/hekam_cubit.dart';
 import 'package:zahra/screen/hekam/widgets/translation_bottom_sheet.dart';
+import 'package:zahra/screen/hekam/widgets/ibn_hadid_bottom_sheet.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:zahra/model/style_model.dart';
 import 'package:zahra/util/style_helper.dart';
@@ -128,6 +129,17 @@ iOS: https://apps.apple.com/app/6746411657''';
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (context) => TranslationBottomSheet(hekam: hekam),
+      );
+    }
+  }
+
+  Future<void> _showIbHadidBottomSheet(Hekam hekam) async {
+    if (mounted) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => IbnHadidBottomSheet(hekam: hekam),
       );
     }
   }
@@ -444,6 +456,12 @@ iOS: https://apps.apple.com/app/6746411657''';
                                                 200,
                                               ),
                                             ));
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.sticky_note_2_outlined),
+                                      onPressed: () {
+                                        _showIbHadidBottomSheet(item);
                                       },
                                     ),
                                     IconButton(
