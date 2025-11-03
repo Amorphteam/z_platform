@@ -69,7 +69,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                 style: Theme.of(context).textTheme.bodySmall),
                             onTap: () {
                               Navigator.pop(context);
-                              openEpub(context: context, book: Book(epub: item.epub));
+                              openEpub(
+                                  context: context,
+                                  book: Book(epub: item.epub));
                             },
                           );
                         },
@@ -88,21 +90,36 @@ class _LibraryScreenState extends State<LibraryScreen> {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
         ),
-        builder: (context) => ListView.builder(
-          itemCount: series.length,
-          itemBuilder: (context, index) {
-            final item = series[index];
-            return ListTile(
-              title: Text(item.title ?? 'Unknown Title',
-                  style: Theme.of(context).textTheme.titleMedium),
-              subtitle: Text(item.description ?? '',
-                  style: Theme.of(context).textTheme.bodySmall),
-              onTap: () {
-                Navigator.pop(context);
-                openEpub(context: context, book: Book(epub: item.epub));
-              },
-            );
-          },
+        builder: (context) => SafeArea(
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Column(
+              children: [
+                Text(
+                  'الأجزاء',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: series.length,
+                    itemBuilder: (context, index) {
+                      final item = series[index];
+                      return ListTile(
+                        title: Text(item.title ?? 'Unknown Title',
+                            style: Theme.of(context).textTheme.titleMedium),
+                        subtitle: Text(item.description ?? '',
+                            style: Theme.of(context).textTheme.bodySmall),
+                        onTap: () {
+                          Navigator.pop(context);
+                          openEpub(context: context, book: Book(epub: item.epub));
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       );
     }
@@ -111,21 +128,23 @@ class _LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    
+
     return Scaffold(
       appBar: CustomAppBar(
         showSearchBar: false,
         title: _hijriDate,
         backgroundImage: 'assets/image/back_tazhib_light.jpg',
         leftWidget: IconButton(
-          icon: Icon(Platform.isIOS ? CupertinoIcons.chat_bubble : Icons.chat_rounded),
+          icon: Icon(
+              Platform.isIOS ? CupertinoIcons.chat_bubble : Icons.chat_rounded),
           onPressed: _openChatScreen,
         ),
         rightWidget: IconButton(
-          icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings_rounded),
+          icon: Icon(Platform.isIOS
+              ? CupertinoIcons.settings
+              : Icons.settings_rounded),
           onPressed: _openStyleScreen,
         ),
-
       ),
       body: BlocConsumer<LibraryCubit, LibraryState>(
         listener: (context, state) {
@@ -189,22 +208,29 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                   children: [
                                     Text(
                                       book.title ?? 'Unknown Title',
-                                      style: Theme.of(context).textTheme.titleLarge,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
                                       book.author ?? 'Unknown Author',
-                                      style: Theme.of(context).textTheme.bodyMedium,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    if (book.description != null && book.description!.isNotEmpty) ...[
+                                    if (book.description != null &&
+                                        book.description!.isNotEmpty) ...[
                                       const SizedBox(height: 8),
                                       Text(
                                         book.description!,
-                                        style: Theme.of(context).textTheme.bodySmall,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
