@@ -13,6 +13,7 @@ class Hekam with _$Hekam {
     String? farsi2,
     String? farsi3,
     String? farsi4,
+    String? hadid,
     @JsonKey(fromJson: _isFavoriteFromJson, toJson: _isFavoriteToJson)
     @Default(false) bool isFavorite,
   }) = _Hekam;
