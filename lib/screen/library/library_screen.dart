@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../model/book_model.dart';
 import '../../util/epub_helper.dart';
 import 'cubit/library_cubit.dart';
@@ -85,46 +87,38 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: book.image != null
-                              ? ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(8.0),
-                            ),
-                            child: Image.network(
-                              book.image!,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
-                          )
-                              : Container(
-                            color: Colors.grey,
-                            alignment: Alignment.center,
-                            child: const Icon(
-                              Icons.book,
-                              size: 50,
-                              color: Colors.white,
+                          child: CachedNetworkImage(
+                            imageUrl: book.image!,
+                            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Container(
+                              alignment: Alignment.center,
+                              child: SvgPicture.asset('assets/icon/logo.svg', color: Colors.white?.withOpacity(0.3), )
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                book.title ?? 'Unknown Title',
-                                style: Theme.of(context).textTheme.titleLarge,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                book.author ?? 'Unknown Author',
-                                style: Theme.of(context).textTheme.bodyMedium,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+                        
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  book.title ?? 'Unknown Title',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  book.author ?? 'Unknown Author',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],

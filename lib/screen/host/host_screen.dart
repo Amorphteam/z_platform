@@ -67,16 +67,16 @@ class _HostScreenState extends State<HostScreen> {
               ),
               label: 'الموضوعي',
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(_currentIndex == 2 ? CupertinoIcons.book_solid : CupertinoIcons.book),
-            //   label: 'الكتب',
-            // ),
             BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 2 ? CupertinoIcons.search_circle_fill : CupertinoIcons.search),
+              icon: Icon(_currentIndex == 2 ? CupertinoIcons.book_solid : CupertinoIcons.book),
+              label: 'الكتب',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_currentIndex == 3 ? CupertinoIcons.search_circle_fill : CupertinoIcons.search),
               label: 'البحث',
             ),
             BottomNavigationBarItem(
-              icon: Icon(_currentIndex == 3 ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark),
+              icon: Icon(_currentIndex == 4 ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark),
               label: 'الإشارات',
             ),
           ],
@@ -94,9 +94,9 @@ class _HostScreenState extends State<HostScreen> {
         return 'الفهرست';
       case 2:
         return 'الكتب';
-      case 2:
-        return 'البحث';
       case 3:
+        return 'البحث';
+      case 4:
         return 'العلامات';
       default:
         return '';
@@ -115,17 +115,17 @@ class _HostScreenState extends State<HostScreen> {
           create: (context) => TocCubit(),
           child: TocScreen(),
         );
-      // case 2:
-      //   return BlocProvider(
-      //     create: (context) => LibraryCubit(),
-      //     child: const LibraryScreen(),
-      //   );
       case 2:
+        return BlocProvider(
+          create: (context) => LibraryCubit(),
+          child: const LibraryScreen(),
+        );
+      case 3:
         return BlocProvider(
           create: (context) => SearchCubit(),
           child: const SearchScreen(),
         );
-      case 3:
+      case 4:
         return BlocProvider(
           create: (context) => BookmarkCubit(),
           child: const BookmarkScreen(),
