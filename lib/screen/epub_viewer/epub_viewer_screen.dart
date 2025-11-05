@@ -1623,6 +1623,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
 
   Future<void> _handleFragment(String fragment) async {
+    // Check if it's a hadid fragment (format: hadid#<number>_<number>)
+    if (fragment.startsWith('hadid#')) {
+      _handleHadidFragment(fragment);
+      return;
+    }
+    
+    // Handle nahj#129 format (existing logic)
     String ids = fragment.split('#').last;
     final databaseRepository = DatabaseRepository();
     Word? word = await databaseRepository.getWordById(int.parse(ids));
@@ -1645,6 +1652,28 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     }
       _showSingleWordDialog(word);
 
+  }
+
+  Future<void> _handleHadidFragment(String fragment) async {
+    // Format: hadid#<number>_<number> (e.g., hadid#1_135)
+    // Extract the part after 'hadid#'
+    final String partAfterHash = fragment.split('#').last;
+    
+    // Split by '_' to get book number and page number
+    final List<String> parts = partAfterHash.split('_');
+    
+    if (parts.length >= 2) {
+      final String bookNumber = parts[0];
+      final String pageNumber = parts[1];
+      
+      // Show snackbar with book and page information
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Directionality(textDirection: TextDirection.rtl, child: Text('الکتاب $bookNumber.epub وصفحة $pageNumber')),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   void _showSingleWordDialog(Word? word) {
