@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -139,18 +140,36 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   Future<void> jumpToPage({String? chapterFileName, int? newPage}) async {
 
     if (newPage != null) {
+      debugPrint('📄 jumpToPage: Using newPage=$newPage');
       emit(EpubViewerState.pageChanged(pageNumber: newPage));
     }
     if (chapterFileName != null) {
       try {
+        debugPrint('📄 jumpToPage: Looking for file: $chapterFileName');
+        debugPrint('📄 Available files: ${_spineHtmlFileName?.take(5).join(", ")}... (showing first 5)');
         final int spineNumber =
-        await findPageIndexInEpub(_epubBook!, chapterFileName);
-        emit(EpubViewerState.pageChanged(pageNumber: spineNumber));
+        await findPageIndexInEpub(_epubBook!, chapterFileName, useSpineOrder: true);
+        if (spineNumber < 0) {
+          debugPrint('❌ File not found: $chapterFileName (returned index: $spineNumber)');
+          // Try without useSpineOrder
+          final int fallbackIndex = await findPageIndexInEpub(_epubBook!, chapterFileName, useSpineOrder: false);
+          if (fallbackIndex >= 0) {
+            debugPrint('✅ Found file using fallback method at index: $fallbackIndex');
+            emit(EpubViewerState.pageChanged(pageNumber: fallbackIndex));
+          } else {
+            debugPrint('❌ File not found even with fallback: $chapterFileName');
+          }
+        } else {
+          debugPrint('✅ Found file at index: $spineNumber');
+          emit(EpubViewerState.pageChanged(pageNumber: spineNumber));
+        }
       } catch (error) {
+        debugPrint('❌ Error in jumpToPage: $error');
         emit(EpubViewerState.error(error: error.toString()));
       }
     }
   }
+
 
 
   _saveStyleHelperToPreferences() async {

@@ -70,6 +70,7 @@ class RouteGenerator {
           final EpubChaptersWithBookPath? toc = args['toc'];
           final SearchModel? search = args['search'];
           final HistoryModel? history = args['history'];
+          final String? xhtmlFileName = args['xhtmlFileName'];
           return MaterialPageRoute(
             builder: (context) => BlocProvider(
               create: (context) => EpubViewerCubit(),
@@ -79,6 +80,7 @@ class RouteGenerator {
                 searchModel: search,
                 historyModel: history,
                 tocModel: toc,
+                xhtmlFileName: xhtmlFileName,
               ),
             ),
           );

@@ -60,6 +60,7 @@ Future<void> openEpub({
   HistoryModel? history,
   EpubChaptersWithBookPath? toc,
   SearchModel? search,
+  String? xhtmlFileName,
 }) async {
   await Navigator.pushNamed(
     context,
@@ -70,6 +71,7 @@ Future<void> openEpub({
       'history': history,
       'toc': toc,
       'search': search,
+      'xhtmlFileName': xhtmlFileName,
     },
   );
 }
@@ -161,21 +163,53 @@ String? convertImageToBase64(EpubByteContentFile? imageFile) {
 }
 
 
-Future<int> findPageIndexInEpub(EpubBook epubBook, String fileName) async {
+Future<int> findPageIndexInEpub(
+    EpubBook epubBook,
+    String fileName, {
+      bool useSpineOrder = false,
+    }) async {
+  final String targetBase = fileName.split('/').last;
+
+  if (useSpineOrder) {
+    try {
+      // Build ordered list based on spine IDs
+      final List<HtmlFileInfo> rawFiles = await extractHtmlContentWithEmbeddedImages(epubBook);
+      final spineItems = epubBook.Schema?.Package?.Spine?.Items;
+      final List<String> idRefs = [];
+      if (spineItems != null) {
+        for (final item in spineItems) {
+          if (item.IdRef != null) {
+            idRefs.add(item.IdRef!);
+          }
+        }
+      }
+      final List<HtmlFileInfo> ordered = reorderHtmlFilesBasedOnSpine(rawFiles, idRefs);
+      for (int i = 0; i < ordered.length; i++) {
+        final String name = ordered[i].fileName;
+        if (name == fileName || name.split('/').last == targetBase) {
+          return i;
+        }
+      }
+    } catch (_) {
+      // Fall back to unordered search if any issue occurs
+    }
+  }
+
+  // Default behavior: search in the content map order
   final EpubContent? bookContent = epubBook.Content;
   final Map<String, EpubTextContentFile>? htmlFiles = bookContent?.Html;
   if (htmlFiles != null) {
     int index = 0;
     for (final String key in htmlFiles.keys) {
-      if (key == fileName) {
+      if (key == fileName || key.split('/').last == targetBase) {
         return index;
       }
       index++;
     }
   }
-  // If chapterFileName is not found in the map, return -1 or handle it as needed.
   return -1;
 }
+
 
 
 String extractImageNameFromTag(String imageTag) {

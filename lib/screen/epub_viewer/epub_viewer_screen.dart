@@ -39,12 +39,14 @@ class EpubViewerScreen extends StatefulWidget {
     this.tocModel,
     this.searchModel,
     this.historyModel,
+    this.xhtmlFileName,
   });
   final ReferenceModel? referenceModel;
   final HistoryModel? historyModel;
   final Book? book;
   final EpubChaptersWithBookPath? tocModel;
   final SearchModel? searchModel;
+  final String? xhtmlFileName;
 
   @override
   _EpubViewerScreenState createState() => _EpubViewerScreenState();
@@ -122,15 +124,21 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     _determineEpubSourceAndLoad();
     
     // Set initial page based on the source
-    if (widget.referenceModel?.navIndex != null) {
-      final double doubleValue = double.parse(widget.referenceModel!.navIndex);
-      _initialPageIndex = doubleValue.toInt();
-    } else if (widget.historyModel?.navIndex != null) {
-      final double doubleValue = double.parse(widget.historyModel!.navIndex);
-      _initialPageIndex = doubleValue.toInt();
-    } else if (widget.searchModel?.pageIndex != null) {
-      _initialPageIndex = widget.searchModel!.pageIndex - 1;
+    // IMPORTANT: If xhtmlFileName is provided, ignore navIndex and don't set initialScrollIndex
+    // We'll jump to the file name after content loads instead
+    if (widget.xhtmlFileName == null || widget.xhtmlFileName!.isEmpty) {
+      // Only set initial page index if we're NOT using a file name to jump
+      if (widget.referenceModel?.navIndex != null) {
+        final double doubleValue = double.parse(widget.referenceModel!.navIndex);
+        _initialPageIndex = doubleValue.toInt();
+      } else if (widget.historyModel?.navIndex != null) {
+        final double doubleValue = double.parse(widget.historyModel!.navIndex);
+        _initialPageIndex = doubleValue.toInt();
+      } else if (widget.searchModel?.pageIndex != null) {
+        _initialPageIndex = widget.searchModel!.pageIndex - 1;
+      }
     }
+    // If xhtmlFileName exists, keep _initialPageIndex at 0 (default) and let the file name jump handle it
 
     // Debounce the item positions listener to reduce rebuilds
     Timer? _debounceTimer;
@@ -191,10 +199,47 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               if (widget.searchModel?.searchedWord != null) {
                 _search(widget.searchModel!.searchedWord!);
               }
+              // Handle xhtml file name jump after content loads
+              if (widget.xhtmlFileName != null && widget.xhtmlFileName!.isNotEmpty) {
+                final String fileName = widget.xhtmlFileName!;
+                // Wait for the list to be fully built and attached before jumping
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  // Add a small delay to ensure the list is ready
+                  Future.delayed(const Duration(milliseconds: 1), () {
+                    if (mounted) {
+                      debugPrint('🔍 Attempting to jump to file: $fileName');
+                      // Try as-is first
+                      context.read<EpubViewerCubit>().jumpToPage(chapterFileName: fileName);
+                      // If filename doesn't contain '/', also try with Text/ prefix as fallback
+                      if (!fileName.contains('/')) {
+                        Future.delayed(const Duration(milliseconds: 1), () {
+                          if (mounted) {
+                            debugPrint('🔍 Fallback: Trying Text/$fileName');
+                            context.read<EpubViewerCubit>().jumpToPage(chapterFileName: 'Text/$fileName');
+                          }
+                        });
+                      }
+                    }
+                  });
+                });
+              } else if (_initialPageIndex > 0) {
+                // Only jump to index if we don't have xhtmlFileName and index > 0
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    if (mounted) {
+                      context.read<EpubViewerCubit>().jumpToPage(newPage: _initialPageIndex);
+                    }
+                  });
+                });
+              }
             }
             
             context.read<EpubViewerCubit>().loadUserPreferences();
             context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
+          },
+          pageChanged: (pageNumber) {
+            // Ensure jumps are executed even if subsequent states are emitted quickly
+            _jumpTo(pageNumber: pageNumber);
           },
           translationLoaded: (translation) {
             // Check if there are any translations available
@@ -614,7 +659,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               key: PageStorageKey('epub_content'),
               addAutomaticKeepAlives: true,
               addRepaintBoundaries: true,
-              initialScrollIndex: _initialPageIndex,
+              // Don't use initialScrollIndex when xhtmlFileName is provided
+              // The jump will be handled programmatically after content loads
+              // This prevents the list from scrolling to index 0 before the filename jump
+              // We use 0 as a safe default, but the jump will override it immediately
+              initialScrollIndex: (widget.xhtmlFileName != null && widget.xhtmlFileName!.isNotEmpty) 
+                  ? 0  // Start at 0, but jump will happen immediately after
+                  : _initialPageIndex,
               itemBuilder: (BuildContext context, int index) {
                 final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -1538,9 +1589,31 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   }
   int tempPageNumber = -1;
   _jumpTo({int? pageNumber}) {
-    if (!_isControllerInitialized || pageNumber == null) return;
+    if (!_isControllerInitialized || pageNumber == null) {
+      debugPrint('⚠️ Cannot jump: controller not initialized or pageNumber is null');
+      return;
+    }
+    
+    // Check if controller is attached
+    if (!itemScrollController.isAttached) {
+      debugPrint('⚠️ Controller not attached yet, deferring jump to page $pageNumber');
+      // Retry after a delay
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted && itemScrollController.isAttached) {
+          _jumpTo(pageNumber: pageNumber);
+        }
+      });
+      return;
+    }
+    
+    // Validate page number is within bounds
+    if (pageNumber < 0) {
+      debugPrint('⚠️ Invalid page number: $pageNumber (negative)');
+      return;
+    }
     
     try {
+      debugPrint('✅ Jumping to page: $pageNumber');
       // Only create new GlobalKey if jumping to a different page
       if (tempPageNumber.toInt() != pageNumber) {
         debugPrint('🔑 Created new GlobalKey: ${_currentPageKey.hashCode} for NEW page: $pageNumber (was on page: ${_currentPage.toInt()})');
@@ -1556,7 +1629,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
         context.read<EpubViewerCubit>().checkBookmark(_bookPath!, _currentPage.toString());
       }
     } catch (e) {
-      debugPrint('Error jumping to page: $e');
+      debugPrint('❌ Error jumping to page $pageNumber: $e');
     }
   }
 
@@ -1680,7 +1753,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
       final String bookNumber = parts[0];
       final String pageNumber = parts[1];
 
-      await openEpub(context: context, reference: ReferenceModel(title: '', bookName: '',bookPath: 'hadid$bookNumber.epub', navIndex: pageNumber));
+      await openEpub(context: context, reference: ReferenceModel(title: '', bookName: '',bookPath: 'hadid$bookNumber.epub', navIndex: '5'), xhtmlFileName: '$pageNumber.xhtml');
     }
   }
 
