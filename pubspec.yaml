@@ -127,3 +127,6 @@ flutter:
     - family: nazaninBold
       fonts:
         - asset: assets/font/NazaninBold.ttf
+    - family: islam
+      fonts:
+        - asset: assets/font/islam.ttf

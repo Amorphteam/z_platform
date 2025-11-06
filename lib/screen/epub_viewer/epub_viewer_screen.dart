@@ -745,6 +745,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
             fontFamily: fontFamily.name,
             padding: HtmlPaddings.only(right: 7),
           ),
+          '.space': Style(
+            textAlign: TextAlign.justify,
+            margin: Margins.only(bottom: 10),
+            fontSize: FontSize(fontSize.size),
+            fontFamily: 'islam',
+            padding: HtmlPaddings.only(right: 7),
+          ),
           'p.center': Style(
             color: isDarkMode ? Colors.white : const Color(0xFF996633),
             textAlign: TextAlign.center,
@@ -952,6 +959,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
           margin: Margins.only(bottom: 10),
           fontSize: FontSize(fontSize.size),
           fontFamily: fontFamily.name,
+          padding: HtmlPaddings.only(right: 7),
+        ),
+        '.space': Style(
+          textAlign: TextAlign.justify,
+          margin: Margins.only(bottom: 10),
+          fontSize: FontSize(fontSize.size),
+          fontFamily: 'islam',
           padding: HtmlPaddings.only(right: 7),
         ),
         'p.center': Style(
@@ -1665,14 +1679,8 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     if (parts.length >= 2) {
       final String bookNumber = parts[0];
       final String pageNumber = parts[1];
-      
-      // Show snackbar with book and page information
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Directionality(textDirection: TextDirection.rtl, child: Text('الکتاب $bookNumber.epub وصفحة $pageNumber')),
-          duration: const Duration(seconds: 3),
-        ),
-      );
+
+      await openEpub(context: context, reference: ReferenceModel(title: '', bookName: '',bookPath: 'hadid$bookNumber.epub', navIndex: pageNumber));
     }
   }
 
