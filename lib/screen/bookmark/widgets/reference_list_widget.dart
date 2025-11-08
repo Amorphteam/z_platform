@@ -35,7 +35,6 @@ class ReferenceListWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Card(
-              color: Theme.of(context).colorScheme.onPrimary,
               child: SizedBox(
                 width: double.infinity,
                 child: Padding(
@@ -72,11 +71,8 @@ class ReferenceListWidget extends StatelessWidget {
                             },
                             child: CircleAvatar(
                               radius: 12,
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.onPrimary,
                               child: Icon(
                                 Icons.close_rounded,
-                                color: Theme.of(context).colorScheme.onSurface,
                                 size: 16,
                               ),
                             ),
@@ -88,7 +84,7 @@ class ReferenceListWidget extends StatelessWidget {
                                 reference.title,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .labelSmall?.copyWith(color: const Color(0xFFFFffff))
+                                    .labelSmall
                                     ,
                                 textAlign: TextAlign.right,
                               ),
@@ -98,7 +94,7 @@ class ReferenceListWidget extends StatelessWidget {
                             (intValue + 1).toString(),
                             style: Theme.of(context)
                                 .textTheme
-                                .titleSmall?.copyWith(color: const Color(0xFFFFffff))
+                                .titleSmall
                                 ,
                           ),
                         ],
@@ -107,10 +103,6 @@ class ReferenceListWidget extends StatelessWidget {
                     if (bookReferences.indexOf(reference) <
                         bookReferences.length - 1)
                       Divider(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onPrimary
-                            .withOpacity(0.4),
                         height: 0.5,
                       ),
                   ],

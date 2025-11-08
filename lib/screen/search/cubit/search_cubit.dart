@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -63,10 +66,16 @@ class SearchCubit extends Cubit<SearchState> {
     for (final bookPath in allBooks) {
       try {
         final epubData = await rootBundle.load('assets/epub/$bookPath');
-        final epubBook = await EpubReader.readBook(epubData.buffer.asUint8List());
-
         final String fileName = getFileNameFromPath(bookPath);
-        final epubBookLocal = EpubBookLocal(epubBook, fileName);
+
+        final epubBookLocal = await compute(
+          _parseEpubInIsolate,
+          _EpubParseParams(
+            bytes: epubData.buffer.asUint8List(),
+            fileName: fileName,
+          ),
+        );
+
         epubBooks.add(epubBookLocal);
       } catch (e) {
         print("❌ Could not load book: $bookPath - Skipping... Error: $e");
@@ -83,4 +92,19 @@ class SearchCubit extends Cubit<SearchState> {
     final String fileName = regExp.stringMatch(bookPath) ?? '';
     return fileName;
   }
+}
+
+class _EpubParseParams {
+  const _EpubParseParams({
+    required this.bytes,
+    required this.fileName,
+  });
+
+  final Uint8List bytes;
+  final String fileName;
+}
+
+Future<EpubBookLocal> _parseEpubInIsolate(_EpubParseParams params) async {
+  final epubBook = await EpubReader.readBook(params.bytes);
+  return EpubBookLocal(epubBook, params.fileName);
 }
