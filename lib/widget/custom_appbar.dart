@@ -25,6 +25,10 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final VoidCallback? onRightTap; // New callback for right icon
   final Function(String)? onSearch; // Optional
   final Function(String)? onSubmitted; // Optional
+  final VoidCallback? onSearchTap;
+  final List<String> recentSearches;
+  final ValueChanged<String>? onRecentSelected;
+  final ValueChanged<String>? onRecentDelete;
   final bool showSearchBar; // Toggle for search bar
   final String? backgroundImage; // New parameter for background image
 
@@ -41,6 +45,10 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.leftWidget,
     this.rightWidget,
     this.onSubmitted, // Default: show search bar
+    this.onSearchTap,
+    this.recentSearches = const [],
+    this.onRecentSelected,
+    this.onRecentDelete,
     this.backgroundImage, // Add to constructor
   }) : super(key: key);
 
@@ -54,6 +62,8 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   final TextEditingController _searchController = TextEditingController();
+  final GlobalKey _searchFieldKey = GlobalKey();
+  OverlayEntry? _recentOverlay;
 
   @override
   Widget build(BuildContext context) {
@@ -116,12 +126,20 @@ class _CustomAppBarState extends State<CustomAppBar> {
             child: Directionality(
               textDirection: TextDirection.rtl,
               child: TextField(
+                key: _searchFieldKey,
                 controller: _searchController,
+                onTap: _handleSearchTap,
                 onChanged: (value) {
                   setState(() {});
+                  _removeRecentOverlay();
                   if (widget.onSearch != null) widget.onSearch!(value);
                 },
-                onSubmitted: widget.onSubmitted,
+                onSubmitted: (query) {
+                  _removeRecentOverlay();
+                  if (widget.onSubmitted != null) {
+                    widget.onSubmitted!(query);
+                  }
+                },
                 decoration: InputDecoration(
                   hintText: "بحث...",
                   prefixIcon: Icon(Icons.search),
@@ -131,6 +149,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     onPressed: () {
                       _searchController.clear();
                       setState(() {});
+                      _removeRecentOverlay();
                       if (widget.onSearch != null) widget.onSearch!('');
                     },
                   )
@@ -147,6 +166,136 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ),
       ],
     );
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomAppBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_recentOverlay != null && !listEquals(oldWidget.recentSearches, widget.recentSearches)) {
+      _removeRecentOverlay();
+      if (widget.recentSearches.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _showRecentOverlay();
+          }
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _removeRecentOverlay();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _handleSearchTap() {
+    widget.onSearchTap?.call();
+
+    if (widget.recentSearches.isEmpty) {
+      _removeRecentOverlay();
+      return;
+    }
+
+    _showRecentOverlay();
+  }
+
+  void _showRecentOverlay() {
+    _removeRecentOverlay();
+
+    final RenderBox? searchBox = _searchFieldKey.currentContext?.findRenderObject() as RenderBox?;
+    final OverlayState? overlayState = Overlay.of(context);
+
+    if (searchBox == null || overlayState == null) {
+      return;
+    }
+
+    final Offset position = searchBox.localToGlobal(Offset.zero);
+    final double top = position.dy + searchBox.size.height;
+
+    _recentOverlay = OverlayEntry(
+      builder: (context) {
+        final theme = Theme.of(context);
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: _removeRecentOverlay,
+                child: Container(color: Colors.transparent),
+              ),
+            ),
+            Positioned(
+              top: top,
+              left: 0,
+              right: 0,
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface,
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.12),
+                            blurRadius: 16,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 320),
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          itemCount: widget.recentSearches.length,
+                          separatorBuilder: (_, __) => Divider(
+                            height: 1,
+                            color: theme.dividerColor.withOpacity(0.2),
+                          ),
+                          itemBuilder: (context, index) {
+                            final term = widget.recentSearches[index];
+                            return ListTile(
+                              leading: const Icon(Icons.history),
+                              title: Text(term),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () {
+                                  widget.onRecentDelete?.call(term);
+                                },
+                              ),
+                              onTap: () {
+                                _removeRecentOverlay();
+                                _searchController..text = term
+                                ..selection =
+                                    TextSelection.fromPosition(TextPosition(offset: term.length));
+                                widget.onSearch?.call(term);
+                                widget.onRecentSelected?.call(term);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    overlayState.insert(_recentOverlay!);
+  }
+
+  void _removeRecentOverlay() {
+    _recentOverlay?.remove();
+    _recentOverlay = null;
   }
 
   void _showThemeDialog(BuildContext context) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masaha/screen/search/widget/book_selection_sheet_widget.dart';
 import 'package:masaha/screen/search/widget/search_results_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/book_model.dart';
 import '../../util/search_helper.dart';
 import '../../widget/custom_appbar.dart';
@@ -16,15 +17,20 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  static const String _recentSearchesPrefsKey = 'search_recent_terms';
+  static const int _maxRecentSearches = 10;
+
   int _selectedBooksCount = 0; // To track the number of selected books
   Map<String, bool> _globalSelectedBooks = {}; // Tracks global selection state
   List<Book> allBooks = [];
   String _currentSearchQuery = ''; // Add this
+  List<String> _recentSearches = [];
 
   @override
   void initState() {
-    context.read<SearchCubit>().fetchBooksList();
     super.initState();
+    context.read<SearchCubit>().fetchBooksList();
+    _loadRecentSearches();
   }
 
   @override
@@ -34,12 +40,16 @@ class _SearchScreenState extends State<SearchScreen> {
           title: "البحث العام",
           backgroundImage: 'assets/image/back_tazhib_light.jpg',
           leftWidget: buildLeftWidget(context),
+          recentSearches: _recentSearches,
+          onRecentSelected: _onRecentSearchSelected,
+          onRecentDelete: _onRecentSearchDeleted,
           onLeftTap: () {
             openBookSelectionSheet(allBooks);
             context.read<SearchCubit>().resetState();
           },
           onSubmitted: (query) async {
             _currentSearchQuery = query; // Store the search query
+            await _upsertRecentSearch(query);
             await context.read<SearchCubit>().search(query, maxResultsPerBook: MAX_RESULTS_PER_BOOK);
           },
         ),
@@ -57,11 +67,33 @@ class _SearchScreenState extends State<SearchScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                 )),
-                loaded: (searchResults, isRunningSearch) =>
-                    SearchResultsWidget(
-                      searchResults: searchResults,
-                      searchQuery: _currentSearchQuery,
-                    ),
+                loaded: (searchResults, isRunningSearch) {
+                  if (searchResults.isEmpty && !isRunningSearch) {
+                    final displayQuery =
+                        _currentSearchQuery.isEmpty ? '...' : _currentSearchQuery;
+                    return Center(
+                      child: Text(
+                        'لم يتم العثور على'
+                            '\n "$displayQuery'
+                            '"\n في مجال البحث المحدد',
+
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }
+
+                  if (searchResults.isEmpty && isRunningSearch) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  return SearchResultsWidget(
+                    searchResults: searchResults,
+                    searchQuery: _currentSearchQuery,
+                  );
+                },
                 loadedList: (books) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     if (_globalSelectedBooks.isEmpty) {
@@ -89,6 +121,19 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       );
+
+  Future<void> _onRecentSearchSelected(String term) async {
+    await _upsertRecentSearch(term);
+    setState(() {
+      _currentSearchQuery = term;
+    });
+
+    await context.read<SearchCubit>().search(term, maxResultsPerBook: MAX_RESULTS_PER_BOOK);
+  }
+
+  void _onRecentSearchDeleted(String term) {
+    _removeRecentSearch(term);
+  }
 
   Widget buildLeftWidget(BuildContext context) {
     return IconButton(
@@ -134,5 +179,43 @@ class _SearchScreenState extends State<SearchScreen> {
       print(
           'Selected books in SearchScreen: ${selectedBooks.keys.where((key) => selectedBooks[key] == true).join(", ")}');
     }
+  }
+
+  Future<void> _loadRecentSearches() async {
+    final prefs = await SharedPreferences.getInstance();
+    final stored = prefs.getStringList(_recentSearchesPrefsKey) ?? [];
+    if (!mounted) return;
+    setState(() {
+      _recentSearches = stored.take(_maxRecentSearches).toList();
+    });
+  }
+
+  Future<void> _upsertRecentSearch(String term) async {
+    final trimmed = term.trim();
+    if (trimmed.isEmpty) {
+      return;
+    }
+
+    final updated = <String>[trimmed, ..._recentSearches.where((item) => item != trimmed)];
+    final limited = updated.take(_maxRecentSearches).toList();
+
+    setState(() {
+      _recentSearches = limited;
+    });
+
+    await _saveRecentSearches(limited);
+  }
+
+  Future<void> _removeRecentSearch(String term) async {
+    final updated = _recentSearches.where((item) => item != term).toList();
+    setState(() {
+      _recentSearches = updated;
+    });
+    await _saveRecentSearches(updated);
+  }
+
+  Future<void> _saveRecentSearches(List<String> values) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_recentSearchesPrefsKey, values);
   }
 }
