@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:html/parser.dart' as html_parser;
+import 'package:html/dom.dart' as dom;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../model/history_model.dart';
 import '../../../model/reference_model.dart';
@@ -40,9 +42,65 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   String? _bookTitle;
   List<EpubChapter>? _tocTreeList;
   StyleHelper styleHelper = StyleHelper();
+  
+  // Track current page for slider
+  int _currentPage = 0;
+  
+  // UI State
+  bool _isSliderVisible = true;
+  bool _isSearchOpen = false;
+  bool _isAboutUsBook = false;
+  int _currentSearchIndex = 0;
+  String _currentSearchTerm = '';
+  
+  // Content caching (persistent content)
+  List<String> _cachedContent = [];
+  String _cachedBookTitle = '';
+  FontSizeCustom _cachedFontSize = FontSizeCustom.medium;
+  LineHeightCustom _cachedLineHeight = LineHeightCustom.medium;
+  FontFamily _cachedFontFamily = FontFamily.font1;
+  
+  // Search state
+  List<String> _originalContent = []; // Store original content before highlighting
+  List<SearchModel> _currentSearchResults = [];
+  Map<int, List<String>> _pageHighlights = {}; // Map of page index to list of highlight IDs
+  Map<int, int> _highlightIndexPerPage = {}; // Map of page index to current highlight index on that page
+  
+  // Debounce timer for iOS slider
+  Timer? _iosSliderDebounceTimer;
 
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
   final searchHelper = SearchHelper();
+  
+  // Getters for UI state
+  bool get isSliderVisible => _isSliderVisible;
+  bool get isSearchOpen => _isSearchOpen;
+  bool get isAboutUsBook => _isAboutUsBook;
+  int get currentSearchIndex => _currentSearchIndex;
+  List<String> get cachedContent => _cachedContent;
+  String get cachedBookTitle => _cachedBookTitle;
+  FontSizeCustom get cachedFontSize => _cachedFontSize;
+  LineHeightCustom get cachedLineHeight => _cachedLineHeight;
+  FontFamily get cachedFontFamily => _cachedFontFamily;
+  
+  // Getters for book and TOC
+  String? get currentBookPath => _assetPath;
+  int get currentPage => _currentPage;
+  List<EpubChapter>? get tocTreeList => _tocTreeList;
+  
+  // Getters for search
+  List<SearchModel> get currentSearchResults => _currentSearchResults;
+  Map<int, List<String>> get pageHighlights => _pageHighlights;
+  int getHighlightIndexForPage(int pageIndex) => _highlightIndexPerPage[pageIndex] ?? 0;
+  String? getCurrentHighlightId() {
+    final highlights = _pageHighlights[_currentPage];
+    if (highlights == null || highlights.isEmpty) return null;
+    final highlightIndex = _highlightIndexPerPage[_currentPage] ?? 0;
+    if (highlightIndex >= 0 && highlightIndex < highlights.length) {
+      return highlights[highlightIndex];
+    }
+    return highlights.first;
+  }
 
 
   Future<void> checkBookmark(String bookPath, String pageIndex) async {
@@ -50,6 +108,66 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     emit(isBookmarked ? const EpubViewerState.bookmarkPresent() : const EpubViewerState.bookmarkAbsent());
   }
 
+  /// Toggle bookmark - add if not exists, remove if exists
+  Future<void> toggleBookmark() async {
+    if (_assetPath == null || _spineHtmlContent == null) return;
+    
+    // Extract just the filename from the asset path (e.g., 'assets/epub/1.epub' -> '1.epub')
+    final String bookPath = _assetPath!.replaceFirst('assets/epub/', '');
+    final String pageIndex = _currentPage.toString();
+    
+    // Check if bookmark exists
+    final bool isBookmarked = await referencesDatabase.isBookmarkExist(bookPath, pageIndex);
+    
+    if (isBookmarked) {
+      // Remove bookmark
+      await removeBookmark(bookPath, pageIndex);
+      await checkBookmark(bookPath, pageIndex);
+    } else {
+      // Add bookmark
+      final String? headingTitle = findPreviousHeading(_currentPage);
+      final String bookmarkTitle = headingTitle ?? 'علامة مرجعية على كتاب $_cachedBookTitle';
+      
+      final reference = ReferenceModel(
+        title: bookmarkTitle,
+        bookName: _cachedBookTitle,
+        bookPath: bookPath,
+        navIndex: pageIndex,
+      );
+      
+      await addBookmark(reference);
+      await checkBookmark(bookPath, pageIndex);
+    }
+  }
+
+  /// Find the previous heading from current page
+  String? findPreviousHeading(int currentPage) {
+    if (_spineHtmlContent == null || _spineHtmlContent!.isEmpty) return null;
+    
+    String? headingText;
+    final int contentIndex = currentPage;
+
+    // Traverse the pages backward from the current page to find the first heading
+    for (int i = contentIndex; i >= 0 && i < _spineHtmlContent!.length; i--) {
+      final dom.Document document = html_parser.parse(_spineHtmlContent![i]);
+      final List<dom.Element> headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+      if (headings.isNotEmpty) {
+        // Check if the heading has a title attribute
+        final dom.Element lastHeading = headings.last;
+        final String? title = lastHeading.attributes['title'];
+
+        if (title != null) {
+          headingText = title.trim();
+        } else {
+          headingText = lastHeading.text.trim();
+        }
+        break;
+      }
+    }
+
+    return headingText;
+  }
 
   Future<void> removeBookmark(String bookPath, String pageNumber) async {
     try {
@@ -83,12 +201,28 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       }
 
       _storeEpubDetails(epubBook, reorderHtmlFilesBasedOnSpine(epubContent, idRefs), assetPath);
-          emit(const EpubViewerState.loading());
-          await Future.delayed(const Duration(milliseconds: 200));
+      
+      // Cache content
+      _cachedContent = _spineHtmlContent ?? [];
+      _cachedBookTitle = _bookTitle ?? '';
+      
+      // Check if it's About Us book
+      if (assetPath.contains('0.epub')) {
+        _isAboutUsBook = true;
+      }
+      
+      emit(const EpubViewerState.loading());
+      await Future.delayed(const Duration(milliseconds: 200));
 
       emit(EpubViewerState.loaded(content: _spineHtmlContent!,
         epubTitle: _bookTitle ?? '',
         tocTreeList: _tocTreeList,),);
+      
+      // Check bookmark after loading if we have a book path
+      if (_assetPath != null && _currentPage >= 0) {
+        final String bookPath = _assetPath!.replaceFirst('assets/epub/', '');
+        await checkBookmark(bookPath, _currentPage.toString());
+      }
     } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
     }
@@ -122,9 +256,18 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   }
 
   void changeStyle({FontSizeCustom? fontSize, LineHeightCustom? lineSpace, FontFamily? fontFamily}) {
-    if (fontSize != null) styleHelper.changeFontSize(fontSize);
-    if (lineSpace != null) styleHelper.changeLineSpace(lineSpace);
-    if (fontFamily != null) styleHelper.changeFontFamily(fontFamily);
+    if (fontSize != null) {
+      styleHelper.changeFontSize(fontSize);
+      _cachedFontSize = fontSize;
+    }
+    if (lineSpace != null) {
+      styleHelper.changeLineSpace(lineSpace);
+      _cachedLineHeight = lineSpace;
+    }
+    if (fontFamily != null) {
+      styleHelper.changeFontFamily(fontFamily);
+      _cachedFontFamily = fontFamily;
+    }
 
     styleHelper.saveToPrefs();
 
@@ -133,18 +276,237 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
 
   Future<void> jumpToPage({String? chapterFileName, int? newPage}) async {
-
     if (newPage != null) {
+      _currentPage = newPage;
       emit(EpubViewerState.pageChanged(pageNumber: newPage));
+      
+      // Check bookmark after page change
+      if (_assetPath != null) {
+        final String bookPath = _assetPath!.replaceFirst('assets/epub/', '');
+        // Debounce bookmark check to reduce database calls
+        Future.delayed(const Duration(milliseconds: 500), () {
+          checkBookmark(bookPath, _currentPage.toString());
+        });
+      }
     }
     if (chapterFileName != null) {
       try {
         final int spineNumber =
         await findPageIndexInEpub(_epubBook!, chapterFileName, useSpineOrder: true);
+        _currentPage = spineNumber;
         emit(EpubViewerState.pageChanged(pageNumber: spineNumber));
       } catch (error) {
         emit(EpubViewerState.error(error: error.toString()));
       }
+    }
+  }
+
+  /// Update current page from slider (for immediate UI feedback during dragging)
+  void updateCurrentPageFromSlider(double page) {
+    final int newPage = page.toInt();
+    if (newPage != _currentPage) {
+      _currentPage = newPage;
+      emit(EpubViewerState.pageChanged(pageNumber: _currentPage));
+    }
+  }
+
+  /// Jump to page when slider is released (Android) or after debounce (iOS)
+  void jumpToPageFromSlider(double page) {
+    final int targetPage = page.toInt();
+    if (targetPage != _currentPage) {
+      _currentPage = targetPage;
+      emit(EpubViewerState.pageChanged(pageNumber: _currentPage));
+    }
+  }
+
+  /// Update current page from scroll position (debounced)
+  Timer? _scrollDebounceTimer;
+  void updateCurrentPageFromScroll(int pageIndex) {
+    if (pageIndex != _currentPage) {
+      _currentPage = pageIndex;
+      emit(EpubViewerState.pageChanged(pageNumber: _currentPage));
+      
+      // Debounce bookmark check to reduce database calls
+      _scrollDebounceTimer?.cancel();
+      _scrollDebounceTimer = Timer(const Duration(milliseconds: 500), () {
+        if (_assetPath != null) {
+          final String bookPath = _assetPath!.replaceFirst('assets/epub/', '');
+          checkBookmark(bookPath, _currentPage.toString());
+        }
+      });
+    }
+  }
+
+  /// Toggle search bar visibility
+  void toggleSearch(bool open) {
+    _isSearchOpen = open;
+    
+    if (!open) {
+      // Restore original content when search is closed
+      if (_originalContent.isNotEmpty) {
+        _cachedContent = _originalContent;
+        _originalContent = [];
+        _pageHighlights = {};
+        _highlightIndexPerPage = {};
+        // Emit loaded state with original content
+        emit(EpubViewerState.loaded(
+          content: _cachedContent,
+          epubTitle: _cachedBookTitle,
+          tocTreeList: _tocTreeList,
+        ));
+      } else {
+        // Emit current state to trigger UI rebuild
+        _emitCurrentStateForUIUpdate();
+      }
+    } else {
+      // Emit current state to trigger UI rebuild when opening search
+      _emitCurrentStateForUIUpdate();
+    }
+  }
+  
+  /// Emit current state to trigger UI rebuild (for UI-only changes like search toggle)
+  void _emitCurrentStateForUIUpdate() {
+    // Re-emit the current state to trigger a rebuild
+    if (_cachedContent.isNotEmpty) {
+      emit(EpubViewerState.loaded(
+        content: _cachedContent,
+        epubTitle: _cachedBookTitle,
+        tocTreeList: _tocTreeList,
+      ));
+    } else {
+      // If no content, emit pageChanged to trigger rebuild
+      emit(EpubViewerState.pageChanged(pageNumber: _currentPage));
+    }
+  }
+
+  /// Toggle slider visibility
+  void toggleSlider(bool visible) {
+    _isSliderVisible = visible;
+  }
+
+  /// Update current search index
+  void updateSearchIndex(int index) {
+    _currentSearchIndex = index;
+  }
+
+  /// Navigate to next search result
+  void navigateToNextSearchResult(List<SearchModel> searchResults) {
+    if (searchResults.isEmpty) return;
+    
+    final currentResult = searchResults[_currentSearchIndex];
+    final currentPageIndex = currentResult.pageIndex - 1;
+    final highlightsOnCurrentPage = _pageHighlights[currentPageIndex] ?? [];
+    final currentHighlightIndex = _highlightIndexPerPage[currentPageIndex] ?? 0;
+    
+    // Check if there's a next highlight on the current page
+    if (currentHighlightIndex < highlightsOnCurrentPage.length - 1) {
+      // Move to next highlight on same page
+      _highlightIndexPerPage[currentPageIndex] = currentHighlightIndex + 1;
+      // Update current page to ensure we're tracking the right page
+      _currentPage = currentPageIndex;
+      // Emit pageChanged to trigger scroll to highlight (even though page number is same)
+      emit(EpubViewerState.pageChanged(pageNumber: currentPageIndex));
+    } else if (_currentSearchIndex < searchResults.length - 1) {
+      // Move to next search result (different page)
+      _currentSearchIndex++;
+      highlightContent(
+        searchResults[_currentSearchIndex].pageIndex,
+        _currentSearchTerm,
+      );
+    }
+  }
+
+  /// Navigate to previous search result
+  void navigateToPreviousSearchResult(List<SearchModel> searchResults) {
+    if (searchResults.isEmpty) return;
+    
+    final currentResult = searchResults[_currentSearchIndex];
+    final currentPageIndex = currentResult.pageIndex - 1;
+    final currentHighlightIndex = _highlightIndexPerPage[currentPageIndex] ?? 0;
+    
+    // Check if there's a previous highlight on the current page
+    if (currentHighlightIndex > 0) {
+      // Move to previous highlight on same page
+      _highlightIndexPerPage[currentPageIndex] = currentHighlightIndex - 1;
+      // Update current page to ensure we're tracking the right page
+      _currentPage = currentPageIndex;
+      // Emit pageChanged to trigger scroll to highlight (even though page number is same)
+      emit(EpubViewerState.pageChanged(pageNumber: currentPageIndex));
+    } else if (_currentSearchIndex > 0) {
+      // Move to previous search result (different page)
+      _currentSearchIndex--;
+      final previousPageIndex = searchResults[_currentSearchIndex].pageIndex - 1;
+      final highlightsOnPreviousPage = _pageHighlights[previousPageIndex] ?? [];
+      // Set highlight index to last highlight on previous page
+      if (highlightsOnPreviousPage.isNotEmpty) {
+        _highlightIndexPerPage[previousPageIndex] = highlightsOnPreviousPage.length - 1;
+      }
+      highlightContent(
+        searchResults[_currentSearchIndex].pageIndex,
+        _currentSearchTerm,
+      );
+    }
+  }
+  
+  /// Navigate to a specific search result by index
+  Future<void> navigateToSearchResult(int resultIndex) async {
+    if (resultIndex < 0 || resultIndex >= _currentSearchResults.length) return;
+    
+    _currentSearchIndex = resultIndex;
+    await highlightContent(
+      _currentSearchResults[resultIndex].pageIndex,
+      _currentSearchTerm,
+    );
+  }
+
+  /// Handle iOS slider change with debounce
+  void handleIOSSliderChange(double page, VoidCallback onJump) {
+    updateCurrentPageFromSlider(page);
+    // Cancel previous timer
+    _iosSliderDebounceTimer?.cancel();
+    // Debounce the jump
+    _iosSliderDebounceTimer = Timer(Duration.zero, () {
+      onJump();
+    });
+  }
+
+  /// Cancel iOS slider debounce timer
+  void cancelIOSSliderDebounce() {
+    _iosSliderDebounceTimer?.cancel();
+    _iosSliderDebounceTimer = null;
+  }
+
+  @override
+  Future<void> close() {
+    _iosSliderDebounceTimer?.cancel();
+    _scrollDebounceTimer?.cancel();
+    return super.close();
+  }
+
+  /// Initialize EPUB loading from different sources
+  Future<void> initializeEpubLoading({
+    String? bookPath,
+    String? bookmarkPath,
+    String? historyPath,
+    String? searchPath,
+    String? tocPath,
+  }) async {
+    String? pathToLoad;
+    
+    if (bookmarkPath != null) {
+      pathToLoad = bookmarkPath;
+    } else if (tocPath != null) {
+      pathToLoad = tocPath;
+    } else if (searchPath != null) {
+      pathToLoad = searchPath;
+    } else if (historyPath != null) {
+      pathToLoad = historyPath;
+    } else if (bookPath != null) {
+      pathToLoad = bookPath;
+    }
+
+    if (pathToLoad != null) {
+      await loadAndParseEpub('assets/epub/$pathToLoad');
     }
   }
 
@@ -157,6 +519,10 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
   Future<void> loadUserPreferences() async {
     StyleHelper.loadFromPrefs().then((_) {
+      _cachedFontSize = styleHelper.fontSize;
+      _cachedLineHeight = styleHelper.lineSpace;
+      _cachedFontFamily = styleHelper.fontFamily;
+      
       emit(EpubViewerState.styleChanged(
         fontSize: styleHelper.fontSize,
         lineHeight: styleHelper.lineSpace,
@@ -206,7 +572,16 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     for (final String fileName in _spineHtmlFileName!){
       if (fileName == item.ContentFileName){
         final int spineNumber = await findPageIndexInEpub(_epubBook!, fileName);
+        _currentPage = spineNumber;
         emit(EpubViewerState.pageChanged(pageNumber: spineNumber));
+        
+        // Check bookmark after chapter navigation
+        if (_assetPath != null) {
+          final String bookPath = _assetPath!.replaceFirst('assets/epub/', '');
+          Future.delayed(const Duration(milliseconds: 500), () {
+            checkBookmark(bookPath, _currentPage.toString());
+          });
+        }
       }
     }
   }
@@ -215,7 +590,16 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     for (final String fileName in _spineHtmlFileName!){
       if (fileName == chapterName){
         final int spineNumber = await findPageIndexInEpub(_epubBook!, fileName);
+        _currentPage = spineNumber;
         emit(EpubViewerState.pageChanged(pageNumber: spineNumber));
+        
+        // Check bookmark after chapter navigation
+        if (_assetPath != null) {
+          final String bookPath = _assetPath!.replaceFirst('assets/epub/', '');
+          Future.delayed(const Duration(milliseconds: 500), () {
+            checkBookmark(bookPath, _currentPage.toString());
+          });
+        }
       }
     }
   }
@@ -227,11 +611,31 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     }
 
     try {
+      // Store search term
+      _currentSearchTerm = searchTerm;
+      
+      // Store original content if not already stored (first search)
+      if (_originalContent.isEmpty && _cachedContent.isNotEmpty) {
+        _originalContent = List<String>.from(_cachedContent);
+      }
+      
       // Assuming searchHtmlContents expects the book title, which we stored in _bookTitle
       final List<SearchModel> results = await searchHelper.searchHtmlContents(_spineHtmlContent!, searchTerm, null, null);
 
+      // Store search results
+      _currentSearchResults = results;
+      
+      // Reset search index when new results are found
+      _currentSearchIndex = 0;
+      _highlightIndexPerPage.clear();
+
       // Emit the search results to the state
       emit(EpubViewerState.searchResultsFound(searchResults: results));
+      
+      // Auto-highlight first result if available
+      if (results.isNotEmpty) {
+        await highlightContent(results[0].pageIndex, searchTerm);
+      }
     } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
     }
@@ -280,10 +684,25 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       globalCounter += _countMatchesInContent(normalizedContent, normalizedSearchTerm);
     }
 
+    // Store page highlights
+    _pageHighlights = pageHighlights;
+    
+    // Reset highlight index for the target page
+    final targetPageIndex = pageIndex - 1;
+    _highlightIndexPerPage[targetPageIndex] = 0;
+    
+    // Update current page if needed
+    if (_currentPage != targetPageIndex) {
+      _currentPage = targetPageIndex;
+    }
+
+    // Cache highlighted content
+    _cachedContent = updatedContent;
+
     // Emit the new state with updated content and page highlights map
     emit(EpubViewerState.contentHighlighted(
         content: updatedContent,
-        highlightedIndex: pageIndex - 1,
+        highlightedIndex: targetPageIndex,
         pageHighlights: pageHighlights
     ));
   }

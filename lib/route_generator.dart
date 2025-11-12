@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:masaha/screen/epub_viewer/epub_viewer_screen_v2.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masaha/screen/bookmark/bookmark_screen.dart';
@@ -60,7 +61,7 @@ class RouteGenerator {
             isIOS: isIOS,
             builder: (context) => BlocProvider(
               create: (context) => EpubViewerCubit(),
-              child: EpubViewerScreen(
+              child: EpubViewerScreenV2(
                 book: cat,
                 referenceModel: reference,
                 searchModel: search,
