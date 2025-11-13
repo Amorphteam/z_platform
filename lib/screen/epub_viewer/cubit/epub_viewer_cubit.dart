@@ -14,6 +14,7 @@ import '../../../model/search_model.dart';
 import '../../../model/style_model.dart';
 import '../../../repository/hostory_database.dart';
 import '../../../repository/reference_database.dart';
+import '../../../service/online_book_service.dart';
 import '../../../util/epub_helper.dart';
 import '../../../util/search_helper.dart';
 import '../../../util/style_helper.dart';
@@ -42,6 +43,11 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   String? _bookTitle;
   List<EpubChapter>? _tocTreeList;
   StyleHelper styleHelper = StyleHelper();
+  
+  // Online book support
+  final OnlineBookService _onlineBookService = OnlineBookService();
+  int? _onlineBookId;
+  bool _isOnlineBook = false;
   
   // Track current page for slider
   int _currentPage = 0;
@@ -87,7 +93,12 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   FontFamily get cachedFontFamily => _cachedFontFamily;
   
   // Getters for book and TOC
-  String? get currentBookPath => _assetPath;
+  String? get currentBookPath {
+    if (_isOnlineBook && _onlineBookId != null) {
+      return 'online_$_onlineBookId';
+    }
+    return _assetPath;
+  }
   int get currentPage => _currentPage;
   List<EpubChapter>? get tocTreeList => _tocTreeList;
   
@@ -517,12 +528,23 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     String? tocChapterFileName,
     String? deepLinkFileName,
     int? initialPage,
+    int? onlineBookId, // New: Support for online books
   }) async {
     String? pathToLoad;
     
     // Clear any pending navigation
     _pendingChapterFileName = null;
     _pendingInitialPage = null;
+    _isOnlineBook = false;
+    _onlineBookId = null;
+    
+    // Check if this is an online book (highest priority)
+    if (onlineBookId != null) {
+      _onlineBookId = onlineBookId;
+      _isOnlineBook = true;
+      await loadOnlineBook(onlineBookId, initialPage: initialPage);
+      return;
+    }
     
     // Determine which source to load from (priority order)
     if (bookmarkPath != null) {
@@ -559,6 +581,90 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
     if (pathToLoad != null) {
       await loadAndParseEpub('assets/epub/$pathToLoad');
+    }
+  }
+  
+  /// Load online book from API (with offline cache fallback)
+  Future<void> loadOnlineBook(int bookId, {int? initialPage}) async {
+    emit(const EpubViewerState.loading());
+    
+    try {
+      List<HtmlFileInfo> htmlContentList;
+      
+      // Try to fetch from API first
+      try {
+        final pages = await _onlineBookService.fetchBookPages(bookId: bookId);
+        
+        // Convert to HtmlFileInfo format
+        htmlContentList = _onlineBookService.convertToHtmlFileInfo(
+          pages,
+          'Book $bookId', // Default title, can be enhanced later
+        );
+        
+        // Cache for offline access
+        await _onlineBookService.cacheBookPages(
+          bookId: bookId,
+          pages: pages,
+        );
+        
+        _bookTitle = 'Book $bookId';
+      } catch (e) {
+        // If online fetch fails, try to load from cache
+        final cachedPages = await _onlineBookService.loadCachedPages(bookId);
+        
+        if (cachedPages != null && cachedPages.isNotEmpty) {
+          htmlContentList = _onlineBookService.convertToHtmlFileInfo(
+            cachedPages,
+            'Book $bookId',
+          );
+          _bookTitle = 'Book $bookId (Offline)';
+        } else {
+          throw Exception('Failed to load book online and no cache available: $e');
+        }
+      }
+      
+      // Store content similar to offline EPUB
+      _spineHtmlContent =
+          htmlContentList.map((info) => info.modifiedHtmlContent).toList();
+      _spineHtmlFileName =
+          htmlContentList.map((info) => info.fileName).toList();
+      _spineHtmlFileIndex =
+          htmlContentList.map((info) => info.pageIndex).toList();
+      _epubContent = htmlContentList;
+      _cachedContent = List<String>.from(_spineHtmlContent!);
+      _cachedBookTitle = _bookTitle ?? '';
+      
+      // Set current page
+      if (initialPage != null && initialPage >= 0 && initialPage < htmlContentList.length) {
+        _currentPage = initialPage;
+      } else {
+        _currentPage = 0;
+      }
+      
+      emit(const EpubViewerState.loading());
+      await Future.delayed(const Duration(milliseconds: 200));
+      
+      emit(EpubViewerState.loaded(
+        content: _spineHtmlContent!,
+        epubTitle: _bookTitle ?? '',
+        tocTreeList: [], // Online books don't have TOC yet
+      ));
+      
+      // Wait a bit for the state handler to run
+      await Future.delayed(const Duration(milliseconds: 100));
+      
+      // Handle post-load navigation
+      if (initialPage != null && initialPage >= 0 && initialPage < htmlContentList.length) {
+        await jumpToPage(newPage: initialPage);
+      }
+      
+      // Check bookmark after loading
+      if (_currentPage >= 0) {
+        final String bookPath = 'online_$bookId';
+        await checkBookmark(bookPath, _currentPage.toString());
+      }
+    } catch (error) {
+      emit(EpubViewerState.error(error: error.toString()));
     }
   }
   

@@ -59,6 +59,7 @@ class RouteGenerator {
           final EpubChaptersWithBookPath? toc = args['toc'];
           final SearchModel? search = args['search'];
           final DeepLinkModel? deepLink = args['deepLink'];
+          final int? onlineBookId = args['onlineBookId']; // New: Support for online books
           // Support legacy fileName parameter for backward compatibility
           final String? fileName = args['fileName'];
 
@@ -83,6 +84,7 @@ class RouteGenerator {
                 searchModel: search,
                 tocModel: toc,
                 deepLinkModel: deepLinkModel,
+                onlineBookId: onlineBookId, // Pass online book ID
               ),
             ),
           );

@@ -35,6 +35,7 @@ class EpubViewerScreenV2 extends StatefulWidget {
     this.searchModel,
     this.historyModel,
     this.deepLinkModel,
+    this.onlineBookId, // New: Support for online books
   });
 
   final ReferenceModel? referenceModel;
@@ -43,6 +44,7 @@ class EpubViewerScreenV2 extends StatefulWidget {
   final EpubChaptersWithBookPath? tocModel;
   final SearchModel? searchModel;
   final DeepLinkModel? deepLinkModel;
+  final int? onlineBookId; // New: Online book ID from API
 
   @override
   _EpubViewerScreenV2State createState() => _EpubViewerScreenV2State();
@@ -154,6 +156,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
       tocChapterFileName: tocChapterFileName,
       deepLinkFileName: widget.deepLinkModel?.fileName,
       initialPage: initialPage,
+      onlineBookId: widget.onlineBookId, // Pass online book ID
     );
   }
 

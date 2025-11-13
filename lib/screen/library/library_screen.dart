@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,11 +19,129 @@ class LibraryScreen extends StatefulWidget {
 
 class _LibraryScreenState extends State<LibraryScreen> {
   String _hijriDate = '';
+  final TextEditingController _bookIdController = TextEditingController();
 
   @override
   void initState() {
     context.read<LibraryCubit>().fetchBooks();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bookIdController.dispose();
+    super.dispose();
+  }
+
+  void _showBookIdDialog(BuildContext context) {
+    _bookIdController.clear();
+    
+    if (Platform.isIOS) {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: const Text('إدخال رقم الكتاب'),
+          content: Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: CupertinoTextField(
+              controller: _bookIdController,
+              placeholder: 'أدخل رقم الكتاب',
+              keyboardType: TextInputType.number,
+              textDirection: TextDirection.ltr,
+              textAlign: TextAlign.center,
+              padding: const EdgeInsets.all(12.0),
+            ),
+          ),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('إلغاء'),
+              onPressed: () => Navigator.pop(context),
+            ),
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: const Text('فتح'),
+              onPressed: () {
+                final bookIdText = _bookIdController.text.trim();
+                if (bookIdText.isNotEmpty) {
+                  final bookId = int.tryParse(bookIdText);
+                  if (bookId != null && bookId > 0) {
+                    Navigator.pop(context);
+                    openEpub(context: context, onlineBookId: bookId);
+                  } else {
+                    // Show error
+                    showCupertinoDialog(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                        title: const Text('خطأ'),
+                        content: const Text('يرجى إدخال رقم كتاب صحيح'),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text('حسناً'),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('إدخال رقم الكتاب'),
+          content: TextField(
+            controller: _bookIdController,
+            decoration: const InputDecoration(
+              hintText: 'أدخل رقم الكتاب',
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.number,
+            textDirection: TextDirection.ltr,
+            textAlign: TextAlign.center,
+            autofocus: true,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('إلغاء'),
+            ),
+            TextButton(
+              onPressed: () {
+                final bookIdText = _bookIdController.text.trim();
+                if (bookIdText.isNotEmpty) {
+                  final bookId = int.tryParse(bookIdText);
+                  if (bookId != null && bookId > 0) {
+                    Navigator.pop(context);
+                    openEpub(context: context, onlineBookId: bookId);
+                  } else {
+                    // Show error
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('خطأ'),
+                        content: const Text('يرجى إدخال رقم كتاب صحيح'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('حسناً'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                }
+              },
+              child: const Text('فتح'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void _showSeriesBottomSheet(BuildContext context, List<Series> series) {
@@ -125,6 +244,58 @@ class _LibraryScreenState extends State<LibraryScreen> {
     }
   }
 
+  Widget _buildOnlineBookTestCard(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      color: theme.colorScheme.primaryContainer.withOpacity(0.15),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12.0),
+        onTap: () {
+          _showBookIdDialog(context);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Icon(
+                Icons.cloud_download_outlined,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 12.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'تجربة الكتاب عبر الإنترنت',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 6.0),
+                    Text(
+                      'اضغط هنا لإدخال رقم الكتاب وقراءته مباشرة من الخادم.',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12.0),
+              Icon(
+                Platform.isIOS ? CupertinoIcons.chevron_forward : Icons.chevron_right,
+                color: theme.colorScheme.primary,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -165,21 +336,30 @@ class _LibraryScreenState extends State<LibraryScreen> {
           loaded: (books, hijriDate) => Padding(
             padding: const EdgeInsets.all(16.0),
             child: ListView.separated(
-              itemCount: books.length + 1,
+              itemCount: books.length + 1 + (kDebugMode ? 1 : 0),
               separatorBuilder: (context, index) {
-                // Add spacing after mobile apps section
-                if (index == books.length) {
+                final hasOnlineTestTile = kDebugMode;
+                final mobileAppsIndex = books.length + (hasOnlineTestTile ? 1 : 0);
+                if (index == mobileAppsIndex) {
                   return const SizedBox.shrink();
                 }
                 return const SizedBox(height: 12.0);
               },
               itemBuilder: (context, index) {
+                final hasOnlineTestTile = kDebugMode;
+                final mobileAppsIndex = books.length + (hasOnlineTestTile ? 1 : 0);
+
+                if (hasOnlineTestTile && index == 0) {
+                  return _buildOnlineBookTestCard(context);
+                }
+
                 // Add MobileAppsWidget as the last item
-                if (index == books.length) {
+                if (index == mobileAppsIndex) {
                   return MobileAppsWidget();
                 }
 
-                final book = books[index];
+                final bookIndex = index - (hasOnlineTestTile ? 1 : 0);
+                final book = books[bookIndex];
                 return GestureDetector(
                   onTap: () {
                     if (book.series != null && book.series!.isNotEmpty) {

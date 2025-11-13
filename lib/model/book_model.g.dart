@@ -15,6 +15,7 @@ _$BookImpl _$$BookImplFromJson(Map<String, dynamic> json) => _$BookImpl(
       series: (json['series'] as List<dynamic>?)
           ?.map((e) => Series.fromJson(e as Map<String, dynamic>))
           .toList(),
+      onlineBookId: (json['onlineBookId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$BookImplToJson(_$BookImpl instance) =>
@@ -25,6 +26,7 @@ Map<String, dynamic> _$$BookImplToJson(_$BookImpl instance) =>
       'image': instance.image,
       'epub': instance.epub,
       'series': instance.series,
+      'onlineBookId': instance.onlineBookId,
     };
 
 _$SeriesImpl _$$SeriesImplFromJson(Map<String, dynamic> json) => _$SeriesImpl(

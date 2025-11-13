@@ -26,6 +26,7 @@ mixin _$Book {
   String? get image => throw _privateConstructorUsedError;
   String get epub => throw _privateConstructorUsedError;
   List<Series>? get series => throw _privateConstructorUsedError;
+  int? get onlineBookId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $BookCopyWith<$Res> {
       String? description,
       String? image,
       String epub,
-      List<Series>? series});
+      List<Series>? series,
+      int? onlineBookId});
 }
 
 /// @nodoc
@@ -65,6 +67,7 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
     Object? image = freezed,
     Object? epub = null,
     Object? series = freezed,
+    Object? onlineBookId = freezed,
   }) {
     return _then(_value.copyWith(
       title: freezed == title
@@ -91,6 +94,10 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
           ? _value.series
           : series // ignore: cast_nullable_to_non_nullable
               as List<Series>?,
+      onlineBookId: freezed == onlineBookId
+          ? _value.onlineBookId
+          : onlineBookId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -108,7 +115,8 @@ abstract class _$$BookImplCopyWith<$Res> implements $BookCopyWith<$Res> {
       String? description,
       String? image,
       String epub,
-      List<Series>? series});
+      List<Series>? series,
+      int? onlineBookId});
 }
 
 /// @nodoc
@@ -127,6 +135,7 @@ class __$$BookImplCopyWithImpl<$Res>
     Object? image = freezed,
     Object? epub = null,
     Object? series = freezed,
+    Object? onlineBookId = freezed,
   }) {
     return _then(_$BookImpl(
       title: freezed == title
@@ -153,6 +162,10 @@ class __$$BookImplCopyWithImpl<$Res>
           ? _value._series
           : series // ignore: cast_nullable_to_non_nullable
               as List<Series>?,
+      onlineBookId: freezed == onlineBookId
+          ? _value.onlineBookId
+          : onlineBookId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -166,7 +179,8 @@ class _$BookImpl implements _Book {
       this.description,
       this.image,
       required this.epub,
-      final List<Series>? series})
+      final List<Series>? series,
+      this.onlineBookId})
       : _series = series;
 
   factory _$BookImpl.fromJson(Map<String, dynamic> json) =>
@@ -193,8 +207,11 @@ class _$BookImpl implements _Book {
   }
 
   @override
+  final int? onlineBookId;
+
+  @override
   String toString() {
-    return 'Book(title: $title, author: $author, description: $description, image: $image, epub: $epub, series: $series)';
+    return 'Book(title: $title, author: $author, description: $description, image: $image, epub: $epub, series: $series, onlineBookId: $onlineBookId)';
   }
 
   @override
@@ -208,13 +225,15 @@ class _$BookImpl implements _Book {
                 other.description == description) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.epub, epub) || other.epub == epub) &&
-            const DeepCollectionEquality().equals(other._series, _series));
+            const DeepCollectionEquality().equals(other._series, _series) &&
+            (identical(other.onlineBookId, onlineBookId) ||
+                other.onlineBookId == onlineBookId));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, title, author, description,
-      image, epub, const DeepCollectionEquality().hash(_series));
+      image, epub, const DeepCollectionEquality().hash(_series), onlineBookId);
 
   @JsonKey(ignore: true)
   @override
@@ -237,7 +256,8 @@ abstract class _Book implements Book {
       final String? description,
       final String? image,
       required final String epub,
-      final List<Series>? series}) = _$BookImpl;
+      final List<Series>? series,
+      final int? onlineBookId}) = _$BookImpl;
 
   factory _Book.fromJson(Map<String, dynamic> json) = _$BookImpl.fromJson;
 
@@ -253,6 +273,8 @@ abstract class _Book implements Book {
   String get epub;
   @override
   List<Series>? get series;
+  @override
+  int? get onlineBookId;
   @override
   @JsonKey(ignore: true)
   _$$BookImplCopyWith<_$BookImpl> get copyWith =>

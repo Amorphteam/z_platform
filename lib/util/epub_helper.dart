@@ -48,6 +48,7 @@ Future<void> openEpub({
   HistoryModel? history,
   EpubChaptersWithBookPath? toc,
   SearchModel? search,
+  int? onlineBookId, // New: Support for online books
 }) async {
   await Navigator.pushNamed(
     context,
@@ -58,6 +59,7 @@ Future<void> openEpub({
       'history': history,
       'toc': toc,
       'search': search,
+      'onlineBookId': onlineBookId, // Pass online book ID
     },
   );
 }
