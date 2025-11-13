@@ -7,11 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../model/book_model.dart';
+import '../../model/deep_link_model.dart';
 import '../../model/history_model.dart';
 import '../../model/reference_model.dart';
 import '../../model/search_model.dart';
 import '../../model/style_model.dart';
 import '../../model/tree_toc_model.dart';
+import '../../util/page_helper.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
 import 'cubit/epub_viewer_cubit.dart';
 import 'widgets/epub_viewer_app_bar.dart';
@@ -32,7 +34,7 @@ class EpubViewerScreenV2 extends StatefulWidget {
     this.tocModel,
     this.searchModel,
     this.historyModel,
-    this.deepLinkFileName,
+    this.deepLinkModel,
   });
 
   final ReferenceModel? referenceModel;
@@ -40,7 +42,7 @@ class EpubViewerScreenV2 extends StatefulWidget {
   final Book? book;
   final EpubChaptersWithBookPath? tocModel;
   final SearchModel? searchModel;
-  final String? deepLinkFileName;
+  final DeepLinkModel? deepLinkModel;
 
   @override
   _EpubViewerScreenV2State createState() => _EpubViewerScreenV2State();
@@ -107,18 +109,70 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
   }
 
   void _loadEpubFromSource() {
-    context.read<EpubViewerCubit>().initializeEpubLoading(
+    final cubit = context.read<EpubViewerCubit>();
+    
+    // Determine initial page based on source
+    int? initialPage;
+    String? tocChapterFileName;
+    String? bookmarkFileName;
+    
+    if (widget.referenceModel != null) {
+      // From bookmark
+      // Check if fileName is provided (takes priority over navIndex)
+      if (widget.referenceModel!.fileName != null && 
+          widget.referenceModel!.fileName!.isNotEmpty) {
+        bookmarkFileName = widget.referenceModel!.fileName;
+      } else if (widget.referenceModel!.navIndex != null) {
+        // Fall back to navIndex if no fileName
+        initialPage = int.tryParse(widget.referenceModel!.navIndex) ?? 0;
+      }
+    } else if (widget.historyModel?.navIndex != null) {
+      // From history
+      initialPage = int.tryParse(widget.historyModel!.navIndex) ?? 0;
+    } else if (widget.searchModel?.pageIndex != null) {
+      // From search (pageIndex is 1-based, convert to 0-based)
+      initialPage = widget.searchModel!.pageIndex - 1;
+    } else if (widget.tocModel?.epubChapter.ContentFileName != null) {
+      // From TOC - use chapter file name for navigation
+      tocChapterFileName = widget.tocModel!.epubChapter.ContentFileName;
+    } else if (widget.deepLinkModel != null) {
+      // From deep link
+      if (widget.deepLinkModel!.epubIndex != null) {
+        initialPage = widget.deepLinkModel!.epubIndex;
+      }
+      // fileName will be handled separately if provided
+    }
+    
+    cubit.initializeEpubLoading(
       bookPath: widget.book?.epub,
       bookmarkPath: widget.referenceModel?.bookPath,
+      bookmarkFileName: bookmarkFileName,
       historyPath: widget.historyModel?.bookPath,
       searchPath: widget.searchModel?.bookAddress,
       tocPath: widget.tocModel?.bookPath,
+      deepLinkPath: widget.deepLinkModel?.epubName,
+      tocChapterFileName: tocChapterFileName,
+      deepLinkFileName: widget.deepLinkModel?.fileName,
+      initialPage: initialPage,
     );
   }
 
   @override
   void dispose() {
-    context.read<EpubViewerCubit>().cancelIOSSliderDebounce();
+    // History saving is handled by cubit.close() which is called automatically
+    // But we also save here to ensure it happens before widget disposal
+    final cubit = context.read<EpubViewerCubit>();
+    cubit.saveCurrentHistory();
+    
+    // Save page data using PageHelper (if needed)
+    final bookPath = cubit.currentBookPath;
+    if (bookPath != null) {
+      final pageHelper = PageHelper();
+      final cleanPath = bookPath.replaceFirst('assets/epub/', '');
+      pageHelper.saveBookData(cleanPath, cubit.currentPage as double);
+    }
+    
+    cubit.cancelIOSSliderDebounce();
     itemPositionsListener.itemPositions.removeListener(() {});
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
@@ -192,55 +246,51 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
         if (!_hasHandledInitialPageJump) {
           _hasHandledInitialPageJump = true;
 
-          // Handle initial page jump based on source
-          int? initialPage;
-          
-          // Check bookmark model
-          if (widget.referenceModel?.navIndex != null) {
-            initialPage = int.tryParse(widget.referenceModel!.navIndex) ?? 0;
-          }
-          // Check history model
-          else if (widget.historyModel?.navIndex != null) {
-            initialPage = int.tryParse(widget.historyModel!.navIndex) ?? 0;
-          }
-          // Check search model
-          else if (widget.searchModel?.pageIndex != null) {
-            initialPage = widget.searchModel!.pageIndex - 1; // pageIndex is 1-based
-          }
-          // Check TOC model
-          else if (widget.tocModel?.epubChapter.ContentFileName != null) {
-            // TOC navigation is handled by openEpubByChapter, so we don't need to jump here
-            // The chapter navigation will emit pageChanged
-          }
+          // Set flag for initial navigation (handled by cubit.handlePostLoadNavigation)
+          // This ensures that when pageChanged is emitted from post-load navigation,
+          // the screen will actually jump to the page
+          _shouldJumpToPage = true;
 
-          // Jump to initial page if we have one
-          if (initialPage != null && initialPage >= 0) {
-            _shouldJumpToPage = true;
-            cubit.jumpToPage(newPage: initialPage);
-          }
+          // Navigation is now handled by cubit.handlePostLoadNavigation()
+          // which is called automatically after loading
+          // But we still need to handle search and deep links here
 
-          // Handle search model if provided
+          // Handle search model if provided (external search)
           if (widget.searchModel?.searchedWord != null) {
-            _shouldJumpToPage = true;
-            cubit.searchUsingHtmlList(widget.searchModel!.searchedWord!);
+            // Wait a bit for content to be fully loaded and initial navigation to complete
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (mounted) {
+                _shouldJumpToPage = true;
+                cubit.searchUsingHtmlList(widget.searchModel!.searchedWord!);
+              }
+            });
           }
 
           // Handle deep link file name jump after content loads
-          if (widget.deepLinkFileName != null &&
-              widget.deepLinkFileName!.isNotEmpty) {
-            final String fileName = widget.deepLinkFileName!;
-            // Try as-is, then try with common 'Text/' prefix
-            _shouldJumpToPage = true;
-            cubit.jumpToPage(chapterFileName: fileName);
-            if (!fileName.contains('/')) {
-              // Fallback attempt with Text/ prefix
-              _shouldJumpToPage = true;
-              cubit.jumpToPage(chapterFileName: 'Text/$fileName');
-            }
+          if (widget.deepLinkModel?.fileName != null &&
+              widget.deepLinkModel!.fileName!.isNotEmpty) {
+            final String fileName = widget.deepLinkModel!.fileName!;
+            // Wait for initial navigation to complete
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (mounted) {
+                // Try as-is, then try with common 'Text/' prefix
+                _shouldJumpToPage = true;
+                cubit.jumpToPage(chapterFileName: fileName);
+                if (!fileName.contains('/')) {
+                  // Fallback attempt with Text/ prefix
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    if (mounted) {
+                      _shouldJumpToPage = true;
+                      cubit.jumpToPage(chapterFileName: 'Text/$fileName');
+                    }
+                  });
+                }
+              }
+            });
           }
         }
 
-        // Load user preferences and check bookmark
+        // Load user preferences
         cubit.loadUserPreferences();
       },
       searchResultsFound: (searchResults) {

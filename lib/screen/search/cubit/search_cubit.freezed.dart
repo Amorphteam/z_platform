@@ -114,12 +114,18 @@ class __$$InitialImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$InitialImpl implements _Initial {
+class _$InitialImpl with DiagnosticableTreeMixin implements _Initial {
   const _$InitialImpl();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'SearchState.initial()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'SearchState.initial'));
   }
 
   @override
@@ -238,12 +244,18 @@ class __$$LoadingImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoadingImpl implements _Loading {
+class _$LoadingImpl with DiagnosticableTreeMixin implements _Loading {
   const _$LoadingImpl();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'SearchState.loading()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'SearchState.loading'));
   }
 
   @override
@@ -382,7 +394,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoadedImpl implements _Loaded {
+class _$LoadedImpl with DiagnosticableTreeMixin implements _Loaded {
   const _$LoadedImpl(
       {required final List<SearchModel> searchResults,
       required this.isRuningSearch})
@@ -400,8 +412,17 @@ class _$LoadedImpl implements _Loaded {
   final bool isRuningSearch;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'SearchState.loaded(searchResults: $searchResults, isRuningSearch: $isRuningSearch)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'SearchState.loaded'))
+      ..add(DiagnosticsProperty('searchResults', searchResults))
+      ..add(DiagnosticsProperty('isRuningSearch', isRuningSearch));
   }
 
   @override
@@ -555,7 +576,7 @@ class __$$LoadedListImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoadedListImpl implements _LoadedList {
+class _$LoadedListImpl with DiagnosticableTreeMixin implements _LoadedList {
   const _$LoadedListImpl(final List<Book> books) : _books = books;
 
   final List<Book> _books;
@@ -567,8 +588,16 @@ class _$LoadedListImpl implements _LoadedList {
   }
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'SearchState.loadedList(books: $books)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'SearchState.loadedList'))
+      ..add(DiagnosticsProperty('books', books));
   }
 
   @override
@@ -716,15 +745,23 @@ class __$$errorImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$errorImpl implements _error {
+class _$errorImpl with DiagnosticableTreeMixin implements _error {
   const _$errorImpl({required this.error});
 
   @override
   final String error;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'SearchState.error(error: $error)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'SearchState.error'))
+      ..add(DiagnosticsProperty('error', error));
   }
 
   @override

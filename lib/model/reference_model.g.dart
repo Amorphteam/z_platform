@@ -13,6 +13,7 @@ _$ReferenceModelImpl _$$ReferenceModelImplFromJson(Map<String, dynamic> json) =>
       bookName: json['bookName'] as String,
       bookPath: json['bookPath'] as String,
       navIndex: json['navIndex'] as String,
+      fileName: json['fileName'] as String?,
     );
 
 Map<String, dynamic> _$$ReferenceModelImplToJson(
@@ -23,4 +24,5 @@ Map<String, dynamic> _$$ReferenceModelImplToJson(
       'bookName': instance.bookName,
       'bookPath': instance.bookPath,
       'navIndex': instance.navIndex,
+      'fileName': instance.fileName,
     };

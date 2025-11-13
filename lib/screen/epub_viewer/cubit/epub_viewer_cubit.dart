@@ -68,6 +68,9 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   
   // Debounce timer for iOS slider
   Timer? _iosSliderDebounceTimer;
+  
+  // History saving timer (debounced to avoid saving too frequently)
+  Timer? _historySaveTimer;
 
   final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
   final searchHelper = SearchHelper();
@@ -218,6 +221,12 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
         epubTitle: _bookTitle ?? '',
         tocTreeList: _tocTreeList,),);
       
+      // Wait a bit for the state handler to run and set up the jump flag
+      await Future.delayed(const Duration(milliseconds: 100));
+      
+      // Handle post-load navigation (TOC chapter, initial page, etc.)
+      await handlePostLoadNavigation();
+      
       // Check bookmark after loading if we have a book path
       if (_assetPath != null && _currentPage >= 0) {
         final String bookPath = _assetPath!.replaceFirst('assets/epub/', '');
@@ -333,6 +342,12 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
           final String bookPath = _assetPath!.replaceFirst('assets/epub/', '');
           checkBookmark(bookPath, _currentPage.toString());
         }
+      });
+      
+      // Debounce history saving (save after user stops scrolling for a bit)
+      _historySaveTimer?.cancel();
+      _historySaveTimer = Timer(const Duration(seconds: 2), () {
+        saveCurrentHistory();
       });
     }
   }
@@ -480,33 +495,84 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   Future<void> close() {
     _iosSliderDebounceTimer?.cancel();
     _scrollDebounceTimer?.cancel();
+    _historySaveTimer?.cancel();
+    // Save history one final time before closing
+    saveCurrentHistory();
     return super.close();
   }
 
+  // Store initial navigation info for after loading
+  String? _pendingChapterFileName;
+  int? _pendingInitialPage;
+  
   /// Initialize EPUB loading from different sources
   Future<void> initializeEpubLoading({
     String? bookPath,
     String? bookmarkPath,
+    String? bookmarkFileName,
     String? historyPath,
     String? searchPath,
     String? tocPath,
+    String? deepLinkPath,
+    String? tocChapterFileName,
+    String? deepLinkFileName,
+    int? initialPage,
   }) async {
     String? pathToLoad;
     
+    // Clear any pending navigation
+    _pendingChapterFileName = null;
+    _pendingInitialPage = null;
+    
+    // Determine which source to load from (priority order)
     if (bookmarkPath != null) {
       pathToLoad = bookmarkPath;
+      // Store bookmark file name if provided (takes priority over initial page)
+      if (bookmarkFileName != null) {
+        _pendingChapterFileName = bookmarkFileName;
+      }
     } else if (tocPath != null) {
       pathToLoad = tocPath;
+      // Store chapter file name for TOC navigation
+      if (tocChapterFileName != null) {
+        _pendingChapterFileName = tocChapterFileName;
+      }
     } else if (searchPath != null) {
       pathToLoad = searchPath;
     } else if (historyPath != null) {
       pathToLoad = historyPath;
+    } else if (deepLinkPath != null) {
+      pathToLoad = deepLinkPath;
+      // Store deep link file name if provided (takes priority over initial page)
+      if (deepLinkFileName != null) {
+        _pendingChapterFileName = deepLinkFileName;
+      }
     } else if (bookPath != null) {
       pathToLoad = bookPath;
+    }
+    
+    // Store initial page if provided (only if no file name navigation)
+    // Note: bookmarkFileName, tocChapterFileName, and deepLinkFileName all set _pendingChapterFileName
+    if (initialPage != null && _pendingChapterFileName == null) {
+      _pendingInitialPage = initialPage;
     }
 
     if (pathToLoad != null) {
       await loadAndParseEpub('assets/epub/$pathToLoad');
+    }
+  }
+  
+  /// Handle post-load navigation (called after EPUB is loaded)
+  Future<void> handlePostLoadNavigation() async {
+    // Handle chapter file name navigation (for TOC)
+    if (_pendingChapterFileName != null) {
+      await jumpToPage(chapterFileName: _pendingChapterFileName);
+      _pendingChapterFileName = null;
+    }
+    // Handle initial page navigation (for bookmark, history, search)
+    else if (_pendingInitialPage != null) {
+      await jumpToPage(newPage: _pendingInitialPage);
+      _pendingInitialPage = null;
     }
   }
 
@@ -566,6 +632,27 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
         emit(EpubViewerState.error(error: error.toString()));
       }
     }
+  }
+  
+  /// Save current reading position to history
+  Future<void> saveCurrentHistory() async {
+    if (_assetPath == null || _cachedBookTitle.isEmpty) return;
+    
+    // Extract just the filename from the asset path (e.g., 'assets/epub/1.epub' -> '1.epub')
+    final String bookPath = _assetPath!.replaceFirst('assets/epub/', '');
+    
+    // Find previous heading for history title
+    final String? headingTitle = findPreviousHeading(_currentPage);
+    final String historyTitle = headingTitle ?? 'علامة مرجعية على كتاب $_cachedBookTitle';
+    
+    final history = HistoryModel(
+      title: historyTitle,
+      bookName: _cachedBookTitle,
+      bookPath: bookPath,
+      navIndex: _currentPage.toString(),
+    );
+    
+    await addHistory(history);
   }
 
   Future<void> openEpubByChapter(EpubChapter item) async {

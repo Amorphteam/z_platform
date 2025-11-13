@@ -26,6 +26,7 @@ mixin _$ReferenceModel {
   String get bookName => throw _privateConstructorUsedError;
   String get bookPath => throw _privateConstructorUsedError;
   String get navIndex => throw _privateConstructorUsedError;
+  String? get fileName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,7 +45,8 @@ abstract class $ReferenceModelCopyWith<$Res> {
       String title,
       String bookName,
       String bookPath,
-      String navIndex});
+      String navIndex,
+      String? fileName});
 }
 
 /// @nodoc
@@ -65,6 +67,7 @@ class _$ReferenceModelCopyWithImpl<$Res, $Val extends ReferenceModel>
     Object? bookName = null,
     Object? bookPath = null,
     Object? navIndex = null,
+    Object? fileName = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -87,6 +90,10 @@ class _$ReferenceModelCopyWithImpl<$Res, $Val extends ReferenceModel>
           ? _value.navIndex
           : navIndex // ignore: cast_nullable_to_non_nullable
               as String,
+      fileName: freezed == fileName
+          ? _value.fileName
+          : fileName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -104,7 +111,8 @@ abstract class _$$ReferenceModelImplCopyWith<$Res>
       String title,
       String bookName,
       String bookPath,
-      String navIndex});
+      String navIndex,
+      String? fileName});
 }
 
 /// @nodoc
@@ -123,6 +131,7 @@ class __$$ReferenceModelImplCopyWithImpl<$Res>
     Object? bookName = null,
     Object? bookPath = null,
     Object? navIndex = null,
+    Object? fileName = freezed,
   }) {
     return _then(_$ReferenceModelImpl(
       id: freezed == id
@@ -145,6 +154,10 @@ class __$$ReferenceModelImplCopyWithImpl<$Res>
           ? _value.navIndex
           : navIndex // ignore: cast_nullable_to_non_nullable
               as String,
+      fileName: freezed == fileName
+          ? _value.fileName
+          : fileName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -157,7 +170,8 @@ class _$ReferenceModelImpl implements _ReferenceModel {
       required this.title,
       required this.bookName,
       required this.bookPath,
-      required this.navIndex});
+      required this.navIndex,
+      this.fileName});
 
   factory _$ReferenceModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReferenceModelImplFromJson(json);
@@ -173,10 +187,12 @@ class _$ReferenceModelImpl implements _ReferenceModel {
   final String bookPath;
   @override
   final String navIndex;
+  @override
+  final String? fileName;
 
   @override
   String toString() {
-    return 'ReferenceModel(id: $id, title: $title, bookName: $bookName, bookPath: $bookPath, navIndex: $navIndex)';
+    return 'ReferenceModel(id: $id, title: $title, bookName: $bookName, bookPath: $bookPath, navIndex: $navIndex, fileName: $fileName)';
   }
 
   @override
@@ -191,13 +207,15 @@ class _$ReferenceModelImpl implements _ReferenceModel {
             (identical(other.bookPath, bookPath) ||
                 other.bookPath == bookPath) &&
             (identical(other.navIndex, navIndex) ||
-                other.navIndex == navIndex));
+                other.navIndex == navIndex) &&
+            (identical(other.fileName, fileName) ||
+                other.fileName == fileName));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, title, bookName, bookPath, navIndex);
+  int get hashCode => Object.hash(
+      runtimeType, id, title, bookName, bookPath, navIndex, fileName);
 
   @JsonKey(ignore: true)
   @override
@@ -220,7 +238,8 @@ abstract class _ReferenceModel implements ReferenceModel {
       required final String title,
       required final String bookName,
       required final String bookPath,
-      required final String navIndex}) = _$ReferenceModelImpl;
+      required final String navIndex,
+      final String? fileName}) = _$ReferenceModelImpl;
 
   factory _ReferenceModel.fromJson(Map<String, dynamic> json) =
       _$ReferenceModelImpl.fromJson;
@@ -235,6 +254,8 @@ abstract class _ReferenceModel implements ReferenceModel {
   String get bookPath;
   @override
   String get navIndex;
+  @override
+  String? get fileName;
   @override
   @JsonKey(ignore: true)
   _$$ReferenceModelImplCopyWith<_$ReferenceModelImpl> get copyWith =>

@@ -22,6 +22,8 @@ import 'package:masaha/screen/color_palette/color_palette_screen.dart';
 import 'package:masaha/screen/color_picker/color_picker_screen.dart';
 import 'package:masaha/screen/liquid_glass_test/liquid_glass_test_screen.dart';
 import 'model/book_model.dart';
+import 'model/deep_link_model.dart';
+import 'model/history_model.dart';
 import 'model/reference_model.dart';
 import 'model/search_model.dart';
 import 'model/tree_toc_model.dart';
@@ -53,9 +55,22 @@ class RouteGenerator {
         if (args != null) {
           final Book? cat = args['cat'];
           final ReferenceModel? reference = args['reference'];
+          final HistoryModel? history = args['history'];
           final EpubChaptersWithBookPath? toc = args['toc'];
           final SearchModel? search = args['search'];
+          final DeepLinkModel? deepLink = args['deepLink'];
+          // Support legacy fileName parameter for backward compatibility
           final String? fileName = args['fileName'];
+
+          // Create DeepLinkModel from legacy fileName if needed
+          DeepLinkModel? deepLinkModel = deepLink;
+          if (deepLinkModel == null && fileName != null && reference != null) {
+            deepLinkModel = DeepLinkModel(
+              fileName: fileName,
+              epubName: reference.bookPath,
+              epubIndex: null,
+            );
+          }
 
           return _buildRoute(
             isIOS: isIOS,
@@ -64,9 +79,10 @@ class RouteGenerator {
               child: EpubViewerScreenV2(
                 book: cat,
                 referenceModel: reference,
+                historyModel: history,
                 searchModel: search,
                 tocModel: toc,
-                deepLinkFileName: fileName,
+                deepLinkModel: deepLinkModel,
               ),
             ),
           );

@@ -27,18 +27,23 @@ class _DeepLinkListenerState extends State<DeepLinkListener> {
 
   void _listenToDeepLinks() {
     _deepLinkService.deepLinkStream.listen((DeepLinkData data) {
-      debugPrint('Deep link received: ${data.route}');
+      debugPrint('DeepLinkListener: Deep link received - route: ${data.route}, arguments: ${data.arguments}');
       
       // Use a delay to ensure the widget tree is fully built
       Future.delayed(const Duration(milliseconds: 300), () {
         final navigator = widget.navigatorKey?.currentState;
         if (navigator != null) {
+          debugPrint('DeepLinkListener: Navigating to ${data.route}');
           navigator.pushNamed(
             data.route,
             arguments: data.arguments,
           );
+        } else {
+          debugPrint('DeepLinkListener: ERROR - Navigator key is null! Cannot navigate to ${data.route}');
         }
       });
+    }, onError: (error) {
+      debugPrint('DeepLinkListener: Error listening to deep links: $error');
     });
   }
 

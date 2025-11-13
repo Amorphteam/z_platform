@@ -11,6 +11,7 @@ class ReferenceModel with _$ReferenceModel {
     required String bookName,
     required String bookPath,
     required String navIndex,
+    String? fileName, // Absolute file name (can be null)
   }) = _ReferenceModel;
 
   factory ReferenceModel.fromJson(Map<String, dynamic> json) =>
