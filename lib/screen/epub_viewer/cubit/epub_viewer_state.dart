@@ -14,6 +14,7 @@ class EpubViewerState with _$EpubViewerState {
     Color? backgroundColor,
     bool? useUniformTextColor,
     Color? uniformTextColor,
+    bool? hideArabicDiacritics,
   }) = _StyleChanged;
   const factory EpubViewerState.bookmarkAdded({int? status}) = _BookmarkAdded;
   const factory EpubViewerState.historyAdded({int? status}) = _HistoryAdded;

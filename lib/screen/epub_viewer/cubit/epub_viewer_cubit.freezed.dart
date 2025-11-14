@@ -31,7 +31,8 @@ mixin _$EpubViewerState {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -59,7 +60,8 @@ mixin _$EpubViewerState {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -86,7 +88,8 @@ mixin _$EpubViewerState {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -219,7 +222,8 @@ class _$InitialImpl implements _Initial {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -250,7 +254,8 @@ class _$InitialImpl implements _Initial {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -280,7 +285,8 @@ class _$InitialImpl implements _Initial {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -415,7 +421,8 @@ class _$LoadingImpl implements _Loading {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -446,7 +453,8 @@ class _$LoadingImpl implements _Loading {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -476,7 +484,8 @@ class _$LoadingImpl implements _Loading {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -678,7 +687,8 @@ class _$LoadedImpl implements _Loaded {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -709,7 +719,8 @@ class _$LoadedImpl implements _Loaded {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -739,7 +750,8 @@ class _$LoadedImpl implements _Loaded {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -910,7 +922,8 @@ class _$errorImpl implements _error {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -941,7 +954,8 @@ class _$errorImpl implements _error {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -971,7 +985,8 @@ class _$errorImpl implements _error {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -1138,7 +1153,8 @@ class _$PageChangedImpl implements _PageChanged {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -1169,7 +1185,8 @@ class _$PageChangedImpl implements _PageChanged {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -1199,7 +1216,8 @@ class _$PageChangedImpl implements _PageChanged {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -1300,7 +1318,8 @@ abstract class _$$StyleChangedImplCopyWith<$Res> {
       FontFamily? fontFamily,
       Color? backgroundColor,
       bool? useUniformTextColor,
-      Color? uniformTextColor});
+      Color? uniformTextColor,
+      bool? hideArabicDiacritics});
 }
 
 /// @nodoc
@@ -1320,6 +1339,7 @@ class __$$StyleChangedImplCopyWithImpl<$Res>
     Object? backgroundColor = freezed,
     Object? useUniformTextColor = freezed,
     Object? uniformTextColor = freezed,
+    Object? hideArabicDiacritics = freezed,
   }) {
     return _then(_$StyleChangedImpl(
       fontSize: freezed == fontSize
@@ -1346,6 +1366,10 @@ class __$$StyleChangedImplCopyWithImpl<$Res>
           ? _value.uniformTextColor
           : uniformTextColor // ignore: cast_nullable_to_non_nullable
               as Color?,
+      hideArabicDiacritics: freezed == hideArabicDiacritics
+          ? _value.hideArabicDiacritics
+          : hideArabicDiacritics // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -1359,7 +1383,8 @@ class _$StyleChangedImpl implements _StyleChanged {
       this.fontFamily,
       this.backgroundColor,
       this.useUniformTextColor,
-      this.uniformTextColor});
+      this.uniformTextColor,
+      this.hideArabicDiacritics});
 
   @override
   final FontSizeCustom? fontSize;
@@ -1373,10 +1398,12 @@ class _$StyleChangedImpl implements _StyleChanged {
   final bool? useUniformTextColor;
   @override
   final Color? uniformTextColor;
+  @override
+  final bool? hideArabicDiacritics;
 
   @override
   String toString() {
-    return 'EpubViewerState.styleChanged(fontSize: $fontSize, lineHeight: $lineHeight, fontFamily: $fontFamily, backgroundColor: $backgroundColor, useUniformTextColor: $useUniformTextColor, uniformTextColor: $uniformTextColor)';
+    return 'EpubViewerState.styleChanged(fontSize: $fontSize, lineHeight: $lineHeight, fontFamily: $fontFamily, backgroundColor: $backgroundColor, useUniformTextColor: $useUniformTextColor, uniformTextColor: $uniformTextColor, hideArabicDiacritics: $hideArabicDiacritics)';
   }
 
   @override
@@ -1395,12 +1422,21 @@ class _$StyleChangedImpl implements _StyleChanged {
             (identical(other.useUniformTextColor, useUniformTextColor) ||
                 other.useUniformTextColor == useUniformTextColor) &&
             (identical(other.uniformTextColor, uniformTextColor) ||
-                other.uniformTextColor == uniformTextColor));
+                other.uniformTextColor == uniformTextColor) &&
+            (identical(other.hideArabicDiacritics, hideArabicDiacritics) ||
+                other.hideArabicDiacritics == hideArabicDiacritics));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, fontSize, lineHeight, fontFamily,
-      backgroundColor, useUniformTextColor, uniformTextColor);
+  int get hashCode => Object.hash(
+      runtimeType,
+      fontSize,
+      lineHeight,
+      fontFamily,
+      backgroundColor,
+      useUniformTextColor,
+      uniformTextColor,
+      hideArabicDiacritics);
 
   @JsonKey(ignore: true)
   @override
@@ -1424,7 +1460,8 @@ class _$StyleChangedImpl implements _StyleChanged {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -1437,7 +1474,7 @@ class _$StyleChangedImpl implements _StyleChanged {
         contentHighlighted,
   }) {
     return styleChanged(fontSize, lineHeight, fontFamily, backgroundColor,
-        useUniformTextColor, uniformTextColor);
+        useUniformTextColor, uniformTextColor, hideArabicDiacritics);
   }
 
   @override
@@ -1456,7 +1493,8 @@ class _$StyleChangedImpl implements _StyleChanged {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -1468,7 +1506,7 @@ class _$StyleChangedImpl implements _StyleChanged {
         contentHighlighted,
   }) {
     return styleChanged?.call(fontSize, lineHeight, fontFamily, backgroundColor,
-        useUniformTextColor, uniformTextColor);
+        useUniformTextColor, uniformTextColor, hideArabicDiacritics);
   }
 
   @override
@@ -1487,7 +1525,8 @@ class _$StyleChangedImpl implements _StyleChanged {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -1501,7 +1540,7 @@ class _$StyleChangedImpl implements _StyleChanged {
   }) {
     if (styleChanged != null) {
       return styleChanged(fontSize, lineHeight, fontFamily, backgroundColor,
-          useUniformTextColor, uniformTextColor);
+          useUniformTextColor, uniformTextColor, hideArabicDiacritics);
     }
     return orElse();
   }
@@ -1575,7 +1614,8 @@ abstract class _StyleChanged implements EpubViewerState {
       final FontFamily? fontFamily,
       final Color? backgroundColor,
       final bool? useUniformTextColor,
-      final Color? uniformTextColor}) = _$StyleChangedImpl;
+      final Color? uniformTextColor,
+      final bool? hideArabicDiacritics}) = _$StyleChangedImpl;
 
   FontSizeCustom? get fontSize;
   LineHeightCustom? get lineHeight;
@@ -1583,6 +1623,7 @@ abstract class _StyleChanged implements EpubViewerState {
   Color? get backgroundColor;
   bool? get useUniformTextColor;
   Color? get uniformTextColor;
+  bool? get hideArabicDiacritics;
   @JsonKey(ignore: true)
   _$$StyleChangedImplCopyWith<_$StyleChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1665,7 +1706,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -1696,7 +1738,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -1726,7 +1769,8 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -1892,7 +1936,8 @@ class _$HistoryAddedImpl implements _HistoryAdded {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -1923,7 +1968,8 @@ class _$HistoryAddedImpl implements _HistoryAdded {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -1953,7 +1999,8 @@ class _$HistoryAddedImpl implements _HistoryAdded {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -2129,7 +2176,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -2160,7 +2208,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -2190,7 +2239,8 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -2332,7 +2382,8 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -2363,7 +2414,8 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -2393,7 +2445,8 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -2528,7 +2581,8 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -2559,7 +2613,8 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -2589,7 +2644,8 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -2792,7 +2848,8 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -2823,7 +2880,8 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -2853,7 +2911,8 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
             FontFamily? fontFamily,
             Color? backgroundColor,
             bool? useUniformTextColor,
-            Color? uniformTextColor)?
+            Color? uniformTextColor,
+            bool? hideArabicDiacritics)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,

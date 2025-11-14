@@ -69,6 +69,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
   FontSizeCustom fontSize = FontSizeCustom.medium;
   LineHeightCustom lineHeight = LineHeightCustom.medium;
   FontFamily fontFamily = FontFamily.font1;
+  bool hideArabicDiacritics = false;
   final String _pathUrl = 'assets/epub/';
   List<String> _content = [];
   List<String> _orginalContent = [];
@@ -245,7 +246,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
             return _buildCurrentUi(context, content);
           },
-          styleChanged: (fontSize, lineSpace, fontFamily, backgroundColor, useUniformTextColor, uniformTextColor){
+          styleChanged: (fontSize, lineSpace, fontFamily, backgroundColor, useUniformTextColor, uniformTextColor, hideErab){
             print('loadUserPreferences $lineSpace add $fontFamily');
 
             _changeStyle(
@@ -255,6 +256,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               backgroundColor,
               useUniformTextColor,
               uniformTextColor,
+              hideErab,
             );
           },
           bookmarkPresent: () => setState(() => isBookmarked = true),
@@ -397,7 +399,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       },
                       styleChanged: (fontSize,
                           lineHeight,
-                          fontFamily,_, __, ___) => _buildCurrentUi(context, _content),
+                          fontFamily,_, __, ___,____) => _buildCurrentUi(context, _content),
                       bookmarkAdded: (int? status) => _buildCurrentUi(context, _content),
                       historyAdded: (int? status) => _buildCurrentUi(context, _content),
                       searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content)),
@@ -1384,7 +1386,16 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
               controller: scrollController,
               child: Column(
                 children: [
-                  StyleSheet(epubViewerCubit: cubit, lineSpace: lineHeight, fontFamily: fontFamily, fontSize: fontSize),
+                  StyleSheet(
+                    epubViewerCubit: cubit,
+                    lineSpace: lineHeight,
+                    fontFamily: fontFamily,
+                    fontSize: fontSize,
+                    backgroundColor: cubit.cachedBackgroundColor,
+                    useUniformTextColor: cubit.useUniformTextColor,
+                    uniformTextColor: cubit.cachedUniformTextColor,
+                    hideArabicDiacritics: hideArabicDiacritics,
+                  ),
                 ],
               ),
             );
@@ -1511,11 +1522,13 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     Color? backgroundColor,
     bool? useUniformTextColor,
     Color? uniformTextColor,
+    bool? hideArabicDiacritics,
   ) {
     setState(() {
       this.fontFamily = fontFamily ?? FontFamily.font1;
       this.lineHeight = lineHeight ?? LineHeightCustom.medium;
       this.fontSize = fontSize ?? FontSizeCustom.medium;
+      this.hideArabicDiacritics = hideArabicDiacritics ?? this.hideArabicDiacritics;
       // The legacy screen does not yet consume the new color options,
       // but we still accept them to keep the listener signature in sync.
       if (backgroundColor != null || useUniformTextColor != null || uniformTextColor != null) {

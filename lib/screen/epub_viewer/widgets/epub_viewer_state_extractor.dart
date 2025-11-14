@@ -60,15 +60,17 @@ class EpubViewerStateExtractor {
     Color? tempBackgroundColor;
     bool? tempUseUniformTextColor;
     Color? tempUniformTextColor;
+    bool? tempHideArabicDiacritics;
     
     state.maybeWhen(
-      styleChanged: (fs, lh, ff, bg, uniformEnabled, uniformColor) {
+      styleChanged: (fs, lh, ff, bg, uniformEnabled, uniformColor, hideErab) {
         tempFontSize = fs;
         tempLineHeight = lh;
         tempFontFamily = ff;
         tempBackgroundColor = bg;
         tempUseUniformTextColor = uniformEnabled;
         tempUniformTextColor = uniformColor;
+        tempHideArabicDiacritics = hideErab;
       },
       orElse: () {},
     );
@@ -86,6 +88,7 @@ class EpubViewerStateExtractor {
       backgroundColor: tempBackgroundColor ?? cubit?.cachedBackgroundColor ?? const Color(0xFFFFFFFF),
       useUniformTextColor: tempUseUniformTextColor ?? cubit?.useUniformTextColor ?? false,
       uniformTextColor: tempUniformTextColor ?? cubit?.cachedUniformTextColor ?? const Color(0xFF000000),
+      hideArabicDiacritics: tempHideArabicDiacritics ?? cubit?.hideArabicDiacritics ?? false,
     );
   }
 }
@@ -103,6 +106,7 @@ class EpubViewerStateData {
   final Color backgroundColor;
   final bool useUniformTextColor;
   final Color uniformTextColor;
+  final bool hideArabicDiacritics;
 
   EpubViewerStateData({
     required this.content,
@@ -117,6 +121,7 @@ class EpubViewerStateData {
     required this.backgroundColor,
     required this.useUniformTextColor,
     required this.uniformTextColor,
+    required this.hideArabicDiacritics,
   });
 }
 

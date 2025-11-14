@@ -15,6 +15,7 @@ import '../../model/reference_model.dart';
 import '../../model/search_model.dart';
 import '../../model/tree_toc_model.dart';
 import '../../util/page_helper.dart';
+import '../../util/arabic_text_helper.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
 import 'cubit/epub_viewer_cubit.dart';
 import 'widgets/epub_content_list.dart';
@@ -65,6 +66,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
   // GlobalKey for current page to enable anchor scrolling
   GlobalKey? _currentPageKey;
   int _lastPageForKey = -1;
+  bool _lastHideDiacritics = false;
 
   bool _hasLoadedEpub = false;
   bool _hasHandledInitialPageJump = false;
@@ -479,7 +481,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     final lineHeight = stateData.lineHeight;
     final fontFamily = stateData.fontFamily;
     final styleSignature =
-        '${fontSize.index}-${lineHeight.index}-${fontFamily.index}-${stateData.backgroundColor.value}-${stateData.useUniformTextColor}-${stateData.uniformTextColor.value}';
+        '${fontSize.index}-${lineHeight.index}-${fontFamily.index}-${stateData.backgroundColor.value}-${stateData.useUniformTextColor}-${stateData.uniformTextColor.value}-${stateData.hideArabicDiacritics}';
 
     if (content.isEmpty) {
       return const Center(
@@ -492,6 +494,10 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     } else {
       _processedContentCache.clear();
       _lastContentListRef = null;
+    }
+    if (_lastHideDiacritics != stateData.hideArabicDiacritics) {
+      _processedContentCache.clear();
+      _lastHideDiacritics = stateData.hideArabicDiacritics;
     }
 
     return Column(
@@ -732,6 +738,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
                     backgroundColor: stateData.backgroundColor,
                     useUniformTextColor: stateData.useUniformTextColor,
                     uniformTextColor: stateData.uniformTextColor,
+                    hideArabicDiacritics: stateData.hideArabicDiacritics,
                   ),
                 ],
               ),
@@ -852,7 +859,9 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
   }
 
   String _processHtmlContent(String content) {
-    // Placeholder for future preprocessing (e.g., localization tweaks, caching)
+    if (_lastHideDiacritics) {
+      return ArabicTextHelper.removeArabicDiacritics(content);
+    }
     return content;
   }
 }

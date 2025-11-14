@@ -16,6 +16,7 @@ class StyleHelper {
   Color backgroundColor = const Color(0xFFFFFFFF);
   bool useUniformTextColor = false;
   Color uniformTextColor = const Color(0xFF000000);
+  bool hideArabicDiacritics = false;
 
   static final StyleHelper _instance = StyleHelper._();
 
@@ -26,6 +27,7 @@ class StyleHelper {
   void changeBackgroundColor(Color newColor) => backgroundColor = newColor;
   void toggleUniformTextColor(bool enabled) => useUniformTextColor = enabled;
   void changeUniformTextColor(Color newColor) => uniformTextColor = newColor;
+  void toggleHideArabicDiacritics(bool enabled) => hideArabicDiacritics = enabled;
 
   // Serialize the object to JSON
   Map<String, dynamic> toJson() => {
@@ -35,6 +37,7 @@ class StyleHelper {
     'backgroundColor': backgroundColor.value,
     'useUniformTextColor': useUniformTextColor,
     'uniformTextColor': uniformTextColor.value,
+    'hideArabicDiacritics': hideArabicDiacritics,
   };
 
   // Initialize StyleHelper from JSON
@@ -45,6 +48,7 @@ class StyleHelper {
     backgroundColor = Color(json['backgroundColor'] ?? const Color(0xFFFFFFFF).value);
     useUniformTextColor = json['useUniformTextColor'] ?? false;
     uniformTextColor = Color(json['uniformTextColor'] ?? const Color(0xFF000000).value);
+    hideArabicDiacritics = json['hideArabicDiacritics'] ?? false;
   }
 
   // Load StyleHelper settings from SharedPreferences

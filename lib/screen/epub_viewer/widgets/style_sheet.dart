@@ -16,6 +16,7 @@ class StyleSheet extends StatefulWidget {
     this.backgroundColor,
     this.useUniformTextColor,
     this.uniformTextColor,
+    this.hideArabicDiacritics,
   });
   final EpubViewerCubit epubViewerCubit;
   final FontSizeCustom fontSize;
@@ -24,6 +25,7 @@ class StyleSheet extends StatefulWidget {
   final Color? backgroundColor;
   final bool? useUniformTextColor;
   final Color? uniformTextColor;
+  final bool? hideArabicDiacritics;
 
   @override
   State<StyleSheet> createState() => _StyleSheetState();
@@ -41,6 +43,7 @@ class _StyleSheetState extends State<StyleSheet> {
   late Color _backgroundColor;
   late bool _useUniformTextColor;
   late Color _uniformTextColor;
+  late bool _hideArabicDiacritics;
   static const List<Color> _backgroundOptions = [
     Color(0xFFFFFFFF),
     Color(0xFFFDF0D5),
@@ -71,6 +74,8 @@ class _StyleSheetState extends State<StyleSheet> {
         widget.useUniformTextColor ?? widget.epubViewerCubit.useUniformTextColor;
     _uniformTextColor = widget.uniformTextColor ??
         widget.epubViewerCubit.cachedUniformTextColor;
+    _hideArabicDiacritics =
+        widget.hideArabicDiacritics ?? widget.epubViewerCubit.hideArabicDiacritics;
   }
 
   void _handleChipSelection(int index) {
@@ -381,6 +386,17 @@ class _StyleSheetState extends State<StyleSheet> {
                 });
                 widget.epubViewerCubit
                     .changeStyle(useUniformTextColor: value);
+              },
+            ),
+            SwitchListTile(
+              title: const Text('إخفاء التشكيل (الحركات)'),
+              value: _hideArabicDiacritics,
+              onChanged: (value) {
+                setState(() {
+                  _hideArabicDiacritics = value;
+                });
+                widget.epubViewerCubit
+                    .changeStyle(hideArabicDiacritics: value);
               },
             ),
             AnimatedSwitcher(

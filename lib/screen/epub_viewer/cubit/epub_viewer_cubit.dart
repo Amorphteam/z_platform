@@ -62,6 +62,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   Color _cachedBackgroundColor = const Color(0xFFFFFFFF);
   bool _cachedUseUniformTextColor = false;
   Color _cachedUniformTextColor = const Color(0xFF000000);
+  bool _cachedHideArabicDiacritics = false;
   
   // Search state
   List<String> _originalContent = []; // Store original content before highlighting
@@ -91,6 +92,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   Color get cachedBackgroundColor => _cachedBackgroundColor;
   bool get useUniformTextColor => _cachedUseUniformTextColor;
   Color get cachedUniformTextColor => _cachedUniformTextColor;
+  bool get hideArabicDiacritics => _cachedHideArabicDiacritics;
   
   // Getters for book and TOC
   String? get currentBookPath => _assetPath;
@@ -277,6 +279,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     Color? backgroundColor,
     bool? useUniformTextColor,
     Color? uniformTextColor,
+    bool? hideArabicDiacritics,
   }) {
     if (fontSize != null) {
       styleHelper.changeFontSize(fontSize);
@@ -302,6 +305,10 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       styleHelper.changeUniformTextColor(uniformTextColor);
       _cachedUniformTextColor = uniformTextColor;
     }
+    if (hideArabicDiacritics != null) {
+      styleHelper.toggleHideArabicDiacritics(hideArabicDiacritics);
+      _cachedHideArabicDiacritics = hideArabicDiacritics;
+    }
 
     styleHelper.saveToPrefs();
 
@@ -312,6 +319,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       backgroundColor: backgroundColor,
       useUniformTextColor: useUniformTextColor,
       uniformTextColor: uniformTextColor,
+      hideArabicDiacritics: hideArabicDiacritics,
     ));
   }
 
@@ -623,6 +631,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       _cachedBackgroundColor = styleHelper.backgroundColor;
       _cachedUseUniformTextColor = styleHelper.useUniformTextColor;
       _cachedUniformTextColor = styleHelper.uniformTextColor;
+      _cachedHideArabicDiacritics = styleHelper.hideArabicDiacritics;
       
       emit(EpubViewerState.styleChanged(
         fontSize: styleHelper.fontSize,
@@ -631,6 +640,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
         backgroundColor: styleHelper.backgroundColor,
         useUniformTextColor: styleHelper.useUniformTextColor,
         uniformTextColor: styleHelper.uniformTextColor,
+        hideArabicDiacritics: styleHelper.hideArabicDiacritics,
       ),);
     });
   }
