@@ -57,25 +57,24 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
   late final ScrollOffsetController scrollOffsetController;
   late final ItemPositionsListener itemPositionsListener;
   late final ScrollOffsetListener scrollOffsetListener;
+  late final _NavigationCoordinator _navigationCoordinator;
   final focusNode = FocusNode();
   final textEditingController = TextEditingController();
   final Map<int, String> _processedContentCache = {};
   List<String>? _lastContentListRef;
-  Timer? _scrollPositionDebounce;
-  
-  // GlobalKey for current page to enable anchor scrolling
-  GlobalKey? _currentPageKey;
-  int _lastPageForKey = -1;
+  late final VoidCallback _itemPositionsListenerCallback;
+  double? _sliderDragValue;
+  bool _pendingSliderCommit = false;
   bool _lastHideDiacritics = false;
 
   bool _hasLoadedEpub = false;
   bool _hasHandledInitialPageJump = false;
-  bool _shouldJumpToPage = false;
 
   @override
   void initState() {
     super.initState();
     _initializeControllers();
+    _navigationCoordinator = _NavigationCoordinator();
   }
 
   @override
@@ -91,29 +90,31 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
 
   void _setupScrollListener() {
     // Listen to scroll position changes to update current page
-    itemPositionsListener.itemPositions.addListener(() {
-      _scrollPositionDebounce?.cancel();
-      _scrollPositionDebounce = Timer(const Duration(milliseconds: 100), () {
-        final positions = itemPositionsListener.itemPositions.value;
-        if (positions.isEmpty) return;
+    _itemPositionsListenerCallback = () {
+      final positions = itemPositionsListener.itemPositions.value;
+      if (positions.isEmpty ||
+          _navigationCoordinator.isJumpInProgress ||
+          _pendingSliderCommit) {
+        return;
+      }
 
-        Iterable<ItemPosition> visiblePositions =
-            positions.where((position) => position.itemLeadingEdge < 1);
-        if (visiblePositions.isEmpty) {
-          visiblePositions = positions;
-        }
+      Iterable<ItemPosition> visiblePositions =
+          positions.where((position) => position.itemLeadingEdge < 1);
+      if (visiblePositions.isEmpty) {
+        visiblePositions = positions;
+      }
 
-        final currentPageIndex = visiblePositions.reduce(
-          (max, position) => position.index > max.index ? position : max,
-        ).index;
+      final currentPageIndex = visiblePositions.reduce(
+        (max, position) => position.index > max.index ? position : max,
+      ).index;
 
-        // Update cubit's current page
-        final cubit = context.read<EpubViewerCubit>();
-        if (cubit.currentPage != currentPageIndex) {
-          cubit.updateCurrentPageFromScroll(currentPageIndex);
-        }
-      });
-    });
+      // Update cubit's current page
+      final cubit = context.read<EpubViewerCubit>();
+      if (cubit.currentPage != currentPageIndex) {
+        cubit.updateCurrentPageFromScroll(currentPageIndex);
+      }
+    };
+    itemPositionsListener.itemPositions.addListener(_itemPositionsListenerCallback);
   }
 
 
@@ -189,10 +190,10 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     }
     
     cubit.cancelIOSSliderDebounce();
-    _scrollPositionDebounce?.cancel();
     _processedContentCache.clear();
     _lastContentListRef = null;
-    itemPositionsListener.itemPositions.removeListener(() {});
+    itemPositionsListener.itemPositions.removeListener(_itemPositionsListenerCallback);
+    _navigationCoordinator.reset();
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
@@ -238,7 +239,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
                   },
                   onSearchSubmitted: () {
                     if (textEditingController.text.isNotEmpty) {
-                      _shouldJumpToPage = true;
+                      _navigationCoordinator.requestJump();
                       cubit.searchUsingHtmlList(textEditingController.text);
                     }
                   },
@@ -269,7 +270,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
           // Set flag for initial navigation (handled by cubit.handlePostLoadNavigation)
           // This ensures that when pageChanged is emitted from post-load navigation,
           // the screen will actually jump to the page
-          _shouldJumpToPage = true;
+          _navigationCoordinator.requestJump();
 
           // Navigation is now handled by cubit.handlePostLoadNavigation()
           // which is called automatically after loading
@@ -280,7 +281,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
             // Wait a bit for content to be fully loaded and initial navigation to complete
             Future.delayed(const Duration(milliseconds: 500), () {
               if (mounted) {
-                _shouldJumpToPage = true;
+                _navigationCoordinator.requestJump();
                 cubit.searchUsingHtmlList(widget.searchModel!.searchedWord!);
               }
             });
@@ -294,13 +295,13 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
             Future.delayed(const Duration(milliseconds: 500), () {
               if (mounted) {
                 // Try as-is, then try with common 'Text/' prefix
-                _shouldJumpToPage = true;
+                _navigationCoordinator.requestJump();
                 cubit.jumpToPage(chapterFileName: fileName);
                 if (!fileName.contains('/')) {
                   // Fallback attempt with Text/ prefix
                   Future.delayed(const Duration(milliseconds: 100), () {
                     if (mounted) {
-                      _shouldJumpToPage = true;
+                      _navigationCoordinator.requestJump();
                       cubit.jumpToPage(chapterFileName: 'Text/$fileName');
                     }
                   });
@@ -331,6 +332,14 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
         });
       },
       pageChanged: (pageNumber) {
+        if (_pendingSliderCommit) {
+          _pendingSliderCommit = false;
+          if (_sliderDragValue != null) {
+            setState(() {
+              _sliderDragValue = null;
+            });
+          }
+        }
         // Scroll to the page when pageChanged is emitted from cubit
         if (pageNumber != null) {
           final cubit = context.read<EpubViewerCubit>();
@@ -375,42 +384,39 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
   }
 
   void _scrollToPage(int pageNumber) {
-    // Update GlobalKey if page changed (needed for anchor scrolling)
-    // Don't recreate key if staying on same page (for highlight navigation)
-    final bool pageChanged = _lastPageForKey != pageNumber;
-    if (pageChanged) {
-      _currentPageKey = GlobalKey();
-      _lastPageForKey = pageNumber;
-    }
-    
+    final bool pageChanged = _navigationCoordinator.updateCurrentPageKey(pageNumber);
+
     if (!itemScrollController.isAttached) {
-      // If controller not attached yet, defer the scroll
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && itemScrollController.isAttached) {
-          try {
-            // Only jump to page if page actually changed
-            if (pageChanged && _shouldJumpToPage) {
-              itemScrollController.jumpTo(index: pageNumber);
-            }
-          } catch (e) {
-            debugPrint('Error scrolling to page: $e');
-          }
+          _attemptJumpToPage(pageNumber, pageChanged);
         }
       });
       return;
     }
-    
-    try {
-      // Only jump to page if page actually changed
-      if (pageChanged && _shouldJumpToPage) {
-        itemScrollController.jumpTo(index: pageNumber);
-      }
-    } catch (e) {
-      debugPrint('Error scrolling to page: $e');
+
+    _attemptJumpToPage(pageNumber, pageChanged);
+  }
+
+  void _attemptJumpToPage(int pageNumber, bool pageChanged) {
+    if (!pageChanged) {
+      _navigationCoordinator.clearJumpRequest();
+      return;
     }
 
-    // Reset the flag after attempting to jump
-    _shouldJumpToPage = false;
+    if (!_navigationCoordinator.consumeJumpRequest()) {
+      return;
+    }
+
+    try {
+      itemScrollController.jumpTo(index: pageNumber);
+    } catch (e) {
+      debugPrint('Error scrolling to page: $e');
+    } finally {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _navigationCoordinator.markJumpComplete();
+      });
+    }
   }
 
   void _updateSystemUI(bool isSliderVisible) {
@@ -482,6 +488,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     final fontFamily = stateData.fontFamily;
     final styleSignature =
         '${fontSize.index}-${lineHeight.index}-${fontFamily.index}-${stateData.backgroundColor.value}-${stateData.useUniformTextColor}-${stateData.uniformTextColor.value}-${stateData.hideArabicDiacritics}';
+    final sliderValue = _sliderDragValue ?? stateData.currentPage;
 
     if (content.isEmpty) {
       return const Center(
@@ -514,7 +521,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
             fontFamily: fontFamily,
             isDarkMode: isDarkMode,
             currentPage: cubit.currentPage,
-            currentPageKey: _currentPageKey,
+            currentPageKey: _navigationCoordinator.currentPageKey,
             processedContentBuilder: widget.enableContentCache
                 ? (index) => _getProcessedContent(index, content[index])
                 : null,
@@ -525,30 +532,14 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
           ),
         ),
         EpubPageSlider(
-          currentPage: stateData.currentPage,
+          currentPage: sliderValue,
           maxPages: content.length.toDouble(),
           bookTitle: bookTitle,
           isAboutUsBook: cubit.isAboutUsBook,
-          onChanged: (newValue) {
-            final cubit = context.read<EpubViewerCubit>();
-            // Update page immediately for UI feedback
-            cubit.updateCurrentPageFromSlider(newValue);
-            
-            // For iOS, debounce the jump since CNSlider doesn't have onChangeEnd
-            if (defaultTargetPlatform == TargetPlatform.iOS) {
-              cubit.handleIOSSliderChange(newValue, () {
-                if (mounted) {
-                  _shouldJumpToPage = true;
-                  cubit.jumpToPage(newPage: newValue.toInt());
-                }
-              });
-            }
-          },
-          onChangedEnd: (newValue) {
-            // Android: Jump to page when slider is released
-            _shouldJumpToPage = true;
-            context.read<EpubViewerCubit>().jumpToPageFromSlider(newValue);
-          },
+          onChanged: _handleSliderChanged,
+          onChangedEnd: defaultTargetPlatform == TargetPlatform.iOS
+              ? null
+              : _handleSliderChangeEnd,
           onPageJump: () {
             final cubit = context.read<EpubViewerCubit>();
             _handlePageJump(context, cubit, content.length);
@@ -558,47 +549,102 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     );
   }
 
+  void _handleSliderChanged(double newValue) {
+    if (_sliderDragValue != newValue) {
+      setState(() {
+        _sliderDragValue = newValue;
+      });
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      final cubit = context.read<EpubViewerCubit>();
+      cubit.handleIOSSliderChange(newValue, () {
+        if (mounted) {
+          final targetPage = newValue.toInt();
+          if (cubit.currentPage == targetPage) {
+            _pendingSliderCommit = false;
+            if (_sliderDragValue != null) {
+              setState(() {
+                _sliderDragValue = null;
+              });
+            }
+            return;
+          }
+          _pendingSliderCommit = true;
+          _navigationCoordinator.requestJump();
+          cubit.jumpToPage(newPage: targetPage);
+        }
+      });
+    }
+  }
+
+  void _handleSliderChangeEnd(double newValue) {
+    final cubit = context.read<EpubViewerCubit>();
+    final targetPage = newValue.toInt();
+
+    if (cubit.currentPage == targetPage) {
+      _pendingSliderCommit = false;
+      if (_sliderDragValue != null) {
+        setState(() {
+          _sliderDragValue = null;
+        });
+      }
+      return;
+    }
+
+    _pendingSliderCommit = true;
+    _navigationCoordinator.requestJump();
+    cubit.jumpToPageFromSlider(newValue);
+  }
+
   Widget _buildSearchNavigation(EpubViewerStateData stateData) {
     final cubit = context.read<EpubViewerCubit>();
+    List<SearchModel> _resolveResults() => _effectiveSearchResults(cubit, stateData);
     
     return SearchNavigationButtons(
-      searchResults: cubit.currentSearchResults.isNotEmpty 
-          ? cubit.currentSearchResults 
-          : stateData.searchResults,
+      searchResults: _resolveResults(),
       currentSearchIndex: cubit.currentSearchIndex,
       onPrevious: () {
-        final results = cubit.currentSearchResults.isNotEmpty 
-            ? cubit.currentSearchResults 
-            : stateData.searchResults;
+        final results = _resolveResults();
         if (results.isNotEmpty) {
-          _shouldJumpToPage = true;
+          _navigationCoordinator.requestJump();
           cubit.navigateToPreviousSearchResult(results);
         }
       },
       onNext: () {
-        final results = cubit.currentSearchResults.isNotEmpty 
-            ? cubit.currentSearchResults 
-            : stateData.searchResults;
+        final results = _resolveResults();
         if (results.isNotEmpty) {
-          _shouldJumpToPage = true;
+          _navigationCoordinator.requestJump();
           cubit.navigateToNextSearchResult(results);
         }
       },
       onShowResults: () {
-        _showSearchResultsDialog(context, cubit);
+        _showSearchResultsDialog(context, cubit, _resolveResults());
       },
     );
+  }
+
+  List<SearchModel> _effectiveSearchResults(
+    EpubViewerCubit cubit,
+    EpubViewerStateData stateData,
+  ) {
+    final cubitResults = cubit.currentSearchResults;
+    if (cubitResults.isNotEmpty) {
+      return cubitResults;
+    }
+    return stateData.searchResults;
   }
   
   void _scrollToHighlight(String highlightId) {
     // Use AnchorKey to find the anchor and scroll to it
-    if (_currentPageKey == null) return;
+    final currentPageKey = _navigationCoordinator.currentPageKey;
+    if (currentPageKey == null) return;
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         // AnchorKey is from flutter_html package
         // It allows finding anchors by ID within an Html widget
-        final anchorContext = AnchorKey.forId(_currentPageKey, highlightId)?.currentContext;
+        final anchorContext = AnchorKey.forId(currentPageKey, highlightId)?.currentContext;
         if (anchorContext != null) {
           Scrollable.ensureVisible(
             anchorContext,
@@ -614,8 +660,11 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     });
   }
 
-  void _showSearchResultsDialog(BuildContext context, EpubViewerCubit cubit) {
-    final searchResults = cubit.currentSearchResults;
+  void _showSearchResultsDialog(
+    BuildContext context,
+    EpubViewerCubit cubit,
+    List<SearchModel> searchResults,
+  ) {
     if (searchResults.isEmpty) return;
 
     final isIOS = defaultTargetPlatform == TargetPlatform.iOS;
@@ -656,7 +705,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
                     title: GestureDetector(
                       onTap: () {
                         Navigator.of(context).pop();
-                        _shouldJumpToPage = true;
+                        _navigationCoordinator.requestJump();
                         cubit.navigateToSearchResult(index);
                       },
                       child: Row(
@@ -712,7 +761,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     );
 
     if (targetPage != null) {
-      _shouldJumpToPage = true;
+      _navigationCoordinator.requestJump();
       cubit.jumpToPage(newPage: targetPage);
     }
   }
@@ -863,5 +912,54 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
       return ArabicTextHelper.removeArabicDiacritics(content);
     }
     return content;
+  }
+
+}
+
+class _NavigationCoordinator {
+  GlobalKey? _currentPageKey;
+  int _lastPageForKey = -1;
+  bool _shouldJumpToPage = false;
+  bool _jumpInProgress = false;
+
+  GlobalKey? get currentPageKey => _currentPageKey;
+  bool get isJumpInProgress => _jumpInProgress;
+
+  void requestJump() {
+    _shouldJumpToPage = true;
+  }
+
+  bool consumeJumpRequest() {
+    final shouldJump = _shouldJumpToPage;
+    _shouldJumpToPage = false;
+     if (shouldJump) {
+       _jumpInProgress = true;
+     }
+    return shouldJump;
+  }
+
+  void clearJumpRequest() {
+    _shouldJumpToPage = false;
+    _jumpInProgress = false;
+  }
+
+  bool updateCurrentPageKey(int pageNumber) {
+    final bool pageChanged = _lastPageForKey != pageNumber;
+    if (pageChanged) {
+      _currentPageKey = GlobalKey();
+      _lastPageForKey = pageNumber;
+    }
+    return pageChanged;
+  }
+
+  void reset() {
+    _currentPageKey = null;
+    _lastPageForKey = -1;
+    _shouldJumpToPage = false;
+    _jumpInProgress = false;
+  }
+
+  void markJumpComplete() {
+    _jumpInProgress = false;
   }
 }

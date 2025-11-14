@@ -350,15 +350,6 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     }
   }
 
-  /// Update current page from slider (for immediate UI feedback during dragging)
-  void updateCurrentPageFromSlider(double page) {
-    final int newPage = page.toInt();
-    if (newPage != _currentPage) {
-      _currentPage = newPage;
-      emit(EpubViewerState.pageChanged(pageNumber: _currentPage));
-    }
-  }
-
   /// Jump to page when slider is released (Android) or after debounce (iOS)
   void jumpToPageFromSlider(double page) {
     final int targetPage = page.toInt();
@@ -516,11 +507,9 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
   /// Handle iOS slider change with debounce
   void handleIOSSliderChange(double page, VoidCallback onJump) {
-    updateCurrentPageFromSlider(page);
-    // Cancel previous timer
     _iosSliderDebounceTimer?.cancel();
     // Debounce the jump
-    _iosSliderDebounceTimer = Timer(Duration.zero, () {
+    _iosSliderDebounceTimer = Timer(const Duration(milliseconds: 150), () {
       onJump();
     });
   }
