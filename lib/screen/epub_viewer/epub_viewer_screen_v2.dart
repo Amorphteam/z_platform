@@ -35,6 +35,7 @@ class EpubViewerScreenV2 extends StatefulWidget {
     this.searchModel,
     this.historyModel,
     this.deepLinkModel,
+    this.enableContentCache = true,
   });
 
   final ReferenceModel? referenceModel;
@@ -43,6 +44,7 @@ class EpubViewerScreenV2 extends StatefulWidget {
   final EpubChaptersWithBookPath? tocModel;
   final SearchModel? searchModel;
   final DeepLinkModel? deepLinkModel;
+  final bool enableContentCache;
 
   @override
   _EpubViewerScreenV2State createState() => _EpubViewerScreenV2State();
@@ -210,6 +212,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
         _updateSystemUI(cubit.isSliderVisible);
 
         return Scaffold(
+          backgroundColor: stateData.backgroundColor,
           appBar: cubit.isSliderVisible
               ? EpubViewerAppBar(
                   isSearchOpen: cubit.isSearchOpen,
@@ -439,6 +442,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
+        color: stateData.backgroundColor,
         child: state.maybeWhen(
           loading: () => const Center(
             child: CircularProgressIndicator(color: Colors.red),
@@ -474,6 +478,8 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     final fontSize = stateData.fontSize;
     final lineHeight = stateData.lineHeight;
     final fontFamily = stateData.fontFamily;
+    final styleSignature =
+        '${fontSize.index}-${lineHeight.index}-${fontFamily.index}-${stateData.backgroundColor.value}-${stateData.useUniformTextColor}-${stateData.uniformTextColor.value}';
 
     if (content.isEmpty) {
       return const Center(
@@ -481,7 +487,12 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
       );
     }
 
-    _syncContentCacheReference(content);
+    if (widget.enableContentCache) {
+      _syncContentCacheReference(content);
+    } else {
+      _processedContentCache.clear();
+      _lastContentListRef = null;
+    }
 
     return Column(
       children: [
@@ -498,8 +509,13 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
             isDarkMode: isDarkMode,
             currentPage: cubit.currentPage,
             currentPageKey: _currentPageKey,
-            processedContentBuilder: (index) =>
-                _getProcessedContent(index, content[index]),
+            processedContentBuilder: widget.enableContentCache
+                ? (index) => _getProcessedContent(index, content[index])
+                : null,
+            backgroundColor: stateData.backgroundColor,
+            useUniformTextColor: stateData.useUniformTextColor,
+            uniformTextColor: stateData.uniformTextColor,
+            styleSignature: styleSignature,
           ),
         ),
         EpubPageSlider(
@@ -713,6 +729,9 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
                     lineSpace: stateData.lineHeight,
                     fontFamily: stateData.fontFamily,
                     fontSize: stateData.fontSize,
+                    backgroundColor: stateData.backgroundColor,
+                    useUniformTextColor: stateData.useUniformTextColor,
+                    uniformTextColor: stateData.uniformTextColor,
                   ),
                 ],
               ),

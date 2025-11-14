@@ -25,8 +25,13 @@ mixin _$EpubViewerState {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -48,8 +53,13 @@ mixin _$EpubViewerState {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -70,8 +80,13 @@ mixin _$EpubViewerState {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -198,8 +213,13 @@ class _$InitialImpl implements _Initial {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -224,8 +244,13 @@ class _$InitialImpl implements _Initial {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -249,8 +274,13 @@ class _$InitialImpl implements _Initial {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -379,8 +409,13 @@ class _$LoadingImpl implements _Loading {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -405,8 +440,13 @@ class _$LoadingImpl implements _Loading {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -430,8 +470,13 @@ class _$LoadingImpl implements _Loading {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -627,8 +672,13 @@ class _$LoadedImpl implements _Loaded {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -653,8 +703,13 @@ class _$LoadedImpl implements _Loaded {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -678,8 +733,13 @@ class _$LoadedImpl implements _Loaded {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -844,8 +904,13 @@ class _$errorImpl implements _error {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -870,8 +935,13 @@ class _$errorImpl implements _error {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -895,8 +965,13 @@ class _$errorImpl implements _error {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -1057,8 +1132,13 @@ class _$PageChangedImpl implements _PageChanged {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -1083,8 +1163,13 @@ class _$PageChangedImpl implements _PageChanged {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -1108,8 +1193,13 @@ class _$PageChangedImpl implements _PageChanged {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -1207,7 +1297,10 @@ abstract class _$$StyleChangedImplCopyWith<$Res> {
   $Res call(
       {FontSizeCustom? fontSize,
       LineHeightCustom? lineHeight,
-      FontFamily? fontFamily});
+      FontFamily? fontFamily,
+      Color? backgroundColor,
+      bool? useUniformTextColor,
+      Color? uniformTextColor});
 }
 
 /// @nodoc
@@ -1224,6 +1317,9 @@ class __$$StyleChangedImplCopyWithImpl<$Res>
     Object? fontSize = freezed,
     Object? lineHeight = freezed,
     Object? fontFamily = freezed,
+    Object? backgroundColor = freezed,
+    Object? useUniformTextColor = freezed,
+    Object? uniformTextColor = freezed,
   }) {
     return _then(_$StyleChangedImpl(
       fontSize: freezed == fontSize
@@ -1238,6 +1334,18 @@ class __$$StyleChangedImplCopyWithImpl<$Res>
           ? _value.fontFamily
           : fontFamily // ignore: cast_nullable_to_non_nullable
               as FontFamily?,
+      backgroundColor: freezed == backgroundColor
+          ? _value.backgroundColor
+          : backgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
+      useUniformTextColor: freezed == useUniformTextColor
+          ? _value.useUniformTextColor
+          : useUniformTextColor // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      uniformTextColor: freezed == uniformTextColor
+          ? _value.uniformTextColor
+          : uniformTextColor // ignore: cast_nullable_to_non_nullable
+              as Color?,
     ));
   }
 }
@@ -1245,7 +1353,13 @@ class __$$StyleChangedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$StyleChangedImpl implements _StyleChanged {
-  const _$StyleChangedImpl({this.fontSize, this.lineHeight, this.fontFamily});
+  const _$StyleChangedImpl(
+      {this.fontSize,
+      this.lineHeight,
+      this.fontFamily,
+      this.backgroundColor,
+      this.useUniformTextColor,
+      this.uniformTextColor});
 
   @override
   final FontSizeCustom? fontSize;
@@ -1253,10 +1367,16 @@ class _$StyleChangedImpl implements _StyleChanged {
   final LineHeightCustom? lineHeight;
   @override
   final FontFamily? fontFamily;
+  @override
+  final Color? backgroundColor;
+  @override
+  final bool? useUniformTextColor;
+  @override
+  final Color? uniformTextColor;
 
   @override
   String toString() {
-    return 'EpubViewerState.styleChanged(fontSize: $fontSize, lineHeight: $lineHeight, fontFamily: $fontFamily)';
+    return 'EpubViewerState.styleChanged(fontSize: $fontSize, lineHeight: $lineHeight, fontFamily: $fontFamily, backgroundColor: $backgroundColor, useUniformTextColor: $useUniformTextColor, uniformTextColor: $uniformTextColor)';
   }
 
   @override
@@ -1269,12 +1389,18 @@ class _$StyleChangedImpl implements _StyleChanged {
             (identical(other.lineHeight, lineHeight) ||
                 other.lineHeight == lineHeight) &&
             (identical(other.fontFamily, fontFamily) ||
-                other.fontFamily == fontFamily));
+                other.fontFamily == fontFamily) &&
+            (identical(other.backgroundColor, backgroundColor) ||
+                other.backgroundColor == backgroundColor) &&
+            (identical(other.useUniformTextColor, useUniformTextColor) ||
+                other.useUniformTextColor == useUniformTextColor) &&
+            (identical(other.uniformTextColor, uniformTextColor) ||
+                other.uniformTextColor == uniformTextColor));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, fontSize, lineHeight, fontFamily);
+  int get hashCode => Object.hash(runtimeType, fontSize, lineHeight, fontFamily,
+      backgroundColor, useUniformTextColor, uniformTextColor);
 
   @JsonKey(ignore: true)
   @override
@@ -1292,8 +1418,13 @@ class _$StyleChangedImpl implements _StyleChanged {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -1305,7 +1436,8 @@ class _$StyleChangedImpl implements _StyleChanged {
             Map<int, List<String>> pageHighlights)
         contentHighlighted,
   }) {
-    return styleChanged(fontSize, lineHeight, fontFamily);
+    return styleChanged(fontSize, lineHeight, fontFamily, backgroundColor,
+        useUniformTextColor, uniformTextColor);
   }
 
   @override
@@ -1318,8 +1450,13 @@ class _$StyleChangedImpl implements _StyleChanged {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -1330,7 +1467,8 @@ class _$StyleChangedImpl implements _StyleChanged {
             Map<int, List<String>> pageHighlights)?
         contentHighlighted,
   }) {
-    return styleChanged?.call(fontSize, lineHeight, fontFamily);
+    return styleChanged?.call(fontSize, lineHeight, fontFamily, backgroundColor,
+        useUniformTextColor, uniformTextColor);
   }
 
   @override
@@ -1343,8 +1481,13 @@ class _$StyleChangedImpl implements _StyleChanged {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -1357,7 +1500,8 @@ class _$StyleChangedImpl implements _StyleChanged {
     required TResult orElse(),
   }) {
     if (styleChanged != null) {
-      return styleChanged(fontSize, lineHeight, fontFamily);
+      return styleChanged(fontSize, lineHeight, fontFamily, backgroundColor,
+          useUniformTextColor, uniformTextColor);
     }
     return orElse();
   }
@@ -1428,11 +1572,17 @@ abstract class _StyleChanged implements EpubViewerState {
   const factory _StyleChanged(
       {final FontSizeCustom? fontSize,
       final LineHeightCustom? lineHeight,
-      final FontFamily? fontFamily}) = _$StyleChangedImpl;
+      final FontFamily? fontFamily,
+      final Color? backgroundColor,
+      final bool? useUniformTextColor,
+      final Color? uniformTextColor}) = _$StyleChangedImpl;
 
   FontSizeCustom? get fontSize;
   LineHeightCustom? get lineHeight;
   FontFamily? get fontFamily;
+  Color? get backgroundColor;
+  bool? get useUniformTextColor;
+  Color? get uniformTextColor;
   @JsonKey(ignore: true)
   _$$StyleChangedImplCopyWith<_$StyleChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1509,8 +1659,13 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -1535,8 +1690,13 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -1560,8 +1720,13 @@ class _$BookmarkAddedImpl implements _BookmarkAdded {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -1721,8 +1886,13 @@ class _$HistoryAddedImpl implements _HistoryAdded {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -1747,8 +1917,13 @@ class _$HistoryAddedImpl implements _HistoryAdded {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -1772,8 +1947,13 @@ class _$HistoryAddedImpl implements _HistoryAdded {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -1943,8 +2123,13 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -1969,8 +2154,13 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -1994,8 +2184,13 @@ class _$SearchResultsFoundImpl implements _SearchResultsFound {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -2131,8 +2326,13 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -2157,8 +2357,13 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -2182,8 +2387,13 @@ class _$BookmarkPresentImpl implements _BookmarkPresent {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -2312,8 +2522,13 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -2338,8 +2553,13 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -2363,8 +2583,13 @@ class _$BookmarkAbsentImpl implements _BookmarkAbsent {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,
@@ -2561,8 +2786,13 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
         loaded,
     required TResult Function(String error) error,
     required TResult Function(int? pageNumber) pageChanged,
-    required TResult Function(FontSizeCustom? fontSize,
-            LineHeightCustom? lineHeight, FontFamily? fontFamily)
+    required TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)
         styleChanged,
     required TResult Function(int? status) bookmarkAdded,
     required TResult Function(int? status) historyAdded,
@@ -2587,8 +2817,13 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
         loaded,
     TResult? Function(String error)? error,
     TResult? Function(int? pageNumber)? pageChanged,
-    TResult? Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult? Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult? Function(int? status)? bookmarkAdded,
     TResult? Function(int? status)? historyAdded,
@@ -2612,8 +2847,13 @@ class _$ContentHighlightedImpl implements _ContentHighlighted {
         loaded,
     TResult Function(String error)? error,
     TResult Function(int? pageNumber)? pageChanged,
-    TResult Function(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-            FontFamily? fontFamily)?
+    TResult Function(
+            FontSizeCustom? fontSize,
+            LineHeightCustom? lineHeight,
+            FontFamily? fontFamily,
+            Color? backgroundColor,
+            bool? useUniformTextColor,
+            Color? uniformTextColor)?
         styleChanged,
     TResult Function(int? status)? bookmarkAdded,
     TResult Function(int? status)? historyAdded,

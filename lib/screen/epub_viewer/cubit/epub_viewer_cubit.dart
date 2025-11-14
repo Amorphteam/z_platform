@@ -59,6 +59,9 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   FontSizeCustom _cachedFontSize = FontSizeCustom.medium;
   LineHeightCustom _cachedLineHeight = LineHeightCustom.medium;
   FontFamily _cachedFontFamily = FontFamily.font1;
+  Color _cachedBackgroundColor = const Color(0xFFFFFFFF);
+  bool _cachedUseUniformTextColor = false;
+  Color _cachedUniformTextColor = const Color(0xFF000000);
   
   // Search state
   List<String> _originalContent = []; // Store original content before highlighting
@@ -85,6 +88,9 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   FontSizeCustom get cachedFontSize => _cachedFontSize;
   LineHeightCustom get cachedLineHeight => _cachedLineHeight;
   FontFamily get cachedFontFamily => _cachedFontFamily;
+  Color get cachedBackgroundColor => _cachedBackgroundColor;
+  bool get useUniformTextColor => _cachedUseUniformTextColor;
+  Color get cachedUniformTextColor => _cachedUniformTextColor;
   
   // Getters for book and TOC
   String? get currentBookPath => _assetPath;
@@ -264,7 +270,14 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
   }
 
-  void changeStyle({FontSizeCustom? fontSize, LineHeightCustom? lineSpace, FontFamily? fontFamily}) {
+  void changeStyle({
+    FontSizeCustom? fontSize,
+    LineHeightCustom? lineSpace,
+    FontFamily? fontFamily,
+    Color? backgroundColor,
+    bool? useUniformTextColor,
+    Color? uniformTextColor,
+  }) {
     if (fontSize != null) {
       styleHelper.changeFontSize(fontSize);
       _cachedFontSize = fontSize;
@@ -277,10 +290,29 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       styleHelper.changeFontFamily(fontFamily);
       _cachedFontFamily = fontFamily;
     }
+    if (backgroundColor != null) {
+      styleHelper.changeBackgroundColor(backgroundColor);
+      _cachedBackgroundColor = backgroundColor;
+    }
+    if (useUniformTextColor != null) {
+      styleHelper.toggleUniformTextColor(useUniformTextColor);
+      _cachedUseUniformTextColor = useUniformTextColor;
+    }
+    if (uniformTextColor != null) {
+      styleHelper.changeUniformTextColor(uniformTextColor);
+      _cachedUniformTextColor = uniformTextColor;
+    }
 
     styleHelper.saveToPrefs();
 
-    emit(EpubViewerState.styleChanged(fontSize: fontSize, lineHeight: lineSpace, fontFamily: fontFamily));
+    emit(EpubViewerState.styleChanged(
+      fontSize: fontSize,
+      lineHeight: lineSpace,
+      fontFamily: fontFamily,
+      backgroundColor: backgroundColor,
+      useUniformTextColor: useUniformTextColor,
+      uniformTextColor: uniformTextColor,
+    ));
   }
 
 
@@ -588,11 +620,17 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       _cachedFontSize = styleHelper.fontSize;
       _cachedLineHeight = styleHelper.lineSpace;
       _cachedFontFamily = styleHelper.fontFamily;
+      _cachedBackgroundColor = styleHelper.backgroundColor;
+      _cachedUseUniformTextColor = styleHelper.useUniformTextColor;
+      _cachedUniformTextColor = styleHelper.uniformTextColor;
       
       emit(EpubViewerState.styleChanged(
         fontSize: styleHelper.fontSize,
         lineHeight: styleHelper.lineSpace,
         fontFamily: styleHelper.fontFamily,
+        backgroundColor: styleHelper.backgroundColor,
+        useUniformTextColor: styleHelper.useUniformTextColor,
+        uniformTextColor: styleHelper.uniformTextColor,
       ),);
     });
   }

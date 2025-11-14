@@ -10,6 +10,8 @@ class EpubHtmlContent extends StatelessWidget {
   final FontFamily fontFamily;
   final bool isDarkMode;
   final GlobalKey? anchorKey;
+  final Color backgroundColor;
+  final Color? uniformTextColor;
 
   const EpubHtmlContent({
     super.key,
@@ -19,6 +21,8 @@ class EpubHtmlContent extends StatelessWidget {
     required this.fontFamily,
     required this.isDarkMode,
     this.anchorKey,
+    required this.backgroundColor,
+    this.uniformTextColor,
   });
 
   @override
@@ -31,6 +35,8 @@ class EpubHtmlContent extends StatelessWidget {
         lineHeight: lineHeight,
         fontFamily: fontFamily,
         isDarkMode: isDarkMode,
+        backgroundColor: backgroundColor,
+        uniformTextColor: uniformTextColor,
       ),
     );
   }

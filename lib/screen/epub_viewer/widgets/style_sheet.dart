@@ -13,11 +13,17 @@ class StyleSheet extends StatefulWidget {
     required this.fontSize,
     required this.fontFamily,
     required this.lineSpace,
+    this.backgroundColor,
+    this.useUniformTextColor,
+    this.uniformTextColor,
   });
   final EpubViewerCubit epubViewerCubit;
   final FontSizeCustom fontSize;
   final FontFamily fontFamily;
   final LineHeightCustom lineSpace;
+  final Color? backgroundColor;
+  final bool? useUniformTextColor;
+  final Color? uniformTextColor;
 
   @override
   State<StyleSheet> createState() => _StyleSheetState();
@@ -32,6 +38,23 @@ class _StyleSheetState extends State<StyleSheet> {
   late double _lineHeightSliderValue;
   bool _isFontSizeSliderChange = false;
   bool _isLineHeightSliderChange = false;
+  late Color _backgroundColor;
+  late bool _useUniformTextColor;
+  late Color _uniformTextColor;
+  static const List<Color> _backgroundOptions = [
+    Color(0xFFFFFFFF),
+    Color(0xFFFDF0D5),
+    Color(0xFFF4F6F8),
+    Color(0xFFE6F4EA),
+    Color(0xFF1B1B1B),
+  ];
+  static const List<Color> _textColorOptions = [
+    Color(0xFF111111),
+    Color(0xFF00695C),
+    Color(0xFF6A1B9A),
+    Color(0xFF5D4037),
+    Color(0xFFFFFFFF),
+  ];
 
   @override
   void initState() {
@@ -42,6 +65,12 @@ class _StyleSheetState extends State<StyleSheet> {
     _fontSizeSliderValue = fontSizeToSliderValue(widget.fontSize);
     _lineHeightSliderValue = lineSpaceToSliderValue(widget.lineSpace);
     _selectedChipIndex = FontFamily.values.indexOf(widget.fontFamily);
+    _backgroundColor =
+        widget.backgroundColor ?? widget.epubViewerCubit.cachedBackgroundColor;
+    _useUniformTextColor =
+        widget.useUniformTextColor ?? widget.epubViewerCubit.useUniformTextColor;
+    _uniformTextColor = widget.uniformTextColor ??
+        widget.epubViewerCubit.cachedUniformTextColor;
   }
 
   void _handleChipSelection(int index) {
@@ -102,7 +131,19 @@ class _StyleSheetState extends State<StyleSheet> {
     _isLineHeightSliderChange = false;
   }
 
-  final Color _selectedColor = Colors.black; // Default color
+  void _updateBackgroundColor(Color color) {
+    setState(() {
+      _backgroundColor = color;
+    });
+    widget.epubViewerCubit.changeStyle(backgroundColor: color);
+  }
+
+  void _updateUniformTextColor(Color color) {
+    setState(() {
+      _uniformTextColor = color;
+    });
+    widget.epubViewerCubit.changeStyle(uniformTextColor: color);
+  }
 
 
   @override
@@ -308,6 +349,72 @@ class _StyleSheetState extends State<StyleSheet> {
                 const Icon(Icons.format_line_spacing),
               ],
             ),
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 26),
+              child: Text(
+                'لون الخلفية',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: _backgroundOptions.map((color) {
+                final isSelected = color.value == _backgroundColor.value;
+                return _ColorSwatch(
+                  color: color,
+                  isSelected: isSelected,
+                  onTap: () => _updateBackgroundColor(color),
+                  showBorder: color.value == const Color(0xFFFFFFFF).value,
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 24),
+            SwitchListTile(
+              title: const Text('استخدام لون موحّد للنص'),
+              value: _useUniformTextColor,
+              onChanged: (value) {
+                setState(() {
+                  _useUniformTextColor = value;
+                });
+                widget.epubViewerCubit
+                    .changeStyle(useUniformTextColor: value);
+              },
+            ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: _useUniformTextColor
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 26),
+                          child: Text(
+                            'اختر لون النص',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Wrap(
+                          spacing: 12,
+                          runSpacing: 12,
+                          children: _textColorOptions.map((color) {
+                            final isSelected =
+                                color.value == _uniformTextColor.value;
+                            return _ColorSwatch(
+                              color: color,
+                              isSelected: isSelected,
+                              onTap: () => _updateUniformTextColor(color),
+                              showBorder: color.value == const Color(0xFFFFFFFF).value,
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+            ),
             // IconButton(
             //   icon: Icon(Icons.color_lens),
             //   onPressed: _showColorPicker,
@@ -318,4 +425,49 @@ class _StyleSheetState extends State<StyleSheet> {
 
       ),
     );
+}
+
+class _ColorSwatch extends StatelessWidget {
+  const _ColorSwatch({
+    required this.color,
+    required this.isSelected,
+    required this.onTap,
+    this.showBorder = false,
+  });
+
+  final Color color;
+  final bool isSelected;
+  final bool showBorder;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: color,
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : (showBorder ? Colors.black26 : Colors.transparent),
+            width: isSelected ? 3 : 1,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
+        ),
+      ),
+    );
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:epub_parser/epub_parser.dart';
 import '../../../model/search_model.dart';
 import '../../../model/style_model.dart';
@@ -55,12 +57,18 @@ class EpubViewerStateExtractor {
     FontSizeCustom? tempFontSize;
     LineHeightCustom? tempLineHeight;
     FontFamily? tempFontFamily;
+    Color? tempBackgroundColor;
+    bool? tempUseUniformTextColor;
+    Color? tempUniformTextColor;
     
     state.maybeWhen(
-      styleChanged: (fs, lh, ff) {
+      styleChanged: (fs, lh, ff, bg, uniformEnabled, uniformColor) {
         tempFontSize = fs;
         tempLineHeight = lh;
         tempFontFamily = ff;
+        tempBackgroundColor = bg;
+        tempUseUniformTextColor = uniformEnabled;
+        tempUniformTextColor = uniformColor;
       },
       orElse: () {},
     );
@@ -75,6 +83,9 @@ class EpubViewerStateExtractor {
       fontSize: tempFontSize ?? cubit?.cachedFontSize ?? FontSizeCustom.medium,
       lineHeight: tempLineHeight ?? cubit?.cachedLineHeight ?? LineHeightCustom.medium,
       fontFamily: tempFontFamily ?? cubit?.cachedFontFamily ?? FontFamily.font1,
+      backgroundColor: tempBackgroundColor ?? cubit?.cachedBackgroundColor ?? const Color(0xFFFFFFFF),
+      useUniformTextColor: tempUseUniformTextColor ?? cubit?.useUniformTextColor ?? false,
+      uniformTextColor: tempUniformTextColor ?? cubit?.cachedUniformTextColor ?? const Color(0xFF000000),
     );
   }
 }
@@ -89,6 +100,9 @@ class EpubViewerStateData {
   final FontSizeCustom fontSize;
   final LineHeightCustom lineHeight;
   final FontFamily fontFamily;
+  final Color backgroundColor;
+  final bool useUniformTextColor;
+  final Color uniformTextColor;
 
   EpubViewerStateData({
     required this.content,
@@ -100,6 +114,9 @@ class EpubViewerStateData {
     required this.fontSize,
     required this.lineHeight,
     required this.fontFamily,
+    required this.backgroundColor,
+    required this.useUniformTextColor,
+    required this.uniformTextColor,
   });
 }
 

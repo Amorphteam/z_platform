@@ -16,6 +16,10 @@ class EpubContentList extends StatelessWidget {
   final int currentPage;
   final GlobalKey? currentPageKey;
   final String Function(int index)? processedContentBuilder;
+  final Color backgroundColor;
+  final bool useUniformTextColor;
+  final Color uniformTextColor;
+  final String styleSignature;
 
   const EpubContentList({
     super.key,
@@ -31,6 +35,10 @@ class EpubContentList extends StatelessWidget {
     required this.currentPage,
     this.currentPageKey,
     this.processedContentBuilder,
+    required this.backgroundColor,
+    required this.useUniformTextColor,
+    required this.uniformTextColor,
+    required this.styleSignature,
   });
 
   @override
@@ -54,6 +62,7 @@ class EpubContentList extends StatelessWidget {
     final isCurrentPage = index == currentPage;
 
     return Container(
+      key: ValueKey('epub_page_${index}_$styleSignature'),
       padding: const EdgeInsets.only(top: 20.0),
       child: ConstrainedBox(
         constraints: BoxConstraints(minHeight: screenHeight),
@@ -61,6 +70,7 @@ class EpubContentList extends StatelessWidget {
           margin: const EdgeInsets.only(right: 16, left: 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
+            color: backgroundColor,
           ),
           child: SelectionArea(
             child: EpubHtmlContent(
@@ -69,6 +79,8 @@ class EpubContentList extends StatelessWidget {
               lineHeight: lineHeight,
               fontFamily: fontFamily,
               isDarkMode: isDarkMode,
+              backgroundColor: backgroundColor,
+              uniformTextColor: useUniformTextColor ? uniformTextColor : null,
               anchorKey: isCurrentPage ? currentPageKey : null,
             ),
           ),

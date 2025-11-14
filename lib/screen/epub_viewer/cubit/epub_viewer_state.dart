@@ -7,7 +7,14 @@ class EpubViewerState with _$EpubViewerState {
   const factory EpubViewerState.loaded({required List<String> content, required String epubTitle, List<EpubChapter>? tocTreeList}) = _Loaded;
   const factory EpubViewerState.error({required String error}) = _error;
   const factory EpubViewerState.pageChanged({int? pageNumber}) = _PageChanged;
-  const factory EpubViewerState.styleChanged({FontSizeCustom? fontSize, LineHeightCustom? lineHeight, FontFamily? fontFamily}) = _StyleChanged;
+  const factory EpubViewerState.styleChanged({
+    FontSizeCustom? fontSize,
+    LineHeightCustom? lineHeight,
+    FontFamily? fontFamily,
+    Color? backgroundColor,
+    bool? useUniformTextColor,
+    Color? uniformTextColor,
+  }) = _StyleChanged;
   const factory EpubViewerState.bookmarkAdded({int? status}) = _BookmarkAdded;
   const factory EpubViewerState.historyAdded({int? status}) = _HistoryAdded;
   const factory EpubViewerState.searchResultsFound({required List<SearchModel> searchResults}) = _SearchResultsFound;

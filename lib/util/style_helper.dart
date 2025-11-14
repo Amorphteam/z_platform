@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/style_model.dart';
@@ -12,6 +13,9 @@ class StyleHelper {
   FontSizeCustom fontSize = FontSizeCustom.medium;
   FontFamily fontFamily = FontFamily.font1;
   LineHeightCustom lineSpace = LineHeightCustom.medium;
+  Color backgroundColor = const Color(0xFFFFFFFF);
+  bool useUniformTextColor = false;
+  Color uniformTextColor = const Color(0xFF000000);
 
   static final StyleHelper _instance = StyleHelper._();
 
@@ -19,12 +23,18 @@ class StyleHelper {
   void changeFontSize(FontSizeCustom newSize) => fontSize = newSize;
   void changeFontFamily(FontFamily newFontFamily) => fontFamily = newFontFamily;
   void changeLineSpace(LineHeightCustom newLineSpace) => lineSpace = newLineSpace;
+  void changeBackgroundColor(Color newColor) => backgroundColor = newColor;
+  void toggleUniformTextColor(bool enabled) => useUniformTextColor = enabled;
+  void changeUniformTextColor(Color newColor) => uniformTextColor = newColor;
 
   // Serialize the object to JSON
   Map<String, dynamic> toJson() => {
     'fontSize': fontSize.index,
     'fontFamily': fontFamily.index,
     'lineSpace': lineSpace.index,
+    'backgroundColor': backgroundColor.value,
+    'useUniformTextColor': useUniformTextColor,
+    'uniformTextColor': uniformTextColor.value,
   };
 
   // Initialize StyleHelper from JSON
@@ -32,6 +42,9 @@ class StyleHelper {
     fontSize = FontSizeCustom.values[json['fontSize'] ?? FontSizeCustom.medium.index];
     lineSpace = LineHeightCustom.values[json['lineSpace'] ?? LineHeightCustom.medium.index];
     fontFamily = FontFamily.values[json['fontFamily'] ?? FontFamily.font1.index];
+    backgroundColor = Color(json['backgroundColor'] ?? const Color(0xFFFFFFFF).value);
+    useUniformTextColor = json['useUniformTextColor'] ?? false;
+    uniformTextColor = Color(json['uniformTextColor'] ?? const Color(0xFF000000).value);
   }
 
   // Load StyleHelper settings from SharedPreferences

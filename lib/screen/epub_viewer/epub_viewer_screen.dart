@@ -245,10 +245,17 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
 
             return _buildCurrentUi(context, content);
           },
-          styleChanged: (fontSize, lineSpace, fontFamily){
+          styleChanged: (fontSize, lineSpace, fontFamily, backgroundColor, useUniformTextColor, uniformTextColor){
             print('loadUserPreferences $lineSpace add $fontFamily');
 
-            _changeStyle(fontSize, lineSpace, fontFamily);
+            _changeStyle(
+              fontSize,
+              lineSpace,
+              fontFamily,
+              backgroundColor,
+              useUniformTextColor,
+              uniformTextColor,
+            );
           },
           bookmarkPresent: () => setState(() => isBookmarked = true),
           bookmarkAbsent: () => setState(() => isBookmarked = false),
@@ -390,7 +397,7 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
                       },
                       styleChanged: (fontSize,
                           lineHeight,
-                          fontFamily,) => _buildCurrentUi(context, _content),
+                          fontFamily,_, __, ___) => _buildCurrentUi(context, _content),
                       bookmarkAdded: (int? status) => _buildCurrentUi(context, _content),
                       historyAdded: (int? status) => _buildCurrentUi(context, _content),
                       searchResultsFound: (List<SearchModel> searchResults) => _buildCurrentUi(context, _content)),
@@ -1497,11 +1504,24 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     );
 
 
-  _changeStyle(FontSizeCustom? fontSize, LineHeightCustom? lineHeight,
-      FontFamily? fontFamily,) {
-    this.fontFamily = fontFamily ?? FontFamily.font1;
-    this.lineHeight = lineHeight ?? LineHeightCustom.medium;
-    this.fontSize = fontSize ?? FontSizeCustom.medium;
+  _changeStyle(
+    FontSizeCustom? fontSize,
+    LineHeightCustom? lineHeight,
+    FontFamily? fontFamily,
+    Color? backgroundColor,
+    bool? useUniformTextColor,
+    Color? uniformTextColor,
+  ) {
+    setState(() {
+      this.fontFamily = fontFamily ?? FontFamily.font1;
+      this.lineHeight = lineHeight ?? LineHeightCustom.medium;
+      this.fontSize = fontSize ?? FontSizeCustom.medium;
+      // The legacy screen does not yet consume the new color options,
+      // but we still accept them to keep the listener signature in sync.
+      if (backgroundColor != null || useUniformTextColor != null || uniformTextColor != null) {
+        debugPrint('Style color options updated (legacy screen not using them yet).');
+      }
+    });
   }
   int tempPageNumber = -1;
   _jumpTo({int? pageNumber}) {
