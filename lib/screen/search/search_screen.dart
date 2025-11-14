@@ -38,7 +38,6 @@ class _SearchScreenState extends State<SearchScreen> {
         appBar: CustomAppBar(
           showSearchBar: true,
           title: "البحث العام",
-          backgroundImage: 'assets/image/back_tazhib_light.jpg',
           leftWidget: buildLeftWidget(context),
           recentSearches: _recentSearches,
           onRecentSelected: _onRecentSearchSelected,

@@ -8,8 +8,7 @@ class EpubHtmlStyles {
     required LineHeightCustom lineHeight,
     required FontFamily fontFamily,
     required bool isDarkMode,
-  }) {
-    return {
+  }) => {
       'body': Style(
         direction: TextDirection.rtl,
         textAlign: TextAlign.justify,
@@ -192,6 +191,5 @@ class EpubHtmlStyles {
       ),
       'mark': Style(backgroundColor: Colors.yellow),
     };
-  }
 }
 

@@ -18,14 +18,10 @@ import '../../model/reference_model.dart';
 import '../../model/search_model.dart';
 import '../../model/style_model.dart';
 import '../../model/tree_toc_model.dart';
-import '../../util/epub_helper.dart';
 import '../../util/page_helper.dart';
-import '../../util/style_helper.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
 import 'cubit/epub_viewer_cubit.dart';
-import 'internal_search/internal_search_screen.dart';
 import 'widgets/style_sheet.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 typedef DataCallback = void Function(dynamic data);
@@ -1269,15 +1265,6 @@ class _EpubViewerScreenState extends State<EpubViewerScreen> {
     }
   }
 
-  _openInternalSearch(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => InternalSearchScreen(
-          cubit: context.read<EpubViewerCubit>(),
-        ),
-      ),
-    );
-  }
 
   Future<void> _addBookmark(BuildContext context) async {
     final String? headingTitle = _findPreviousHeading(_currentPage);

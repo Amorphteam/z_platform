@@ -29,7 +29,6 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar:  CustomAppBar(
-      backgroundImage: 'assets/image/back_tazhib_light.jpg',
       showSearchBar: false,
       title: "منصة مساحة",
       leftIcon: Icons.delete, // Example: Search icon

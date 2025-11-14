@@ -133,7 +133,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
       appBar: CustomAppBar(
         showSearchBar: false,
         title: _hijriDate,
-        backgroundImage: 'assets/image/back_tazhib_light.jpg',
         leftWidget: IconButton(
           icon: Icon(
               Platform.isIOS ? CupertinoIcons.chat_bubble : Icons.chat_rounded),

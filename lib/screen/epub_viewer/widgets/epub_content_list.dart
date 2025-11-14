@@ -15,6 +15,7 @@ class EpubContentList extends StatelessWidget {
   final bool isDarkMode;
   final int currentPage;
   final GlobalKey? currentPageKey;
+  final String Function(int index)? processedContentBuilder;
 
   const EpubContentList({
     super.key,
@@ -29,6 +30,7 @@ class EpubContentList extends StatelessWidget {
     required this.isDarkMode,
     required this.currentPage,
     this.currentPageKey,
+    this.processedContentBuilder,
   });
 
   @override
@@ -62,7 +64,7 @@ class EpubContentList extends StatelessWidget {
           ),
           child: SelectionArea(
             child: EpubHtmlContent(
-              content: content[index],
+              content: processedContentBuilder?.call(index) ?? content[index],
               fontSize: fontSize,
               lineHeight: lineHeight,
               fontFamily: fontFamily,

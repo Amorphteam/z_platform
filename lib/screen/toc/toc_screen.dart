@@ -37,7 +37,6 @@ class _TocScreenState extends State<TocScreen> {
       appBar: CustomAppBar(
         showSearchBar: true,
         title: 'فهرس المحتويات',
-        backgroundImage: 'assets/image/back_tazhib_light.jpg',
         leftWidget: const SizedBox(),
         onSearch: (query) {
           context.read<TocCubit>().filterTocItems(query);

@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../model/book_model.dart';
@@ -11,20 +13,18 @@ import '../../model/deep_link_model.dart';
 import '../../model/history_model.dart';
 import '../../model/reference_model.dart';
 import '../../model/search_model.dart';
-import '../../model/style_model.dart';
 import '../../model/tree_toc_model.dart';
 import '../../util/page_helper.dart';
 import '../bookmark/cubit/bookmark_cubit.dart';
 import 'cubit/epub_viewer_cubit.dart';
-import 'widgets/epub_viewer_app_bar.dart';
-import 'widgets/search_navigation_buttons.dart';
 import 'widgets/epub_content_list.dart';
 import 'widgets/epub_page_slider.dart';
+import 'widgets/epub_viewer_app_bar.dart';
 import 'widgets/epub_viewer_state_extractor.dart';
+import 'widgets/page_jump_dialog.dart';
+import 'widgets/search_navigation_buttons.dart';
 import 'widgets/style_sheet.dart';
 import 'widgets/toc_tree_list_widget.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter/cupertino.dart';
 
 class EpubViewerScreenV2 extends StatefulWidget {
   const EpubViewerScreenV2({
@@ -56,6 +56,9 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
   late final ScrollOffsetListener scrollOffsetListener;
   final focusNode = FocusNode();
   final textEditingController = TextEditingController();
+  final Map<int, String> _processedContentCache = {};
+  List<String>? _lastContentListRef;
+  Timer? _scrollPositionDebounce;
   
   // GlobalKey for current page to enable anchor scrolling
   GlobalKey? _currentPageKey;
@@ -85,18 +88,27 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
   void _setupScrollListener() {
     // Listen to scroll position changes to update current page
     itemPositionsListener.itemPositions.addListener(() {
-      final positions = itemPositionsListener.itemPositions.value;
-      if (positions.isNotEmpty) {
-        // Get the first visible item (current page)
-        final firstVisible = positions.first;
-        final currentPageIndex = firstVisible.index;
-        
+      _scrollPositionDebounce?.cancel();
+      _scrollPositionDebounce = Timer(const Duration(milliseconds: 100), () {
+        final positions = itemPositionsListener.itemPositions.value;
+        if (positions.isEmpty) return;
+
+        Iterable<ItemPosition> visiblePositions =
+            positions.where((position) => position.itemLeadingEdge < 1);
+        if (visiblePositions.isEmpty) {
+          visiblePositions = positions;
+        }
+
+        final currentPageIndex = visiblePositions.reduce(
+          (max, position) => position.index > max.index ? position : max,
+        ).index;
+
         // Update cubit's current page
         final cubit = context.read<EpubViewerCubit>();
         if (cubit.currentPage != currentPageIndex) {
           cubit.updateCurrentPageFromScroll(currentPageIndex);
         }
-      }
+      });
     });
   }
 
@@ -173,6 +185,9 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     }
     
     cubit.cancelIOSSliderDebounce();
+    _scrollPositionDebounce?.cancel();
+    _processedContentCache.clear();
+    _lastContentListRef = null;
     itemPositionsListener.itemPositions.removeListener(() {});
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
@@ -466,6 +481,8 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
       );
     }
 
+    _syncContentCacheReference(content);
+
     return Column(
       children: [
         Expanded(
@@ -481,6 +498,8 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
             isDarkMode: isDarkMode,
             currentPage: cubit.currentPage,
             currentPageKey: _currentPageKey,
+            processedContentBuilder: (index) =>
+                _getProcessedContent(index, content[index]),
           ),
         ),
         EpubPageSlider(
@@ -509,7 +528,8 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
             context.read<EpubViewerCubit>().jumpToPageFromSlider(newValue);
           },
           onPageJump: () {
-            // TODO: Move logic to cubit - show page jump dialog
+            final cubit = context.read<EpubViewerCubit>();
+            _handlePageJump(context, cubit, content.length);
           },
         ),
       ],
@@ -657,18 +677,34 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     );
   }
 
+  Future<void> _handlePageJump(
+    BuildContext context,
+    EpubViewerCubit cubit,
+    int totalPages,
+  ) async {
+    if (totalPages <= 0) return;
+
+    final targetPage = await PageJumpDialog.show(
+      context: context,
+      totalPages: totalPages,
+    );
+
+    if (targetPage != null) {
+      _shouldJumpToPage = true;
+      cubit.jumpToPage(newPage: targetPage);
+    }
+  }
+
   void _showStyleBottomSheet(BuildContext context, EpubViewerCubit cubit, EpubViewerStateData stateData) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (BuildContext context) {
-        return DraggableScrollableSheet(
+      builder: (BuildContext context) => DraggableScrollableSheet(
           initialChildSize: 0.5,
           minChildSize: 0.25,
           maxChildSize: 0.9,
           expand: false,
-          builder: (context, scrollController) {
-            return SingleChildScrollView(
+          builder: (context, scrollController) => SingleChildScrollView(
               controller: scrollController,
               child: Column(
                 children: [
@@ -680,10 +716,8 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
                   ),
                 ],
               ),
-            );
-          },
-        );
-      },
+            ),
+        ),
     );
   }
 
@@ -773,5 +807,33 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
         ),
       ),
     );
+  }
+
+  void _syncContentCacheReference(List<String> content) {
+    final bool isNewList = !identical(_lastContentListRef, content);
+    final bool lengthChanged =
+        _lastContentListRef != null && _lastContentListRef!.length != content.length;
+    if (isNewList || lengthChanged) {
+      _processedContentCache.clear();
+      _lastContentListRef = content;
+    } else if (_processedContentCache.isNotEmpty) {
+      _processedContentCache.removeWhere((key, _) => key >= content.length);
+    }
+  }
+
+  String _getProcessedContent(int index, String rawContent) {
+    final cachedContent = _processedContentCache[index];
+    if (cachedContent != null) {
+      return cachedContent;
+    }
+
+    final processedContent = _processHtmlContent(rawContent);
+    _processedContentCache[index] = processedContent;
+    return processedContent;
+  }
+
+  String _processHtmlContent(String content) {
+    // Placeholder for future preprocessing (e.g., localization tweaks, caching)
+    return content;
   }
 }
