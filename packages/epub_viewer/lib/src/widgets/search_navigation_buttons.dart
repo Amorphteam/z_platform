@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import '../../../model/search_model.dart';
+import '../models/search_model.dart';
 
 class SearchNavigationButtons extends StatelessWidget {
   final List<SearchModel> searchResults;

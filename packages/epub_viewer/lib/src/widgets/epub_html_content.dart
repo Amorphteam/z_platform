@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import '../../../model/style_model.dart';
+import '../models/style_model.dart';
 import 'epub_html_styles.dart';
 
 class EpubHtmlContent extends StatelessWidget {

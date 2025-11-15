@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cupertino_native/cupertino_native.dart';
 
-import '../../../model/style_model.dart';
+import '../models/style_model.dart';
 import '../cubit/epub_viewer_cubit.dart';
 
 class StyleSheet extends StatefulWidget {

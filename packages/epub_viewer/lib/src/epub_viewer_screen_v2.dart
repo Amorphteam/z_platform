@@ -8,16 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../../model/book_model.dart';
-import '../../model/deep_link_model.dart';
-import '../../model/history_model.dart';
-import '../../model/reference_model.dart';
-import '../../model/search_model.dart';
-import '../../model/tree_toc_model.dart';
-import '../../util/page_helper.dart';
-import '../../util/arabic_text_helper.dart';
-import '../bookmark/cubit/bookmark_cubit.dart';
 import 'cubit/epub_viewer_cubit.dart';
+import 'models/epub_viewer_entry_data.dart';
+import 'models/search_model.dart';
 import 'widgets/epub_content_list.dart';
 import 'widgets/epub_page_slider.dart';
 import 'widgets/epub_viewer_app_bar.dart';
@@ -30,22 +23,14 @@ import 'widgets/toc_tree_list_widget.dart';
 class EpubViewerScreenV2 extends StatefulWidget {
   const EpubViewerScreenV2({
     super.key,
-    this.referenceModel,
-    this.book,
-    this.tocModel,
-    this.searchModel,
-    this.historyModel,
-    this.deepLinkModel,
+    required this.entryData,
     this.enableContentCache = true,
+    this.onBookmarksChanged,
   });
 
-  final ReferenceModel? referenceModel;
-  final HistoryModel? historyModel;
-  final Book? book;
-  final EpubChaptersWithBookPath? tocModel;
-  final SearchModel? searchModel;
-  final DeepLinkModel? deepLinkModel;
+  final EpubViewerEntryData entryData;
   final bool enableContentCache;
+  final Future<void> Function()? onBookmarksChanged;
 
   @override
   _EpubViewerScreenV2State createState() => _EpubViewerScreenV2State();
@@ -127,49 +112,47 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
 
   void _loadEpubFromSource() {
     final cubit = context.read<EpubViewerCubit>();
+    final data = widget.entryData;
     
     // Determine initial page based on source
     int? initialPage;
     String? tocChapterFileName;
     String? bookmarkFileName;
     
-    if (widget.referenceModel != null) {
-      // From bookmark
-      // Check if fileName is provided (takes priority over navIndex)
-      if (widget.referenceModel!.fileName != null && 
-          widget.referenceModel!.fileName!.isNotEmpty) {
-        bookmarkFileName = widget.referenceModel!.fileName;
-      } else if (widget.referenceModel!.navIndex != null) {
-        // Fall back to navIndex if no fileName
-        initialPage = int.tryParse(widget.referenceModel!.navIndex) ?? 0;
-      }
-    } else if (widget.historyModel?.navIndex != null) {
+    if (data.bookmarkFileName != null && data.bookmarkFileName!.isNotEmpty) {
+      // From bookmark (file name takes priority)
+      bookmarkFileName = data.bookmarkFileName;
+    } else if (data.bookmarkPageIndex != null &&
+        data.bookmarkPageIndex!.isNotEmpty) {
+      // Fall back to bookmark page index when file name absent
+      initialPage = int.tryParse(data.bookmarkPageIndex!) ?? 0;
+    } else if (data.historyPageIndex != null &&
+        data.historyPageIndex!.isNotEmpty) {
       // From history
-      initialPage = int.tryParse(widget.historyModel!.navIndex) ?? 0;
-    } else if (widget.searchModel?.pageIndex != null) {
+      initialPage = int.tryParse(data.historyPageIndex!) ?? 0;
+    } else if (data.searchPageIndex != null) {
       // From search (pageIndex is 1-based, convert to 0-based)
-      initialPage = widget.searchModel!.pageIndex - 1;
-    } else if (widget.tocModel?.epubChapter.ContentFileName != null) {
+      initialPage = data.searchPageIndex! - 1;
+    } else if (data.tocChapterFileName != null &&
+        data.tocChapterFileName!.isNotEmpty) {
       // From TOC - use chapter file name for navigation
-      tocChapterFileName = widget.tocModel!.epubChapter.ContentFileName;
-    } else if (widget.deepLinkModel != null) {
+      tocChapterFileName = data.tocChapterFileName;
+    } else if (data.deepLinkPageIndex != null) {
       // From deep link
-      if (widget.deepLinkModel!.epubIndex != null) {
-        initialPage = widget.deepLinkModel!.epubIndex;
-      }
-      // fileName will be handled separately if provided
+      initialPage = data.deepLinkPageIndex;
+      // file name navigation handled later if provided
     }
     
     cubit.initializeEpubLoading(
-      bookPath: widget.book?.epub,
-      bookmarkPath: widget.referenceModel?.bookPath,
+      bookPath: data.primaryBookPath,
+      bookmarkPath: data.bookmarkBookPath,
       bookmarkFileName: bookmarkFileName,
-      historyPath: widget.historyModel?.bookPath,
-      searchPath: widget.searchModel?.bookAddress,
-      tocPath: widget.tocModel?.bookPath,
-      deepLinkPath: widget.deepLinkModel?.epubName,
+      historyPath: data.historyBookPath,
+      searchPath: data.searchBookPath,
+      tocPath: data.tocBookPath,
+      deepLinkPath: data.deepLinkBookPath,
       tocChapterFileName: tocChapterFileName,
-      deepLinkFileName: widget.deepLinkModel?.fileName,
+      deepLinkFileName: data.deepLinkChapterFileName,
       initialPage: initialPage,
     );
   }
@@ -180,14 +163,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
     // But we also save here to ensure it happens before widget disposal
     final cubit = context.read<EpubViewerCubit>();
     cubit.saveCurrentHistory();
-    
-    // Save page data using PageHelper (if needed)
-    final bookPath = cubit.currentBookPath;
-    if (bookPath != null) {
-      final pageHelper = PageHelper();
-      final cleanPath = bookPath.replaceFirst('assets/epub/', '');
-      pageHelper.saveBookData(cleanPath, cubit.currentPage as double);
-    }
+    cubit.saveCurrentPageProgress();
     
     cubit.cancelIOSSliderDebounce();
     _processedContentCache.clear();
@@ -277,20 +253,21 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
           // But we still need to handle search and deep links here
 
           // Handle search model if provided (external search)
-          if (widget.searchModel?.searchedWord != null) {
+          final initialSearchQuery = widget.entryData.searchQuery;
+          if (initialSearchQuery != null && initialSearchQuery.isNotEmpty) {
             // Wait a bit for content to be fully loaded and initial navigation to complete
             Future.delayed(const Duration(milliseconds: 500), () {
               if (mounted) {
                 _navigationCoordinator.requestJump();
-                cubit.searchUsingHtmlList(widget.searchModel!.searchedWord!);
+                cubit.searchUsingHtmlList(initialSearchQuery);
               }
             });
           }
 
           // Handle deep link file name jump after content loads
-          if (widget.deepLinkModel?.fileName != null &&
-              widget.deepLinkModel!.fileName!.isNotEmpty) {
-            final String fileName = widget.deepLinkModel!.fileName!;
+          final deepLinkFileName = widget.entryData.deepLinkChapterFileName;
+          if (deepLinkFileName != null && deepLinkFileName.isNotEmpty) {
+            final String fileName = deepLinkFileName;
             // Wait for initial navigation to complete
             Future.delayed(const Duration(milliseconds: 500), () {
               if (mounted) {
@@ -798,11 +775,7 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
 
   Future<void> _handleBookmarkToggle(BuildContext context, EpubViewerCubit cubit) async {
     await cubit.toggleBookmark();
-    // Refresh bookmark list in BookmarkCubit if available
-    if (context.mounted) {
-      final bookmarkCubit = context.read<BookmarkCubit>();
-      bookmarkCubit.loadAllBookmarks();
-    }
+    await widget.onBookmarksChanged?.call();
   }
 
   void _showTocBottomSheet(BuildContext context, EpubViewerCubit cubit, bool isDarkMode) {
@@ -902,16 +875,13 @@ class _EpubViewerScreenV2State extends State<EpubViewerScreenV2> {
       return cachedContent;
     }
 
-    final processedContent = _processHtmlContent(rawContent);
+    final cubit = context.read<EpubViewerCubit>();
+    final processedContent = cubit.processHtmlContent(
+      rawContent,
+      hideArabicDiacritics: _lastHideDiacritics,
+    );
     _processedContentCache[index] = processedContent;
     return processedContent;
-  }
-
-  String _processHtmlContent(String content) {
-    if (_lastHideDiacritics) {
-      return ArabicTextHelper.removeArabicDiacritics(content);
-    }
-    return content;
   }
 
 }

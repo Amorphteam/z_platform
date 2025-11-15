@@ -5,18 +5,15 @@ import 'dart:ui';
 import 'package:bloc/bloc.dart';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as html_parser;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../model/history_model.dart';
-import '../../../model/reference_model.dart';
-import '../../../model/search_model.dart';
-import '../../../model/style_model.dart';
-import '../../../repository/hostory_database.dart';
-import '../../../repository/reference_database.dart';
-import '../../../util/epub_helper.dart';
-import '../../../util/search_helper.dart';
-import '../../../util/style_helper.dart';
+import '../helper/style_helper.dart';
+import '../models/epub_viewer_persistence.dart';
+import '../models/search_model.dart';
+import '../models/style_model.dart';
+import '../utils/arabic_text_helper.dart';
+import '../utils/epub_content_helper.dart';
 part 'epub_viewer_cubit.freezed.dart';
 part 'epub_viewer_state.dart';
 
@@ -30,7 +27,9 @@ class _BlockTagInfo {
 }
 
 class EpubViewerCubit extends Cubit<EpubViewerState> {
-  EpubViewerCubit() : super(const EpubViewerState.initial());
+  EpubViewerCubit({required this.persistence}) : super(const EpubViewerState.initial());
+  
+  final EpubViewerPersistence persistence;
   
   EpubBook? _epubBook;
   List<String>? _spineHtmlContent;
@@ -76,9 +75,6 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   // History saving timer (debounced to avoid saving too frequently)
   Timer? _historySaveTimer;
 
-  final ReferencesDatabase referencesDatabase = ReferencesDatabase.instance;
-  final searchHelper = SearchHelper();
-  
   // Getters for UI state
   bool get isSliderVisible => _isSliderVisible;
   bool get isSearchOpen => _isSearchOpen;
@@ -115,7 +111,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
 
   Future<void> checkBookmark(String bookPath, String pageIndex) async {
-    final bool isBookmarked = await referencesDatabase.isBookmarkExist(bookPath, pageIndex);
+    final bool isBookmarked = await persistence.bookmarkDataSource.isBookmarked(bookPath, pageIndex);
     emit(isBookmarked ? const EpubViewerState.bookmarkPresent() : const EpubViewerState.bookmarkAbsent());
   }
 
@@ -128,7 +124,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     final String pageIndex = _currentPage.toString();
     
     // Check if bookmark exists
-    final bool isBookmarked = await referencesDatabase.isBookmarkExist(bookPath, pageIndex);
+    final bool isBookmarked = await persistence.bookmarkDataSource.isBookmarked(bookPath, pageIndex);
     
     if (isBookmarked) {
       // Remove bookmark
@@ -139,11 +135,11 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       final String? headingTitle = findPreviousHeading(_currentPage);
       final String bookmarkTitle = headingTitle ?? 'علامة مرجعية على كتاب $_cachedBookTitle';
       
-      final reference = ReferenceModel(
+      final reference = EpubBookmark(
         title: bookmarkTitle,
         bookName: _cachedBookTitle,
         bookPath: bookPath,
-        navIndex: pageIndex,
+        pageIndex: pageIndex,
       );
       
       await addBookmark(reference);
@@ -182,11 +178,8 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
   Future<void> removeBookmark(String bookPath, String pageNumber) async {
     try {
-      final int result = await referencesDatabase.deleteReferenceByBookPathAndPageNumber(bookPath, pageNumber);
-      if (result != 0) {
-        emit(const EpubViewerState.bookmarkAbsent());
-      } else {
-      }
+      await persistence.bookmarkDataSource.removeBookmark(bookPath, pageNumber);
+      emit(const EpubViewerState.bookmarkAbsent());
     } catch (error) {
       emit(EpubViewerState.error(error: error.toString()));
     }
@@ -247,8 +240,9 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
 
 
   Future<void> emitLastPageSeen() async {
-    final lastPageNumber = await getLastPageNumberForBook(
-      assetPath: _assetPath!,);
+    if (_assetPath == null) return;
+    final cleanPath = _assetPath!.replaceFirst('assets/epub/', '');
+    final lastPageNumber = await persistence.pageProgressStore.loadLastPage(cleanPath);
     if (lastPageNumber != null) {
       jumpToPage(newPage: lastPageNumber.toInt());
     }
@@ -634,17 +628,27 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     });
   }
 
-  Future<void> addBookmark(ReferenceModel bookmark) async {
+  /// Persist current page for quick resume using injected page storage
+  Future<void> saveCurrentPageProgress() async {
+    final bookPath = _assetPath;
+    if (bookPath == null) return;
+
+    final cleanPath = bookPath.replaceFirst('assets/epub/', '');
+    await persistence.pageProgressStore.saveLastPage(cleanPath, _currentPage.toDouble());
+  }
+
+  /// Apply text processing (e.g., removing diacritics) before rendering HTML
+  String processHtmlContent(String content, {required bool hideArabicDiacritics}) {
+    if (hideArabicDiacritics) {
+      return ArabicTextHelper.removeArabicDiacritics(content);
+    }
+    return content;
+  }
+
+  Future<void> addBookmark(EpubBookmark bookmark) async {
     try {
-      final referencesDatabase = ReferencesDatabase.instance;
-      final existingReferences = await referencesDatabase
-          .getReferenceByBookTitleAndPage(bookmark.bookPath, bookmark.navIndex);
-      if (existingReferences.isEmpty) {
-        final int addStatus = await referencesDatabase.addReference(bookmark);
-        emit(EpubViewerState.bookmarkAdded(status: addStatus));
-      } else {
-        emit(const EpubViewerState.bookmarkAdded(status: -1));
-      }
+      final success = await persistence.bookmarkDataSource.saveBookmark(bookmark);
+      emit(EpubViewerState.bookmarkAdded(status: success ? 1 : -1));
     } catch (error) {
       if (error is Exception) {
         emit(EpubViewerState.error(error: error.toString()));
@@ -653,17 +657,10 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
   }
 
 
-  Future<void> addHistory(HistoryModel history) async {
+  Future<void> addHistory(EpubHistoryEntry history) async {
     try {
-      final historyDatabase = HistoryDatabase.instance;
-      final existingHistory = await historyDatabase
-          .getHistoryByBookTitleAndPage(history.bookPath, history.navIndex);
-      if (existingHistory.isEmpty) {
-        final int addStatus = await historyDatabase.addHistory(history);
-        emit(EpubViewerState.historyAdded(status: addStatus));
-      } else {
-        emit(const EpubViewerState.historyAdded(status: -1));
-      }
+      final success = await persistence.historyDataSource.saveHistory(history);
+      emit(EpubViewerState.historyAdded(status: success ? 1 : -1));
     } catch (error) {
       if (error is Exception) {
         emit(EpubViewerState.error(error: error.toString()));
@@ -682,11 +679,11 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     final String? headingTitle = findPreviousHeading(_currentPage);
     final String historyTitle = headingTitle ?? 'علامة مرجعية على كتاب $_cachedBookTitle';
     
-    final history = HistoryModel(
+    final history = EpubHistoryEntry(
       title: historyTitle,
       bookName: _cachedBookTitle,
       bookPath: bookPath,
-      navIndex: _currentPage.toString(),
+      pageIndex: _currentPage.toString(),
     );
     
     await addHistory(history);
@@ -744,7 +741,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       }
       
       // Assuming searchHtmlContents expects the book title, which we stored in _bookTitle
-      final List<SearchModel> results = await searchHelper.searchHtmlContents(_spineHtmlContent!, searchTerm, null, null);
+      final List<SearchModel> results = await persistence.searchService.searchHtmlContents(_spineHtmlContent!, searchTerm);
 
       // Store search results
       _currentSearchResults = results;
@@ -772,7 +769,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
     var decodedSearchTerm = html_parser.parse(searchTerm).documentElement?.text ?? '';
 
     // Normalize the search term by removing diacritics
-    final normalizedSearchTerm = searchHelper.removeArabicDiacritics(decodedSearchTerm);
+    final normalizedSearchTerm = persistence.searchService.removeArabicDiacritics(decodedSearchTerm);
 
     // Create a new list to store updated content
     final List<String> updatedContent = [];
@@ -791,7 +788,7 @@ class EpubViewerCubit extends Cubit<EpubViewerState> {
       final convertedContent = convertLatinNumbersToArabic(content);
 
       // Remove diacritics from the content for searching
-      final normalizedContent = searchHelper.removeArabicDiacritics(convertedContent);
+      final normalizedContent = persistence.searchService.removeArabicDiacritics(convertedContent);
 
       // Get the positions of matches in the normalized content
       final highlightedContent = _applyHighlightingUsingMapping(convertedContent, normalizedContent, normalizedSearchTerm, globalCounter);
