@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import '../../../model/style_model.dart';
+import '../models/style_model.dart';
 
 class EpubHtmlStyles {
   static Map<String, Style> getStyles({

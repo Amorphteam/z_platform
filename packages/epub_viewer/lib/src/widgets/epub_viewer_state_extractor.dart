@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:epub_parser/epub_parser.dart';
-import '../../../model/search_model.dart';
-import '../../../model/style_model.dart';
+import '../models/search_model.dart';
+import '../models/style_model.dart';
 import '../cubit/epub_viewer_cubit.dart';
 
 /// Extracts state data from EpubViewerState, with fallback to cubit cached values

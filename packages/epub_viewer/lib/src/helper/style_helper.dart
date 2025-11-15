@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/style_model.dart';
+import '../models/style_model.dart';
 
 
 class StyleHelper {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import '../../../model/style_model.dart';
+import '../models/style_model.dart';
 import 'epub_html_content.dart';
 
 class EpubContentList extends StatelessWidget {

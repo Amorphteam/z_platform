@@ -1,15 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:masaha/screen/epub_viewer/epub_viewer_screen_v2.dart';
+import 'package:epub_viewer/epub_viewer.dart' as epub_viewer;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masaha/screen/bookmark/bookmark_screen.dart';
 import 'package:masaha/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:masaha/screen/chat/chat_screen.dart';
 import 'package:masaha/screen/chat/cubit/chat_cubit.dart';
-import 'package:masaha/screen/epub_viewer/cubit/epub_viewer_cubit.dart';
-import 'package:masaha/screen/epub_viewer/epub_viewer_screen.dart';
 import 'package:masaha/screen/host/cubit/host_cubit.dart';
 import 'package:masaha/screen/host/host_screen.dart';
 import 'package:masaha/screen/library/cubit/library_cubit.dart';
@@ -25,9 +23,12 @@ import 'model/book_model.dart';
 import 'model/deep_link_model.dart';
 import 'model/history_model.dart';
 import 'model/reference_model.dart';
-import 'model/search_model.dart';
+import 'model/search_model.dart' as host_search;
 import 'model/tree_toc_model.dart';
+import 'repository/hostory_database.dart';
+import 'repository/reference_database.dart';
 import 'util/constants.dart';
+import 'util/page_helper.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -53,11 +54,16 @@ class RouteGenerator {
         );
       case '/epubViewer':
         if (args != null) {
+          final epub_viewer.EpubViewerEntryData? providedEntryData =
+              args['entryData'] as epub_viewer.EpubViewerEntryData?;
+          final bool enableContentCache = args['enableContentCache'] is bool
+              ? args['enableContentCache'] as bool
+              : true;
           final Book? cat = args['cat'];
           final ReferenceModel? reference = args['reference'];
           final HistoryModel? history = args['history'];
           final EpubChaptersWithBookPath? toc = args['toc'];
-          final SearchModel? search = args['search'];
+          final host_search.SearchModel? search = args['search'];
           final DeepLinkModel? deepLink = args['deepLink'];
           // Support legacy fileName parameter for backward compatibility
           final String? fileName = args['fileName'];
@@ -72,17 +78,41 @@ class RouteGenerator {
             );
           }
 
+          final epub_viewer.EpubViewerEntryData entryData = providedEntryData ??
+              epub_viewer.EpubViewerEntryData(
+                primaryBookPath: cat?.epub,
+                bookmarkBookPath: reference?.bookPath,
+                bookmarkFileName: reference?.fileName,
+                bookmarkPageIndex: reference?.navIndex,
+                historyBookPath: history?.bookPath,
+                historyPageIndex: history?.navIndex,
+                searchBookPath: search?.bookAddress,
+                searchPageIndex: search?.pageIndex,
+                searchQuery: search?.searchedWord,
+                tocBookPath: toc?.bookPath,
+                tocChapterFileName: toc?.epubChapter.ContentFileName,
+                deepLinkBookPath: deepLinkModel?.epubName,
+                deepLinkPageIndex: deepLinkModel?.epubIndex,
+                deepLinkChapterFileName: deepLinkModel?.fileName,
+              );
+
           return _buildRoute(
             isIOS: isIOS,
             builder: (context) => BlocProvider(
-              create: (context) => EpubViewerCubit(),
-              child: EpubViewerScreenV2(
-                book: cat,
-                referenceModel: reference,
-                historyModel: history,
-                searchModel: search,
-                tocModel: toc,
-                deepLinkModel: deepLinkModel,
+              create: (context) => epub_viewer.EpubViewerCubit(
+                persistence: _createEpubViewerPersistence(),
+              ),
+              child: epub_viewer.EpubViewerScreenV2(
+                entryData: entryData,
+                enableContentCache: enableContentCache,
+                onBookmarksChanged: () async {
+                  try {
+                    final bookmarkCubit = context.read<BookmarkCubit>();
+                    bookmarkCubit.loadAllBookmarks();
+                  } catch (_) {
+                    // BookmarkCubit not available in ancestor tree – ignore.
+                  }
+                },
               ),
             ),
           );
@@ -136,4 +166,78 @@ class RouteGenerator {
         body: Center(child: Text('Error: Page not found')),
       ),
     );
+
+  static epub_viewer.EpubViewerPersistence _createEpubViewerPersistence() {
+    return epub_viewer.EpubViewerPersistence(
+      bookmarkDataSource: _BookmarkDataSource(),
+      historyDataSource: _HistoryDataSource(),
+      searchService: epub_viewer.DefaultSearchService(),
+      pageProgressStore: _PageProgressStore(),
+    );
+  }
+}
+
+class _BookmarkDataSource implements epub_viewer.BookmarkDataSource {
+  final ReferencesDatabase _referencesDatabase = ReferencesDatabase.instance;
+
+  @override
+  Future<bool> isBookmarked(String bookPath, String pageIndex) {
+    return _referencesDatabase.isBookmarkExist(bookPath, pageIndex);
+  }
+
+  @override
+  Future<void> removeBookmark(String bookPath, String pageIndex) {
+    return _referencesDatabase.deleteReferenceByBookPathAndPageNumber(bookPath, pageIndex);
+  }
+
+  @override
+  Future<bool> saveBookmark(epub_viewer.EpubBookmark bookmark) async {
+    final existing = await _referencesDatabase.getReferenceByBookTitleAndPage(bookmark.bookPath, bookmark.pageIndex);
+    if (existing.isNotEmpty) {
+      return false;
+    }
+    final reference = ReferenceModel(
+      title: bookmark.title,
+      bookName: bookmark.bookName,
+      bookPath: bookmark.bookPath,
+      navIndex: bookmark.pageIndex,
+      fileName: bookmark.fileName,
+    );
+    final result = await _referencesDatabase.addReference(reference);
+    return result != 0;
+  }
+}
+
+class _HistoryDataSource implements epub_viewer.HistoryDataSource {
+  final HistoryDatabase _historyDatabase = HistoryDatabase.instance;
+
+  @override
+  Future<bool> saveHistory(epub_viewer.EpubHistoryEntry historyEntry) async {
+    final existing = await _historyDatabase.getHistoryByBookTitleAndPage(historyEntry.bookPath, historyEntry.pageIndex);
+    if (existing.isNotEmpty) {
+      return false;
+    }
+    final history = HistoryModel(
+      title: historyEntry.title,
+      bookName: historyEntry.bookName,
+      bookPath: historyEntry.bookPath,
+      navIndex: historyEntry.pageIndex,
+    );
+    final result = await _historyDatabase.addHistory(history);
+    return result != 0;
+  }
+}
+
+class _PageProgressStore implements epub_viewer.PageProgressStore {
+  final PageHelper _pageHelper = PageHelper();
+
+  @override
+  Future<double?> loadLastPage(String bookPath) {
+    return _pageHelper.getLastPageNumberForBook(bookPath);
+  }
+
+  @override
+  Future<void> saveLastPage(String bookPath, double pageIndex) {
+    return _pageHelper.saveBookData(bookPath, pageIndex);
+  }
 }
