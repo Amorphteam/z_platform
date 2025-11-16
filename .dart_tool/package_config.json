@@ -219,7 +219,7 @@
     },
     {
       "name": "epub_viewer",
-      "rootUri": "../packages/epub_viewer",
+      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },

@@ -292,8 +292,8 @@ packages:
   epub_viewer:
     dependency: "direct main"
     description:
-      path: "packages/epub_viewer"
-      relative: true
+      path: "/Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package"
+      relative: false
     source: path
     version: "0.1.0"
   equatable:
