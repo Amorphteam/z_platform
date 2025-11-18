@@ -113,6 +113,57 @@ class RouteGenerator {
                     // BookmarkCubit not available in ancestor tree – ignore.
                   }
                 },
+                onAnchorIdTap: (ctx, anchorId) async {
+                  // anchorId already includes '#', e.g. "#note_12"
+                  // 1) query your DB using anchorId as filter
+                  final data = 'await myRepository.loadByAnchor(anchorId)';
+
+                  // 2) show bottom sheet for this app
+                  if (!ctx.mounted) return;
+                  showModalBottomSheet(
+                    context: ctx,
+                    isScrollControlled: true,
+                    builder: (_) => Container(
+                      padding: EdgeInsets.all(20),
+                      height: 600,
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(anchorId)
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                onTranslatePressed: (ctx, {
+                  required pageNumber,
+                  required sectionName,
+                  required bookName,
+                  required bookPath
+                }) {
+                  showModalBottomSheet(
+                    context: ctx,
+                    isScrollControlled: true,
+                    builder: (_) => Container(
+                      padding: EdgeInsets.all(20),
+                      height: 600,
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('''
+                          کتاب $bookName 
+                          عنوان $bookPath
+                          الصفحة${pageNumber+1}
+                          '''),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+
+
               ),
             ),
           );
