@@ -281,6 +281,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.6.9"
+  epub_bookmarks:
+    dependency: "direct main"
+    description:
+      path: "/Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_bookmarks"
+      relative: false
+    source: path
+    version: "0.1.0"
   epub_parser:
     dependency: "direct main"
     description:
@@ -292,7 +299,7 @@ packages:
   epub_viewer:
     dependency: "direct main"
     description:
-      path: "/Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package"
+      path: "/Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_viewer"
       relative: false
     source: path
     version: "0.1.0"

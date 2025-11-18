@@ -3,7 +3,6 @@ import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:masaha/model/deep_link_model.dart';
 import 'package:masaha/model/reference_model.dart';
-import 'package:masaha/screen/bookmark/widgets/reference_list_widget.dart';
 import '../model/book_model.dart';
 
 /// Deep Link Service to handle incoming app links and URL schemes

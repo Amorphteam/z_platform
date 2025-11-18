@@ -6,8 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cupertino_native/cupertino_native.dart';
 
-import '../bookmark/bookmark_screen.dart';
-import '../bookmark/cubit/bookmark_cubit.dart';
+import 'package:epub_bookmarks/epub_bookmarks.dart';
+import '../../route_generator.dart';
+import '../../model/reference_model.dart';
+import '../../model/history_model.dart';
+import '../../util/epub_helper.dart';
 import '../library/cubit/library_cubit.dart';
 import '../library/library_screen.dart';
 import '../search/cubit/search_cubit.dart';
@@ -161,9 +164,29 @@ class _HostScreenState extends State<HostScreen> {
           child: const SearchScreen(),
         );
       case 3:
-        return BlocProvider(
-          create: (context) => BookmarkCubit(),
-          child: const BookmarkScreen(),
+        return BookmarkScreen(
+          persistence: RouteGenerator.createBookmarkPersistence(),
+          onBookmarkTap: (screenContext, bookmark) async {
+            final reference = ReferenceModel(
+              id: bookmark.id,
+              title: bookmark.title,
+              bookName: bookmark.bookName,
+              bookPath: bookmark.bookPath,
+              navIndex: bookmark.pageIndex,
+              fileName: bookmark.fileName,
+            );
+            await openEpub(context: screenContext, reference: reference);
+          },
+          onHistoryTap: (screenContext, history) async {
+            final historyModel = HistoryModel(
+              id: history.id,
+              title: history.title,
+              bookName: history.bookName,
+              bookPath: history.bookPath,
+              navIndex: history.pageIndex,
+            );
+            await openEpub(context: screenContext, history: historyModel);
+          },
         );
       default:
         return Container();

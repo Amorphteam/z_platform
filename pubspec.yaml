@@ -31,7 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
   epub_viewer:
-    path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package
+    path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_viewer
+  epub_bookmarks:
+    path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_bookmarks
   intl: ^0.19.0
 
   # The following adds the Cupertino Icons font to your application.

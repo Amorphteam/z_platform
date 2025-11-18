@@ -2,10 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:epub_viewer/epub_viewer.dart' as epub_viewer;
+import 'package:epub_bookmarks/epub_bookmarks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masaha/screen/bookmark/bookmark_screen.dart';
-import 'package:masaha/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:masaha/screen/chat/chat_screen.dart';
 import 'package:masaha/screen/chat/cubit/chat_cubit.dart';
 import 'package:masaha/screen/host/cubit/host_cubit.dart';
@@ -29,6 +28,7 @@ import 'repository/hostory_database.dart';
 import 'repository/reference_database.dart';
 import 'util/constants.dart';
 import 'util/page_helper.dart';
+import 'util/epub_helper.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -169,6 +169,37 @@ class RouteGenerator {
           );
         }
         return _errorRoute();
+      case '/bookmarkScreen':
+        return _buildRoute(
+          isIOS: isIOS,
+          builder: (context) => BookmarkScreen(
+            persistence: _createBookmarkPersistence(),
+            appBar: BookmarkAppBar(
+              title: 'منصة مساحة',
+            ),
+            onBookmarkTap: (screenContext, bookmark) async {
+              final reference = ReferenceModel(
+                id: bookmark.id,
+                title: bookmark.title,
+                bookName: bookmark.bookName,
+                bookPath: bookmark.bookPath,
+                navIndex: bookmark.pageIndex,
+                fileName: bookmark.fileName,
+              );
+              await openEpub(context: screenContext, reference: reference);
+            },
+            onHistoryTap: (screenContext, history) async {
+              final historyModel = HistoryModel(
+                id: history.id,
+                title: history.title,
+                bookName: history.bookName,
+                bookPath: history.bookPath,
+                navIndex: history.pageIndex,
+              );
+              await openEpub(context: screenContext, history: historyModel);
+            },
+          ),
+        );
       case '/colorPalette':
         return _buildRoute(
           isIOS: isIOS,
@@ -225,6 +256,18 @@ class RouteGenerator {
       searchService: epub_viewer.DefaultSearchService(),
       pageProgressStore: _PageProgressStore(),
     );
+  }
+
+  static BookmarkPersistence _createBookmarkPersistence() {
+    return BookmarkPersistence(
+      bookmarkDataSource: _AppBookmarkDataSource(),
+      historyDataSource: _AppHistoryDataSource(),
+    );
+  }
+
+  // Public method to create persistence (for use in host_screen)
+  static BookmarkPersistence createBookmarkPersistence() {
+    return _createBookmarkPersistence();
   }
 }
 
@@ -292,3 +335,75 @@ class _PageProgressStore implements epub_viewer.PageProgressStore {
     return _pageHelper.saveBookData(bookPath, pageIndex);
   }
 }
+
+class _AppBookmarkDataSource implements BookmarkDataSource {
+  final ReferencesDatabase _database = ReferencesDatabase.instance;
+
+  @override
+  Future<List<Bookmark>> getAllBookmarks() async {
+    final references = await _database.getAllReferences();
+    return references.map((reference) => Bookmark(
+      id: reference.id,
+      title: reference.title,
+      bookName: reference.bookName,
+      bookPath: reference.bookPath,
+      pageIndex: reference.navIndex,
+      fileName: reference.fileName,
+    )).toList();
+  }
+
+  @override
+  Future<void> deleteBookmark(int id) async {
+    await _database.deleteReference(id);
+  }
+
+  @override
+  Future<void> clearAllBookmarks() async {
+    await _database.clearAllReferences();
+  }
+
+  @override
+  Future<bool> isBookmarked(String bookPath, String pageIndex) async {
+    return await _database.isBookmarkExist(bookPath, pageIndex);
+  }
+
+  @override
+  Future<List<Bookmark>> filterBookmarks(String query) async {
+    final references = await _database.getFilterReference(query);
+    return references.map((reference) => Bookmark(
+      id: reference.id,
+      title: reference.title,
+      bookName: reference.bookName,
+      bookPath: reference.bookPath,
+      pageIndex: reference.navIndex,
+      fileName: reference.fileName,
+    )).toList();
+  }
+}
+
+class _AppHistoryDataSource implements HistoryDataSource {
+  final HistoryDatabase _database = HistoryDatabase.instance;
+
+  @override
+  Future<List<History>> getAllHistory() async {
+    final historyList = await _database.getAllHistory();
+    return historyList.map((history) => History(
+      id: history.id,
+      title: history.title,
+      bookName: history.bookName,
+      bookPath: history.bookPath,
+      pageIndex: history.navIndex,
+    )).toList();
+  }
+
+  @override
+  Future<void> deleteHistory(int id) async {
+    await _database.deleteHistory(id);
+  }
+
+  @override
+  Future<void> clearAllHistory() async {
+    await _database.clearAllHistory();
+  }
+}
+

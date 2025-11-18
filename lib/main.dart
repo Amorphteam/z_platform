@@ -11,7 +11,6 @@ import 'package:masaha/route_generator.dart';
 import 'package:masaha/service/deep_link_service.dart';
 import 'package:masaha/widget/deep_link_listener.dart';
 import 'package:provider/provider.dart';
-import 'package:masaha/screen/bookmark/cubit/bookmark_cubit.dart';
 import 'package:masaha/util/date_helper.dart';
 import 'package:masaha/util/theme_helper.dart';
 import 'package:masaha/util/color_helper.dart';
@@ -62,9 +61,7 @@ class MyApp extends StatelessWidget {
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
-  Widget build(BuildContext context) => BlocProvider(
-      create: (_) => BookmarkCubit(),
-      child: Consumer2<ThemeHelper, ColorHelper>(
+  Widget build(BuildContext context) => Consumer2<ThemeHelper, ColorHelper>(
         builder: (context, themeHelper, colorHelper, child) {
           return DynamicColorBuilder(
             builder: (lightDynamic, darkDynamic) {
@@ -112,8 +109,7 @@ class MyApp extends StatelessWidget {
             },
           );
         },
-      ),
-    );
+      );
 }
 
 void lockOrientation() {

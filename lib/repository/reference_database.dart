@@ -18,7 +18,12 @@ class ReferencesDatabase {
 
   Future<Database> _initDB(String filePath) async {
     final path = join(await getDatabasesPath(), filePath);
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(
+      path,
+      version: 2, // Incremented version for migration
+      onCreate: _createDB,
+      onUpgrade: _onUpgrade,
+    );
   }
 
   Future<void> _createDB(Database db, int version) async {
@@ -28,9 +33,17 @@ class ReferencesDatabase {
         title TEXT,
         bookName TEXT,
         bookPath TEXT,
-        navIndex TEXT
+        navIndex TEXT,
+        fileName TEXT
       )
     ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Add fileName column for version 2
+      await db.execute('ALTER TABLE reference_database ADD COLUMN fileName TEXT');
+    }
   }
 
   Future<int> addReference(ReferenceModel referenceModel) async {
@@ -47,6 +60,7 @@ class ReferencesDatabase {
       bookName: maps[i]['bookName'],
       bookPath: maps[i]['bookPath'],
       navIndex: maps[i]['navIndex'],
+      fileName: maps[i]['fileName'],
     ),);
   }
 
@@ -82,6 +96,7 @@ class ReferencesDatabase {
       bookName: maps[i]['bookName'],
       bookPath: maps[i]['bookPath'],
       navIndex: maps[i]['navIndex'],
+      fileName: maps[i]['fileName'],
     ),);
   }
 
@@ -95,6 +110,7 @@ class ReferencesDatabase {
       bookName: maps[i]['bookName'],
       bookPath: maps[i]['bookPath'],
       navIndex: maps[i]['navIndex'],
+      fileName: maps[i]['fileName'],
     ),);
 
     if (query.isNotEmpty) {

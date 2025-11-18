@@ -212,6 +212,12 @@
       "languageVersion": "2.16"
     },
     {
+      "name": "epub_bookmarks",
+      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_bookmarks",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "epub_parser",
       "rootUri": "file:///Users/alibayati/.pub-cache/hosted/pub.dev/epub_parser-3.0.1",
       "packageUri": "lib/",
@@ -219,7 +225,7 @@
     },
     {
       "name": "epub_viewer",
-      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package",
+      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_viewer",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
