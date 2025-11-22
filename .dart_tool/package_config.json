@@ -213,7 +213,7 @@
     },
     {
       "name": "epub_bookmarks",
-      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_bookmarks",
+      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader/packages/epub_bookmarks",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -224,8 +224,14 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "epub_search",
+      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader/packages/epub_search",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "epub_viewer",
-      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_viewer",
+      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader/packages/epub_viewer",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },

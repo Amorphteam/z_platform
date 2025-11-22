@@ -1,20 +1,16 @@
 import 'dart:io';
+import 'package:epub_search/epub_search.dart' as epub_search_package;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:epub_viewer/epub_viewer.dart' as epub_viewer;
 import 'package:epub_bookmarks/epub_bookmarks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:masaha/screen/chat/chat_screen.dart';
 import 'package:masaha/screen/chat/cubit/chat_cubit.dart';
 import 'package:masaha/screen/host/cubit/host_cubit.dart';
 import 'package:masaha/screen/host/host_screen.dart';
-import 'package:masaha/screen/library/cubit/library_cubit.dart';
-import 'package:masaha/screen/library/library_screen.dart';
-import 'package:masaha/screen/search/cubit/search_cubit.dart';
-import 'package:masaha/screen/search/search_screen.dart';
-import 'package:masaha/screen/toc/cubit/toc_cubit.dart';
-import 'package:masaha/screen/toc/toc_screen.dart';
 import 'package:masaha/screen/color_palette/color_palette_screen.dart';
 import 'package:masaha/screen/color_picker/color_picker_screen.dart';
 import 'package:masaha/screen/liquid_glass_test/liquid_glass_test_screen.dart';
@@ -26,6 +22,7 @@ import 'model/search_model.dart' as host_search;
 import 'model/tree_toc_model.dart';
 import 'repository/hostory_database.dart';
 import 'repository/reference_database.dart';
+import 'repository/json_repository.dart';
 import 'util/constants.dart';
 import 'util/page_helper.dart';
 import 'util/epub_helper.dart';
@@ -34,28 +31,21 @@ class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments as Map<String, dynamic>?;
     final isIOS = Platform.isIOS;
-    
+
     switch (settings.name) {
       case '/':
         return _buildRoute(
           isIOS: isIOS,
-          builder: (context) => BlocProvider(
-            create: (context) => HostCubit(),
-            child: HostScreen(),
-          ),
-        );
-      case '/searchScreen':
-        return _buildRoute(
-          isIOS: isIOS,
-          builder: (context) => BlocProvider(
-              create: (context) => SearchCubit(),
-              child: SearchScreen(),
-            ),
+          builder: (context) =>
+              BlocProvider(
+                create: (context) => HostCubit(),
+                child: HostScreen(),
+              ),
         );
       case '/epubViewer':
         if (args != null) {
           final epub_viewer.EpubViewerEntryData? providedEntryData =
-              args['entryData'] as epub_viewer.EpubViewerEntryData?;
+          args['entryData'] as epub_viewer.EpubViewerEntryData?;
           final bool enableContentCache = args['enableContentCache'] is bool
               ? args['enableContentCache'] as bool
               : true;
@@ -98,107 +88,112 @@ class RouteGenerator {
 
           return _buildRoute(
             isIOS: isIOS,
-            builder: (context) => BlocProvider(
-              create: (context) => epub_viewer.EpubViewerCubit(
-                persistence: _createEpubViewerPersistence(),
-              ),
-              child: epub_viewer.EpubViewerScreenV2(
-                entryData: entryData,
-                enableContentCache: enableContentCache,
-                onBookmarksChanged: () async {
-                  try {
-                    final bookmarkCubit = context.read<BookmarkCubit>();
-                    bookmarkCubit.loadAllBookmarks();
-                  } catch (_) {
-                    // BookmarkCubit not available in ancestor tree – ignore.
-                  }
-                },
-                onAnchorIdTap: (ctx, anchorId) async {
-                  // anchorId already includes '#', e.g. "#note_12"
-                  // 1) query your DB using anchorId as filter
-                  final data = 'await myRepository.loadByAnchor(anchorId)';
-
-                  // 2) show bottom sheet for this app
-                  if (!ctx.mounted) return;
-                  showModalBottomSheet(
-                    context: ctx,
-                    isScrollControlled: true,
-                    builder: (_) => Container(
-                      padding: EdgeInsets.all(20),
-                      height: 600,
-                      width: double.infinity,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(anchorId)
-                        ],
+            builder: (context) =>
+                BlocProvider(
+                  create: (context) =>
+                      epub_viewer.EpubViewerCubit(
+                        persistence: _createEpubViewerPersistence(),
                       ),
-                    ),
-                  );
-                },
-                onTranslatePressed: (ctx, {
-                  required pageNumber,
-                  required sectionName,
-                  required bookName,
-                  required bookPath
-                }) {
-                  showModalBottomSheet(
-                    context: ctx,
-                    isScrollControlled: true,
-                    builder: (_) => Container(
-                      padding: EdgeInsets.all(20),
-                      height: 600,
-                      width: double.infinity,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('''
+                  child: epub_viewer.EpubViewerScreenV2(
+                    entryData: entryData,
+                    enableContentCache: enableContentCache,
+                    onBookmarksChanged: () async {
+                      try {
+                        final bookmarkCubit = context.read<BookmarkCubit>();
+                        bookmarkCubit.loadAllBookmarks();
+                      } catch (_) {
+                        // BookmarkCubit not available in ancestor tree – ignore.
+                      }
+                    },
+                    onAnchorIdTap: (ctx, anchorId) async {
+                      // anchorId already includes '#', e.g. "#note_12"
+                      // 1) query your DB using anchorId as filter
+                      final data = 'await myRepository.loadByAnchor(anchorId)';
+
+                      // 2) show bottom sheet for this app
+                      if (!ctx.mounted) return;
+                      showModalBottomSheet(
+                        context: ctx,
+                        isScrollControlled: true,
+                        builder: (_) =>
+                            Container(
+                              padding: EdgeInsets.all(20),
+                              height: 600,
+                              width: double.infinity,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(anchorId)
+                                ],
+                              ),
+                            ),
+                      );
+                    },
+                    onTranslatePressed: (ctx, {
+                      required pageNumber,
+                      required sectionName,
+                      required bookName,
+                      required bookPath
+                    }) {
+                      showModalBottomSheet(
+                        context: ctx,
+                        isScrollControlled: true,
+                        builder: (_) =>
+                            Container(
+                              padding: EdgeInsets.all(20),
+                              height: 600,
+                              width: double.infinity,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text('''
                           کتاب $bookName 
                           عنوان $bookPath
-                          الصفحة${pageNumber+1}
+                          الصفحة${pageNumber + 1}
                           '''),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                                ],
+                              ),
+                            ),
+                      );
+                    },
 
 
-              ),
-            ),
+                  ),
+                ),
           );
         }
         return _errorRoute();
       case '/bookmarkScreen':
         return _buildRoute(
           isIOS: isIOS,
-          builder: (context) => BookmarkScreen(
-            persistence: _createBookmarkPersistence(),
-            appBar: BookmarkAppBar(
-              title: 'منصة مساحة',
-            ),
-            onBookmarkTap: (screenContext, bookmark) async {
-              final reference = ReferenceModel(
-                id: bookmark.id,
-                title: bookmark.title,
-                bookName: bookmark.bookName,
-                bookPath: bookmark.bookPath,
-                navIndex: bookmark.pageIndex,
-                fileName: bookmark.fileName,
-              );
-              await openEpub(context: screenContext, reference: reference);
-            },
-            onHistoryTap: (screenContext, history) async {
-              final historyModel = HistoryModel(
-                id: history.id,
-                title: history.title,
-                bookName: history.bookName,
-                bookPath: history.bookPath,
-                navIndex: history.pageIndex,
-              );
-              await openEpub(context: screenContext, history: historyModel);
-            },
-          ),
+          builder: (context) =>
+              BookmarkScreen(
+                persistence: _createBookmarkPersistence(),
+                appBar: BookmarkAppBar(
+                  title: 'منصة مساحة',
+                ),
+                onBookmarkTap: (screenContext, bookmark) async {
+                  final reference = ReferenceModel(
+                    id: bookmark.id,
+                    title: bookmark.title,
+                    bookName: bookmark.bookName,
+                    bookPath: bookmark.bookPath,
+                    navIndex: bookmark.pageIndex,
+                    fileName: bookmark.fileName,
+                  );
+                  await openEpub(context: screenContext, reference: reference);
+                },
+                onHistoryTap: (screenContext, history) async {
+                  final historyModel = HistoryModel(
+                    id: history.id,
+                    title: history.title,
+                    bookName: history.bookName,
+                    bookPath: history.bookPath,
+                    navIndex: history.pageIndex,
+                  );
+                  await openEpub(context: screenContext, history: historyModel);
+                },
+              ),
         );
       case '/colorPalette':
         return _buildRoute(
@@ -243,11 +238,13 @@ class RouteGenerator {
     );
   }
 
-  static Route _errorRoute() => MaterialPageRoute(
-      builder: (_) => const Scaffold(
-        body: Center(child: Text('Error: Page not found')),
-      ),
-    );
+  static Route _errorRoute() =>
+      MaterialPageRoute(
+        builder: (_) =>
+        const Scaffold(
+          body: Center(child: Text('Error: Page not found')),
+        ),
+      );
 
   static epub_viewer.EpubViewerPersistence _createEpubViewerPersistence() {
     return epub_viewer.EpubViewerPersistence(
@@ -265,10 +262,22 @@ class RouteGenerator {
     );
   }
 
+  static epub_search_package.SearchPersistence _createSearchPersistence() {
+    return epub_search_package.SearchPersistence(
+      bookDataSource: _AppBookDataSource(),
+      recentSearchesDataSource: _AppRecentSearchesDataSource(),
+    );
+  }
+
   // Public method to create persistence (for use in host_screen)
   static BookmarkPersistence createBookmarkPersistence() {
     return _createBookmarkPersistence();
   }
+
+  static epub_search_package.SearchPersistence createSearchPersistence() {
+    return _createSearchPersistence();
+  }
+
 }
 
 class _BookmarkDataSource implements epub_viewer.BookmarkDataSource {
@@ -281,12 +290,14 @@ class _BookmarkDataSource implements epub_viewer.BookmarkDataSource {
 
   @override
   Future<void> removeBookmark(String bookPath, String pageIndex) {
-    return _referencesDatabase.deleteReferenceByBookPathAndPageNumber(bookPath, pageIndex);
+    return _referencesDatabase.deleteReferenceByBookPathAndPageNumber(
+        bookPath, pageIndex);
   }
 
   @override
   Future<bool> saveBookmark(epub_viewer.EpubBookmark bookmark) async {
-    final existing = await _referencesDatabase.getReferenceByBookTitleAndPage(bookmark.bookPath, bookmark.pageIndex);
+    final existing = await _referencesDatabase.getReferenceByBookTitleAndPage(
+        bookmark.bookPath, bookmark.pageIndex);
     if (existing.isNotEmpty) {
       return false;
     }
@@ -307,7 +318,8 @@ class _HistoryDataSource implements epub_viewer.HistoryDataSource {
 
   @override
   Future<bool> saveHistory(epub_viewer.EpubHistoryEntry historyEntry) async {
-    final existing = await _historyDatabase.getHistoryByBookTitleAndPage(historyEntry.bookPath, historyEntry.pageIndex);
+    final existing = await _historyDatabase.getHistoryByBookTitleAndPage(
+        historyEntry.bookPath, historyEntry.pageIndex);
     if (existing.isNotEmpty) {
       return false;
     }
@@ -342,14 +354,15 @@ class _AppBookmarkDataSource implements BookmarkDataSource {
   @override
   Future<List<Bookmark>> getAllBookmarks() async {
     final references = await _database.getAllReferences();
-    return references.map((reference) => Bookmark(
-      id: reference.id,
-      title: reference.title,
-      bookName: reference.bookName,
-      bookPath: reference.bookPath,
-      pageIndex: reference.navIndex,
-      fileName: reference.fileName,
-    )).toList();
+    return references.map((reference) =>
+        Bookmark(
+          id: reference.id,
+          title: reference.title,
+          bookName: reference.bookName,
+          bookPath: reference.bookPath,
+          pageIndex: reference.navIndex,
+          fileName: reference.fileName,
+        )).toList();
   }
 
   @override
@@ -370,14 +383,15 @@ class _AppBookmarkDataSource implements BookmarkDataSource {
   @override
   Future<List<Bookmark>> filterBookmarks(String query) async {
     final references = await _database.getFilterReference(query);
-    return references.map((reference) => Bookmark(
-      id: reference.id,
-      title: reference.title,
-      bookName: reference.bookName,
-      bookPath: reference.bookPath,
-      pageIndex: reference.navIndex,
-      fileName: reference.fileName,
-    )).toList();
+    return references.map((reference) =>
+        Bookmark(
+          id: reference.id,
+          title: reference.title,
+          bookName: reference.bookName,
+          bookPath: reference.bookPath,
+          pageIndex: reference.navIndex,
+          fileName: reference.fileName,
+        )).toList();
   }
 }
 
@@ -387,13 +401,14 @@ class _AppHistoryDataSource implements HistoryDataSource {
   @override
   Future<List<History>> getAllHistory() async {
     final historyList = await _database.getAllHistory();
-    return historyList.map((history) => History(
-      id: history.id,
-      title: history.title,
-      bookName: history.bookName,
-      bookPath: history.bookPath,
-      pageIndex: history.navIndex,
-    )).toList();
+    return historyList.map((history) =>
+        History(
+          id: history.id,
+          title: history.title,
+          bookName: history.bookName,
+          bookPath: history.bookPath,
+          pageIndex: history.navIndex,
+        )).toList();
   }
 
   @override
@@ -404,6 +419,79 @@ class _AppHistoryDataSource implements HistoryDataSource {
   @override
   Future<void> clearAllHistory() async {
     await _database.clearAllHistory();
+  }
+}
+
+class _AppBookDataSource implements epub_search_package.BookDataSource {
+  final JsonRepository _repository = JsonRepository();
+
+  @override
+  Future<List<epub_search_package.Book>> getBooks() async {
+    final books = await _repository.loadEpubFromJson();
+    return books.map((book) => epub_search_package.Book(
+      title: book.title,
+      author: book.author,
+      description: book.description,
+      image: book.image,
+      epub: book.epub,
+      series: book.series?.map((s) => epub_search_package.Series(
+        title: s.title,
+        description: s.description,
+        image: s.image,
+        epub: s.epub,
+      )).toList(),
+    )).toList();
+  }
+}
+
+class _AppRecentSearchesDataSource implements epub_search_package.RecentSearchesDataSource {
+  static const String _key = 'recent_searches';
+  static const int _maxRecentSearches = 10;
+
+  @override
+  Future<List<String>> getRecentSearches() async {
+    final prefs = await SharedPreferences.getInstance();
+    final searches = prefs.getStringList(_key) ?? [];
+    return searches;
+  }
+
+  @override
+  Future<void> saveRecentSearches(List<String> searches) async {
+    final prefs = await SharedPreferences.getInstance();
+    // Limit to max items
+    final limitedSearches = searches.length > _maxRecentSearches
+        ? searches.sublist(0, _maxRecentSearches)
+        : searches;
+    await prefs.setStringList(_key, limitedSearches);
+  }
+
+  @override
+  Future<void> addRecentSearch(String term) async {
+    if (term.trim().isEmpty) return;
+    
+    final prefs = await SharedPreferences.getInstance();
+    final searches = prefs.getStringList(_key) ?? [];
+    
+    // Remove if already exists
+    searches.remove(term);
+    
+    // Add to beginning
+    searches.insert(0, term);
+    
+    // Keep only max items
+    if (searches.length > _maxRecentSearches) {
+      searches.removeRange(_maxRecentSearches, searches.length);
+    }
+    
+    await prefs.setStringList(_key, searches);
+  }
+
+  @override
+  Future<void> removeRecentSearch(String term) async {
+    final prefs = await SharedPreferences.getInstance();
+    final searches = prefs.getStringList(_key) ?? [];
+    searches.remove(term);
+    await prefs.setStringList(_key, searches);
   }
 }
 

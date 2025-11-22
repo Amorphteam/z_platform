@@ -7,14 +7,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cupertino_native/cupertino_native.dart';
 
 import 'package:epub_bookmarks/epub_bookmarks.dart';
+import 'package:epub_search/epub_search.dart' as epub_search_package;
+
+import '../../model/search_model.dart';
 import '../../route_generator.dart';
 import '../../model/reference_model.dart';
 import '../../model/history_model.dart';
 import '../../util/epub_helper.dart';
 import '../library/cubit/library_cubit.dart';
 import '../library/library_screen.dart';
-import '../search/cubit/search_cubit.dart';
-import '../search/search_screen.dart';
 import '../toc/cubit/toc_cubit.dart';
 import '../toc/toc_screen.dart';
 
@@ -27,7 +28,7 @@ class HostScreen extends StatefulWidget {
 
 class _HostScreenState extends State<HostScreen> {
   int _currentIndex = 0;
-  
+
   // Helper function to check iOS version support for liquid glass
   bool _shouldUseLiquidGlass() {
     if (!Platform.isIOS) return false;
@@ -43,6 +44,7 @@ class _HostScreenState extends State<HostScreen> {
       return false;
     }
   }
+
   late final LibraryCubit _libraryCubit;
 
   @override
@@ -63,64 +65,69 @@ class _HostScreenState extends State<HostScreen> {
       body: _getScreen(_currentIndex),
       bottomNavigationBar: _shouldUseLiquidGlass()
           ? // Liquid Glass Tab Bar for iOS 16+
-            CNTabBar(
-                items: const [
-                  CNTabBarItem(
-                    label: 'الإشارات',
-                    icon: CNSymbol('bookmark.fill'),
-                  ),
-                  CNTabBarItem(
-                    label: 'البحث',
-                    icon: CNSymbol('magnifyingglass'),
-                  ),
-                  CNTabBarItem(
-                    label: 'الموضوعي',
-                    icon: CNSymbol('book.fill'),
-                  ),
-                  CNTabBarItem(
-                    label: 'الرئيسية',
-                    icon: CNSymbol('house.fill'),
-                  ),
-                ],
-                currentIndex: 3 - _currentIndex, // Reverse index for RTL
-                onTap: (index) {
-                  setState(() {
-                    _currentIndex = 3 - index; // Reverse index back
-                  });
-                },
-              )
+      CNTabBar(
+        items: const [
+          CNTabBarItem(
+            label: 'الإشارات',
+            icon: CNSymbol('bookmark.fill'),
+          ),
+          CNTabBarItem(
+            label: 'البحث',
+            icon: CNSymbol('magnifyingglass'),
+          ),
+          CNTabBarItem(
+            label: 'الموضوعي',
+            icon: CNSymbol('book.fill'),
+          ),
+          CNTabBarItem(
+            label: 'الرئيسية',
+            icon: CNSymbol('house.fill'),
+          ),
+        ],
+        currentIndex: 3 - _currentIndex, // Reverse index for RTL
+        onTap: (index) {
+          setState(() {
+            _currentIndex = 3 - index; // Reverse index back
+          });
+        },
+      )
           : // Material Bottom Navigation Bar for Android
-            Directionality(
-                textDirection: TextDirection.rtl,
-                child: BottomNavigationBar(
-                  currentIndex: _currentIndex,
-                  onTap: (index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                  type: BottomNavigationBarType.fixed,
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: Icon(_currentIndex == 0 ? Icons.home : Icons.home_outlined),
-                      label: 'الرئيسية',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(_currentIndex == 1 ? Icons.library_books : Icons.library_books_outlined),
-                      label: 'الموضوعي',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(_currentIndex == 2 ? CupertinoIcons.search_circle_fill : CupertinoIcons.search),
-                      label: 'البحث',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(_currentIndex == 3 ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark),
-                      label: 'الإشارات',
-                    ),
-                  ],
-                ),
-              ),
-                  );
+      Directionality(
+        textDirection: TextDirection.rtl,
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(_currentIndex == 0 ? Icons.home : Icons.home_outlined),
+              label: 'الرئيسية',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_currentIndex == 1 ? Icons.library_books : Icons
+                  .library_books_outlined),
+              label: 'الموضوعي',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_currentIndex == 2
+                  ? CupertinoIcons.search_circle_fill
+                  : CupertinoIcons.search),
+              label: 'البحث',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_currentIndex == 3
+                  ? CupertinoIcons.bookmark_solid
+                  : CupertinoIcons.bookmark),
+              label: 'الإشارات',
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// Returns the title for the app bar dynamically.
@@ -143,53 +150,66 @@ class _HostScreenState extends State<HostScreen> {
 
   Widget _getScreen(int index) {
     switch (index) {
-      case 0:
-        return BlocProvider.value(
-          value: _libraryCubit,
-          child: LibraryScreen(),
+    case 0:
+    return BlocProvider.value(
+    value: _libraryCubit,
+    child: LibraryScreen(),
+    );
+    case 1:
+    return BlocProvider(
+    create: (context) => TocCubit(),
+    child: TocScreen(),
+    );
+    // case 2:
+    //   return BlocProvider(
+    //     create: (context) => LibraryCubit(),
+    //     child: const LibraryScreen(),
+    //   );
+    case 2:
+    return epub_search_package.SearchScreen(
+      persistence: RouteGenerator.createSearchPersistence(),
+      onResultTap: (epub_search_package.SearchModel result) {
+        // Convert epub_search package's SearchModel to our local SearchModel
+        final searchResult = SearchModel(
+          pageIndex: result.pageIndex,
+          searchCount: result.searchCount,
+          bookAddress: result.bookAddress,
+          bookTitle: result.bookTitle,
+          pageId: result.pageId,
+          searchedWord: result.searchedWord,
+          spanna: result.spanna ?? '',
         );
-      case 1:
-        return BlocProvider(
-          create: (context) => TocCubit(),
-          child: TocScreen(),
-        );
-      // case 2:
-      //   return BlocProvider(
-      //     create: (context) => LibraryCubit(),
-      //     child: const LibraryScreen(),
-      //   );
-      case 2:
-        return BlocProvider(
-          create: (context) => SearchCubit(),
-          child: const SearchScreen(),
-        );
-      case 3:
-        return BookmarkScreen(
-          persistence: RouteGenerator.createBookmarkPersistence(),
-          onBookmarkTap: (screenContext, bookmark) async {
-            final reference = ReferenceModel(
-              id: bookmark.id,
-              title: bookmark.title,
-              bookName: bookmark.bookName,
-              bookPath: bookmark.bookPath,
-              navIndex: bookmark.pageIndex,
-              fileName: bookmark.fileName,
-            );
-            await openEpub(context: screenContext, reference: reference);
-          },
-          onHistoryTap: (screenContext, history) async {
-            final historyModel = HistoryModel(
-              id: history.id,
-              title: history.title,
-              bookName: history.bookName,
-              bookPath: history.bookPath,
-              navIndex: history.pageIndex,
-            );
-            await openEpub(context: screenContext, history: historyModel);
-          },
-        );
-      default:
-        return Container();
+        openEpub(context: context, search: searchResult);
+      },
+    );
+
+    case 3:
+    return BookmarkScreen(
+    persistence: RouteGenerator.createBookmarkPersistence(),
+    onBookmarkTap: (screenContext, bookmark) async {
+    final reference = ReferenceModel(
+    id: bookmark.id,
+    title: bookmark.title,
+    bookName: bookmark.bookName,
+    bookPath: bookmark.bookPath,
+    navIndex: bookmark.pageIndex,
+    fileName: bookmark.fileName,
+    );
+    await openEpub(context: screenContext, reference: reference);
+    },
+    onHistoryTap: (screenContext, history) async {
+    final historyModel = HistoryModel(
+    id: history.id,
+    title: history.title,
+    bookName: history.bookName,
+    bookPath: history.bookPath,
+    navIndex: history.pageIndex,
+    );
+    await openEpub(context: screenContext, history: historyModel);
+    },
+    );
+    default:
+    return Container();
     }
   }
 
