@@ -75,6 +75,7 @@ class ViewerHistoryDataSource implements epub_viewer.HistoryDataSource {
 
   @override
   Future<bool> saveHistory(epub_viewer.EpubHistoryEntry historyEntry) async {
+    // Check if history already exists to avoid unnecessary insert attempts
     final existing = await _historyDatabase.getHistoryByBookTitleAndPage(
       historyEntry.bookPath,
       historyEntry.pageIndex,
@@ -90,7 +91,10 @@ class ViewerHistoryDataSource implements epub_viewer.HistoryDataSource {
       navIndex: historyEntry.pageIndex,
     );
 
+    // addHistory now uses a transaction to atomically check and insert,
+    // preventing race conditions where this method might be called twice simultaneously
     final result = await _historyDatabase.addHistory(history);
+    // Return true if insert succeeded (result > 0), false if already exists (result == 0)
     return result != 0;
   }
 }
