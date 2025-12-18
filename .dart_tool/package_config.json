@@ -213,7 +213,7 @@
     },
     {
       "name": "epub_bookmarks",
-      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader/packages/epub_bookmarks",
+      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_bookmarks",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -225,13 +225,13 @@
     },
     {
       "name": "epub_search",
-      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader/packages/epub_search",
+      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_search",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "epub_viewer",
-      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader/packages/epub_viewer",
+      "rootUri": "file:///Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_viewer",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -327,7 +327,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.35.7/packages/flutter",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.35.4/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
@@ -363,7 +363,7 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.35.7/packages/flutter_test",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.35.4/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
@@ -375,7 +375,7 @@
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.35.7/packages/flutter_web_plugins",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.35.4/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
@@ -729,7 +729,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/alibayati/fvm/versions/3.35.7/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/alibayati/fvm/versions/3.35.4/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
@@ -946,7 +946,7 @@
   ],
   "generator": "pub",
   "generatorVersion": "3.9.2",
-  "flutterRoot": "file:///Users/alibayati/fvm/versions/3.35.7",
-  "flutterVersion": "3.35.7",
+  "flutterRoot": "file:///Users/alibayati/fvm/versions/3.35.4",
+  "flutterVersion": "3.35.4",
   "pubCache": "file:///Users/alibayati/.pub-cache"
 }
