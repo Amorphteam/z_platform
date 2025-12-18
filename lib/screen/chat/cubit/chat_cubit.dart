@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../api/ai_service.dart';
+import '../../../api/ai_provider.dart';
 import '../../../model/chat_message_model.dart';
 
 part 'chat_state.dart';
@@ -16,12 +17,32 @@ class ChatCubit extends Cubit<ChatState> {
   
   List<ChatMessage> get messages => _messages;
 
-  /// Initialize the AI service with API key
+  /// Initialize the AI service with API key (legacy method for backward compatibility)
   set apiKey(String apiKey) {
     AIService.apiKey = apiKey;
   }
 
-  /// Test AI connection
+  /// Set the AI provider (ChatGPT or Claude)
+  void setProvider(AIProvider provider) {
+    AIService.provider = provider;
+    // Clear conversation history when switching providers
+    AIService.clearConversationHistory();
+  }
+
+  /// Get the current AI provider
+  AIProvider get currentProvider => AIService.provider;
+
+  /// Initialize OpenAI API key
+  void setOpenAIApiKey(String apiKey) {
+    AIService.openAIApiKey = apiKey;
+  }
+
+  /// Initialize Claude API key
+  void setClaudeApiKey(String apiKey) {
+    AIService.claudeApiKey = apiKey;
+  }
+
+  /// Test AI connection for the current provider
   Future<bool> testAIConnection() async => _aiService.testConnection();
 
   Future<void> sendMessage(String content) async {
@@ -76,6 +97,7 @@ class ChatCubit extends Cubit<ChatState> {
   
   void clearChat() {
     _messages.clear();
+    AIService.clearConversationHistory();
     emit(const ChatState.initial());
   }
 }

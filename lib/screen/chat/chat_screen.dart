@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../model/chat_message_model.dart';
+import '../../api/ai_provider.dart';
 import 'cubit/chat_cubit.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -47,6 +48,105 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: const Text('AI Chat'),
         actions: [
+          // Provider selector
+          BlocBuilder<ChatCubit, ChatState>(
+            builder: (context, state) {
+              final currentProvider = context.read<ChatCubit>().currentProvider;
+              return PopupMenuButton<AIProvider>(
+                icon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      currentProvider == AIProvider.chatGPT
+                          ? Icons.chat_bubble
+                          : Icons.psychology,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      currentProvider.displayName,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+                tooltip: 'Select AI Provider',
+                onSelected: (AIProvider provider) {
+                  context.read<ChatCubit>().setProvider(provider);
+                  context.read<ChatCubit>().clearChat();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Switched to ${provider.displayName}'),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+                itemBuilder: (BuildContext context) => [
+                  PopupMenuItem<AIProvider>(
+                    value: AIProvider.chatGPT,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.chat_bubble,
+                          size: 20,
+                          color: currentProvider == AIProvider.chatGPT
+                              ? Theme.of(context).primaryColor
+                              : null,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          AIProvider.chatGPT.displayName,
+                          style: TextStyle(
+                            fontWeight: currentProvider == AIProvider.chatGPT
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                        ),
+                        if (currentProvider == AIProvider.chatGPT) ...[
+                          const Spacer(),
+                          Icon(
+                            Icons.check,
+                            size: 20,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<AIProvider>(
+                    value: AIProvider.claude,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.psychology,
+                          size: 20,
+                          color: currentProvider == AIProvider.claude
+                              ? Theme.of(context).primaryColor
+                              : null,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          AIProvider.claude.displayName,
+                          style: TextStyle(
+                            fontWeight: currentProvider == AIProvider.claude
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                        ),
+                        if (currentProvider == AIProvider.claude) ...[
+                          const Spacer(),
+                          Icon(
+                            Icons.check,
+                            size: 20,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.clear_all),
             onPressed: () {

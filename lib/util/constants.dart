@@ -10,4 +10,11 @@ class Constants {
     }
     return apiKey;
   }
+
+  // Claude API Configuration
+  // API key is loaded from environment variables for security
+  static String? get claudeApiKey {
+    final apiKey = dotenv.env['CLAUDE_API_KEY'];
+    return apiKey?.isEmpty == true ? null : apiKey;
+  }
 }

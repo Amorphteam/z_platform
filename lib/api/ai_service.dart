@@ -1,22 +1,44 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'ai_provider.dart';
 
 class AIService {
   // ====== Config ======
-  static String model = 'gpt-4.1-mini';
+  static AIProvider provider = AIProvider.chatGPT;
+  static String openAIModel = 'gpt-4.1-mini';
+  static String claudeModel = 'claude-3-5-sonnet-20241022'; // Latest Claude model
   static String? vectorStoreId = 'vs_68ec99dc0ab08191bed6cbbfbdb75e7a'; // set once from outside
-  static String? _apiKey;
+  static String? _openAIApiKey;
+  static String? _claudeApiKey;
 
   static bool _isInitialized = false;
 
-  // Cache: one assistant per language so each has proper instructions
+  // Cache: one assistant per language so each has proper instructions (OpenAI only)
   static final Map<String, String> _assistantIdByLang = {};
-  static String? _threadId; // reuse a single thread (optional)
+  static String? _threadId; // reuse a single thread (optional, OpenAI only)
+
+  // Conversation history for Claude (since it uses Messages API directly)
+  static final List<Map<String, dynamic>> _claudeConversationHistory = [];
 
   // ====== Init ======
+  static set openAIApiKey(String apiKey) {
+    _openAIApiKey = apiKey;
+    _isInitialized = true;
+  }
+
+  static set claudeApiKey(String apiKey) {
+    _claudeApiKey = apiKey;
+    _isInitialized = true;
+  }
+
+  // Legacy setter for backward compatibility
   static set apiKey(String apiKey) {
-    _apiKey = apiKey;
+    if (provider == AIProvider.claude) {
+      _claudeApiKey = apiKey;
+    } else {
+      _openAIApiKey = apiKey;
+    }
     _isInitialized = true;
   }
 
@@ -28,14 +50,35 @@ class AIService {
 
 
   Future<bool> testConnection() async {
-    if (!_isInitialized || _apiKey == null) return false;
-    try {
-      // Simple auth probe that costs $0 in tokens.
-      final uri = Uri.parse('https://api.openai.com/v1/assistants?limit=1');
-      final r = await _get(uri);
-      return r.statusCode == 200;
-    } catch (_) {
-      return false;
+    if (!_isInitialized) return false;
+    
+    if (provider == AIProvider.claude) {
+      if (_claudeApiKey == null) return false;
+      try {
+        // Simple auth probe for Claude
+        final uri = Uri.parse('https://api.anthropic.com/v1/messages');
+        final body = {
+          'model': claudeModel,
+          'max_tokens': 1,
+          'messages': [
+            {'role': 'user', 'content': 'test'}
+          ]
+        };
+        final r = await _postClaude(uri, body);
+        return r.statusCode == 200 || r.statusCode == 400; // 400 is OK for auth test
+      } catch (_) {
+        return false;
+      }
+    } else {
+      if (_openAIApiKey == null) return false;
+      try {
+        // Simple auth probe that costs $0 in tokens.
+        final uri = Uri.parse('https://api.openai.com/v1/assistants?limit=1');
+        final r = await _get(uri);
+        return r.statusCode == 200;
+      } catch (_) {
+        return false;
+      }
     }
   }
 
@@ -101,22 +144,36 @@ class AIService {
 
   // ====== Public API ======
   Future<String> askQuestion(String question) async {
-    if (!_isInitialized || _apiKey == null) {
+    if (!_isInitialized) {
       throw Exception('AI service not initialized. Please set the API key first.');
+    }
+
+    final q = question.trim().isEmpty ? 'Summarize the book briefly.' : question.trim();
+
+    // Route to appropriate provider
+    if (provider == AIProvider.claude) {
+      return _askClaude(q);
+    } else {
+      return _askChatGPT(q);
+    }
+  }
+
+  // ====== ChatGPT Implementation ======
+  Future<String> _askChatGPT(String question) async {
+    if (_openAIApiKey == null) {
+      throw Exception('OpenAI API key not set. Please set AIService.openAIApiKey first.');
     }
     if ((vectorStoreId ?? '').isEmpty) {
       throw Exception('Vector Store ID is required. Set AIService.vectorStoreId first.');
     }
 
-    final q = question.trim().isEmpty ? 'Summarize the book briefly.' : question.trim();
-
     // detect language like your Python script
-    final lang = _isEnglish(q) ? 'en' : (_isPersian(q) ? 'fa' : (_isArabic(q) ? 'ar' : 'en'));
-    final onlySher = _wantsSher(q);
+    final lang = _isEnglish(question) ? 'en' : (_isPersian(question) ? 'fa' : (_isArabic(question) ? 'ar' : 'en'));
+    final onlySher = _wantsSher(question);
     final restrictMsg =
         "Use ONLY passages explicitly marked as poetry: those that include [TAG:sher] "
         "or the line 'Tags: sher'. Ignore everything else.";
-    final userMsg = onlySher ? "$restrictMsg\n\n$q" : q;
+    final userMsg = onlySher ? "$restrictMsg\n\n$question" : question;
 
     try {
       // 1) Assistant per language (cached)
@@ -137,12 +194,6 @@ class AIService {
       // 6) Read latest assistant message
       final answer = await _getLatestAssistantMessage(threadId: _threadId!);
 
-      // Optional: enforce poetry-only on client side (like Python).
-      if (onlySher) {
-        // If you return JSON, you’d parse and verify tag==sher here.
-        // Since we return plain text to your UI, we’ll trust the instruction.
-      }
-
       return answer.isNotEmpty ? answer : _fallbackDontKnow(lang);
     } on Exception catch (e) {
       final s = e.toString().toLowerCase();
@@ -158,6 +209,93 @@ class AIService {
     }
   }
 
+  // ====== Claude Implementation ======
+  Future<String> _askClaude(String question) async {
+    if (_claudeApiKey == null) {
+      throw Exception('Claude API key not set. Please set AIService.claudeApiKey first.');
+    }
+
+    // detect language
+    final lang = _isEnglish(question) ? 'en' : (_isPersian(question) ? 'fa' : (_isArabic(question) ? 'ar' : 'en'));
+    final onlySher = _wantsSher(question);
+
+    // Build system message with instructions
+    final systemMessage = _pickInstructions(lang);
+    final restrictMsg =
+        "Use ONLY passages explicitly marked as poetry: those that include [TAG:sher] "
+        "or the line 'Tags: sher'. Ignore everything else.";
+    final userMsg = onlySher ? "$restrictMsg\n\n$question" : question;
+
+    try {
+      // Add user message to conversation history
+      _claudeConversationHistory.add({
+        'role': 'user',
+        'content': userMsg,
+      });
+
+      // Build messages array (keep last 10 messages for context)
+      final messages = _claudeConversationHistory.length > 10
+          ? _claudeConversationHistory.sublist(_claudeConversationHistory.length - 10)
+          : List<Map<String, dynamic>>.from(_claudeConversationHistory);
+
+      // Call Claude API
+      final uri = Uri.parse('https://api.anthropic.com/v1/messages');
+      final body = {
+        'model': claudeModel,
+        'max_tokens': 4096,
+        'system': systemMessage,
+        'messages': messages,
+      };
+
+      final resp = await _postClaude(uri, body);
+      _ensureOk(resp, 'claudeMessage');
+
+      final json = jsonDecode(resp.body) as Map<String, dynamic>;
+      final content = json['content'] as List;
+      
+      // Extract text from response
+      final texts = <String>[];
+      for (final item in content) {
+        if (item['type'] == 'text') {
+          final text = item['text']?.toString();
+          if (text != null && text.isNotEmpty) {
+            texts.add(text);
+          }
+        }
+      }
+
+      final answer = texts.join('\n').trim();
+
+      // Add assistant response to conversation history
+      if (answer.isNotEmpty) {
+        _claudeConversationHistory.add({
+          'role': 'assistant',
+          'content': answer,
+        });
+      }
+
+      return answer.isNotEmpty ? answer : _fallbackDontKnow(lang);
+    } on Exception catch (e) {
+      final s = e.toString().toLowerCase();
+      if (s.contains('unauthorized') || s.contains('api key') || s.contains('authentication')) {
+        return 'Error: Please check your Claude API key configuration.';
+      } else if (s.contains('quota') || s.contains('insufficient')) {
+        return 'Error: API quota exceeded. Please check your Claude billing.';
+      } else if (s.contains('rate limit')) {
+        return 'Error: Rate limit exceeded. Please try again in a moment.';
+      } else {
+        return 'Error: Failed to get AI response. ${e.toString()}';
+      }
+    }
+  }
+
+  // Clear conversation history (useful when switching providers or clearing chat)
+  static void clearConversationHistory() {
+    _claudeConversationHistory.clear();
+    _threadId = null;
+    _assistantIdByLang.clear();
+  }
+
   String _fallbackDontKnow(String lang) =>
       (lang == 'fa') ? 'نمی‌دانم' : (lang == 'ar') ? 'لا أعلم' : 'I don’t know';
 
@@ -167,7 +305,7 @@ class AIService {
     final id = await _createAssistant(
       name: 'EPUB QA (${lang.toUpperCase()})',
       instructions: _pickInstructions(lang),
-      model: model,
+      model: openAIModel,
       vectorStoreId: vectorStoreId!,
     );
     _assistantIdByLang[lang] = id;
@@ -301,9 +439,30 @@ class AIService {
   }
 
   void _applyHeaders(HttpClientRequest req) {
-    req.headers.set(HttpHeaders.authorizationHeader, 'Bearer $_apiKey');
+    req.headers.set(HttpHeaders.authorizationHeader, 'Bearer $_openAIApiKey');
     req.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
     req.headers.set('OpenAI-Beta', 'assistants=v2'); // required
+  }
+
+  // ====== Claude HTTP helpers ======
+  Future<_HttpResponse> _postClaude(Uri uri, Map<String, dynamic> body) async {
+    final client = HttpClient();
+    try {
+      final req = await client.postUrl(uri);
+      _applyClaudeHeaders(req);
+      req.add(utf8.encode(jsonEncode(body)));
+      final res = await req.close();
+      final text = await utf8.decodeStream(res);
+      return _HttpResponse(res.statusCode, text);
+    } finally {
+      client.close(force: true);
+    }
+  }
+
+  void _applyClaudeHeaders(HttpClientRequest req) {
+    req.headers.set('x-api-key', _claudeApiKey!);
+    req.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
+    req.headers.set('anthropic-version', '2023-06-01'); // Required Claude API version
   }
 }
 

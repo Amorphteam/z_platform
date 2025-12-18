@@ -8,6 +8,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masaha/screen/chat/chat_screen.dart';
 import 'package:masaha/screen/chat/cubit/chat_cubit.dart';
+import 'package:masaha/api/ai_provider.dart';
 import 'package:masaha/screen/host/cubit/host_cubit.dart';
 import 'package:masaha/screen/host/host_screen.dart';
 import 'package:masaha/screen/color_palette/color_palette_screen.dart';
@@ -196,8 +197,13 @@ class RouteGenerator {
           isIOS: isIOS,
           builder: (context) {
             final chatCubit = ChatCubit();
-            // Initialize AI service with API key
-            chatCubit.apiKey = Constants.openAIApiKey;
+            // Initialize AI service with both API keys
+            chatCubit.setOpenAIApiKey(Constants.openAIApiKey);
+            if (Constants.claudeApiKey != null) {
+              chatCubit.setClaudeApiKey(Constants.claudeApiKey!);
+            }
+            // Default to ChatGPT
+            chatCubit.setProvider(AIProvider.chatGPT);
             return BlocProvider(
               create: (context) => chatCubit,
               child: const ChatScreen(),
