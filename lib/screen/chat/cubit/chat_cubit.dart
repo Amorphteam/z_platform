@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../../../api/ai_service.dart';
 import '../../../api/ai_provider.dart';
 import '../../../model/chat_message_model.dart';
+import '../../../util/constants.dart';
 
 part 'chat_state.dart';
 part 'chat_cubit.freezed.dart';
@@ -25,6 +26,16 @@ class ChatCubit extends Cubit<ChatState> {
   /// Set the AI provider (ChatGPT or Claude)
   void setProvider(AIProvider provider) {
     AIService.provider = provider;
+    // Re-initialize API keys from Constants when switching
+    try {
+      setOpenAIApiKey(Constants.openAIApiKey);
+    } catch (e) {
+      // OpenAI key not set, that's okay if using Claude
+    }
+    final claudeKey = Constants.claudeApiKey;
+    if (claudeKey != null) {
+      setClaudeApiKey(claudeKey);
+    }
     // Clear conversation history when switching providers
     AIService.clearConversationHistory();
   }
@@ -40,6 +51,14 @@ class ChatCubit extends Cubit<ChatState> {
   /// Initialize Claude API key
   void setClaudeApiKey(String apiKey) {
     AIService.claudeApiKey = apiKey;
+  }
+
+  /// Set EPUB asset path for Claude (e.g., 'assets/epub/1.epub')
+  /// This allows Claude to answer questions about the EPUB content
+  void setEpubAssetPath(String? assetPath) {
+    AIService.epubAssetPath = assetPath;
+    // Clear EPUB cache when path changes
+    AIService.clearEpubCache();
   }
 
   /// Test AI connection for the current provider

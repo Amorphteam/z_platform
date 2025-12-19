@@ -198,10 +198,18 @@ class RouteGenerator {
           builder: (context) {
             final chatCubit = ChatCubit();
             // Initialize AI service with both API keys
-            chatCubit.setOpenAIApiKey(Constants.openAIApiKey);
-            if (Constants.claudeApiKey != null) {
-              chatCubit.setClaudeApiKey(Constants.claudeApiKey!);
+            try {
+              chatCubit.setOpenAIApiKey(Constants.openAIApiKey);
+            } catch (e) {
+              // OpenAI key not set, will show error when trying to use ChatGPT
             }
+            final claudeKey = Constants.claudeApiKey;
+            if (claudeKey != null && claudeKey.isNotEmpty) {
+              chatCubit.setClaudeApiKey(claudeKey);
+            }
+            // Set EPUB asset path for Claude (use the same EPUB as vector store if available)
+            // You can change this to any EPUB file in assets/epub/ (e.g., 'assets/epub/1.epub')
+            chatCubit.setEpubAssetPath('assets/epub/mafatih.epub'); // Default to first EPUB
             // Default to ChatGPT
             chatCubit.setProvider(AIProvider.chatGPT);
             return BlocProvider(

@@ -1,16 +1,34 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:epub_parser/epub_parser.dart';
+import 'package:html/parser.dart' as html_parser;
 import 'ai_provider.dart';
+import '../util/epub_helper.dart';
 
 class AIService {
   // ====== Config ======
   static AIProvider provider = AIProvider.chatGPT;
   static String openAIModel = 'gpt-4.1-mini';
-  static String claudeModel = 'claude-3-5-sonnet-20241022'; // Latest Claude model
+  // Claude model options (try these if one doesn't work):
+  // - claude-3-haiku-20240307 (fastest, cheapest, most widely available - try this first)
+  // - claude-3-5-sonnet-20241022 (newer Sonnet model)
+  // - claude-3-sonnet-20240229 (balanced, good performance)
+  // - claude-3-opus-20240229 (most capable, may require higher tier)
+  // Note: Model availability depends on your API key tier
+  static String claudeModel = 'claude-3-haiku-20240307';
   static String? vectorStoreId = 'vs_68ec99dc0ab08191bed6cbbfbdb75e7a'; // set once from outside
+  static String? epubAssetPath; // EPUB asset path for Claude (e.g., 'assets/epub/1.epub')
   static String? _openAIApiKey;
   static String? _claudeApiKey;
+  
+  // Cache for EPUB content to avoid re-extracting
+  static String? _cachedEpubContent;
+  static String? _cachedEpubPath;
+  
+  // Cache for uploaded Claude file IDs (file_id per EPUB path)
+  static final Map<String, String> _claudeFileIds = {}; // Maps epubAssetPath -> file_id
 
   static bool _isInitialized = false;
 
@@ -209,6 +227,148 @@ class AIService {
     }
   }
 
+  // ====== Claude File Upload API ======
+  /// Upload EPUB content as a file to Claude's Files API
+  /// Returns the file_id that can be used in messages
+  Future<String> _uploadEpubToClaude(String epubContent, String fileName) async {
+    if (_claudeApiKey == null) {
+      throw Exception('Claude API key not set');
+    }
+    
+    try {
+      final uri = Uri.parse('https://api.anthropic.com/v1/files');
+      final client = HttpClient();
+      
+      try {
+        final request = await client.postUrl(uri);
+        _applyClaudeHeaders(request);
+        request.headers.set('anthropic-beta', 'files-api-2025-04-14'); // Required for Files API
+        
+        // Create multipart form data
+        final boundary = '----WebKitFormBoundary${DateTime.now().millisecondsSinceEpoch}';
+        request.headers.set(HttpHeaders.contentTypeHeader, 'multipart/form-data; boundary=$boundary');
+        
+        final bodyBuffer = StringBuffer();
+        bodyBuffer.writeln('--$boundary');
+        bodyBuffer.writeln('Content-Disposition: form-data; name="file"; filename="$fileName"');
+        bodyBuffer.writeln('Content-Type: text/plain');
+        bodyBuffer.writeln();
+        bodyBuffer.writeln(epubContent);
+        bodyBuffer.writeln('--$boundary--');
+        
+        request.add(utf8.encode(bodyBuffer.toString()));
+        final response = await request.close();
+        final responseBody = await utf8.decodeStream(response);
+        
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          final json = jsonDecode(responseBody) as Map<String, dynamic>;
+          final fileId = json['id'] as String?;
+          if (fileId != null) {
+            return fileId;
+          }
+        }
+        
+        throw Exception('Failed to upload file: ${response.statusCode} $responseBody');
+      } finally {
+        client.close(force: true);
+      }
+    } catch (e) {
+      throw Exception('Error uploading file to Claude: $e');
+    }
+  }
+  
+  /// Get or upload EPUB file to Claude, returns file_id
+  Future<String?> _getOrUploadEpubFile(String? assetPath) async {
+    if (assetPath == null || assetPath.isEmpty) return null;
+    
+    // Check cache
+    if (_claudeFileIds.containsKey(assetPath)) {
+      return _claudeFileIds[assetPath];
+    }
+    
+    try {
+      // Extract EPUB content
+      final epubContent = await _extractEpubContentAsText(assetPath);
+      if (epubContent.isEmpty) return null;
+      
+      // Upload to Claude
+      final fileName = assetPath.split('/').last.replaceAll('.epub', '.txt');
+      final fileId = await _uploadEpubToClaude(epubContent, fileName);
+      
+      // Cache the file_id
+      _claudeFileIds[assetPath] = fileId;
+      return fileId;
+    } catch (e) {
+      print('Error uploading EPUB to Claude: $e');
+      return null;
+    }
+  }
+
+  // ====== EPUB Content Extraction for Claude ======
+  Future<String> _extractEpubContentAsText(String? assetPath) async {
+    if (assetPath == null || assetPath.isEmpty) return '';
+    
+    // Use cached content if available
+    if (_cachedEpubContent != null && _cachedEpubPath == assetPath) {
+      return _cachedEpubContent!;
+    }
+    
+    try {
+      // Load EPUB
+      final epubBook = await loadEpubFromAsset(assetPath);
+      
+      // Extract HTML content
+      final htmlFiles = await extractHtmlContentWithEmbeddedImages(epubBook);
+      
+      // Reorder based on spine
+      final spineItems = epubBook.Schema?.Package?.Spine?.Items;
+      final List<String> idRefs = [];
+      if (spineItems != null) {
+        for (final item in spineItems) {
+          if (item.IdRef != null) {
+            idRefs.add(item.IdRef!);
+          }
+        }
+      }
+      final orderedFiles = reorderHtmlFilesBasedOnSpine(htmlFiles, idRefs);
+      
+      // Convert HTML to plain text and combine
+      final textParts = <String>[];
+      for (final file in orderedFiles) {
+        // Parse HTML and extract text
+        final document = html_parser.parse(file.modifiedHtmlContent);
+        final text = document.body?.text ?? '';
+        
+        // Clean up and format
+        final cleaned = text
+            .replaceAll(RegExp(r'\s+'), ' ') // Replace multiple spaces with single space
+            .trim();
+        
+        if (cleaned.isNotEmpty) {
+          // Add chapter markers if available
+          final fileName = file.fileName.split('/').last;
+          textParts.add('=== Chapter: $fileName ===\n$cleaned\n');
+        }
+      }
+      
+      final fullText = textParts.join('\n\n');
+      
+      // Cache the result
+      _cachedEpubContent = fullText;
+      _cachedEpubPath = assetPath;
+      
+      return fullText;
+    } catch (e) {
+      print('Error extracting EPUB content: $e');
+      return '';
+    }
+  }
+  
+  String _htmlToPlainText(String html) {
+    final document = html_parser.parse(html);
+    return document.body?.text ?? '';
+  }
+
   // ====== Claude Implementation ======
   Future<String> _askClaude(String question) async {
     if (_claudeApiKey == null) {
@@ -219,18 +379,58 @@ class AIService {
     final lang = _isEnglish(question) ? 'en' : (_isPersian(question) ? 'fa' : (_isArabic(question) ? 'ar' : 'en'));
     final onlySher = _wantsSher(question);
 
+    // Upload EPUB to Claude Files API if available (better than including in system message)
+    String? fileId;
+    if (epubAssetPath != null && epubAssetPath!.isNotEmpty) {
+      try {
+        fileId = await _getOrUploadEpubFile(epubAssetPath);
+      } catch (e) {
+        print('Warning: Could not upload EPUB file, falling back to system message: $e');
+      }
+    }
+    
     // Build system message with instructions
-    final systemMessage = _pickInstructions(lang);
+    String systemMessage = _pickInstructions(lang);
+    if (fileId == null) {
+      // Fallback: If file upload failed, try including content in system message (limited)
+      final epubContent = await _extractEpubContentAsText(epubAssetPath);
+      if (epubContent.isNotEmpty) {
+        final maxContentLength = 15000; // Reduced to avoid rate limits
+        final contentPreview = epubContent.length > maxContentLength 
+            ? '${epubContent.substring(0, maxContentLength)}...\n\n[Note: EPUB content truncated. Showing first $maxContentLength of ${epubContent.length} characters.]'
+            : epubContent;
+        systemMessage += '\n\n=== EPUB CONTENT (First portion) ===\n$contentPreview';
+      } else {
+        systemMessage += '\n\nNote: No EPUB content is available. You can answer general questions, but cannot reference specific EPUB content.';
+      }
+    }
+    
     final restrictMsg =
         "Use ONLY passages explicitly marked as poetry: those that include [TAG:sher] "
         "or the line 'Tags: sher'. Ignore everything else.";
     final userMsg = onlySher ? "$restrictMsg\n\n$question" : question;
 
     try {
+      // Build message content - include file if uploaded
+      final messageContent = <Map<String, dynamic>>[
+        {'type': 'text', 'text': userMsg}
+      ];
+      
+      // Add file reference if available
+      if (fileId != null) {
+        messageContent.add({
+          'type': 'file',
+          'source': {
+            'type': 'file',
+            'file_id': fileId,
+          }
+        });
+      }
+
       // Add user message to conversation history
       _claudeConversationHistory.add({
         'role': 'user',
-        'content': userMsg,
+        'content': messageContent,
       });
 
       // Build messages array (keep last 10 messages for context)
@@ -246,8 +446,31 @@ class AIService {
         'system': systemMessage,
         'messages': messages,
       };
+      
+      // Add citations if file is attached
+      if (fileId != null) {
+        body['citations'] = true; // Enable citations for file references
+      }
 
       final resp = await _postClaude(uri, body);
+      
+      // Better error handling for specific status codes
+      if (resp.statusCode == 404) {
+        final errorBody = resp.body;
+        throw Exception('Claude model "$claudeModel" not found. This model may not be available for your API key. Try changing claudeModel in AIService to "claude-3-haiku-20240307" or "claude-3-sonnet-20240229". Error: $errorBody');
+      } else if (resp.statusCode == 429) {
+        // Rate limit error - provide helpful message
+        final errorBody = resp.body;
+        try {
+          final errorJson = jsonDecode(errorBody) as Map<String, dynamic>;
+          final error = errorJson['error'] as Map<String, dynamic>?;
+          final message = error?['message']?.toString() ?? 'Rate limit exceeded';
+          throw Exception('Rate limit error: $message. Please wait a moment before trying again.');
+        } catch (_) {
+          throw Exception('Rate limit exceeded. Please wait a moment and try again.');
+        }
+      }
+      
       _ensureOk(resp, 'claudeMessage');
 
       final json = jsonDecode(resp.body) as Map<String, dynamic>;
@@ -281,8 +504,12 @@ class AIService {
         return 'Error: Please check your Claude API key configuration.';
       } else if (s.contains('quota') || s.contains('insufficient')) {
         return 'Error: API quota exceeded. Please check your Claude billing.';
-      } else if (s.contains('rate limit')) {
-        return 'Error: Rate limit exceeded. Please try again in a moment.';
+      } else if (s.contains('rate limit') || s.contains('429')) {
+        // Better rate limit error message
+        if (s.contains('input tokens per minute')) {
+          return 'Error: Rate limit exceeded. The EPUB content is too large. Please wait a moment and try again, or ask a more specific question.';
+        }
+        return 'Error: Rate limit exceeded. Please wait a moment and try again.';
       } else {
         return 'Error: Failed to get AI response. ${e.toString()}';
       }
@@ -294,6 +521,20 @@ class AIService {
     _claudeConversationHistory.clear();
     _threadId = null;
     _assistantIdByLang.clear();
+    // Optionally clear EPUB cache when clearing history
+    // _cachedEpubContent = null;
+    // _cachedEpubPath = null;
+  }
+  
+  // Clear EPUB cache (useful when switching books)
+  static void clearEpubCache() {
+    _cachedEpubContent = null;
+    _cachedEpubPath = null;
+  }
+  
+  // Clear Claude file IDs cache (useful when switching EPUBs)
+  static void clearClaudeFileIds() {
+    _claudeFileIds.clear();
   }
 
   String _fallbackDontKnow(String lang) =>
@@ -463,6 +704,7 @@ class AIService {
     req.headers.set('x-api-key', _claudeApiKey!);
     req.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
     req.headers.set('anthropic-version', '2023-06-01'); // Required Claude API version
+    // Alternative: try '2024-06-01' if the above doesn't work
   }
 }
 
