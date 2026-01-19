@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:epub_search/epub_search.dart' as epub_search_package;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:epub_viewer/epub_viewer.dart' as epub_viewer;
 import 'package:epub_bookmarks/epub_bookmarks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -54,6 +55,11 @@ class RouteGenerator {
           final DeepLinkModel? deepLink = args['deepLink'];
           // Support legacy fileName parameter for backward compatibility
           final String? fileName = args['fileName'];
+          final Map<String, Style>? customStyle = args['customStyle'] as Map<String, Style>?;
+          // CustomStyleBuilder is a typedef exported from epub_viewer package
+          // We extract it without casting since typedefs can't be used in 'as' expressions
+          // The package will validate the function signature matches CustomStyleBuilder
+          final customStyleBuilder = args['customStyleBuilder'];
 
           // Create DeepLinkModel from legacy fileName if needed
           DeepLinkModel? deepLinkModel = deepLink;
@@ -81,6 +87,7 @@ class RouteGenerator {
                 deepLinkBookPath: deepLinkModel?.epubName,
                 deepLinkPageIndex: deepLinkModel?.epubIndex,
                 deepLinkChapterFileName: deepLinkModel?.fileName,
+
               );
 
           return _buildRoute(
@@ -92,6 +99,8 @@ class RouteGenerator {
               child: epub_viewer.EpubViewerScreenV2(
                 entryData: entryData,
                 enableContentCache: enableContentCache,
+                customStyle: customStyle,
+                customStyleBuilder: customStyleBuilder,
                 onBookmarksChanged: () async {
                   try {
                     final bookmarkCubit = context.read<BookmarkCubit>();

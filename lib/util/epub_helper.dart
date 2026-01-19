@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:epub_viewer/epub_viewer.dart' as epub_viewer;
 import 'package:masaha/model/history_model.dart';
 import 'package:masaha/util/page_helper.dart';
 
@@ -12,6 +14,7 @@ import '../model/search_model.dart';
 import '../model/tree_toc_model.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
+import 'epub_style_manager.dart' show EpubStyleManager, CustomStyleBuilder;
 
 String convertLatinNumbersToArabic(String input) {
   const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -41,6 +44,75 @@ String convertLatinNumbersToArabic(String input) {
 }
 
 
+/// Opens an EPUB viewer screen with the specified book, reference, history, TOC, or search result.
+/// 
+/// This function automatically applies custom styles if they are defined in [EpubStyleManager]
+/// for the book being opened. Custom styles use dynamic values that respect user preferences
+/// (font size, colors, etc.) and can be adjusted via the style button in the EPUB viewer.
+/// 
+/// ## Parameters
+/// 
+/// - [context]: The BuildContext for navigation
+/// - [book]: The book to open (optional)
+/// - [reference]: A reference/bookmark to open (optional)
+/// - [history]: A history entry to open (optional)
+/// - [toc]: A table of contents chapter to open (optional)
+/// - [search]: A search result to open (optional)
+/// - [customStyle]: Override custom styles (static) - if provided, these will be used instead of
+///   automatically detected styles from [EpubStyleManager]
+/// - [customStyleBuilder]: Override custom style builder (dynamic) - if provided, this will be
+///   used to build styles dynamically based on user preferences
+/// - [useBookCustomStyle]: If `true` (default), automatically detects and applies custom
+///   styles from [EpubStyleManager] based on the book's epub path. Set to `false` to
+///   disable automatic style detection.
+/// 
+/// ## Custom Styles
+/// 
+/// Custom styles can be defined in [EpubStyleManager]. If [useBookCustomStyle] is `true`
+/// and no [customStyle] or [customStyleBuilder] is provided, the function will automatically
+/// look up custom styles for the book being opened.
+/// 
+/// **Dynamic vs Static Styles:**
+/// - Use [customStyleBuilder] for styles that should respect user preferences (recommended)
+/// - Use [customStyle] for static styles that override user preferences
+/// 
+/// Example:
+/// ```dart
+/// // Automatically uses custom styles from EpubStyleManager if defined
+/// await openEpub(context: context, book: myBook);
+/// 
+/// // Manually override with static styles
+/// await openEpub(
+///   context: context,
+///   book: myBook,
+///   customStyle: {'p': Style(fontSize: FontSize(20))},
+/// );
+/// 
+/// // Manually override with dynamic styles
+/// await openEpub(
+///   context: context,
+///   book: myBook,
+///   customStyleBuilder: ({
+///     required fontSize,
+///     required lineHeight,
+///     required fontFamily,
+///     required isDarkMode,
+///     required backgroundColor,
+///     uniformTextColor,
+///   }) {
+///     return {
+///       'p': Style(fontSize: FontSize(fontSize.size * 1.1)),
+///     };
+///   },
+/// );
+/// 
+/// // Disable automatic style detection
+/// await openEpub(
+///   context: context,
+///   book: myBook,
+///   useBookCustomStyle: false,
+/// );
+/// ```
 Future<void> openEpub({
   required BuildContext context,
   Book? book,
@@ -48,7 +120,23 @@ Future<void> openEpub({
   HistoryModel? history,
   EpubChaptersWithBookPath? toc,
   SearchModel? search,
+  Map<String, Style>? customStyle,
+  CustomStyleBuilder? customStyleBuilder,
+  bool useBookCustomStyle = true,
 }) async {
+  // If useBookCustomStyle is true and no custom styles are provided,
+  // automatically detect and apply custom styles from EpubStyleManager
+  CustomStyleBuilder? effectiveCustomStyleBuilder = customStyleBuilder;
+  Map<String, Style>? effectiveCustomStyle = customStyle;
+  
+  if (useBookCustomStyle && effectiveCustomStyleBuilder == null && effectiveCustomStyle == null) {
+    final epubPath = book?.epub ?? 
+                     reference?.bookPath ?? 
+                     history?.bookPath ?? 
+                     search?.bookAddress;
+    effectiveCustomStyleBuilder = EpubStyleManager.instance.getStyleBuilderForBook(epubPath);
+  }
+
   await Navigator.pushNamed(
     context,
     '/epubViewer',
@@ -58,6 +146,8 @@ Future<void> openEpub({
       'history': history,
       'toc': toc,
       'search': search,
+      'customStyle': effectiveCustomStyle,
+      'customStyleBuilder': effectiveCustomStyleBuilder,
     },
   );
 }
