@@ -54,6 +54,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<!-- Background Audio Capabilities -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<!-- URL Schemes for Deep Linking -->
 	<key>CFBundleURLTypes</key>
 	<array>

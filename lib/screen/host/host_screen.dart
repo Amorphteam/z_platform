@@ -20,6 +20,7 @@ import '../library/cubit/library_cubit.dart';
 import '../library/library_screen.dart';
 import '../toc/cubit/toc_cubit.dart';
 import '../toc/toc_screen.dart';
+import '../../widget/audio_player_mini.dart';
 
 class HostScreen extends StatefulWidget {
   const HostScreen({super.key});
@@ -64,7 +65,20 @@ class _HostScreenState extends State<HostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _getScreen(_currentIndex),
+      body: Stack(
+        children: [
+          _getScreen(_currentIndex),
+          const Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: SafeArea(
+              top: false,
+              child: AudioPlayerMini(),
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: _shouldUseLiquidGlass()
           ? // Liquid Glass Tab Bar for iOS 16+
           CNTabBar(

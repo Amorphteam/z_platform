@@ -25,6 +25,9 @@ import 'model/search_model.dart' as host_search;
 import 'model/tree_toc_model.dart';
 import 'util/constants.dart';
 import 'util/epub_helper.dart';
+import 'screen/audio_player/audio_player_screen.dart';
+import 'screen/audio_player/cubit/audio_player_cubit.dart';
+import 'model/audio_track_model.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -232,6 +235,22 @@ class RouteGenerator {
           isIOS: isIOS,
           builder: (context) => const LiquidGlassTestScreen(),
         );
+      case '/audioPlayer':
+        if (args != null) {
+          final List<AudioTrack> tracks = args['tracks'] as List<AudioTrack>;
+          final int? initialIndex = args['initialIndex'] as int?;
+          return _buildRoute(
+            isIOS: isIOS,
+            builder: (context) => BlocProvider(
+              create: (context) => AudioPlayerCubit(),
+              child: AudioPlayerScreen(
+                tracks: tracks,
+                initialIndex: initialIndex,
+              ),
+            ),
+          );
+        }
+        return _errorRoute();
       default:
         return _errorRoute();
     }

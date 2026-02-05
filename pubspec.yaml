@@ -70,6 +70,10 @@ dependencies:
   cupertino_native: ^0.1.1
   modal_bottom_sheet: ^3.0.0
   app_links: ^6.4.1
+  just_audio: ^0.9.36
+  audio_service: ^0.18.11
+  rxdart: ^0.28.0
+  lottie: ^3.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -102,6 +106,7 @@ flutter:
     - assets/epub/
     - assets/icon/
     - assets/db/
+    - assets/lottie/
     - .env
 
   fonts:
