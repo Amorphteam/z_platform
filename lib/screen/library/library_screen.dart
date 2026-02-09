@@ -33,8 +33,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       // Use showCupertinoModalBottomSheet for iOS with full screen and blurred background
       showCupertinoModalBottomSheet(
         context: context,
-        expand: true,
-        backgroundColor: Colors.transparent,
+        useRootNavigator: true,
         builder: (context) => CupertinoPageScaffold(
           backgroundColor: Colors.transparent,
           child: Container(

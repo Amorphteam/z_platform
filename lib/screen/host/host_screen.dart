@@ -65,6 +65,7 @@ class _HostScreenState extends State<HostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: _shouldUseLiquidGlass(),
       body: Stack(
         children: [
           _getScreen(_currentIndex),
@@ -81,7 +82,13 @@ class _HostScreenState extends State<HostScreen> {
       ),
       bottomNavigationBar: _shouldUseLiquidGlass()
           ? // Liquid Glass Tab Bar for iOS 16+
-          CNTabBar(
+      Material(
+        color: Colors.transparent,
+        child: CupertinoTheme(
+          data: CupertinoThemeData(
+            primaryColor: Theme.of(context).colorScheme.secondaryContainer,
+          ),
+         child: CNTabBar(
               items: const [
                 CNTabBarItem(
                   label: 'الإشارات',
@@ -106,7 +113,7 @@ class _HostScreenState extends State<HostScreen> {
                   _currentIndex = 3 - index; // Reverse index back
                 });
               },
-            )
+            )))
           : // Material Bottom Navigation Bar for Android
           Directionality(
               textDirection: TextDirection.rtl,

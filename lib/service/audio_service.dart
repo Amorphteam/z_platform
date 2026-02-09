@@ -22,20 +22,27 @@ class AudioPlayerHandler extends audio_service.BaseAudioHandler
     _init();
   }
   
+  /// Push playback state to both UI stream and platform (notification/lock screen).
+  void _broadcastPlaybackState() {
+    final state = _playbackState;
+    _playbackStateController.add(state);
+    playbackState.add(state);
+  }
+
   void _init() {
     // Listen to player state changes
     _player.playbackEventStream.listen((event) {
-      _playbackStateController.add(_playbackState);
+      _broadcastPlaybackState();
     });
     
     // Listen to position changes
     _player.positionStream.listen((position) {
-      _playbackStateController.add(_playbackState);
+      _broadcastPlaybackState();
     });
     
     // Listen to duration changes
     _player.durationStream.listen((duration) {
-      _playbackStateController.add(_playbackState);
+      _broadcastPlaybackState();
     });
     
     // Handle player errors
@@ -130,9 +137,10 @@ class AudioPlayerHandler extends audio_service.BaseAudioHandler
     await _playlist.addAll(audioSources);
     await _player.setAudioSource(_playlist);
     
-    // Update current media item
+    // Update current media item and broadcast state so notification/lock screen appear
     if (_tracks.isNotEmpty) {
       _updateMediaItem(_currentIndex);
+      _broadcastPlaybackState();
     }
   }
   
@@ -143,10 +151,11 @@ class AudioPlayerHandler extends audio_service.BaseAudioHandler
   
   void _updateMediaItem(int index) {
     if (index >= 0 && index < _tracks.length && index < queue.value.length) {
-      final mediaItem = queue.value[index];
-      _currentMediaItemController.add(mediaItem);
-      // Update the current media item in the audio service
-      this.mediaItem.value = mediaItem;
+      final item = queue.value[index];
+      _currentMediaItemController.add(item);
+      // Update the current media item in the audio service (notification/lock screen)
+      this.mediaItem.value = item;
+      _broadcastPlaybackState();
     }
   }
   
@@ -177,6 +186,15 @@ class AudioPlayerHandler extends audio_service.BaseAudioHandler
     queue.value = [];
     mediaItem.value = null;
     _currentMediaItemController.add(null);
+    playbackState.add(audio_service.PlaybackState(
+      controls: [],
+      processingState: audio_service.AudioProcessingState.idle,
+      playing: false,
+      updatePosition: Duration.zero,
+      bufferedPosition: Duration.zero,
+      speed: 1.0,
+      queueIndex: null,
+    ));
   }
   
   @override

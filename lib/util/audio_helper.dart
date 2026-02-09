@@ -23,9 +23,10 @@ class AudioHelper {
     );
     if (Platform.isIOS) {
       showCupertinoModalBottomSheet(
+        useRootNavigator: true,
         context: context,
         expand: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.red,
         builder: (context) => content,
       );
     } else {
