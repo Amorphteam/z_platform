@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:audio_player/audio_player.dart';
 import 'package:epub_search/epub_search.dart' as epub_search_package;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,9 +26,7 @@ import 'model/search_model.dart' as host_search;
 import 'model/tree_toc_model.dart';
 import 'util/constants.dart';
 import 'util/epub_helper.dart';
-import 'screen/audio_player/audio_player_screen.dart';
-import 'screen/audio_player/cubit/audio_player_cubit.dart';
-import 'model/audio_track_model.dart';
+
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -239,15 +238,52 @@ class RouteGenerator {
         if (args != null) {
           final List<AudioTrack> tracks = args['tracks'] as List<AudioTrack>;
           final int? initialIndex = args['initialIndex'] as int?;
-          return _buildRoute(
-            isIOS: isIOS,
-            builder: (context) => BlocProvider(
-              create: (context) => AudioPlayerCubit(),
-              child: AudioPlayerScreen(
-                tracks: tracks,
-                initialIndex: initialIndex,
-              ),
-            ),
+          
+          // Show as modal bottom sheet
+          return MaterialPageRoute(
+            builder: (context) {
+              // Show bottom sheet immediately when route is pushed
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                final content = BlocProvider(
+                  create: (context) => AudioPlayerCubit(),
+                  child: AudioPlayerScreen(
+                    tracks: tracks,
+                    initialIndex: initialIndex,
+                  ),
+                );
+                
+                if (isIOS) {
+                  showCupertinoModalBottomSheet(
+                    useRootNavigator: true,
+                    context: context,
+                    expand: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => content,
+                  ).then((_) {
+                    // Pop the route when bottom sheet is dismissed
+                    if (context.mounted && Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    }
+                  });
+                } else {
+                  showMaterialModalBottomSheet(
+                    context: context,
+                    expand: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => content,
+                  ).then((_) {
+                    // Pop the route when bottom sheet is dismissed
+                    if (context.mounted && Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    }
+                  });
+                }
+              });
+              
+              // Return empty container while bottom sheet is shown
+              return const SizedBox.shrink();
+            },
+            fullscreenDialog: false,
           );
         }
         return _errorRoute();
@@ -265,6 +301,7 @@ class RouteGenerator {
       builder: builder,
     );
   }
+
 
   static Route _errorRoute() => MaterialPageRoute(
         builder: (_) => const Scaffold(

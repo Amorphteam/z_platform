@@ -18,7 +18,8 @@ import 'package:masaha/util/time_zone_helper.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'api/api_client.dart';
-import 'service/audio_service.dart';
+import 'package:audio_player/audio_player.dart' as audio_player;
+import 'audio_integration/audio_adapter_factory.dart' as audio_adapters;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,11 @@ void main() async {
     
     await Firebase.initializeApp();
     await initializeDateFormatting('ar'); // Initialize Arabic locale
+    
+    // Initialize audio helper with app-specific interactions
+    audio_player.AudioHelper.initialize(
+      audio_adapters.createAudioPlayerInteractions()
+    );
     
     // Note: Audio service will be initialized lazily when needed
     // Initializing here can cause issues with cache manager state

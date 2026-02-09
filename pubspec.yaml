@@ -36,6 +36,8 @@ dependencies:
     path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_bookmarks
   epub_search:
     path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_search
+  audio_player:
+    path: /Users/alibayati/Works/Programming/MultiPlatform/audio_player_package/packages/audio_player
   intl: ^0.19.0
 
   # The following adds the Cupertino Icons font to your application.

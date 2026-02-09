@@ -7,9 +7,7 @@ import 'package:masaha/screen/mobile_apps/mobile_apps_widget.dart';
 import '../../model/book_model.dart';
 import '../../util/epub_helper.dart';
 import '../../widget/custom_appbar.dart';
-import '../../widget/audio_player_mini.dart';
-import '../../util/audio_helper.dart';
-import '../../model/audio_track_model.dart';
+import 'package:audio_player/audio_player.dart' as audio_player;
 import 'cubit/library_cubit.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -293,7 +291,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
           error: (message) => Center(child: Text(message)),
         ),
       ),
-      bottomNavigationBar: const AudioPlayerMini(),
+      bottomNavigationBar: const audio_player.AudioPlayerMini(),
     );
   }
 
@@ -309,7 +307,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     // Example: Create multiple sample tracks for demonstration
     // Replace this with your actual audio tracks
     final sampleTracks = [
-      AudioHelper.createTrack(
+      audio_player.AudioHelper.createTrack(
         id: '1',
         title: 'مثال على الصوت ١',
         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
@@ -317,7 +315,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         artworkUrl: 'https://picsum.photos/300/300?random=1',
         duration: const Duration(seconds: 180),
       ),
-      AudioHelper.createTrack(
+      audio_player.AudioHelper.createTrack(
         id: '2',
         title: 'مثال على الصوت ٢',
         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
@@ -325,7 +323,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         artworkUrl: 'https://picsum.photos/300/300?random=2',
         duration: const Duration(seconds: 200),
       ),
-      AudioHelper.createTrack(
+      audio_player.AudioHelper.createTrack(
         id: '3',
         title: 'مثال على الصوت ٣',
         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
@@ -333,7 +331,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         artworkUrl: 'https://picsum.photos/300/300?random=3',
         duration: const Duration(seconds: 480),
       ),
-      AudioHelper.createTrack(
+      audio_player.AudioHelper.createTrack(
         id: '4',
         title: 'مثال على الصوت ۴',
         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
@@ -341,7 +339,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         artworkUrl: 'https://picsum.photos/300/300?random=4',
         duration: const Duration(seconds: 1280),
       ),
-      AudioHelper.createTrack(
+      audio_player.AudioHelper.createTrack(
         id: '5',
         title: 'مثال على الصوت ۵',
         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
@@ -352,6 +350,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
     ];
 
     // Open audio player with playlist
-    AudioHelper.playPlaylist(context, sampleTracks);
+    audio_player.AudioHelper.playPlaylist(context, sampleTracks);
   }
 }

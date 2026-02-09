@@ -20,7 +20,7 @@ import '../library/cubit/library_cubit.dart';
 import '../library/library_screen.dart';
 import '../toc/cubit/toc_cubit.dart';
 import '../toc/toc_screen.dart';
-import '../../widget/audio_player_mini.dart';
+import 'package:audio_player/audio_player.dart';
 
 class HostScreen extends StatefulWidget {
   const HostScreen({super.key});
