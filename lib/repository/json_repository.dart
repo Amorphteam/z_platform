@@ -3,9 +3,36 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 import '../model/book_model.dart';
+import '../model/item_model.dart';
+import '../model/section_widget_model.dart';
 import '../model/toc_item.dart';
 
+/// Union type for home screen items: ItemModel or SectionWidgetModel.
+typedef HomeWidgetItem = Object;
+
 class JsonRepository {
+  Future<List<HomeWidgetItem>> fetchItems() async {
+    final String response = await rootBundle.loadString('assets/json/main.json');
+    final List<dynamic> data = json.decode(response) as List<dynamic>;
+
+    return data.map((item) {
+      final map = item as Map<String, dynamic>;
+      final type = map['type'] as String?;
+      switch (type) {
+        case 'sectionFullWidth':
+          return SectionWidgetModel.fromJson(map, layout: 'fullWidthImages');
+        case 'sectionHalfWidth':
+          return SectionWidgetModel.fromJson(map, layout: 'halfWidthItems');
+        case 'sectionThumbnail2x2':
+          return SectionWidgetModel.fromJson(map, layout: 'thumbnail2x2');
+        case 'sectionThumbnail3x3':
+          return SectionWidgetModel.fromJson(map, layout: 'thumbnail3x3');
+        default:
+          return ItemModel.fromJson(map);
+      }
+    }).toList();
+  }
+
   Future<List<Book>> loadEpubFromJson() async {
     final String response = await rootBundle.loadString('assets/json/library.json');
     final List<dynamic> data = json.decode(response);

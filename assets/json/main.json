@@ -1,259 +1,60 @@
 [
   {
-    "title": "فاطمة\nفي سطور",
-    "type": "smallimage",
-    "picName": "1.jpg",
-    "items": [],
-    "linkTo": {
-      "goto": "text",
-      "key": "1_61",
-      "id": 0
-    }
-  },
-  {
-    "title": "",
-    "type": "list",
-    "picName": "",
+    "type": "sectionFullWidth",
+    "title": "صور فاطمة الزهراء",
+    "subtitle": "معرض الصور بالعرض الكامل",
+    "showMoreLink": { "goto": "jsonList", "key": "", "id": 1 },
     "items": [
-      {
-        "title": "فاطمة في عالم الأنوار",
-        "goto": "jsonGraphic",
-        "key": "",
-        "id": 1
-      },
-      {
-        "title": "خلقها من ثمار الجنة",
-        "goto": "jsonList",
-        "key": "",
-        "id": 357
-      },
-      {
-        "title": "ولادة فاطمة",
-        "goto": "jsonGraphic",
-        "key": "",
-        "id": 2
-      },
-      {
-        "title": "السمات الشخصية",
-        "goto": "jsonGraphic",
-        "key": "",
-        "id": 3
-      }
-    ],
-    "linkTo": {}
+      { "goto": "jsonGraphic", "id": 1 },
+      { "goto": "jsonGraphic", "id": 2 },
+      { "goto": "jsonList", "id": 357 },
+      { "goto": "jsonGraphic", "id": 4 }
+    ]
   },
   {
-    "title": "فاطمة في القرآن الكريم",
-    "type": "smallimage",
-    "picName": "2.jpg",
-    "items": [],
-    "linkTo": {
-      "goto": "jsonList",
-      "key": "",
-      "id": 1262
-    }
-  },
-  {
-    "title": "فاطمة في الحديث الشريف",
-    "type": "smallimage",
-    "picName": "3.jpg",
-    "items": [],
-    "linkTo": {
-      "goto": "jsonGraphic",
-      "key": "",
-      "id": 4
-    }
-  },
-  {
-    "title": "",
-    "type": "list",
-    "picName": "",
+    "type": "sectionHalfWidth",
+    "title": "فاطمة والسيرة",
+    "subtitle": "صور مصغرة",
+    "showMoreLink": { "goto": "jsonGraphic", "key": "", "id": 5 },
     "items": [
-      {
-        "title": "السيرة العطرة",
-        "goto": "jsonList",
-        "key": "",
-        "id": 172
-      },
-      {
-        "title": "البيت الشامخ",
-        "goto": "jsonGraphic",
-        "key": "",
-        "id": 5
-      },
-      {
-        "title": "منزلتها في الإسلام",
-        "goto": "jsonList",
-        "key": "",
-        "id": 16
-      },
-      {
-        "title": "فاطمة في كلمات الأعلام",
-        "goto": "jsonList",
-        "key": "",
-        "id": 41
-      }
-    ],
-    "linkTo": {}
+      { "goto": "jsonList", "id": 2487 },
+      { "goto": "jsonList", "id": 2557 },
+      { "goto": "jsonGraphic", "id": 6 },
+      { "goto": "jsonGraphic", "id": 10 }
+    ]
   },
   {
-    "title": "فاطمة في مكة المكرمة",
-    "type": "smallimage",
-    "picName": "4.jpg",
-    "items": [],
-    "linkTo": {
-      "goto": "jsonList",
-      "key": "",
-      "id": 2487
-    }
-  },
-  {
-    "title": "فاطمة في المدينة المنورة",
-    "type": "smallimage",
-    "picName": "5.jpg",
-    "items": [],
-    "linkTo": {
-      "goto": "jsonList",
-      "key": "",
-      "id": 2557
-    }
-  },
-  {
-    "title": "",
-    "type": "tripleDark",
-    "picName": "",
+    "type": "sectionThumbnail2x2",
+    "title": "أقسام مختارة",
+    "subtitle": "مصغرات مع عناوين - عمودين",
+    "showMoreLink": { "goto": "jsonList", "key": "", "id": 41 },
     "items": [
-      {
-        "title": "منزلتها عند أبيها",
-        "goto": "jsonList",
-        "key": "",
-        "id": 2638
-      },
-      {
-        "title": "الرسول مع فاطمة",
-        "goto": "jsonList",
-        "key": "",
-        "id": 2759
-      },
-      {
-        "title": "فاطمة مع الرسول",
-        "goto": "jsonList",
-        "key": "",
-        "id": 2897
-      }
-    ],
-    "linkTo": {}
+      { "title": "المدينة", "goto": "jsonList", "id": 2557 },
+      { "title": "الزواج المبارك", "goto": "jsonGraphic", "id": 6 },
+      { "title": "الظلامة الكبرى", "goto": "jsonGraphic", "id": 10 },
+      { "title": "فاطمة في التراث", "goto": "jsonGraphic", "id": 15 },
+      { "title": "تسبيح فاطمة", "goto": "jsonGraphic", "id": 8 },
+      { "title": "صلوات فاطمة", "goto": "jsonList", "id": 5714 }
+    ]
   },
   {
-    "title": "الزواج المبارك",
-    "type": "bigimage",
-    "picName": "6.jpg",
-    "items": [],
-    "linkTo": {
-      "goto": "jsonGraphic",
-      "key": "",
-      "id": 6
-    }
-  },
-  {
-    "title": "فضائل فاطمة",
-    "type": "singleDark",
-    "picName": "",
-    "items": [],
-    "linkTo": {
-      "goto": "jsonGraphic",
-      "key": "",
-      "id": 7
-    }
-  },
-  {
-    "title": "",
-    "type": "threeitems",
-    "picName": "",
+    "type": "sectionThumbnail3x3",
+    "title": "أدعية وتسبيح",
+    "subtitle": "مصغرات - ثلاثة أعمدة",
+    "showMoreLink": { "goto": "jsonGraphic", "key": "", "id": 9 },
     "items": [
-      {
-        "title": "تسبيح\nفاطمة",
-        "goto": "jsonGraphic",
-        "key": "",
-        "id": 8
-      },
-      {
-        "title": "صلوات\nفاطمة",
-        "goto": "jsonList",
-        "key": "",
-        "id": 5714
-      },
-      {
-        "title": "أدعية\nفاطمة",
-        "goto": "jsonGraphic",
-        "key": "",
-        "id": 9
-      }
-    ],
-    "linkTo": {}
-  },
-  {
-    "title": "الظلامة الكبرى",
-    "type": "bigimage",
-    "picName": "7.jpg",
-    "items": [],
-    "linkTo": {
-      "goto": "jsonGraphic",
-      "key": "",
-      "id": 10
-    }
-  },
-  {
-    "title": "فدك وباقي مملوكاتها",
-    "type": "singleDark",
-    "picName": "",
-    "items": [],
-    "linkTo": {
-      "goto": "jsonGraphic",
-      "key": "",
-      "id": 11
-    }
-  },
-  {
-    "title": "",
-    "type": "dubleLight",
-    "picName": "",
-    "items": [
-      {
-        "title": "الخطب\nالغراء",
-        "goto": "jsonGraphic",
-        "key": "",
-        "id": 12
-      },
-      {
-        "title": "مسند\nفاطمة",
-        "goto": "jsonGraphic",
-        "key": "",
-        "id": 13
-      }
-    ],
-    "linkTo": {}
-  },
-  {
-    "title": "في عوالم ما بعد الموت",
-    "type": "smallimage",
-    "picName": "8.jpg",
-    "items": [],
-    "linkTo": {
-      "goto": "jsonGraphic",
-      "key": "",
-      "id": 14
-    }
-  },
-  {
-    "title": "فاطمة في التراث",
-    "type": "singleDark",
-    "picName": "",
-    "items": [],
-    "linkTo": {
-      "goto": "jsonGraphic",
-      "key": "",
-      "id": 15
-    }
+      { "title": "تسبيح", "goto": "jsonGraphic", "id": 8 },
+      { "title": "صلوات", "goto": "jsonList", "id": 5714 },
+      { "title": "أدعية", "goto": "jsonGraphic", "id": 9 },
+      { "title": "الخطب", "goto": "jsonGraphic", "id": 12 },
+      { "title": "مسند فاطمة", "goto": "jsonGraphic", "id": 13 },
+      { "title": "فاطمة في القرآن", "goto": "jsonList", "id": 1262 },
+      { "title": "فاطمة في الحديث", "goto": "jsonGraphic", "id": 4 },
+      { "title": "السيرة العطرة", "goto": "jsonList", "id": 172 },
+      { "title": "البيت الشامخ", "goto": "jsonGraphic", "id": 5 },
+      { "title": "منزلتها في الإسلام", "goto": "jsonList", "id": 16 },
+      { "title": "فاطمة في مكة", "goto": "jsonList", "id": 2487 },
+      { "title": "فاطمة في المدينة", "goto": "jsonList", "id": 2557 }
+    ]
   }
 ]

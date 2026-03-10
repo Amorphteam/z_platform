@@ -20,9 +20,7 @@ mixin _$HomeState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)
-        loaded,
+    required TResult Function(List<HomeWidgetItem> items) loaded,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -30,9 +28,7 @@ mixin _$HomeState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)?
-        loaded,
+    TResult? Function(List<HomeWidgetItem> items)? loaded,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -40,9 +36,7 @@ mixin _$HomeState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)?
-        loaded,
+    TResult Function(List<HomeWidgetItem> items)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -89,9 +83,6 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -108,9 +99,6 @@ class __$$InitialImplCopyWithImpl<$Res>
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -137,9 +125,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)
-        loaded,
+    required TResult Function(List<HomeWidgetItem> items) loaded,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -150,9 +136,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)?
-        loaded,
+    TResult? Function(List<HomeWidgetItem> items)? loaded,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -163,9 +147,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)?
-        loaded,
+    TResult Function(List<HomeWidgetItem> items)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -231,9 +213,6 @@ class __$$LoadingImplCopyWithImpl<$Res>
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -260,9 +239,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)
-        loaded,
+    required TResult Function(List<HomeWidgetItem> items) loaded,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -273,9 +250,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)?
-        loaded,
+    TResult? Function(List<HomeWidgetItem> items)? loaded,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -286,9 +261,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)?
-        loaded,
+    TResult Function(List<HomeWidgetItem> items)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -346,7 +319,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<String> items, String? hekamText, List<Occasion>? occasions});
+  $Res call({List<HomeWidgetItem> items});
 }
 
 /// @nodoc
@@ -357,28 +330,16 @@ class __$$LoadedImplCopyWithImpl<$Res>
       _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? items = null,
-    Object? hekamText = freezed,
-    Object? occasions = freezed,
   }) {
     return _then(_$LoadedImpl(
       null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      hekamText: freezed == hekamText
-          ? _value.hekamText
-          : hekamText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      occasions: freezed == occasions
-          ? _value._occasions
-          : occasions // ignore: cast_nullable_to_non_nullable
-              as List<Occasion>?,
+              as List<HomeWidgetItem>,
     ));
   }
 }
@@ -386,34 +347,19 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl(final List<String> items,
-      {this.hekamText, final List<Occasion>? occasions})
-      : _items = items,
-        _occasions = occasions;
+  const _$LoadedImpl(final List<HomeWidgetItem> items) : _items = items;
 
-  final List<String> _items;
+  final List<HomeWidgetItem> _items;
   @override
-  List<String> get items {
+  List<HomeWidgetItem> get items {
     if (_items is EqualUnmodifiableListView) return _items;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_items);
   }
 
   @override
-  final String? hekamText;
-  final List<Occasion>? _occasions;
-  @override
-  List<Occasion>? get occasions {
-    final value = _occasions;
-    if (value == null) return null;
-    if (_occasions is EqualUnmodifiableListView) return _occasions;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  @override
   String toString() {
-    return 'HomeState.loaded(items: $items, hekamText: $hekamText, occasions: $occasions)';
+    return 'HomeState.loaded(items: $items)';
   }
 
   @override
@@ -421,23 +367,14 @@ class _$LoadedImpl implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
-            const DeepCollectionEquality().equals(other._items, _items) &&
-            (identical(other.hekamText, hekamText) ||
-                other.hekamText == hekamText) &&
-            const DeepCollectionEquality()
-                .equals(other._occasions, _occasions));
+            const DeepCollectionEquality().equals(other._items, _items));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_items),
-      hekamText,
-      const DeepCollectionEquality().hash(_occasions));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
 
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
@@ -448,12 +385,10 @@ class _$LoadedImpl implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)
-        loaded,
+    required TResult Function(List<HomeWidgetItem> items) loaded,
     required TResult Function(String message) error,
   }) {
-    return loaded(items, hekamText, occasions);
+    return loaded(items);
   }
 
   @override
@@ -461,12 +396,10 @@ class _$LoadedImpl implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)?
-        loaded,
+    TResult? Function(List<HomeWidgetItem> items)? loaded,
     TResult? Function(String message)? error,
   }) {
-    return loaded?.call(items, hekamText, occasions);
+    return loaded?.call(items);
   }
 
   @override
@@ -474,14 +407,12 @@ class _$LoadedImpl implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)?
-        loaded,
+    TResult Function(List<HomeWidgetItem> items)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(items, hekamText, occasions);
+      return loaded(items);
     }
     return orElse();
   }
@@ -525,17 +456,10 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements HomeState {
-  const factory _Loaded(final List<String> items,
-      {final String? hekamText,
-      final List<Occasion>? occasions}) = _$LoadedImpl;
+  const factory _Loaded(final List<HomeWidgetItem> items) = _$LoadedImpl;
 
-  List<String> get items;
-  String? get hekamText;
-  List<Occasion>? get occasions;
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  List<HomeWidgetItem> get items;
+  @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -557,8 +481,6 @@ class __$$ErrorImplCopyWithImpl<$Res>
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -597,9 +519,7 @@ class _$ErrorImpl implements _Error {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
@@ -610,9 +530,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)
-        loaded,
+    required TResult Function(List<HomeWidgetItem> items) loaded,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -623,9 +541,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)?
-        loaded,
+    TResult? Function(List<HomeWidgetItem> items)? loaded,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -636,9 +552,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(
-            List<String> items, String? hekamText, List<Occasion>? occasions)?
-        loaded,
+    TResult Function(List<HomeWidgetItem> items)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -690,10 +604,7 @@ abstract class _Error implements HomeState {
   const factory _Error(final String message) = _$ErrorImpl;
 
   String get message;
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

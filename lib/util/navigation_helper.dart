@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:masaha/model/item_model.dart';
+import 'package:masaha/repository/json_repository.dart';
 import 'package:masaha/util/epub_helper.dart';
 import '../model/reference_model.dart';
+import '../model/section_widget_model.dart';
+import '../widget/big_image_card_widget.dart';
+import '../widget/blue_list_card_widget.dart';
+import '../widget/circle_list_card_widget.dart';
+import '../widget/multi_dark_card_widget.dart';
+import '../widget/normal_list_card_widget.dart';
+import '../widget/section_widget.dart';
+import '../widget/simple_list_card_widget.dart';
+import '../widget/single_dark_card_widget.dart';
+import '../widget/small_image_card_widget.dart';
+import '../widget/square_list_card_widget.dart';
+import '../widget/three_items_card_widget.dart';
 
 class NavigationHelper {
   static void navigateTo(
@@ -22,6 +35,44 @@ class NavigationHelper {
         break;
     }
   }
+
+  static Widget buildItem(BuildContext context, HomeWidgetItem item) {
+    if (item is SectionWidgetModel) {
+      return SectionWidget(section: item);
+    }
+    if (item is! ItemModel) {
+      return ListTile(title: Text('Unknown item type'));
+    }
+    switch (item.type) {
+      case 'bigimage':
+        return BigImageCardWidget(item: item);
+      case 'blue_list':
+        return BlueListCardWidget(item: item);
+      case 'circleList':
+        return CircleListCardWidget(item: item);
+      case 'normalList':
+        return NormalListCardWidget(item: item);
+      case 'singleDark':
+        return SingleDarkCardWidget(item: item);
+      case 'dubleLight':
+        return MultiDarkCardWidget(item: item);
+      case 'dubleDark':
+        return MultiDarkCardWidget(item: item);
+      case 'tripleDark':
+        return MultiDarkCardWidget(item: item);
+      case 'smallimage':
+        return SmallImageCardWidget(item: item);
+      case 'squareList':
+        return SquareListCardWidget(item: item);
+      case 'list':
+        return SimpleListCardWidget(item: item);
+      case 'threeitems':
+        return ThreeItemsCardWidget(item: item);
+      default:
+        return ListTile(title: Text('Unknown item type: ${item.type}'));
+    }
+  }
+
 
   static void navigateToToc(
       SubItems? subItem, ItemModel? item, BuildContext context, String? title,) {

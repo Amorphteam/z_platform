@@ -11,10 +11,13 @@ import 'package:epub_search/epub_search.dart' as epub_search_package;
 
 import 'package:masaha/epub_integration/epub_adapter_factory.dart'
     as epub_adapters;
+import 'package:masaha/screen/home/cubit/home_cubit.dart';
+import 'package:masaha/screen/home/home_screen.dart';
 
 import '../../model/search_model.dart';
 import '../../model/reference_model.dart';
 import '../../model/history_model.dart';
+import '../../repository/json_repository.dart';
 import '../../util/epub_helper.dart';
 import '../library/cubit/library_cubit.dart';
 import '../library/library_screen.dart';
@@ -106,11 +109,15 @@ class _HostScreenState extends State<HostScreen> {
                   label: 'الرئيسية',
                   icon: CNSymbol('house.fill'),
                 ),
+                CNTabBarItem(
+                  label: 'القالب',
+                  icon: CNSymbol('menucard.fill'),
+                ),
               ],
-              currentIndex: 3 - _currentIndex, // Reverse index for RTL
+              currentIndex: 4 - _currentIndex, // Reverse index for RTL
               onTap: (index) {
                 setState(() {
-                  _currentIndex = 3 - index; // Reverse index back
+                  _currentIndex = 4 - index; // Reverse index back
                 });
               },
             )))
@@ -128,27 +135,33 @@ class _HostScreenState extends State<HostScreen> {
                 items: [
                   BottomNavigationBarItem(
                     icon: Icon(
-                        _currentIndex == 0 ? Icons.home : Icons.home_outlined),
+                        _currentIndex == 0 ? Icons.line_style_rounded : Icons.line_style_outlined),
+                    label: 'القالب',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                        _currentIndex == 1 ? Icons.home : Icons.home_outlined),
                     label: 'الرئيسية',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(_currentIndex == 1
+                    icon: Icon(_currentIndex == 2
                         ? Icons.library_books
                         : Icons.library_books_outlined),
                     label: 'الموضوعي',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(_currentIndex == 2
+                    icon: Icon(_currentIndex == 3
                         ? CupertinoIcons.search_circle_fill
                         : CupertinoIcons.search),
                     label: 'البحث',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(_currentIndex == 3
+                    icon: Icon(_currentIndex == 4
                         ? CupertinoIcons.bookmark_solid
                         : CupertinoIcons.bookmark),
                     label: 'الإشارات',
                   ),
+
                 ],
               ),
             ),
@@ -176,11 +189,16 @@ class _HostScreenState extends State<HostScreen> {
   Widget _getScreen(int index) {
     switch (index) {
       case 0:
+        return BlocProvider(
+          create: (context) => HomeCubit(JsonRepository()),
+          child: const HomeScreen(),
+        );
+      case 1:
         return BlocProvider.value(
           value: _libraryCubit,
           child: LibraryScreen(),
         );
-      case 1:
+      case 2:
         return BlocProvider(
           create: (context) => TocCubit(),
           child: TocScreen(),
@@ -190,7 +208,7 @@ class _HostScreenState extends State<HostScreen> {
       //     create: (context) => LibraryCubit(),
       //     child: const LibraryScreen(),
       //   );
-      case 2:
+      case 3:
         return epub_search_package.SearchScreen(
           persistence: epub_adapters.createSearchPersistence(),
           onResultTap: (epub_search_package.SearchModel result) {
@@ -208,7 +226,7 @@ class _HostScreenState extends State<HostScreen> {
           },
         );
 
-      case 3:
+      case 4:
         return BookmarkScreen(
           persistence: epub_adapters.createBookmarkPersistence(),
           onBookmarkTap: (screenContext, bookmark) async {
