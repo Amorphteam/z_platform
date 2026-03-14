@@ -1,7 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+
+import '../../util/snap_scroll_physics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../util/navigation_helper.dart';
 import 'cubit/home_cubit.dart';
@@ -18,9 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final halfMediaHeight = MediaQuery.of(context).size.height / 1.7;
+    final mediaQuery = MediaQuery.of(context);
+    final halfMediaHeight = mediaQuery.size.height / 1.7;
+    final snapExtent = mediaQuery.size.height * 0.65;
     context.read<HomeCubit>().fetchItems();
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
 
     return Scaffold(
       body: Directionality(
@@ -48,7 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 48.0, left: 48, top: 40),
                     child: CustomScrollView(
-                      physics: const BouncingScrollPhysics(),
+                      physics: SnapScrollPhysics(
+                        snapExtent: snapExtent,
+                        parent: const BouncingScrollPhysics(),
+                      ),
                       cacheExtent: 500,
                       slivers: <Widget>[
                         if (!isLandscape)
@@ -141,7 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
               return true;
             },
             child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
+              physics: SnapScrollPhysics(
+                snapExtent: snapExtent,
+                parent: const BouncingScrollPhysics(),
+              ),
               cacheExtent: 500,
               slivers: <Widget>[
                 SliverAppBar(
@@ -169,11 +178,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                 if (index > 0)
                                   Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 16),
-                                    child: Divider(
-                                      color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-                                      thickness: 1,
-                                      indent: 24,
-                                      endIndent: 24,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Divider(
+                                            color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                                            thickness: 1,
+                                            indent: 16,
+                                            endIndent: 12,
+                                          ),
+                                        ),
+                                        SvgPicture.asset('assets/image/zakhrafa.svg', width: 24, height: 24, color: Theme.of(context).colorScheme.outline,),
+                                        Expanded(
+                                          child: Divider(
+                                            color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                                            thickness: 1,
+                                            indent: 12,
+                                            endIndent: 16,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 Padding(

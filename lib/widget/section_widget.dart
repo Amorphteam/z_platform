@@ -156,28 +156,34 @@ class _FullWidthImagesLayout extends StatelessWidget {
   const _FullWidthImagesLayout({required this.items});
   final List<SectionItem> items;
 
+  static const _cornerRadius = 24.0;
+  static const _horizontalPadding = 12.0;
+
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final itemWidth = screenWidth * 0.88;
-
     return SizedBox(
-      height: 180,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
+      height: 200,
+      child: PageView.builder(
+        padEnds: false,
+        controller: PageController(viewportFraction: 0.94),
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
+            padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
             child: GestureDetector(
               onTap: () => _navigateSectionItem(context, item),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  _imageAsset(item),
-                  width: itemWidth,
-                  fit: BoxFit.cover,
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(_cornerRadius),
+                  bottomLeft: Radius.circular(_cornerRadius),
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Image.asset(
+                    _imageAsset(item),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -199,8 +205,9 @@ class _HalfWidthItemsLayout extends StatelessWidget {
 
     return SizedBox(
       height: 140,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
+      child: PageView.builder(
+        padEnds: false,
+        controller: PageController(viewportFraction: 0.5),
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
@@ -240,8 +247,9 @@ class _Thumbnail2x2Layout extends StatelessWidget {
 
         return SizedBox(
           height: rowHeight * 2 + 16,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
+          child: PageView.builder(
+            padEnds: false,
+            controller: PageController(viewportFraction: 1.0),
             itemCount: (items.length / 2).ceil(),
             itemBuilder: (context, pageIndex) {
               final start = pageIndex * 2;
@@ -312,8 +320,9 @@ class _Thumbnail3x3Layout extends StatelessWidget {
 
         return SizedBox(
           height: rowHeight * 3 + 20,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
+          child: PageView.builder(
+            padEnds: false,
+            controller: PageController(viewportFraction: 1.0),
             itemCount: (items.length / 3).ceil(),
             itemBuilder: (context, pageIndex) {
               final start = pageIndex * 3;
