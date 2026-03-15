@@ -1,0 +1,1271 @@
+[
+  {
+    "level": 1,
+    "key": 2000,
+    "title": "الآداب",
+    "id": 1,
+    "parentId": 0,
+    "childs": [
+      {
+        "level": 2,
+        "key": 2005,
+        "title": "آداب التخلي",
+        "id": 2,
+        "parentId": 1,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2006,
+        "title": "آداب الوضوء",
+        "id": 3,
+        "parentId": 1,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2007,
+        "title": "آداب الدخول إلى المسجد",
+        "id": 4,
+        "parentId": 1,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2008,
+        "title": "آداب الصلاة",
+        "id": 5,
+        "parentId": 1,
+        "childs": []
+      }
+    ]
+  },
+  {
+    "level": 1,
+    "key": 2000,
+    "title": "تعقيبات الصلاة",
+    "id": 6,
+    "parentId": 0,
+    "childs": [
+      {
+        "level": 2,
+        "key": 2000,
+        "title": "سجدة الشكر",
+        "id": 7,
+        "parentId": 6,
+        "childs": [
+          {
+            "level": 3,
+            "key": 2012,
+            "title": "فضل سجدة الشكر",
+            "id": 8,
+            "parentId": 7,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2013,
+            "title": "كيفية سجدة الشكر",
+            "id": 9,
+            "parentId": 7,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2014,
+            "title": "أدعية سجدة الشكر",
+            "id": 10,
+            "parentId": 7,
+            "childs": []
+          }
+        ]
+      },
+      {
+        "level": 2,
+        "key": 2009,
+        "title": "تسبيح فاطمة الزهراء(عليها السلام",
+        "id": 11,
+        "parentId": 6,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2010,
+        "title": "باقي التعقيبات العامة",
+        "id": 12,
+        "parentId": 6,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2142,
+        "title": "دعاء بعد الفرائض",
+        "id": 13,
+        "parentId": 6,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2011,
+        "title": "التعقيبات الخاصّة بفريضة الصبح",
+        "id": 14,
+        "parentId": 6,
+        "childs": []
+      }
+    ]
+  },
+  {
+    "level": 1,
+    "key": 2000,
+    "title": "الليل والنهار",
+    "id": 15,
+    "parentId": 0,
+    "childs": [
+      {
+        "level": 2,
+        "key": 2003,
+        "title": "الدعاء عند طلوع الفجر الصادق",
+        "id": 16,
+        "parentId": 15,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2004,
+        "title": "الدعاء عند سماع أذان الفجر",
+        "id": 17,
+        "parentId": 15,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2002,
+        "title": "فضل ما بين الطلوعين",
+        "id": 18,
+        "parentId": 15,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2015,
+        "title": "أعمال في النهار",
+        "id": 19,
+        "parentId": 15,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2016,
+        "title": " أعمال من الغروب إلى حين النوم",
+        "id": 20,
+        "parentId": 15,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2000,
+        "title": "صلاة الليل",
+        "id": 21,
+        "parentId": 15,
+        "childs": [
+          {
+            "level": 3,
+            "key": 2017,
+            "title": "فضل قيام الليل",
+            "id": 22,
+            "parentId": 21,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2018,
+            "title": "كيفية صلاة الليل",
+            "id": 23,
+            "parentId": 21,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2139,
+            "title": "دعاء بعد صلاة الوتر",
+            "id": 24,
+            "parentId": 21,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2140,
+            "title": "دعاء الحزين",
+            "id": 25,
+            "parentId": 21,
+            "childs": []
+          }
+        ]
+      },
+      {
+        "level": 2,
+        "key": 2019,
+        "title": " أذكار ودعوات تقرأ صباحا ومساء",
+        "id": 26,
+        "parentId": 15,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2000,
+        "title": "ما يدعى به في كل ساعة وما يدعى به في كل يوم",
+        "id": 27,
+        "parentId": 15,
+        "childs": [
+          {
+            "level": 3,
+            "key": 2020,
+            "title": "ساعات اليوم",
+            "id": 28,
+            "parentId": 27,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2021,
+            "title": "أذكار خلال اليوم",
+            "id": 29,
+            "parentId": 27,
+            "childs": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "level": 1,
+    "key": 2000,
+    "title": "الصلوات المستحبة",
+    "id": 30,
+    "parentId": 0,
+    "childs": [
+      {
+        "level": 2,
+        "key": 2022,
+        "title": "صلاة الاعرابي",
+        "id": 31,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2023,
+        "title": "صلاة الهدية",
+        "id": 32,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2024,
+        "title": "صلاة ليلة الدفن",
+        "id": 33,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2025,
+        "title": "صلاة الولد لوالديه",
+        "id": 34,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2026,
+        "title": "صلاة الجائع",
+        "id": 35,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2027,
+        "title": "صلاة لحديث النفس",
+        "id": 36,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2028,
+        "title": "صلاة الاستخارة ذات الرقاع",
+        "id": 37,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2029,
+        "title": "الصلاة للدَيْنِ ولكفاية ظلم السلطان",
+        "id": 38,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2030,
+        "title": "صلاة الحاجة",
+        "id": 39,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2031,
+        "title": "الصلاة للمهمات",
+        "id": 40,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2032,
+        "title": "صلاة العسرة",
+        "id": 41,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2033,
+        "title": "صلوات لزيادة الرزق",
+        "id": 42,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2034,
+        "title": "صلوات لقضاء الحاجة",
+        "id": 43,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2035,
+        "title": "صلاة الاستغاثة",
+        "id": 44,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2036,
+        "title": "صلاة الاستغاثة بالبتول (صلّى الله عليها)",
+        "id": 45,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2037,
+        "title": "صلاة الحجة (عليه السلام) في جامع جمكران",
+        "id": 46,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2038,
+        "title": "صلاة الخوف من الظالم",
+        "id": 47,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2039,
+        "title": "الصلاة للذكاء وجودة الحفظ‍",
+        "id": 48,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2040,
+        "title": "صلوات لغفران الذنوب",
+        "id": 49,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2041,
+        "title": "صلاة الوصية",
+        "id": 50,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2042,
+        "title": "صلاة العفو",
+        "id": 51,
+        "parentId": 30,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2000,
+        "title": "صلوات أيام الاسبوع",
+        "id": 52,
+        "parentId": 30,
+        "childs": [
+          {
+            "level": 3,
+            "key": 2043,
+            "title": "صلاة يوم السبت",
+            "id": 53,
+            "parentId": 52,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2044,
+            "title": "صلاة يوم الاحد",
+            "id": 54,
+            "parentId": 52,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2045,
+            "title": "صلاة يوم الاثنين",
+            "id": 55,
+            "parentId": 52,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2046,
+            "title": "صلاة يوم الثلاثاء",
+            "id": 56,
+            "parentId": 52,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2047,
+            "title": "صلاة يوم الاربعاء",
+            "id": 57,
+            "parentId": 52,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2048,
+            "title": "صلاة يوم الخميس",
+            "id": 58,
+            "parentId": 52,
+            "childs": []
+          },
+          {
+            "level": 3,
+            "key": 2049,
+            "title": "صلاة يوم الجمعة",
+            "id": 59,
+            "parentId": 52,
+            "childs": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "level": 1,
+    "key": 2000,
+    "title": "الأدعية والعوذات من الآلام والأمراض",
+    "id": 60,
+    "parentId": 0,
+    "childs": [
+      {
+        "level": 2,
+        "key": 2050,
+        "title": "دعاء العافية بعد صلاة الفجر",
+        "id": 61,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2051,
+        "title": "دعاء العافية",
+        "id": 62,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2052,
+        "title": "للأمراض",
+        "id": 63,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2053,
+        "title": "لوجع الرأس",
+        "id": 64,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2054,
+        "title": "للصداع",
+        "id": 65,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2055,
+        "title": "للشقيقة",
+        "id": 66,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2056,
+        "title": "للصّمم",
+        "id": 67,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2057,
+        "title": "لوجع الفم",
+        "id": 68,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2058,
+        "title": "لوجع الاسنان",
+        "id": 69,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2059,
+        "title": "لوجع الصدر",
+        "id": 70,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2060,
+        "title": "لوجع البطن",
+        "id": 71,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2061,
+        "title": "لوجع البطن وغيره",
+        "id": 72,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2062,
+        "title": "للقولنج",
+        "id": 73,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2063,
+        "title": "لوجع البطن والقولنج",
+        "id": 74,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2064,
+        "title": "للثؤلول",
+        "id": 75,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2065,
+        "title": "للاورام",
+        "id": 76,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2066,
+        "title": "لتعسر الولادة",
+        "id": 77,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2067,
+        "title": "لحل المربوط‍",
+        "id": 78,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2068,
+        "title": "عوذة الحمّى",
+        "id": 79,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2069,
+        "title": "الدعاء للزحير",
+        "id": 80,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2070,
+        "title": "الدعاء لقراقر البطن",
+        "id": 81,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2071,
+        "title": "الدعاء للبرص",
+        "id": 82,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2072,
+        "title": "لوجع العورة",
+        "id": 83,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2073,
+        "title": "لوجع الركبة",
+        "id": 84,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2074,
+        "title": "لوجع العين",
+        "id": 85,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2075,
+        "title": "ولضعف الباصرة والشبكور (العشاوة)",
+        "id": 86,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2076,
+        "title": "وللرعاف",
+        "id": 87,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2077,
+        "title": "العوذة لابطال السحر",
+        "id": 88,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2078,
+        "title": "الحرز من العين",
+        "id": 89,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2079,
+        "title": "لدفع وساوس الشيطان",
+        "id": 90,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2080,
+        "title": "للأمن من السارق",
+        "id": 91,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2081,
+        "title": "عوذة للعقرب",
+        "id": 92,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2128,
+        "title": "دعاء لزوال الأسقام",
+        "id": 93,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2129,
+        "title": "دعاء للبثر",
+        "id": 94,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2130,
+        "title": "دعاء يقال للخنازير",
+        "id": 95,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2131,
+        "title": "دعاء لوجع الظهر",
+        "id": 96,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2132,
+        "title": "دعاء لوجع السرة",
+        "id": 97,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2133,
+        "title": "عوذة للآلام",
+        "id": 98,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2134,
+        "title": "عوذة لوجع الخاصرة",
+        "id": 99,
+        "parentId": 60,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2135,
+        "title": "عوذة لوجع البطن والقولنج ونحوهما",
+        "id": 100,
+        "parentId": 60,
+        "childs": []
+      }
+    ]
+  },
+  {
+    "level": 1,
+    "key": 2000,
+    "title": "الحجاب والأحراز",
+    "id": 101,
+    "parentId": 0,
+    "childs": [
+      {
+        "level": 2,
+        "key": 2114,
+        "title": "حجاب الإمام الصادق(عليه السلام)",
+        "id": 102,
+        "parentId": 101,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2115,
+        "title": "حجاب الإمام الكاظم(عليه السلام)",
+        "id": 103,
+        "parentId": 101,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2116,
+        "title": "حجاب الإمام الجواد(عليه السلام)",
+        "id": 104,
+        "parentId": 101,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2093,
+        "title": "حرز فاطمة (عليها السلام)",
+        "id": 105,
+        "parentId": 101,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2094,
+        "title": "حرز الإمام زين العابدين (عليه السلام)",
+        "id": 106,
+        "parentId": 101,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2095,
+        "title": "حرز الإمام جعفر الصادق (عليه السلام)",
+        "id": 107,
+        "parentId": 101,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2096,
+        "title": "حرز الإمام موسى الكاظم (عليه السلام)",
+        "id": 108,
+        "parentId": 101,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2097,
+        "title": "حرز الإمام الرضا(عليه السلام) رقعة الجيب ـ",
+        "id": 109,
+        "parentId": 101,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2098,
+        "title": "حرز الإمام محمد الجواد (عليه السلام)",
+        "id": 110,
+        "parentId": 101,
+        "childs": []
+      }
+    ]
+  },
+  {
+    "level": 1,
+    "key": 2124,
+    "title": "الخاتمة: في خلاصة من أحكام الاموات",
+    "id": 111,
+    "parentId": 0,
+    "childs": []
+  },
+  {
+    "level": 1,
+    "key": 2123,
+    "title": "الباب السادس في آثار بعض السور والايات وذكر أمور مختلفة",
+    "id": 112,
+    "parentId": 0,
+    "childs": []
+  },
+  {
+    "level": 1,
+    "key": 2000,
+    "title": "المناجات",
+    "id": 113,
+    "parentId": 0,
+    "childs": [
+      {
+        "level": 2,
+        "key": 2104,
+        "title": "المناجاة بالاستخارة",
+        "id": 114,
+        "parentId": 113,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2105,
+        "title": "المناجاة بالاستقالة",
+        "id": 115,
+        "parentId": 113,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2106,
+        "title": "المناجاة للسفر",
+        "id": 116,
+        "parentId": 113,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2107,
+        "title": "المناجاة بطلب الرزق",
+        "id": 117,
+        "parentId": 113,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2108,
+        "title": "المناجاة بالاستعاذة",
+        "id": 118,
+        "parentId": 113,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2109,
+        "title": "المناجاة بطلب التوبة",
+        "id": 119,
+        "parentId": 113,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2110,
+        "title": "المناجاة بطلب الحج",
+        "id": 120,
+        "parentId": 113,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2111,
+        "title": "المناجاة لكشف الظلم",
+        "id": 121,
+        "parentId": 113,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2112,
+        "title": "المناجاة بشكر اللّه",
+        "id": 122,
+        "parentId": 113,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2113,
+        "title": "المناجاة بطلب الحوائج",
+        "id": 123,
+        "parentId": 113,
+        "childs": []
+      }
+    ]
+  },
+  {
+    "level": 1,
+    "key": 2000,
+    "title": "الأدعية للمهم من أمور الدنيا",
+    "id": 124,
+    "parentId": 0,
+    "childs": [
+      {
+        "level": 2,
+        "key": 2092,
+        "title": "دعاء لدفع الشدة",
+        "id": 125,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2099,
+        "title": "دعاء النبي(صلى الله عليه وآله) للأمان",
+        "id": 126,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2100,
+        "title": "دعاء للحفظ والأمان",
+        "id": 127,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2101,
+        "title": "دعاء النبي(صلى الله عليه وآله)",
+        "id": 128,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2102,
+        "title": "دعاء الإمام الباقر(عليه السلام)",
+        "id": 129,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2103,
+        "title": "أدعية الوسائل إلى المسائل",
+        "id": 130,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2117,
+        "title": "دعاء الإمام الكاظم(عليه السلام) للخلاص من الشدة",
+        "id": 131,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2118,
+        "title": "دعاء للرزق وغيره",
+        "id": 132,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2119,
+        "title": "دعاء لدفع شر إبليس",
+        "id": 133,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2120,
+        "title": "دعاء لإحياء القلب",
+        "id": 134,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2121,
+        "title": "دعاء للخلاص من ثلاثة أمور",
+        "id": 135,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2122,
+        "title": "دعاء لقضاء الدين",
+        "id": 136,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2126,
+        "title": "دعاء مروي عن أمير المؤمنين(عليه السلام)",
+        "id": 137,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2127,
+        "title": "دعاء لدفع الهول والغم",
+        "id": 138,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2136,
+        "title": "دعاء للمكروب والملهوف",
+        "id": 139,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2137,
+        "title": "دعاء للخلاص من السجن",
+        "id": 140,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2138,
+        "title": "أدعية الفرج",
+        "id": 141,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2141,
+        "title": "كلمات مروية عن الإمام الكاظم(عليه السلام)",
+        "id": 142,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2143,
+        "title": "دعاء السفر",
+        "id": 143,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2144,
+        "title": "دعاء ليلة الزفاف",
+        "id": 144,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2145,
+        "title": "دعاء الرهبة",
+        "id": 145,
+        "parentId": 124,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2146,
+        "title": "دعاء الإمام السجاد(عليه السلام) في التوبة",
+        "id": 146,
+        "parentId": 124,
+        "childs": []
+      }
+    ]
+  },
+  {
+    "level": 1,
+    "key": 2082,
+    "title": "الباب الرابع: في دعوات منتخبة من كتاب الكافي الشريف",
+    "id": 147,
+    "parentId": 0,
+    "childs": [
+      {
+        "level": 2,
+        "key": 2082,
+        "title": "(الفصل الأول) في عدة من الادعية التي يدعى بها صباحاً ومساءً",
+        "id": 148,
+        "parentId": 147,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2083,
+        "title": "(الفصل الثاني) في أدعية يدعى بها عند النوم وعند الانتباه منه",
+        "id": 149,
+        "parentId": 147,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2084,
+        "title": "(الفصل الثالث) في ذكر عدة دعوات يدعى بها إذا خرج الانسان من منزله",
+        "id": 150,
+        "parentId": 147,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2085,
+        "title": "(الفصل الرابع) في دعوات ماثورة قبل الصلاة وفي أدبارها",
+        "id": 151,
+        "parentId": 147,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2086,
+        "title": "(الفصل الخامس) في أدعية مأثورة للرزق",
+        "id": 152,
+        "parentId": 147,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2087,
+        "title": "(الفصل السادس) في ذكر دعاءين للدين",
+        "id": 153,
+        "parentId": 147,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2088,
+        "title": "(الفصل السابع) في ذكر بعض ماورد للهم والغم والخوف وغيرها",
+        "id": 154,
+        "parentId": 147,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2089,
+        "title": "(الفصل الثامن) في أدعية العلل والامراض",
+        "id": 155,
+        "parentId": 147,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2090,
+        "title": "(الفصل التاسع) في بعض الاحراز والعوذ",
+        "id": 156,
+        "parentId": 147,
+        "childs": []
+      },
+      {
+        "level": 2,
+        "key": 2091,
+        "title": "(الفصل العاشر) في دعوات موجزات لجميع حوائج الدنيا والاخرة",
+        "id": 157,
+        "parentId": 147,
+        "childs": []
+      }
+    ]
+  }
+]

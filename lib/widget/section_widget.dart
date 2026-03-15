@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../model/item_model.dart';
@@ -14,6 +15,57 @@ String _imageAsset(SectionItem item) {
   return item.picName != null && item.picName!.isNotEmpty
       ? 'assets/image/${item.picName}'
       : _defaultImage;
+}
+
+/// Builds image or SVG for a section item. Use for any size; supports .svg (SvgPicture) and raster (Image.asset).
+/// [width]/[height] null means expand to fill; use [boxFit] for full-width cards.
+Widget _sectionItemImage(
+  BuildContext context,
+  SectionItem item, {
+  double? width,
+  double? height,
+  BoxFit fit = BoxFit.cover,
+  BorderRadius? borderRadius,
+}) {
+  final path = _imageAsset(item);
+  final isSvg = path.toLowerCase().endsWith('.svg');
+  final effectiveRadius = borderRadius ?? BorderRadius.circular(4);
+
+  if (isSvg) {
+    return ClipRRect(
+      borderRadius: effectiveRadius,
+      child: SvgPicture.asset(
+        path,
+        width: width,
+        height: height,
+        fit: fit,
+        placeholderBuilder: (_) => _defaultImagePlaceholder(width, height),
+      ),
+    );
+  }
+  return ClipRRect(
+    borderRadius: effectiveRadius,
+    child: Image.asset(
+      path,
+      width: width,
+      height: height,
+      fit: fit,
+      errorBuilder: (_, __, ___) => _defaultImagePlaceholder(width, height),
+    ),
+  );
+}
+
+Widget _defaultImagePlaceholder(double? width, double? height) {
+  return Container(
+    width: width,
+    height: height,
+    color: const Color(0xFFE0E0E0),
+    child: const Icon(Icons.image_not_supported_outlined, color: Color(0xFF9E9E9E)),
+  );
+}
+
+Widget _leadingImage(BuildContext context, SectionItem item, {double size = 40}) {
+  return _sectionItemImage(context, item, width: size, height: size, fit: BoxFit.contain);
 }
 
 class SectionWidget extends StatelessWidget {
@@ -50,6 +102,8 @@ class SectionWidget extends StatelessWidget {
         return _Thumbnail2x2Layout(items: section.items);
       case 'thumbnail3x3':
         return _Thumbnail3x3Layout(items: section.items);
+      case 'simpleList':
+        return _SimpleListLayout(items: section.items);
       default:
         return _FullWidthImagesLayout(items: section.items);
     }
@@ -162,7 +216,7 @@ class _FullWidthImagesLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      height: 230,
       child: PageView.builder(
         padEnds: false,
         controller: PageController(viewportFraction: 0.94),
@@ -173,16 +227,16 @@ class _FullWidthImagesLayout extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
             child: GestureDetector(
               onTap: () => _navigateSectionItem(context, item),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(_cornerRadius),
-                  bottomLeft: Radius.circular(_cornerRadius),
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Image.asset(
-                    _imageAsset(item),
-                    fit: BoxFit.cover,
+              child: SizedBox(
+                width: double.infinity,
+                height: double.infinity,
+                child: _sectionItemImage(
+                  context,
+                  item,
+                  fit: BoxFit.cover,
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(_cornerRadius),
+                    bottomLeft: Radius.circular(_cornerRadius),
                   ),
                 ),
               ),
@@ -215,14 +269,13 @@ class _HalfWidthItemsLayout extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 6),
             child: GestureDetector(
               onTap: () => _navigateSectionItem(context, item),
-              child: ClipRRect(
+              child: _sectionItemImage(
+                context,
+                item,
+                width: itemWidth,
+                height: 140,
+                fit: BoxFit.cover,
                 borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  _imageAsset(item),
-                  width: itemWidth,
-                  height: 140,
-                  fit: BoxFit.cover,
-                ),
               ),
             ),
           );
@@ -277,14 +330,13 @@ class _Thumbnail2x2Layout extends StatelessWidget {
               height: rowHeight,
               child: Row(
                 children: [
-                  ClipRRect(
+                  _sectionItemImage(
+                    context,
+                    item,
+                    width: thumbnailSize,
+                    height: thumbnailSize,
+                    fit: BoxFit.cover,
                     borderRadius: BorderRadius.circular(6),
-                    child: Image.asset(
-                      _imageAsset(item),
-                      width: thumbnailSize,
-                      height: thumbnailSize,
-                      fit: BoxFit.cover,
-                    ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -350,14 +402,13 @@ class _Thumbnail3x3Layout extends StatelessWidget {
               height: rowHeight,
               child: Row(
                 children: [
-                  ClipRRect(
+                  _sectionItemImage(
+                    context,
+                    item,
+                    width: thumbnailSize,
+                    height: thumbnailSize,
+                    fit: BoxFit.cover,
                     borderRadius: BorderRadius.circular(4),
-                    child: Image.asset(
-                      _imageAsset(item),
-                      width: thumbnailSize,
-                      height: thumbnailSize,
-                      fit: BoxFit.cover,
-                    ),
                   ),
                   const SizedBox(width: 6),
                   Expanded(
@@ -374,6 +425,41 @@ class _Thumbnail3x3Layout extends StatelessWidget {
           ),
         )).toList(),
       ),
+    );
+  }
+}
+
+class _SimpleListLayout extends StatelessWidget {
+  const _SimpleListLayout({required this.items});
+  final List<SectionItem> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: items.map((item) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: GestureDetector(
+            onTap: () => _navigateSectionItem(context, item),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _leadingImage(context, item, size: 44),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    item.title ?? '',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

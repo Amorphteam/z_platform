@@ -23,6 +23,21 @@ class NavigationHelper {
       SubItems? subItem,
       String? title,
       required BuildContext context,}) {
+    // Normalize: support both type names and asset filenames from JSON
+    final isToc = goto == 'jsonList' ||
+        goto.toLowerCase() == 'jsonlist.json' ||
+        goto.toLowerCase().contains('jsonlist');
+    final isEpub = goto.toLowerCase().endsWith('.epub');
+
+    if (isToc) {
+      navigateToToc(subItem, item, context, title);
+      return;
+    }
+    if (isEpub && (subItem != null || item != null)) {
+      _navigateToEpubByGoto(context, goto, subItem, item);
+      return;
+    }
+
     switch (goto) {
       case 'text':
         navigateToEpub(subItem, item, context);
@@ -34,6 +49,20 @@ class NavigationHelper {
         navigateToToc(subItem, item, context, title);
         break;
     }
+  }
+
+  static void _navigateToEpubByGoto(
+    BuildContext context,
+    String goto,
+    SubItems? subItem,
+    ItemModel? item,
+  ) {
+    final bookPath = goto.toLowerCase().endsWith('.epub')
+        ? goto.substring(0, goto.length - 4)
+        : goto;
+    final id = subItem?.id ?? item?.linkTo?.id;
+    final navIndex = id?.toString() ?? '0';
+    openBook(context, bookPath, navIndex);
   }
 
   static Widget buildItem(BuildContext context, HomeWidgetItem item) {

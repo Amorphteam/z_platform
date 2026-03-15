@@ -19,6 +19,14 @@ class JsonRepository {
       final map = item as Map<String, dynamic>;
       final type = map['type'] as String?;
       switch (type) {
+        case 'fullImage':
+          return SectionWidgetModel.fromJson(map, layout: 'fullWidthImages');
+        case 'smallImage':
+          return SectionWidgetModel.fromJson(map, layout: 'halfWidthItems');
+        case 'threeItems':
+          return SectionWidgetModel.fromJson(map, layout: 'thumbnail3x3');
+        case 'simpleList':
+          return SectionWidgetModel.fromJson(map, layout: 'simpleList');
         case 'sectionFullWidth':
           return SectionWidgetModel.fromJson(map, layout: 'fullWidthImages');
         case 'sectionHalfWidth':
@@ -74,7 +82,7 @@ class JsonRepository {
   }
 
   Future<List<TocItem>> fetchJsonToc() async {
-    final String response = await rootBundle.loadString('assets/json/jsonlist.json');
+    final String response = await rootBundle.loadString('assets/json/jsonList.json');
     final List<dynamic> data = json.decode(response) as List<dynamic>;
 
     return data.map((item) => TocItem.fromJson(item as Map<String, dynamic>)).toList();

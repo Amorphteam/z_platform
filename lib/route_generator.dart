@@ -13,6 +13,8 @@ import 'package:masaha/screen/chat/cubit/chat_cubit.dart';
 import 'package:masaha/api/ai_provider.dart';
 import 'package:masaha/screen/host/cubit/host_cubit.dart';
 import 'package:masaha/screen/host/host_screen.dart';
+import 'package:masaha/screen/toc/cubit/toc_cubit.dart';
+import 'package:masaha/screen/toc/toc_screen.dart';
 import 'package:masaha/screen/color_palette/color_palette_screen.dart';
 import 'package:masaha/screen/color_picker/color_picker_screen.dart';
 import 'package:masaha/screen/liquid_glass_test/liquid_glass_test_screen.dart';
@@ -233,6 +235,16 @@ class RouteGenerator {
         return _buildRoute(
           isIOS: isIOS,
           builder: (context) => const LiquidGlassTestScreen(),
+        );
+      case '/toc':
+        final tocId = args?['id'] as int?;
+        final tocTitle = args?['title'] as String?;
+        return _buildRoute(
+          isIOS: isIOS,
+          builder: (context) => BlocProvider(
+            create: (context) => TocCubit(),
+            child: TocScreen(id: tocId, title: tocTitle),
+          ),
         );
       case '/audioPlayer':
         if (args != null) {

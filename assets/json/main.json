@@ -1,60 +1,352 @@
 [
   {
-    "type": "sectionFullWidth",
-    "title": "صور فاطمة الزهراء",
-    "subtitle": "معرض الصور بالعرض الكامل",
-    "showMoreLink": { "goto": "jsonList", "key": "", "id": 1 },
+    "type": "fullImage",
+    "sort": 1,
+    "title": "الليل والنهار",
+    "subtitle": "أدعية وأذكار تشمل ساعات الليل والنهار",
+    "showMoreLink": {
+      "visible": true,
+      "goto": "jsonlist.json",
+      "id": 15
+    },
     "items": [
-      { "goto": "jsonGraphic", "id": 1 },
-      { "goto": "jsonGraphic", "id": 2 },
-      { "goto": "jsonList", "id": 357 },
-      { "goto": "jsonGraphic", "id": 4 }
+      {
+        "imageName": "day1.jpg",
+        "title": "دعاء الحزين",
+        "goto": "baqeyat.epub",
+        "id": 2140
+      },
+      {
+        "imageName": "day2.jpg",
+        "title": "فضل ما بين الطلوعين",
+        "goto": "baqeyat.epub",
+        "id": 2002
+      },
+      {
+        "imageName": "day3.jpg",
+        "title": "صلاة الليل",
+        "goto": "jsonlist.json",
+        "id": 22
+      },
+      {
+        "imageName": "day4.jpg",
+        "title": "أذكار خلال اليوم",
+        "goto": "jsonlist.json",
+        "id": 27
+      },
+      {
+        "imageName": "day5.jpg",
+        "title": "من الغروب إلى النوم",
+        "goto": "baqeyat.epub",
+        "id": 2016
+      }
     ]
   },
   {
-    "type": "sectionHalfWidth",
-    "title": "فاطمة والسيرة",
-    "subtitle": "صور مصغرة",
-    "showMoreLink": { "goto": "jsonGraphic", "key": "", "id": 5 },
+    "type": "simpleList",
+    "sort": 2,
+    "title": "تعقيبات الصلاة",
+    "subtitle": "التعقيبات العامة والخاصة للصلوات اليومية",
+    "showMoreLink": {
+      "visible": false,
+      "goto": "",
+      "id": 0
+    },
     "items": [
-      { "goto": "jsonList", "id": 2487 },
-      { "goto": "jsonList", "id": 2557 },
-      { "goto": "jsonGraphic", "id": 6 },
-      { "goto": "jsonGraphic", "id": 10 }
+      {
+        "imageName": "listicon.svg",
+        "title": "سجدة الشكر",
+        "goto": "jsonlist.json",
+        "id": 7
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "تسبيح فاطمة الزهراء(ع)",
+        "goto": "baqeyat.epub",
+        "id": 2009
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "التعقيبات العامة",
+        "goto": "baqeyat.epub",
+        "id": 2010
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "دعاء بعد الفرائض",
+        "goto": "baqeyat.epub",
+        "id": 2142
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "تعقيبات فريضة الصبح",
+        "goto": "baqeyat.epub",
+        "id": 2011
+      }
     ]
   },
   {
-    "type": "sectionThumbnail2x2",
-    "title": "أقسام مختارة",
-    "subtitle": "مصغرات مع عناوين - عمودين",
-    "showMoreLink": { "goto": "jsonList", "key": "", "id": 41 },
+    "type": "smallImage",
+    "sort": 3,
+    "title": "صلوات أيام الأسبوع",
+    "subtitle": "الصلوات الواردة لتؤدى خلال أيام الأسبوع",
+    "showMoreLink": {
+      "visible": false,
+      "goto": "",
+      "id": 0
+    },
     "items": [
-      { "title": "المدينة", "goto": "jsonList", "id": 2557 },
-      { "title": "الزواج المبارك", "goto": "jsonGraphic", "id": 6 },
-      { "title": "الظلامة الكبرى", "goto": "jsonGraphic", "id": 10 },
-      { "title": "فاطمة في التراث", "goto": "jsonGraphic", "id": 15 },
-      { "title": "تسبيح فاطمة", "goto": "jsonGraphic", "id": 8 },
-      { "title": "صلوات فاطمة", "goto": "jsonList", "id": 5714 }
+      {
+        "imageName": "weekdays1.jpg",
+        "title": "صلاة يوم السبت",
+        "goto": "baqeyat.epub",
+        "id": 2043
+      },
+      {
+        "imageName": "weekdays2.jpg",
+        "title": "صلاة يوم الأحد",
+        "goto": "baqeyat.epub",
+        "id": 2044
+      },
+      {
+        "imageName": "weekdays3.jpg",
+        "title": "صلاة يوم الاثنين",
+        "goto": "baqeyat.epub",
+        "id": 2045
+      },
+      {
+        "imageName": "weekdays4.jpg",
+        "title": "صلاة يوم الثلاثاء",
+        "goto": "baqeyat.epub",
+        "id": 2046
+      },
+      {
+        "imageName": "weekdays5.jpg",
+        "title": "صلاة يوم الأربعاء",
+        "goto": "baqeyat.epub",
+        "id": 2047
+      },
+      {
+        "imageName": "weekdays6.jpg",
+        "title": "صلاة يوم الخميس",
+        "goto": "baqeyat.epub",
+        "id": 2048
+      },
+      {
+        "imageName": "weekdays7.jpg",
+        "title": "صلاة يوم الجمعة",
+        "goto": "baqeyat.epub",
+        "id": 2049
+      }
     ]
   },
   {
-    "type": "sectionThumbnail3x3",
-    "title": "أدعية وتسبيح",
-    "subtitle": "مصغرات - ثلاثة أعمدة",
-    "showMoreLink": { "goto": "jsonGraphic", "key": "", "id": 9 },
+    "type": "threeItems",
+    "sort": 4,
+    "title": "الحجاب والأحراز",
+    "subtitle": "الحجاب والأحراز المروية عن المعصومين(ع) والنافعة لقضاء الحوائج",
+    "showMoreLink": {
+      "visible": false,
+      "goto": "",
+      "id": 0
+    },
     "items": [
-      { "title": "تسبيح", "goto": "jsonGraphic", "id": 8 },
-      { "title": "صلوات", "goto": "jsonList", "id": 5714 },
-      { "title": "أدعية", "goto": "jsonGraphic", "id": 9 },
-      { "title": "الخطب", "goto": "jsonGraphic", "id": 12 },
-      { "title": "مسند فاطمة", "goto": "jsonGraphic", "id": 13 },
-      { "title": "فاطمة في القرآن", "goto": "jsonList", "id": 1262 },
-      { "title": "فاطمة في الحديث", "goto": "jsonGraphic", "id": 4 },
-      { "title": "السيرة العطرة", "goto": "jsonList", "id": 172 },
-      { "title": "البيت الشامخ", "goto": "jsonGraphic", "id": 5 },
-      { "title": "منزلتها في الإسلام", "goto": "jsonList", "id": 16 },
-      { "title": "فاطمة في مكة", "goto": "jsonList", "id": 2487 },
-      { "title": "فاطمة في المدينة", "goto": "jsonList", "id": 2557 }
+      {
+        "imageName": "listicon.svg",
+        "title": "حجاب الإمام الصادق(ع)",
+        "goto": "baqeyat.epub",
+        "id": 2114
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "حجاب الإمام الكاظم(ع)",
+        "goto": "baqeyat.epub",
+        "id": 2115
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "حجاب الإمام الجواد(ع)",
+        "goto": "baqeyat.epub",
+        "id": 2116
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "حرز فاطمة(ع)",
+        "goto": "baqeyat.epub",
+        "id": 2093
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "حرز الإمام زين العابدين(ع)",
+        "goto": "baqeyat.epub",
+        "id": 2094
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "حرز الإمام جعفر الصادق(ع)",
+        "goto": "baqeyat.epub",
+        "id": 2095
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "حرز الإمام موسى الكاظم(ع)",
+        "goto": "baqeyat.epub",
+        "id": 2096
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "حرز الإمام الرضا(ع) رقعة الجيب",
+        "goto": "baqeyat.epub",
+        "id": 2097
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "حرز الإمام محمد الجواد(ع)",
+        "goto": "baqeyat.epub",
+        "id": 2098
+      }
+    ]
+  },
+  {
+    "type": "fullImage",
+    "sort": 5,
+    "title": "الأدعية والمناجات",
+    "subtitle": "مختار مما ورد عن المعصومين(ع) من الأدعية واالمناجات",
+    "showMoreLink": {
+      "visible": false,
+      "goto": "",
+      "id": 0
+    },
+    "items": [
+      {
+        "imageName": "doa1.jpg",
+        "title": "للآلام والأمراض",
+        "goto": "jsonlist.json",
+        "id": 60
+      },
+      {
+        "imageName": "doa2.jpg",
+        "title": "المناجات",
+        "goto": "jsonlist.json",
+        "id": 113
+      },
+      {
+        "imageName": "doa2.jpg",
+        "title": "للمهم من أمور الدنيا",
+        "goto": "jsonlist.json",
+        "id": 124
+      },
+      {
+        "imageName": "doa2.jpg",
+        "title": "مختارات من الكافي",
+        "goto": "jsonlist.json",
+        "id": 147
+      }
+    ]
+  },
+  {
+    "type": "simpleList",
+    "sort": 6,
+    "title": "الآداب",
+    "subtitle": "مجموعة من الآداب الواردة في الشريعة الإسلامية",
+    "showMoreLink": {
+      "visible": false,
+      "goto": "",
+      "id": 0
+    },
+    "items": [
+      {
+        "imageName": "listicon.svg",
+        "title": "آداب التخلي",
+        "goto": "baqeyat.epub",
+        "id": 2005
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "آداب الوضوء",
+        "goto": "baqeyat.epub",
+        "id": 2006
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "آداب الدخول إلى المسجد",
+        "goto": "baqeyat.epub",
+        "id": 2007
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "آداب الصلاة",
+        "goto": "baqeyat.epub",
+        "id": 2007
+      }
+    ]
+  },
+  {
+    "type": "fullImage",
+    "sort": 7,
+    "title": "الصلوات المستحبة",
+    "subtitle": "مختار من الصلوات المستحبة الواردة في الشريعة الإسلامية",
+    "showMoreLink": {
+      "visible": true,
+      "goto": "jsonlist.json",
+      "id": 30
+    },
+    "items": [
+      {
+        "imageName": "pray1.jpg",
+        "title": "صلوات لزيادة الرزق",
+        "goto": "baqeyat.epub",
+        "id": 2033
+      },
+      {
+        "imageName": "pray2.jpg",
+        "title": "صلاة الاستغاثة بالبتول (صلّى الله عليها)",
+        "goto": "baqeyat.epub",
+        "id": 2036
+      },
+      {
+        "imageName": "pray3.jpg",
+        "title": "صلاة ليلة الدفن",
+        "goto": "baqeyat.epub",
+        "id": 2024
+      },
+      {
+        "imageName": "pray4.jpg",
+        "title": "صلوات لقضاء الحاجة",
+        "goto": "baqeyat.epub",
+        "id": 2034
+      },
+      {
+        "imageName": "pray5.jpg",
+        "title": "صلوات لغفران الذنوب",
+        "goto": "baqeyat.epub",
+        "id": 2040
+      }
+    ]
+  },
+  {
+    "type": "simpleList",
+    "sort": 8,
+    "title": "الخاتمة",
+    "subTitle": "خاتمة فيها فوائد ذيل بها المصنف الكتاب",
+    "showMoreLink": {
+      "visible": false,
+      "goto": "",
+      "id": 0
+    },
+    "items": [
+      {
+        "imageName": "listicon.svg",
+        "title": "آثار بعض السور والآيات وذكر أمور مختلفة",
+        "goto": "baqeyat.epub",
+        "id": 2123
+      },
+      {
+        "imageName": "listicon.svg",
+        "title": "خلاصة من أحكام الاموات",
+        "goto": "baqeyat.epub",
+        "id": 2124
+      }
     ]
   }
 ]

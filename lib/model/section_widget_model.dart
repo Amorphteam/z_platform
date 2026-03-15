@@ -23,7 +23,7 @@ class SectionWidgetModel {
   factory SectionWidgetModel.fromJson(Map<String, dynamic> json, {required String layout}) {
     return SectionWidgetModel(
       title: json['title'] as String? ?? '',
-      subtitle: json['subtitle'] as String?,
+      subtitle: (json['subtitle'] ?? json['subTitle']) as String?,
       showMoreLink: json['showMoreLink'] == null
           ? null
           : LinkTo.fromJson(json['showMoreLink'] as Map<String, dynamic>),
@@ -56,7 +56,7 @@ class SectionItem {
 
   factory SectionItem.fromJson(Map<String, dynamic> json) {
     return SectionItem(
-      picName: json['picName'] as String?,
+      picName: (json['picName'] ?? json['imageName']) as String?,
       title: json['title'] as String?,
       goto: json['goto'] as String?,
       key: json['key'] as String?,
