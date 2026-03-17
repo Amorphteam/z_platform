@@ -49,21 +49,20 @@ class JsonRepository {
 
   Future<List<TocItem>> fetchJsonTocById(int id) async {
     final allTocItem = await fetchJsonToc();
-    final List<TocItem> result = [];
+    TocItem? found;
 
     void searchTocItems(List<TocItem> items) {
       for (final item in items) {
         if (item.id == id) {
-          result.addAll(item.childs??[]);
+          found = item;
           return;
-        } else {
-          searchTocItems(item.childs??[]);
         }
+        searchTocItems(item.childs ?? []);
       }
     }
 
     searchTocItems(allTocItem);
-    return result;
+    return found != null ? [found!] : [];
   }
 
   Future<List<TocItem>> fetchAllJsonToc() async {

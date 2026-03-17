@@ -126,7 +126,7 @@ class _SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -210,13 +210,13 @@ class _FullWidthImagesLayout extends StatelessWidget {
   const _FullWidthImagesLayout({required this.items});
   final List<SectionItem> items;
 
-  static const _cornerRadius = 24.0;
-  static const _horizontalPadding = 12.0;
+  static const _cornerRadius = 40.0;
+  static const _itemSpacing = 18.0;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 230,
+      height: 250,
       child: PageView.builder(
         padEnds: false,
         controller: PageController(viewportFraction: 0.94),
@@ -224,7 +224,49 @@ class _FullWidthImagesLayout extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = items[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+            padding: const EdgeInsets.symmetric(horizontal: _itemSpacing / 2),
+            child: GestureDetector(
+            onTap: () => _navigateSectionItem(context, item),
+            child: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: _sectionItemImage(
+                context,
+                item,
+                fit: BoxFit.cover,
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(_cornerRadius),
+                  bottomLeft: Radius.circular(_cornerRadius),
+                ),
+              ),
+            ),
+          ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _HalfWidthItemsLayout extends StatelessWidget {
+  const _HalfWidthItemsLayout({required this.items});
+  final List<SectionItem> items;
+
+  static const _cornerRadius = 40.0;
+  static const _itemSpacing = 18.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 180,
+      child: PageView.builder(
+        padEnds: false,
+        controller: PageController(viewportFraction: 0.75),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: _itemSpacing / 2),
             child: GestureDetector(
               onTap: () => _navigateSectionItem(context, item),
               child: SizedBox(
@@ -248,46 +290,12 @@ class _FullWidthImagesLayout extends StatelessWidget {
   }
 }
 
-class _HalfWidthItemsLayout extends StatelessWidget {
-  const _HalfWidthItemsLayout({required this.items});
-  final List<SectionItem> items;
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final itemWidth = screenWidth > 600 ? 200.0 : (screenWidth - 48) / 2;
-
-    return SizedBox(
-      height: 140,
-      child: PageView.builder(
-        padEnds: false,
-        controller: PageController(viewportFraction: 0.5),
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: GestureDetector(
-              onTap: () => _navigateSectionItem(context, item),
-              child: _sectionItemImage(
-                context,
-                item,
-                width: itemWidth,
-                height: 140,
-                fit: BoxFit.cover,
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
 class _Thumbnail2x2Layout extends StatelessWidget {
   const _Thumbnail2x2Layout({required this.items});
   final List<SectionItem> items;
+
+  static const _viewportFraction = 0.88;
+  static const _horizontalPadding = 12.0;
 
   @override
   Widget build(BuildContext context) {
@@ -296,20 +304,26 @@ class _Thumbnail2x2Layout extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final fullWidth = constraints.maxWidth;
-
         return SizedBox(
-          height: rowHeight * 2 + 16,
+          height: rowHeight * 2 + 24,
           child: PageView.builder(
             padEnds: false,
-            controller: PageController(viewportFraction: 1.0),
+            controller: PageController(viewportFraction: _viewportFraction),
             itemCount: (items.length / 2).ceil(),
             itemBuilder: (context, pageIndex) {
               final start = pageIndex * 2;
               final pageItems = items.skip(start).take(2).toList();
-              return SizedBox(
-                width: fullWidth,
-                child: _buildColumn(context, pageItems, fullWidth, rowHeight, thumbnailSize),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                child: LayoutBuilder(
+                  builder: (context, pageConstraints) {
+                    final width = pageConstraints.maxWidth;
+                    return SizedBox(
+                      width: width,
+                      child: _buildColumn(context, pageItems, width, rowHeight, thumbnailSize),
+                    );
+                  },
+                ),
               );
             },
           ),
@@ -323,7 +337,7 @@ class _Thumbnail2x2Layout extends StatelessWidget {
       width: width,
       child: Column(
         children: columnItems.map((item) => Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.only(bottom: 12),
           child: GestureDetector(
             onTap: () => _navigateSectionItem(context, item),
             child: SizedBox(
@@ -361,6 +375,9 @@ class _Thumbnail3x3Layout extends StatelessWidget {
   const _Thumbnail3x3Layout({required this.items});
   final List<SectionItem> items;
 
+  static const _viewportFraction = 0.88;
+  static const _horizontalPadding = 12.0;
+
   @override
   Widget build(BuildContext context) {
     const rowHeight = 48.0;
@@ -368,20 +385,26 @@ class _Thumbnail3x3Layout extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final fullWidth = constraints.maxWidth;
-
         return SizedBox(
-          height: rowHeight * 3 + 20,
+          height: rowHeight * 3 + 30,
           child: PageView.builder(
             padEnds: false,
-            controller: PageController(viewportFraction: 1.0),
+            controller: PageController(viewportFraction: _viewportFraction),
             itemCount: (items.length / 3).ceil(),
             itemBuilder: (context, pageIndex) {
               final start = pageIndex * 3;
               final pageItems = items.skip(start).take(3).toList();
-              return SizedBox(
-                width: fullWidth,
-                child: _buildColumn(context, pageItems, fullWidth, rowHeight, thumbnailSize),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                child: LayoutBuilder(
+                  builder: (context, pageConstraints) {
+                    final width = pageConstraints.maxWidth;
+                    return SizedBox(
+                      width: width,
+                      child: _buildColumn(context, pageItems, width, rowHeight, thumbnailSize),
+                    );
+                  },
+                ),
               );
             },
           ),
@@ -395,7 +418,7 @@ class _Thumbnail3x3Layout extends StatelessWidget {
       width: width,
       child: Column(
         children: columnItems.map((item) => Padding(
-          padding: const EdgeInsets.only(bottom: 6),
+          padding: const EdgeInsets.only(bottom: 10),
           child: GestureDetector(
             onTap: () => _navigateSectionItem(context, item),
             child: SizedBox(
@@ -433,13 +456,16 @@ class _SimpleListLayout extends StatelessWidget {
   const _SimpleListLayout({required this.items});
   final List<SectionItem> items;
 
+  static const _itemPadding = EdgeInsets.only(left: 18, right: 18, bottom: 8);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: items.map((item) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+          padding: _itemPadding,
           child: GestureDetector(
             onTap: () => _navigateSectionItem(context, item),
             child: Row(

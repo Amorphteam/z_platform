@@ -23,6 +23,7 @@ import '../library/cubit/library_cubit.dart';
 import '../library/library_screen.dart';
 import '../toc/cubit/toc_cubit.dart';
 import '../toc/toc_screen.dart';
+import '../../widget/toc_nav_provider.dart';
 import 'package:audio_player/audio_player.dart';
 
 class HostScreen extends StatefulWidget {
@@ -34,6 +35,8 @@ class HostScreen extends StatefulWidget {
 
 class _HostScreenState extends State<HostScreen> {
   int _currentIndex = 0;
+  int? _tocIdToLoad;
+  String? _tocTitle;
 
   // Helper function to check iOS version support for liquid glass
   bool _shouldUseLiquidGlass() {
@@ -65,9 +68,19 @@ class _HostScreenState extends State<HostScreen> {
     super.dispose();
   }
 
+  void _openTocWithId(int? id, String? title) {
+    setState(() {
+      _currentIndex = 2;
+      _tocIdToLoad = id;
+      _tocTitle = title;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return TocNavProvider(
+      openToc: _openTocWithId,
+      child: Scaffold(
       extendBody: _shouldUseLiquidGlass(),
       body: Stack(
         children: [
@@ -118,6 +131,7 @@ class _HostScreenState extends State<HostScreen> {
               onTap: (index) {
                 setState(() {
                   _currentIndex = 4 - index; // Reverse index back
+                  if (_currentIndex != 2) _tocIdToLoad = null;
                 });
               },
             )))
@@ -129,6 +143,7 @@ class _HostScreenState extends State<HostScreen> {
                 onTap: (index) {
                   setState(() {
                     _currentIndex = index;
+                    if (_currentIndex != 2) _tocIdToLoad = null;
                   });
                 },
                 type: BottomNavigationBarType.fixed,
@@ -165,6 +180,7 @@ class _HostScreenState extends State<HostScreen> {
                 ],
               ),
             ),
+      ),
     );
   }
 
@@ -201,7 +217,7 @@ class _HostScreenState extends State<HostScreen> {
       case 2:
         return BlocProvider(
           create: (context) => TocCubit(),
-          child: TocScreen(),
+          child: TocScreen(id: _tocIdToLoad, title: _tocTitle),
         );
       // case 2:
       //   return BlocProvider(

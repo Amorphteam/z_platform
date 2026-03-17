@@ -7,7 +7,7 @@ part 'toc_item.g.dart';
 class TocItem with _$TocItem {
   const factory TocItem({
     required int level,
-    required String key,
+    @JsonKey(fromJson: _keyFromJson) required String key,
     required String title,
     required int id,
     required int parentId,
@@ -16,3 +16,5 @@ class TocItem with _$TocItem {
 
   factory TocItem.fromJson(Map<String, dynamic> json) => _$TocItemFromJson(json);
 }
+
+String _keyFromJson(dynamic value) => value?.toString() ?? '';

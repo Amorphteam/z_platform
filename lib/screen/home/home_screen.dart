@@ -90,10 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               endIndent: 24,
                                             ),
                                           ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 12, left: 12),
-                                          child: NavigationHelper.buildItem(context, items[index]),
-                                        ),
+                                        NavigationHelper.buildItem(context, items[index]),
                                       ],
                                     ),
                                     childCount: items.length,
@@ -200,10 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     ),
                                   ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 12, left: 12),
-                                  child: NavigationHelper.buildItem(context, items[index]),
-                                ),
+                                NavigationHelper.buildItem(context, items[index]),
                               ],
                             ),
                             childCount: items.length,

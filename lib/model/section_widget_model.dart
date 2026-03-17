@@ -20,13 +20,22 @@ class SectionWidgetModel {
   /// Layout: fullWidthImages | halfWidthItems | thumbnail2x2 | thumbnail3x3
   final String layout;
 
+  /// Parses showMoreLink only when visible is true. When visible, uses jsonList with id.
+  static LinkTo? _parseShowMoreLink(dynamic json) {
+    if (json == null || json is! Map<String, dynamic>) return null;
+    final visible = json['visible'] as bool? ?? false;
+    if (!visible) return null;
+    final goto = json['goto'] as String?;
+    final id = (json['id'] as num?)?.toInt();
+    if (goto == null || goto.isEmpty || id == null) return null;
+    return LinkTo(goto: goto, key: json['key'] as String?, id: id);
+  }
+
   factory SectionWidgetModel.fromJson(Map<String, dynamic> json, {required String layout}) {
     return SectionWidgetModel(
       title: json['title'] as String? ?? '',
       subtitle: (json['subtitle'] ?? json['subTitle']) as String?,
-      showMoreLink: json['showMoreLink'] == null
-          ? null
-          : LinkTo.fromJson(json['showMoreLink'] as Map<String, dynamic>),
+      showMoreLink: _parseShowMoreLink(json['showMoreLink']),
       showMoreUrl: json['showMoreUrl'] as String?,
       items: (json['items'] as List<dynamic>?)
               ?.map((e) => SectionItem.fromJson(e as Map<String, dynamic>))

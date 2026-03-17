@@ -78,7 +78,8 @@ class _TocScreenState extends State<TocScreen> {
                         loaded: (items, filteredItems) {
                           final itemsToShow = filteredItems ?? items;
                           final isFiltered = filteredItems != null;
-                          return _buildTocTree(itemsToShow, context, isFiltered: isFiltered);
+                          final expandFromLoadMore = widget.id != null;
+                          return _buildTocTree(itemsToShow, context, isFiltered: isFiltered, initiallyExpanded: expandFromLoadMore);
                         },
                         error: (message) =>
                             Center(child: SelectionArea(child: Text(message))),
@@ -158,7 +159,8 @@ class _TocScreenState extends State<TocScreen> {
                 loaded: (items, filteredItems) {
                   final itemsToShow = filteredItems ?? items;
                   final isFiltered = filteredItems != null;
-                  return _buildTocTree(itemsToShow, context, isFiltered: isFiltered);
+                  final expandFromLoadMore = widget.id != null;
+                  return _buildTocTree(itemsToShow, context, isFiltered: isFiltered, initiallyExpanded: expandFromLoadMore);
                 },
                 error: (message) =>
                     Center(child: SelectionArea(child: Text(message))),
@@ -170,7 +172,7 @@ class _TocScreenState extends State<TocScreen> {
     );
   }
 
-  Widget _buildTocTree(List<TocItem> items, BuildContext context, {bool isFiltered = false}) {
+  Widget _buildTocTree(List<TocItem> items, BuildContext context, {bool isFiltered = false, bool initiallyExpanded = false}) {
     if (isFiltered) {
       // For filtered results, show all items in a flat list
       return ListView(
@@ -181,14 +183,14 @@ class _TocScreenState extends State<TocScreen> {
       final rootItems = items.where((item) => item.parentId == 0).toList();
       return Scaffold(
         body: ListView(
-          children: rootItems.map((item) => _buildTocItem(item, context)).toList(),
+          children: rootItems.map((item) => _buildTocItem(item, context, initiallyExpanded: initiallyExpanded)).toList(),
         ),
       );
     }
   }
 
 
-  Widget _buildTocItem(TocItem item, BuildContext context, {bool isNestedParent = false}) {
+  Widget _buildTocItem(TocItem item, BuildContext context, {bool isNestedParent = false, bool initiallyExpanded = false}) {
     if (item.childs == null || item.childs!.isEmpty) {
       return _buildCardView(item, context);
     } else {
@@ -201,6 +203,7 @@ class _TocScreenState extends State<TocScreen> {
         child: Card(
           elevation: 0,
           child: ExpansionTile(
+            initiallyExpanded: initiallyExpanded,
             title: _buildCardTitle(item, context),
 
             children: item.childs!

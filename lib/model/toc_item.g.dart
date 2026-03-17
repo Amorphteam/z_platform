@@ -9,7 +9,7 @@ part of 'toc_item.dart';
 _$TocItemImpl _$$TocItemImplFromJson(Map<String, dynamic> json) =>
     _$TocItemImpl(
       level: (json['level'] as num).toInt(),
-      key: json['key'] as String,
+      key: _keyFromJson(json['key']),
       title: json['title'] as String,
       id: (json['id'] as num).toInt(),
       parentId: (json['parentId'] as num).toInt(),

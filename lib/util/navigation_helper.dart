@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masaha/model/item_model.dart';
+import 'package:masaha/widget/toc_nav_provider.dart';
 import 'package:masaha/repository/json_repository.dart';
 import 'package:masaha/util/epub_helper.dart';
 import '../model/reference_model.dart';
@@ -105,11 +106,16 @@ class NavigationHelper {
 
   static void navigateToToc(
       SubItems? subItem, ItemModel? item, BuildContext context, String? title,) {
-    final int id = subItem?.id ?? item?.linkTo?.id ?? 0;
-    Navigator.of(context).pushNamed(
-      '/toc',
-      arguments: {'id': id, 'item': item, 'title': title},
-    );
+    final int? id = subItem?.id ?? item?.linkTo?.id;
+    // Prefer switching to TOC tab if available (when inside HostScreen)
+    TocNavProvider.maybeOpenToc(context, id, title);
+    // Fallback: push as new route if not inside HostScreen
+    if (TocNavProvider.of(context) == null) {
+      Navigator.of(context).pushNamed(
+        '/toc',
+        arguments: {'id': id ?? 0, 'item': item, 'title': title},
+      );
+    }
   }
 
   static void navigateToDetail(
