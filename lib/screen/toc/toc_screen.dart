@@ -282,8 +282,11 @@ class _TocScreenState extends State<TocScreen> {
     final String bookPath = item.key.split('_').first;
     final String sectionName = item.key.split('_').last;
     final int sectionNumber = int.parse(sectionName);
-    final String sectionNumberString = (sectionNumber - 1).toString();
-    NavigationHelper.openBook(context, bookPath, sectionNumberString);
+    // `item.key` uses a 1-based numeric "section" scheme, but the EPUB HTML files
+    // inside `assets/epub/*.epub` are 1-based from (e.g. baqeyat starts at 2001.xhtml).
+    // We drive navigation by `ReferenceModel.fileName` and keep `navIndex` as a safe fallback.
+    final String fileName = 'Text/${sectionNumber}.xhtml';
+    NavigationHelper.openBook(context, bookPath, '0', fileName: fileName);
   }
 
   @override

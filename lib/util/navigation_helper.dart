@@ -59,11 +59,12 @@ class NavigationHelper {
     ItemModel? item,
   ) {
     final bookPath = goto.toLowerCase().endsWith('.epub')
-        ? goto.substring(0, goto.length - 4)
+        ? goto.substring(0, goto.length - 5)
         : goto;
+
     final id = subItem?.id ?? item?.linkTo?.id;
-    final navIndex = id?.toString() ?? '0';
-    openBook(context, bookPath, navIndex);
+    final String fileName = 'Text/${id}.xhtml';
+    openBook(context, bookPath, '0', fileName: fileName);
   }
 
   static Widget buildItem(BuildContext context, HomeWidgetItem item) {
@@ -135,9 +136,24 @@ class NavigationHelper {
     openBook(context, bookPath, sectionNumberString);
   }
 
-  static void openBook(BuildContext context, String? bookPath, String? sectionName) {
-      final bookPath0 = '$bookPath.epub';
-      openEpub(context: context, reference: ReferenceModel(title: '', bookName: '',bookPath: bookPath0, navIndex: sectionName.toString()));
+  static void openBook(
+    BuildContext context,
+    String? bookPath,
+    String? navIndex, {
+    String? fileName,
+  }) {
+    final bookPath0 = '$bookPath.epub';
+    openEpub(
+      context: context,
+      reference: ReferenceModel(
+        title: '',
+        bookName: '',
+        bookPath: bookPath0,
+        // `epub_viewer` requires this field, but navigation can be driven by `fileName`.
+        navIndex: navIndex ?? '0',
+        fileName: fileName,
+      ),
+    );
   }
 
 }
