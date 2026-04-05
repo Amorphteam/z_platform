@@ -227,6 +227,10 @@ class _HostScreenState extends State<HostScreen> {
       case 3:
         return epub_search_package.SearchScreen(
           persistence: epub_adapters.createSearchPersistence(),
+          resultItemUseCard: true,
+          showResultPageNumber: false,
+          resultItemCardColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+          groupResultsByBookName: false,
           onResultTap: (epub_search_package.SearchModel result) {
             // Convert epub_search package's SearchModel to our local SearchModel
             final searchResult = SearchModel(
@@ -245,6 +249,10 @@ class _HostScreenState extends State<HostScreen> {
       case 4:
         return BookmarkScreen(
           persistence: epub_adapters.createBookmarkPersistence(),
+          itemUseCard: true,
+          showItemPageNumber: false,
+          itemCardColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+          groupResultsByBookName: false,
           onBookmarkTap: (screenContext, bookmark) async {
             final reference = ReferenceModel(
               id: bookmark.id,
