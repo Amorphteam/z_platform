@@ -67,6 +67,7 @@ class RouteGenerator {
 
           // Create DeepLinkModel from legacy fileName if needed
           DeepLinkModel? deepLinkModel = deepLink;
+
           if (deepLinkModel == null && fileName != null && reference != null) {
             deepLinkModel = DeepLinkModel(
               fileName: fileName,
@@ -93,6 +94,7 @@ class RouteGenerator {
                 deepLinkChapterFileName: deepLinkModel?.fileName,
 
               );
+          
 
           return _buildRoute(
             isIOS: isIOS,
@@ -134,7 +136,11 @@ class RouteGenerator {
                     ),
                   );
                 },
-                onExtraActionPressed: (ctx,
+                showBottomBar: true,
+                showAppBarSearchButton:
+                true,
+                showAppBarTocButton: true,
+                  onExtraActionPressed: (ctx,
                     {required pageNumber,
                     required sectionName,
                     required bookName,

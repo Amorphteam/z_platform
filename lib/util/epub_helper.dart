@@ -4,7 +4,6 @@ import 'package:epub_parser/epub_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:epub_viewer/epub_viewer.dart' as epub_viewer;
 import 'package:masaha/model/history_model.dart';
 import 'package:masaha/util/page_helper.dart';
 
