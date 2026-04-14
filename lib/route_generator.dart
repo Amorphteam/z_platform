@@ -134,7 +134,7 @@ class RouteGenerator {
                     ),
                   );
                 },
-                onTranslatePressed: (ctx,
+                onExtraActionPressed: (ctx,
                     {required pageNumber,
                     required sectionName,
                     required bookName,

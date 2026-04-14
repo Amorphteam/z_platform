@@ -23,6 +23,7 @@ import '../library/cubit/library_cubit.dart';
 import '../library/library_screen.dart';
 import '../toc/cubit/toc_cubit.dart';
 import '../toc/toc_screen.dart';
+import '../../widget/custom_appbar.dart';
 import '../../widget/toc_nav_provider.dart';
 import 'package:audio_player/audio_player.dart';
 
@@ -193,9 +194,9 @@ class _HostScreenState extends State<HostScreen> {
         return 'الفهرست';
       case 2:
         return 'الكتب';
-      case 2:
-        return 'البحث';
       case 3:
+        return 'البحث';
+      case 4:
         return 'العلامات';
       default:
         return '';
@@ -245,6 +246,16 @@ class _HostScreenState extends State<HostScreen> {
       case 4:
         return BookmarkScreen(
           persistence: epub_adapters.createBookmarkPersistence(),
+          customAppBarBuilder: (context, config) {
+            return CustomAppBar(
+              title: config.title,
+              showSearchBar: false,
+              leftWidget: IconButton(
+                icon: const Icon(Icons.delete, color: Colors.black),
+                onPressed: config.onClearAllTap,
+              ),
+            );
+          },
           onBookmarkTap: (screenContext, bookmark) async {
             final reference = ReferenceModel(
               id: bookmark.id,
