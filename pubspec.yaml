@@ -31,11 +31,11 @@ dependencies:
   flutter:
     sdk: flutter
   epub_viewer:
-    path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader/packages/epub_viewer
+    path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_viewer
   epub_bookmarks:
-    path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader/packages/epub_bookmarks
+    path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_bookmarks
   epub_search:
-    path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader/packages/epub_search
+    path: /Users/alibayati/Works/Programming/MultiPlatform/ketub_reader_package/packages/epub_search
   audio_player:
     path: /Users/alibayati/Works/Programming/MultiPlatform/audio_player_package/packages/audio_player
   intl: ^0.19.0

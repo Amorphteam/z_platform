@@ -26,7 +26,9 @@ import 'model/history_model.dart';
 import 'model/reference_model.dart';
 import 'model/search_model.dart' as host_search;
 import 'model/tree_toc_model.dart';
+import 'model/baqyat_sound_model.dart';
 import 'util/constants.dart';
+import 'util/baqyat_sound_helper.dart';
 import 'util/epub_helper.dart';
 
 
@@ -102,69 +104,11 @@ class RouteGenerator {
               create: (context) => epub_viewer.EpubViewerCubit(
                 persistence: epub_adapters.createEpubViewerPersistence(),
               ),
-              child: epub_viewer.EpubViewerScreenV2(
+              child: _EpubViewerRouteWrapper(
                 entryData: entryData,
                 enableContentCache: enableContentCache,
                 customStyle: customStyle,
                 customStyleBuilder: customStyleBuilder,
-                onBookmarksChanged: () async {
-                  try {
-                    final bookmarkCubit = context.read<BookmarkCubit>();
-                    bookmarkCubit.loadAllBookmarks();
-                  } catch (_) {
-                    // BookmarkCubit not available in ancestor tree – ignore.
-                  }
-                },
-                onAnchorIdTap: (ctx, anchorId) async {
-                  // anchorId already includes '#', e.g. "#note_12"
-                  // 1) query your DB using anchorId as filter
-                  final data = 'await myRepository.loadByAnchor(anchorId)';
-
-                  // 2) show bottom sheet for this app
-                  if (!ctx.mounted) return;
-                  showModalBottomSheet(
-                    context: ctx,
-                    isScrollControlled: true,
-                    builder: (_) => Container(
-                      padding: EdgeInsets.all(20),
-                      height: 600,
-                      width: double.infinity,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [Text(anchorId)],
-                      ),
-                    ),
-                  );
-                },
-                showBottomBar: true,
-                showAppBarSearchButton:
-                true,
-                showAppBarTocButton: true,
-                  onExtraActionPressed: (ctx,
-                    {required pageNumber,
-                    required sectionName,
-                    required bookName,
-                    required bookPath}) {
-                  showModalBottomSheet(
-                    context: ctx,
-                    isScrollControlled: true,
-                    builder: (_) => Container(
-                      padding: EdgeInsets.all(20),
-                      height: 600,
-                      width: double.infinity,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('''
-                          کتاب $bookName 
-                          عنوان $bookPath
-                          الصفحة${pageNumber + 1}
-                          '''),
-                        ],
-                      ),
-                    ),
-                  );
-                },
               ),
             ),
           );
@@ -326,4 +270,143 @@ class RouteGenerator {
           body: Center(child: Text('Error: Page not found')),
         ),
       );
+}
+
+class _EpubViewerRouteWrapper extends StatefulWidget {
+  const _EpubViewerRouteWrapper({
+    required this.entryData,
+    required this.enableContentCache,
+    required this.customStyle,
+    required this.customStyleBuilder,
+  });
+
+  final epub_viewer.EpubViewerEntryData entryData;
+  final bool enableContentCache;
+  final Map<String, Style>? customStyle;
+  final dynamic customStyleBuilder;
+
+  @override
+  State<_EpubViewerRouteWrapper> createState() => _EpubViewerRouteWrapperState();
+}
+
+class _EpubViewerRouteWrapperState extends State<_EpubViewerRouteWrapper> {
+  Map<int, BaqyatSoundItem> _soundsByChapterId = const {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBaqyatSounds();
+  }
+
+  Future<void> _loadBaqyatSounds() async {
+    final response = await BaqyatSoundHelper().getBaqyatSounds();
+    if (!mounted) return;
+
+    final mapped = <int, BaqyatSoundItem>{};
+    for (final item in response.data) {
+      mapped[item.id] = item;
+    }
+
+    setState(() {
+      _soundsByChapterId = mapped;
+    });
+  }
+
+  int? _extractChapterIdFromFileName(String? fileName) {
+    if (fileName == null || fileName.trim().isEmpty) return null;
+    final base = fileName.split('/').last;
+    final stem = base.split('.').first;
+    return int.tryParse(stem);
+  }
+
+  bool _hasAudioForSection(String? sectionFileName) {
+    final chapterId = _extractChapterIdFromFileName(sectionFileName);
+    if (chapterId == null) return false;
+    return _soundsByChapterId.containsKey(chapterId);
+  }
+
+  void _openAudioForSection(BuildContext context, String? sectionFileName) {
+    final chapterId = _extractChapterIdFromFileName(sectionFileName);
+    if (chapterId == null) return;
+
+    final soundItem = _soundsByChapterId[chapterId];
+    if (soundItem == null) return;
+
+    final tracks = soundItem.files
+        .map((file) {
+          final sourceUrl = file.pathM4a ?? file.path;
+          if (sourceUrl == null || sourceUrl.isEmpty) return null;
+
+          final seconds = double.tryParse(file.duration) ?? 0;
+          return AudioHelper.createTrack(
+            id: '${soundItem.id}_${file.readerId}',
+            title: soundItem.title,
+            url: sourceUrl,
+            artist: file.readerName,
+            artworkUrl: file.picPath,
+            duration: Duration(milliseconds: (seconds * 1000).round()),
+          );
+        })
+        .whereType<AudioTrack>()
+        .toList();
+
+    if (tracks.isEmpty) return;
+    AudioHelper.playPlaylist(context, tracks);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return epub_viewer.EpubViewerScreenV2(
+      entryData: widget.entryData,
+      enableContentCache: widget.enableContentCache,
+      customStyle: widget.customStyle,
+      customStyleBuilder: widget.customStyleBuilder,
+      onBookmarksChanged: () async {
+        try {
+          final bookmarkCubit = context.read<BookmarkCubit>();
+          bookmarkCubit.loadAllBookmarks();
+        } catch (_) {
+          // BookmarkCubit not available in ancestor tree – ignore.
+        }
+      },
+      onAnchorIdTap: (ctx, anchorId) async {
+        if (!ctx.mounted) return;
+        showModalBottomSheet(
+          context: ctx,
+          isScrollControlled: true,
+          builder: (_) => Container(
+            padding: const EdgeInsets.all(20),
+            height: 600,
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [Text(anchorId)],
+            ),
+          ),
+        );
+      },
+      showBottomBar: true,
+      showAppBarSearchButton: true,
+      showAppBarTocButton: true,
+      extraActionIcon:
+          Platform.isIOS ? CupertinoIcons.music_note_2 : Icons.audiotrack_rounded,
+      isExtraActionVisible: ({
+        required pageNumber,
+        required sectionName,
+        required bookName,
+        required bookPath,
+      }) {
+        return _hasAudioForSection(sectionName);
+      },
+      onExtraActionPressed: (
+        ctx, {
+        required pageNumber,
+        required sectionName,
+        required bookName,
+        required bookPath,
+      }) {
+        _openAudioForSection(ctx, sectionName);
+      },
+    );
+  }
 }
