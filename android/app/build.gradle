@@ -35,7 +35,8 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "org.masaha.alhadith"
     compileSdkVersion 35
-    ndkVersion flutter.ndkVersion
+    // NDK r28+ builds 16 KB-aligned ELF segments by default (Play 16 KB page size).
+    ndkVersion "28.0.12433566"
 
 
 
@@ -74,10 +75,17 @@ android {
         applicationId "org.masaha.alhadith"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
-        targetSdkVersion 35
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+    }
+
+    // Keep native libs uncompressed so 16 KB ELF alignment is preserved in the AAB/APK.
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
     }
 
 

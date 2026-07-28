@@ -6,7 +6,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.3.2'
+        // AGP 8.5.1+ required for 16 KB page-size zip alignment of native libs.
+        classpath 'com.android.tools.build:gradle:8.5.2'
         // START: FlutterFire Configuration
         classpath 'com.google.gms:google-services:4.4.1'
         // END: FlutterFire Configuration

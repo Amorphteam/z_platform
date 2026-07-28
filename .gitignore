@@ -13,3 +13,8 @@ pubspec.lock
 *.log
 *.pyc
 .DS_Store
+
+# Secrets / local env (never commit)
+.env
+.env.*
+!.env.example
